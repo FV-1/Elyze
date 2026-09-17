@@ -130,6 +130,37 @@
   }
   .pill.ghost:hover { background: #fff; color: var(--ink); }
   .note { margin: 0; font-size: 14.5px; color: var(--muted-soft); }
+  .note a { color: var(--ink); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+
+  /* L'ADRESSE EN CLAIR, PARCE QUE `mailto:` NE SUFFIT PAS.
+     Un navigateur sans application mail associée, cas courant quand on relève
+     son courrier sur le web, n'ouvre rien du tout au clic : le bouton semble
+     cassé. L'adresse est donc écrite, sélectionnable d'un seul clic
+     (`user-select: all`), et copiable d'un bouton quand le navigateur le
+     permet. Sans JavaScript, il reste l'adresse et la sélection. */
+  .choix {
+    margin: 26px 0 14px;
+    font-size: 15px; font-weight: 700; letter-spacing: 0.02em;
+    color: var(--muted);
+  }
+  .mail-line {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 10px; margin: 0 0 14px;
+  }
+  .mail {
+    user-select: all; -webkit-user-select: all;
+    background: #fff; border: 1px solid var(--line); border-radius: 999px;
+    padding: 11px 20px;
+    font-size: clamp(17px, 1.4vw + 13px, 21px); font-weight: 800; letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .copy {
+    font: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer;
+    background: var(--ink); color: var(--lime);
+    border: 0; border-radius: 999px; padding: 12px 20px;
+    transition: background 160ms ease;
+  }
+  .copy:hover { background: #342b45; }
 
   /* ------------------------------------------------- aperçu de l'app (CSS) */
   .preview { display: grid; justify-items: center; gap: 12px; }
@@ -351,9 +382,11 @@
           qui les porte. Le nom n'arrive qu'à la fin.
         </p>
         <div class="cta-row">
-          <a class="pill" href="mailto:elyze2027@ik.me?subject=Demande%20beta%20test%20Elyze">Rejoindre la beta</a>
+          <a class="pill" href="#beta">Rejoindre la beta</a>
           <a class="pill ghost" href="#comment">Comment ça marche</a>
-          <p class="note">Un mail, et on te prévient dès l'ouverture. iOS et Android.</p>
+          <p class="note">
+            Le mail est déjà écrit, tu n'as qu'à l'envoyer. Sur iPhone comme sur Android.
+          </p>
         </div>
       </div>
 
@@ -631,9 +664,9 @@
       <details>
         <summary>Comment rejoindre la beta ?</summary>
         <p>
-          Un mail à <a href="mailto:elyze2027@ik.me?subject=Demande%20beta%20test%20Elyze">elyze2027@ik.me</a>,
-          en précisant si tu es sur iOS ou Android. Les invitations partent par vagues, et ce
-          qu'on cherche avant tout, ce sont des retours honnêtes sur ce qui coince.
+          Un clic sur le bouton de ton téléphone, en bas de page : le mail est déjà rédigé, tu
+          n'as qu'à l'envoyer. Les invitations partent par vagues, et ce qu'on cherche avant
+          tout, ce sont des retours honnêtes sur ce qui coince.
         </p>
       </details>
 
@@ -656,9 +689,28 @@
       L'app est en construction. Les premières invitations partent par petits groupes, et les
       retours servent vraiment à la corriger.
     </p>
+    <!-- DEUX PORTES, ET RIEN À ÉCRIRE. Le message part tout rédigé : objet,
+         demande, et le téléphone, qui est la seule chose qu'on ait besoin de
+         savoir pour envoyer la bonne invitation. Poser la question dans le
+         bouton évite un aller-retour par personne.
+
+         LA QUESTION EST ÉCRITE AU-DESSUS parce que la page se lit souvent
+         depuis un ordinateur : sans elle, « je suis sur iPhone » se comprend
+         comme « l'appareil sur lequel je suis en train de lire », et on hésite
+         devant deux boutons dont aucun ne correspond. -->
+    <p class="choix">Sur quel téléphone&nbsp;?</p>
     <div class="cta-row" style="justify-content: center;">
-      <a class="pill" href="mailto:elyze2027@ik.me?subject=Demande%20beta%20test%20Elyze">Rejoindre la beta</a>
+      <a class="pill" href="mailto:elyze2027@ik.me?subject=Beta%20Elyze%20%C2%B7%20iPhone&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20rejoindre%20la%20beta%20d'Elyze.%0AJe%20suis%20sur%20iPhone.%0A%0AMerci%20!">Je suis sur iPhone</a>
+      <a class="pill" href="mailto:elyze2027@ik.me?subject=Beta%20Elyze%20%C2%B7%20Android&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20rejoindre%20la%20beta%20d'Elyze.%0AJe%20suis%20sur%20Android.%0A%0AMerci%20!">Je suis sur Android</a>
     </div>
+    <p class="mail-line" style="margin-top: 22px;">
+      <span class="mail">elyze2027@ik.me</span>
+      <button class="copy" type="button" hidden data-copy="elyze2027@ik.me">Copier l'adresse</button>
+    </p>
+    <p class="note" style="max-width: 44ch; margin: 0 auto;">
+      Si rien ne s'ouvre, c'est que ton navigateur n'a pas d'application mail associée. Copie
+      l'adresse, et dis-nous simplement si tu es sur iPhone ou sur Android.
+    </p>
   </div>
 </section>
 
@@ -676,6 +728,24 @@
     </div>
   </div>
 </footer>
+
+<script>
+  // Le bouton n'existe que si le navigateur sait copier : sans lui, l'adresse
+  // reste écrite et un clic la sélectionne en entier. Rien d'autre sur cette
+  // page ne dépend de JavaScript.
+  (function () {
+    var bouton = document.querySelector('.copy');
+    if (!bouton || !navigator.clipboard) return;
+    bouton.hidden = false;
+    bouton.addEventListener('click', function () {
+      navigator.clipboard.writeText(bouton.dataset.copy).then(function () {
+        var avant = bouton.textContent;
+        bouton.textContent = 'Adresse copiée';
+        setTimeout(function () { bouton.textContent = avant; }, 1800);
+      });
+    });
+  })();
+</script>
 
 </body>
 </html>
