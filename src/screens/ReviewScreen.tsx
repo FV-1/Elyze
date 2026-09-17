@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -357,10 +357,14 @@ function makeStyles(colors: ColorTokens) {
       backgroundColor: colors.warning,
       borderColor: colors.warning,
     },
+    // Le bouton descend d'une douzaine de pixels : il montait presque contre
+    // la dernière ligne de la liste, si bien qu'on le touchait en croyant
+    // toucher une réponse. L'écart repris en haut est rendu en bas — la marge
+    // sous le bouton reste celle que la zone sûre de l'écran impose.
     footer: {
       paddingHorizontal: spacing.xl,
-      paddingBottom: spacing.lg,
-      paddingTop: spacing.sm,
+      paddingBottom: spacing.sm + 4,
+      paddingTop: spacing.md + 4,
     },
     cta: {
       flexDirection: 'row',

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -28,6 +28,7 @@ import {
   pickTopMatch,
 } from '../utils/scoring';
 import { haptics } from '../utils/haptics';
+import { porteeDesThemes } from '../utils/portee';
 import {
   countedAnswers,
   Milestone,
@@ -58,9 +59,23 @@ type Props = {
   onOpenSettings: () => void;
   showTutorial: boolean;
   onDismissTutorial: () => void;
+  tab: SwipeTab;
+  onChangeTab: (tab: SwipeTab) => void;
+  // Non nul quand la partie en cours est le défi de quelqu'un. `resume` reste
+  // nul tant que le paquet n'est pas fini (voir RankingPanel).
+  duel: {
+    resume: { accords: number; tranchees: number } | null;
+    onVoir: () => void;
+  } | null;
 };
 
-type SwipeTab = 'swipe' | 'ranking' | 'propositions';
+// L'ONGLET EST TENU PAR L'ÉCRAN PARENT, comme l'était déjà le thème ouvert.
+//
+// Cet écran est démonté dès qu'on le quitte — pour le duel, la révision, les
+// réglages — et son état local repartait alors sur « Swiper ». Ouvrir la
+// comparaison depuis l'onglet Classement, puis revenir, déposait donc sur le
+// paquet de cartes : le retour ne ramenait pas là d'où l'on venait.
+export type SwipeTab = 'swipe' | 'ranking' | 'propositions';
 
 // Trois onglets, plus l'action « Thèmes » que la barre affiche à part (voir
 // BottomTabBar). Cette action a brièvement été déplacée dans l'en-tête pour
@@ -95,11 +110,13 @@ export function SwipeScreen({
   onOpenSettings,
   showTutorial,
   onDismissTutorial,
+  tab,
+  onChangeTab,
+  duel,
 }: Props) {
   const colors = useColors();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const deckRef = useRef<SwipeDeckHandle>(null);
-  const [tab, setTab] = useState<SwipeTab>('swipe');
   // Rattrapage silencieux : les paliers déjà franchis au montage sont marqués
   // comme vus sans rien afficher. Cet écran est démonté dès qu'on le quitte
   // (accueil, révision, relance de l'app) ; sans ce rattrapage, une reprise de
@@ -234,11 +251,14 @@ export function SwipeScreen({
         setOpenTheme(null);
         return true;
       }
-      setTab('swipe');
+      onChangeTab('swipe');
       return true;
     });
     return () => subscription.remove();
-  }, [tab, openTheme]);
+  }, [tab, openTheme, onChangeTab]);
+
+  // Sur quoi porte le classement provisoire, quand il ne porte pas sur tout.
+  const portee = useMemo(() => porteeDesThemes(selectedThemeIds, THEMES), [selectedThemeIds]);
 
   // Un thème sans proposition ne peut pas être sélectionné (l'écran de choix
   // ne l'affiche pas), donc le total de référence est le nombre de thèmes
@@ -261,9 +281,11 @@ export function SwipeScreen({
   // réellement démarré (`swipeTop` le dit), et il retombe dès que l'index
   // avance — ce que la validation de la carte provoque toujours.
   const [swiping, setSwiping] = useState(false);
-  useEffect(() => {
+  const [indexArme, setIndexArme] = useState(currentIndex);
+  if (indexArme !== currentIndex) {
+    setIndexArme(currentIndex);
     setSwiping(false);
-  }, [currentIndex]);
+  }
 
   const triggerSwipe = (direction: SwipeDirection) => {
     if (swiping) return;
@@ -284,8 +306,9 @@ export function SwipeScreen({
         {/* UNE MAISON, PAS UN CHEVRON.
             Ce bouton n'a jamais fait « page précédente » : il quitte la
             session pour l'accueil. Un chevron promet un pas en arrière dans un
-            fil de navigation, alors qu'ici on sort d'un parcours de 165
-            cartes — l'icône annonçait une chose et en faisait une autre.
+            fil de navigation, alors qu'ici on sort d'un parcours de cinquante
+            à cent soixante-cinq cartes — l'icône annonçait une chose et en
+            faisait une autre.
             L'action, elle, n'a pas changé : la session étant enregistrée à
             chaque réponse, revenir à l'accueil ne perd rien et « Reprendre »
             attend sur place.
@@ -401,6 +424,9 @@ export function SwipeScreen({
           themeAgreement={themeAgreement}
           deckDone={isDeckDone}
           showCandidates={showCandidates}
+          portee={portee}
+          duel={duel}
+          onSeeResult={onSeeResult}
           onSelectCandidate={setSelectedCandidateId}
           onOpenCandidateInfo={setInfoCandidateId}
         />
@@ -413,7 +439,7 @@ export function SwipeScreen({
       <BottomTabBar
         tabs={SWIPE_TABS}
         active={tab}
-        onChange={setTab}
+        onChange={onChangeTab}
         extra={{
           // Le compte ne s'affiche que s'il y a quelque chose à signaler :
           // « 15 thèmes » en permanence banaliserait le repère, alors que
@@ -436,7 +462,7 @@ export function SwipeScreen({
         cancelLabel="Continuer à swiper"
         onConfirm={() => {
           setMilestoneVisible(false);
-          setTab('ranking');
+          onChangeTab('ranking');
         }}
         onCancel={() => setMilestoneVisible(false)}
       />

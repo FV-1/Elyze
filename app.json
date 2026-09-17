@@ -37,7 +37,9 @@
             "backgroundColor": "#121016"
           }
         }
-      ]
+      ],
+      "expo-sharing",
+      "expo-status-bar"
     ],
     "extra": {
       "eas": {

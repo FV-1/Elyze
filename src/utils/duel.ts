@@ -3,7 +3,7 @@ import { PROPOSALS } from '../data/proposals';
 import { THEMES } from '../data/themes';
 import { Answers, AnswerValue, Candidate, CandidateResult, Proposal } from '../types';
 import { CATALOG_FINGERPRINT } from './catalog';
-import { buildSessionDeck } from './deck';
+import { buildSessionDeck, QUOTA_PAR_CANDIDAT } from './deck';
 import { computeResults } from './scoring';
 import { shuffleAvecGraine } from './shuffle';
 
@@ -38,15 +38,27 @@ import { shuffleAvecGraine } from './shuffle';
 //   octets 1-2   : empreinte courte du catalogue
 //   octets 3-6   : graine du mélange
 //   octets 7-8   : masque des thèmes retenus, un bit par thème
-//   octets 9...  : deux bits par proposition du paquet reconstruit
+//   octet 9      : quota par candidat (longueur de la partie)
+//   octets 10... : deux bits par proposition du paquet reconstruit
 //   dernier      : somme de contrôle
 //
 // La longueur totale dépend du paquet, que seule la reconstruction révèle : on
 // lit l'entête, on refait le paquet, et c'est lui qui dit combien d'octets de
 // réponses doivent suivre.
-export const DUEL_FORMAT = 2;
+//
+// FORMAT 3 : LE QUOTA A REJOINT L'ENTÊTE. Depuis qu'une partie peut être
+// courte (cinq propositions par candidat) ou longue (quinze), la graine ne
+// suffit plus à refaire le paquet — même graine et même catalogue donnent deux
+// paquets différents selon le quota. Sans cet octet, l'autre téléphone
+// reconstruisait cent soixante-cinq cartes là où l'expéditeur en avait joué
+// cinquante-cinq : la somme de contrôle ne tombait pas juste, et le code était
+// rejeté comme illisible — dans le meilleur des cas.
+//
+// Les codes au format 2 sont refusés par le contrôle de version qui suit, avec
+// le message prévu pour ça (« ce code vient d'une autre version »).
+export const DUEL_FORMAT = 3;
 
-const ENTETE = 9;
+const ENTETE = 10;
 
 // Deux bits par réponse. « Sans avis » et « pas encore répondu » partagent la
 // valeur 0 : ni l'un ni l'autre ne compte dans le score, et un défi ne s'émet
@@ -92,9 +104,18 @@ function themesDuMasque(masque: number): string[] {
 }
 
 // Reconstruit le paquet exact d'une partie à partir de sa clé.
-export function paquetDuDefi(graine: number, themeIds: string[]): Proposal[] {
+export function paquetDuDefi(
+  graine: number,
+  themeIds: string[],
+  quota: number = QUOTA_PAR_CANDIDAT
+): Proposal[] {
   const pool = PROPOSALS.filter((p) => themeIds.includes(p.themeId));
-  return buildSessionDeck(pool, themeIds.length === THEMES.length, shuffleAvecGraine(graine));
+  return buildSessionDeck(
+    pool,
+    themeIds.length === THEMES.length,
+    shuffleAvecGraine(graine),
+    quota
+  );
 }
 
 // --- Base 32 lisible à voix haute ------------------------------------------
@@ -142,8 +163,13 @@ function depuisBase32(texte: string): Uint8Array | null {
 
 // --- Encodage ---------------------------------------------------------------
 
-export function encoderDefi(graine: number, themeIds: string[], reponses: Answers): string {
-  const paquet = paquetDuDefi(graine, themeIds);
+export function encoderDefi(
+  graine: number,
+  themeIds: string[],
+  reponses: Answers,
+  quota: number = QUOTA_PAR_CANDIDAT
+): string {
+  const paquet = paquetDuDefi(graine, themeIds, quota);
   const taille = ENTETE + Math.ceil((paquet.length * 2) / 8) + 1;
   const octets = new Uint8Array(taille);
   const empreinte = empreinteCourte();
@@ -158,6 +184,7 @@ export function encoderDefi(graine: number, themeIds: string[], reponses: Answer
   octets[6] = graine & 0xff;
   octets[7] = (masque >> 8) & 0xff;
   octets[8] = masque & 0xff;
+  octets[9] = quota & 0xff;
 
   paquet.forEach((proposition, i) => {
     const reponse = reponses[proposition.id];
@@ -177,6 +204,9 @@ export type DuelErreur = 'illisible' | 'format' | 'catalogue';
 export type Defi = {
   graine: number;
   themeIds: string[];
+  // Propositions par candidat : c'est ce qui distingue une partie courte d'une
+  // longue, et il faut le rejouer à l'identique.
+  quota: number;
   // Le paquet reconstruit, dans l'ordre exact où l'autre l'a joué.
   paquet: Proposal[];
   // Ses réponses, indexées par identifiant de proposition.
@@ -195,8 +225,10 @@ export function decoderDefi(code: string): Defi | DuelErreur {
   const graine = ((octets[3] << 24) | (octets[4] << 16) | (octets[5] << 8) | octets[6]) >>> 0;
   const themeIds = themesDuMasque((octets[7] << 8) | octets[8]);
   if (themeIds.length === 0) return 'illisible';
+  const quota = octets[9];
+  if (quota === 0) return 'illisible';
 
-  const paquet = paquetDuDefi(graine, themeIds);
+  const paquet = paquetDuDefi(graine, themeIds, quota);
   if (paquet.length === 0) return 'illisible';
 
   // C'est la reconstruction qui dit la longueur attendue : un code plus court
@@ -212,7 +244,7 @@ export function decoderDefi(code: string): Defi | DuelErreur {
     if (reponse) reponses[proposition.id] = reponse;
   });
 
-  return { graine, themeIds, paquet, reponses };
+  return { graine, themeIds, quota, paquet, reponses };
 }
 
 // --- Lien profond -----------------------------------------------------------

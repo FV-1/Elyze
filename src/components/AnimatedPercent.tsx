@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { StyleProp, Text, TextStyle } from 'react-native';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
@@ -30,11 +30,23 @@ export function AnimatedPercent({
   const [displayed, setDisplayed] = useState(skip ? value : 0);
   const frameRef = useRef<number | null>(null);
 
+  // Sans animation, la valeur finale s'affiche directement : elle n'a pas à
+  // passer par l'état, qu'il faudrait alors remettre à jour depuis un effet —
+  // un aller-retour de rendu pour un chiffre déjà connu au moment de peindre.
+  const affiche = skip ? value : displayed;
+
+  // Un défilement retardé repart de zéro : pendant l'attente, le chiffre
+  // précédent ne doit pas rester affiché comme s'il était le nouveau. Remis
+  // au rendu, avec le changement de valeur qui le provoque, plutôt que depuis
+  // l'effet — qui ne s'exécute qu'après la peinture.
+  const [visee, setVisee] = useState(value);
+  if (visee !== value) {
+    setVisee(value);
+    if (delayMs > 0) setDisplayed(0);
+  }
+
   useEffect(() => {
-    if (skip) {
-      setDisplayed(value);
-      return;
-    }
+    if (skip) return;
 
     const tick = (start: number) => {
       const elapsed = Date.now() - start;
@@ -53,7 +65,6 @@ export function AnimatedPercent({
 
     let attente: ReturnType<typeof setTimeout> | null = null;
     if (delayMs > 0) {
-      setDisplayed(0);
       attente = setTimeout(lancer, delayMs);
     } else {
       lancer();
@@ -65,5 +76,5 @@ export function AnimatedPercent({
     };
   }, [value, skip, delayMs]);
 
-  return <Text style={style}>{displayed}%</Text>;
+  return <Text style={style}>{affiche}%</Text>;
 }

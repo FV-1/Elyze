@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, {
@@ -98,13 +98,13 @@ export function SwipeTutorialOverlay({ onDismiss }: { onDismiss: () => void }) {
 function makeStyles(colors: ColorTokens) {
   return StyleSheet.create({
     overlay: {
-      ...StyleSheet.absoluteFillObject,
+      ...StyleSheet.absoluteFill,
       zIndex: 50,
       alignItems: 'center',
       justifyContent: 'center',
     },
     scrim: {
-      ...StyleSheet.absoluteFillObject,
+      ...StyleSheet.absoluteFill,
       // 0.86 plutôt que 0.72 : en thème clair, le fond de l'app transparaissait
       // assez pour ramener le voile à un gris moyen sur lequel plus aucune
       // icône colorée ne passait le contraste.

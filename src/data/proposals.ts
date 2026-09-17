@@ -6,6 +6,11 @@
 
 import { Proposal } from '../types';
 
+// Date de l'export Poligraph qui a produit ce catalogue. Affichée dans
+// l'app : un comparateur de programmes qui ne dit pas de quand datent ses
+// données demande une confiance qu'il ne justifie pas.
+export const DATASET_DATE = '2026-08-29';
+
 export const PROPOSALS: Proposal[] = [
   {
     id: 'cazeneuve-economie-instaurer-une-fiscalite-ciblant-',

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Modal,
@@ -9,6 +9,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { openUrl } from '../data/source';
 import {
@@ -17,53 +18,45 @@ import {
   FEEDBACK_KINDS_BY_ID,
   FEEDBACK_MAX,
   FeedbackKind,
-  feedbackContext,
 } from '../data/feedback';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
 // Signaler un bug, proposer une idée, donner un avis.
 //
-// CE QUI EST À L'ÉCRAN : le choix de la nature, une case, un bouton.
+// TROIS ÉLÉMENTS, DANS L'ORDRE OÙ ON LES UTILISE : de quoi il s'agit, ce
+// qu'on a à dire, et le bouton qui part. Rien d'autre à l'écran.
 //
-// Il y en a eu davantage, et chaque retrait a eu sa raison. Un paragraphe
-// d'accueil disait ce que le titre disait déjà. Un encadré de six lignes sur
-// l'absence de serveur repoussait le bouton hors de l'écran dès l'ouverture du
-// clavier. Une seconde case demandait au bug sa marche à suivre : bonne
-// intention, mais deux zones de texte dans une fenêtre posée sur les réglages,
-// cela ressemble à un formulaire administratif, et un formulaire décourage
-// d'écrire plus sûrement qu'une consigne manquante ne gêne la correction.
+// LA BOÎTE VIENT DU BAS ET Y RESTE. Une fenêtre centrée se fait recouvrir par
+// le clavier dès qu'on touche la case ; posée contre le bord inférieur, elle
+// monte avec lui et le texte reste visible pendant qu'on l'écrit. C'est aussi
+// là que le pouce arrive.
 //
-// LA TYPOGRAPHIE SUIT LE MÊME PRINCIPE. Les intitulés étaient en capitales
-// espacées et les trois natures en pastilles pleines sur un rail : beaucoup
-// d'appareil pour une fenêtre qu'on ouvre trente secondes. Les intitulés sont
-// redevenus des phrases, et la nature retenue se signale par une teinte
-// plutôt que par un aplat.
-//
-// LA PROMESSE RESTE, ELLE A CHANGÉ DE PLACE. Elle vit derrière le « i » de
-// l'entête, à un toucher, et elle est écrite là où elle est utile : quand on
-// se demande ce que le bouton va faire. C'est une information de confiance,
-// pas une étape du parcours — et une garantie qu'on relit rarement deux fois.
-// Elle reste par ailleurs en toutes lettres dans la page confidentialité.
+// CE QUI A ÉTÉ RETIRÉ. Un bouton « i » dépliait une explication sur l'absence
+// de serveur : une information de confiance qui mérite d'être lue, pas un
+// interrupteur à actionner. Elle tient maintenant en une ligne sous le bouton,
+// là où l'on se demande ce qu'il va faire. L'intitulé au-dessus de la case
+// répétait le filigrane qui est dans la case. Le compteur de caractères
+// surveillait une borne (1200) qu'un retour ordinaire ne rencontre jamais.
 //
 // Voir data/feedback.ts pour le raisonnement complet sur le courriel.
 export function FeedbackDialog({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   const colors = useColors();
+  const insets = useSafeAreaInsets();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [kind, setKind] = useState<FeedbackKind>('bug');
   const [message, setMessage] = useState('');
-  const [infoOuverte, setInfoOuverte] = useState(false);
 
-  // Une boîte rouverte repart à vide, explication repliée comprise. Retrouver
-  // le brouillon de la fois précédente, déjà envoyé, inviterait à l'envoyer
-  // deux fois.
-  useEffect(() => {
+  // Une boîte rouverte repart à vide. Retrouver le brouillon de la fois
+  // précédente, déjà envoyé, inviterait à l'envoyer deux fois.
+  const [ouvertAvant, setOuvertAvant] = useState(visible);
+  if (ouvertAvant !== visible) {
+    setOuvertAvant(visible);
     if (visible) {
       setKind('bug');
       setMessage('');
-      setInfoOuverte(false);
     }
-  }, [visible]);
+  }
 
   const info = FEEDBACK_KINDS_BY_ID[kind];
   const pret = message.trim().length > 0;
@@ -75,42 +68,27 @@ export function FeedbackDialog({ visible, onClose }: { visible: boolean; onClose
   };
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay} accessibilityViewIsModal>
         <Pressable style={styles.scrim} onPress={onClose} accessibilityLabel="Fermer" />
-        {/* Le champ de saisie occupe le bas de la boîte : sans cela, le
-            clavier le recouvre entièrement sur un écran court, et on écrit
-            sans voir ce qu'on écrit. */}
+        {/* LA FEUILLE EST BORNÉE PAR L'ÉCRAN, et cela tient à ce `flex: 1`.
+            Sans lui, la vue qui esquive le clavier mesure exactement sa
+            feuille plus la hauteur du clavier : bord inférieur collé en bas
+            d'un écran court, le surplus sort par le HAUT, et c'est l'entête —
+            titre et croix de fermeture — qui passe hors champ dès qu'on touche
+            la case. Avec `flex: 1`, elle occupe l'écran entier et son
+            rembourrage pousse la feuille vers le haut au lieu de l'allonger. */}
         <KeyboardAvoidingView
+          style={styles.esquive}
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          style={styles.centrage}
         >
-          <View style={styles.card}>
-            {/* Titre, explication et sortie sur une seule ligne. */}
+          <View style={[styles.sheet, { paddingBottom: spacing.lg + insets.bottom }]}>
             <View style={styles.entete}>
               <Text style={styles.title}>Un retour ?</Text>
               <Pressable
-                onPress={() => setInfoOuverte((ouvert) => !ouvert)}
-                hitSlop={10}
-                style={({ pressed }) => [
-                  styles.rond,
-                  infoOuverte && styles.rondActif,
-                  pressed && styles.presse,
-                ]}
-                accessibilityRole="button"
-                accessibilityState={{ expanded: infoOuverte }}
-                accessibilityLabel="Ce que l’application fait de ton message"
-              >
-                <Ionicons
-                  name="information"
-                  size={17}
-                  color={infoOuverte ? colors.onAccent : colors.textSecondary}
-                />
-              </Pressable>
-              <Pressable
                 onPress={onClose}
-                hitSlop={10}
-                style={({ pressed }) => [styles.rond, pressed && styles.presse]}
+                hitSlop={12}
+                style={({ pressed }) => [styles.fermer, pressed && styles.presse]}
                 accessibilityRole="button"
                 accessibilityLabel="Fermer"
               >
@@ -118,31 +96,26 @@ export function FeedbackDialog({ visible, onClose }: { visible: boolean; onClose
               </Pressable>
             </View>
 
-            {infoOuverte && (
-              <Text style={styles.info}>
-                L’app ne se connecte à aucun serveur. Elle écrit un brouillon dans ton
-                application de messagerie : tu le relis et tu l’envoies toi-même. Deux lignes y
-                sont ajoutées, celles-ci et rien d’autre : {feedbackContext()}.
-              </Text>
-            )}
-
-            <View style={styles.kindRow}>
+            {/* Un sélecteur segmenté : trois natures, celle qui est retenue
+                posée en clair sur le rail. C'est la forme que le système
+                emploie pour un choix unique — on la reconnaît sans l'apprendre. */}
+            <View style={styles.rail} accessibilityRole="radiogroup">
               {FEEDBACK_KINDS.map((nature) => {
                 const actif = kind === nature.kind;
                 return (
                   <Pressable
                     key={nature.kind}
                     onPress={() => setKind(nature.kind)}
-                    style={[styles.kind, actif && styles.kindActive]}
+                    style={[styles.segment, actif && styles.segmentActif]}
                     accessibilityRole="radio"
                     accessibilityState={{ checked: actif }}
                     accessibilityLabel={nature.label}
                   >
                     <Text
-                      style={[styles.kindText, actif && styles.kindTextActive]}
+                      style={[styles.segmentTexte, actif && styles.segmentTexteActif]}
                       numberOfLines={1}
                       adjustsFontSizeToFit
-                      minimumFontScale={0.8}
+                      minimumFontScale={0.85}
                     >
                       {nature.label}
                     </Text>
@@ -151,35 +124,22 @@ export function FeedbackDialog({ visible, onClose }: { visible: boolean; onClose
               })}
             </View>
 
-            <View style={styles.champs}>
-              {/* L'intitulé du champ est celui-là même qui servira
-                  d'intertitre dans le courriel : ce qu'on écrit ici arrive
-                  là-bas sous la question à laquelle on répond. */}
-              <Text style={styles.champTitre}>{info.champ}</Text>
-              <TextInput
-                style={styles.input}
-                value={message}
-                onChangeText={setMessage}
-                placeholder={info.placeholder}
-                placeholderTextColor={colors.textMuted}
-                multiline
-                textAlignVertical="top"
-                maxLength={FEEDBACK_MAX}
-                accessibilityLabel={info.champ}
-              />
-              {/* Le compteur n'apparaît qu'une fois qu'on écrit : « 0 / 1200 »
-                  sous une case vide n'apprend rien et fait du bruit. */}
-              {message.length > 0 && (
-                <Text style={styles.compteur}>
-                  {message.length} / {FEEDBACK_MAX}
-                </Text>
-              )}
-            </View>
+            {/* Le filigrane appelle le détail utile à CETTE nature de retour ;
+                il change avec elle et tient lieu d'intitulé. */}
+            <TextInput
+              style={styles.input}
+              value={message}
+              onChangeText={setMessage}
+              placeholder={info.placeholder}
+              placeholderTextColor={colors.textMuted}
+              multiline
+              textAlignVertical="top"
+              maxLength={FEEDBACK_MAX}
+              accessibilityLabel={info.champ}
+            />
 
-            {/* UNE SEULE ACTION EN BAS. « Annuler » y tenait la moitié de la
-                largeur pour une sortie déjà offerte deux fois — la croix de
-                l'entête et le fond touchable — et mettait sur le même rang
-                celle qu'on vient chercher et celle qu'on prend par erreur. */}
+            {/* UNE SEULE ACTION. Éteinte tant que rien n'est écrit : ouvrir une
+                application de messagerie sur un brouillon vide n'aide personne. */}
             <Pressable
               onPress={envoyer}
               disabled={!pret}
@@ -192,9 +152,15 @@ export function FeedbackDialog({ visible, onClose }: { visible: boolean; onClose
               accessibilityState={{ disabled: !pret }}
               accessibilityLabel="Ouvrir le brouillon dans mon application de messagerie"
             >
-              <Ionicons name="mail-outline" size={18} color={colors.onAccent} />
               <Text style={styles.actionTexte}>Ouvrir mon mail</Text>
             </Pressable>
+
+            {/* La promesse, écrite là où elle sert : juste sous le bouton, au
+                moment où l'on se demande ce qu'il va faire. */}
+            <Text style={styles.note}>
+              L’app n’envoie rien elle-même : elle prépare un brouillon, tu le relis et tu
+              l’envoies.
+            </Text>
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -206,35 +172,28 @@ function makeStyles(colors: ColorTokens) {
   return StyleSheet.create({
     overlay: {
       flex: 1,
+      justifyContent: 'flex-end',
     },
     scrim: {
-      ...StyleSheet.absoluteFillObject,
+      ...StyleSheet.absoluteFill,
       backgroundColor: 'rgba(10,9,14,0.55)',
     },
-    centrage: {
+    // Posée contre le bord inférieur : seuls les coins hauts sont arrondis,
+    // le bas file sous l'écran plutôt que de flotter.
+    esquive: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: spacing.lg,
-      paddingVertical: spacing.xl,
+      justifyContent: 'flex-end',
     },
-    card: {
-      width: '100%',
-      maxWidth: 400,
-      // La boîte ne dépasse jamais l'écran : au-delà, ce sont les cases qui
-      // défilent, et l'entête comme le bouton restent en place.
+    sheet: {
+      // Deuxième garde-fou, pour le grossissement système du texte : la
+      // feuille ne dépasse pas la place qui lui reste une fois le clavier posé.
       maxHeight: '100%',
       backgroundColor: colors.surface,
-      borderRadius: radii.lg,
-      padding: spacing.lg,
-      gap: spacing.sm,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: colors.border,
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 12 },
-      shadowOpacity: 0.18,
-      shadowRadius: 28,
-      elevation: 8,
+      borderTopLeftRadius: radii.lg,
+      borderTopRightRadius: radii.lg,
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.lg,
+      gap: spacing.md,
     },
 
     entete: {
@@ -244,13 +203,11 @@ function makeStyles(colors: ColorTokens) {
     },
     title: {
       flex: 1,
-      fontSize: fonts.body + 1,
+      fontSize: fonts.body + 3,
       fontWeight: '800',
       color: colors.textPrimary,
     },
-    // Les deux boutons de l'entête ont la même forme : ils appartiennent au
-    // cadre de la boîte, pas à son contenu.
-    rond: {
+    fermer: {
       width: 32,
       height: 32,
       borderRadius: radii.pill,
@@ -258,94 +215,64 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
       backgroundColor: colors.surfaceAlt,
     },
-    rondActif: {
-      backgroundColor: colors.accent,
-    },
     presse: {
       opacity: 0.7,
     },
-    info: {
-      fontSize: fonts.tiny,
-      lineHeight: fonts.tiny * 1.5,
-      color: colors.textSecondary,
-      backgroundColor: colors.surfaceAlt,
-      borderRadius: radii.md,
-      padding: spacing.sm + 2,
-    },
 
-    // Trois choix posés sur le fond de la boîte, sans rail ni aplat. Le rail
-    // gris plus l'aplat d'accent faisaient de ce simple choix l'élément le
-    // plus appuyé de la fenêtre, avant même la case où l'on écrit.
-    kindRow: {
+    rail: {
       flexDirection: 'row',
-      gap: spacing.xs,
+      backgroundColor: colors.surfaceAlt,
+      borderRadius: radii.pill,
+      padding: 3,
     },
-    kind: {
+    segment: {
       flex: 1,
       alignItems: 'center',
-      paddingVertical: spacing.sm,
+      paddingVertical: spacing.sm + 1,
       borderRadius: radii.pill,
     },
-    kindActive: {
-      backgroundColor: colors.accentSoft,
+    segmentActif: {
+      backgroundColor: colors.surface,
+      shadowColor: '#1A1730',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.12,
+      shadowRadius: 3,
+      elevation: 2,
     },
-    kindText: {
-      fontSize: fonts.small,
+    segmentTexte: {
+      fontSize: fonts.small + 1,
       fontWeight: '600',
       color: colors.textSecondary,
     },
     // `accentText` est le jeton prévu pour de l'accent en texte sur un fond
-    // neutre ou `accentSoft` : c'est exactement ce cas, et il tient le
-    // contraste là où `accent` ne le tiendrait pas.
-    kindTextActive: {
+    // neutre : il tient le contraste là où `accent` ne le tiendrait pas.
+    segmentTexteActif: {
       color: colors.accentText,
       fontWeight: '800',
     },
 
-    champs: {
-      gap: spacing.xs,
-    },
-    // Intitulé de case. Il porte le même mot que l'intertitre du courriel,
-    // pour qu'on sache en écrivant sous quel titre le texte arrivera. En
-    // phrase et non en capitales espacées : c'est une question posée, pas
-    // l'étiquette d'un bordereau.
-    champTitre: {
-      fontSize: fonts.small,
-      fontWeight: '600',
-      color: colors.textSecondary,
-      marginTop: spacing.xs,
-    },
     input: {
+      // Se rétracte quand la place manque (petit écran, clavier ouvert, texte
+      // agrandi) : c'est le seul bloc de la feuille dont la hauteur soit un
+      // confort et non une nécessité.
+      flexShrink: 1,
       minHeight: 110,
       maxHeight: 200,
       backgroundColor: colors.surfaceAlt,
       borderRadius: radii.md,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: colors.border,
       padding: spacing.md,
-      fontSize: fonts.small + 1,
-      lineHeight: (fonts.small + 1) * 1.45,
+      fontSize: fonts.small + 2,
+      lineHeight: (fonts.small + 2) * 1.45,
       color: colors.textPrimary,
-    },
-    compteur: {
-      alignSelf: 'flex-end',
-      fontSize: fonts.tiny,
-      fontWeight: '600',
-      color: colors.textMuted,
-      fontVariant: ['tabular-nums'],
     },
 
     action: {
-      flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      gap: spacing.sm,
       backgroundColor: colors.accent,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
     },
-    // Éteint tant que rien n'est écrit : ouvrir une application de messagerie
-    // sur un brouillon vide n'aide personne.
     actionEteinte: {
       opacity: 0.4,
     },
@@ -353,6 +280,13 @@ function makeStyles(colors: ColorTokens) {
       fontSize: fonts.body,
       fontWeight: '700',
       color: colors.onAccent,
+    },
+    note: {
+      textAlign: 'center',
+      fontSize: fonts.tiny,
+      lineHeight: fonts.tiny * 1.5,
+      color: colors.textMuted,
+      marginTop: -spacing.xs,
     },
   });
 }

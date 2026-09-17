@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -49,9 +49,14 @@ export function CandidateInfoDialog({
 
   // Chaque fiche s'ouvre repliée. Sans cette remise à zéro, avoir déplié les
   // sujets d'un candidat laissait la fiche du suivant ouverte en grand.
-  useEffect(() => {
+  //
+  // Pendant le rendu, et non depuis un effet : la fiche du candidat suivant
+  // serait sinon peinte une image en grand avant de se replier.
+  const [ficheAffichee, setFicheAffichee] = useState(candidate?.id);
+  if (ficheAffichee !== candidate?.id) {
+    setFicheAffichee(candidate?.id);
     setTousLesSujets(false);
-  }, [candidate?.id]);
+  }
 
   const stats = useMemo(() => {
     if (!candidate) return null;

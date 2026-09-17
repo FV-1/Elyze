@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,6 +9,7 @@ import { haptics } from '../utils/haptics';
 import { PROPOSALS } from '../data/proposals';
 import { CANDIDATES } from '../data/candidates';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { FormatPartie, QUOTA_COURT, QUOTA_PAR_CANDIDAT } from '../utils/deck';
 
 // Easter egg : sept appuis rapides sur le titre débloquent un accent caché.
 const SECRET_TAPS_REQUIRED = 7;
@@ -32,6 +33,14 @@ export type RestorableSummary = {
   topCount?: number;
 };
 
+// Les deux longueurs, avec le nombre de cartes qu'elles donnent réellement.
+// Chaque candidat a de quoi fournir son quota dans les deux cas (le plus petit
+// vivier en compte vingt), donc la multiplication dit vrai — voir utils/deck.
+const LONGUEURS: { format: FormatPartie; label: string; quota: number }[] = [
+  { format: 'court', label: 'Partie courte', quota: QUOTA_COURT },
+  { format: 'long', label: 'Partie longue', quota: QUOTA_PAR_CANDIDAT },
+];
+
 type Props = {
   onStartFresh: () => void;
   onCustomizeThemes: () => void;
@@ -39,6 +48,18 @@ type Props = {
   onResume: () => void;
   onOpenHowItWorks: () => void;
   onOpenSettings: () => void;
+  // Longueur de la prochaine partie. Tenue par l'écran parent, parce qu'elle
+  // vaut aussi pour la partie lancée depuis le choix des thèmes.
+  format: FormatPartie;
+  onChangeFormat: (format: FormatPartie) => void;
+  // Relever le défi de quelqu'un. L'écran de duel n'était atteignable que
+  // depuis un résultat : qui recevait un code par message devait d'abord finir
+  // sa propre partie pour avoir le droit de le saisir.
+  onOpenDuel: () => void;
+  // Une partie était en cours, mais elle portait sur des propositions que la
+  // mise à jour a changées. On le dit ici plutôt que de la faire disparaître
+  // sans un mot (voir utils/storage.ts).
+  sessionPerimee: boolean;
 };
 
 export function IntroScreen({
@@ -48,6 +69,10 @@ export function IntroScreen({
   onResume,
   onOpenHowItWorks,
   onOpenSettings,
+  format,
+  onChangeFormat,
+  onOpenDuel,
+  sessionPerimee,
 }: Props) {
   const colors = useColors();
   const styles = useMemo(() => makeStyles(colors), [colors]);
@@ -247,6 +272,19 @@ export function IntroScreen({
       </View>
 
       <View style={styles.footer}>
+        {/* Ce qui a disparu, et pourquoi. Sans cette ligne, quelqu'un arrêté à
+            la cent-vingtième carte rouvrait l'app sur un accueil vide : la
+            perte est la même, la stupeur non. */}
+        {sessionPerimee && (
+          <View style={styles.avis}>
+            <Ionicons name="refresh-outline" size={17} color={colors.textSecondary} />
+            <Text style={styles.avisTexte}>
+              Ta partie en cours portait sur des propositions mises à jour depuis. Elle n’a pas pu
+              être reprise — il faut recommencer.
+            </Text>
+          </View>
+        )}
+
         {/* Le rappel du dernier résultat est une action : il vit avec les
             autres, en bas. Placé plus haut, il s'ajoutait à un bloc centré et
             faisait remonter tout le contenu de l'écran selon qu'on avait ou
@@ -295,6 +333,36 @@ export function IntroScreen({
 
         {(!restorable || restorable.isComplete) && (
           <>
+            {/* LA PARTIE COURTE EST LE DÉFAUT. Cent soixante-cinq cartes font
+                onze minutes sans s'arrêter, et une partie abandonnée ne donne
+                jamais de résultat — seulement un classement provisoire. La
+                partie longue reste à un toucher pour qui la veut.
+                Le nombre de cartes est écrit sous le nom : « courte » ne veut
+                rien dire tant qu'on ne sait pas à quoi on s'engage. */}
+            <View style={styles.longueurRail}>
+              {LONGUEURS.map((longueur) => {
+                const actif = format === longueur.format;
+                const cartes = longueur.quota * CANDIDATES.length;
+                return (
+                  <Pressable
+                    key={longueur.format}
+                    onPress={() => onChangeFormat(longueur.format)}
+                    style={[styles.longueur, actif && styles.longueurActive]}
+                    accessibilityRole="radio"
+                    accessibilityState={{ checked: actif }}
+                    accessibilityLabel={`${longueur.label}, ${cartes} cartes`}
+                  >
+                    <Text style={[styles.longueurTitre, actif && styles.longueurTitreActif]}>
+                      {longueur.label}
+                    </Text>
+                    <Text style={[styles.longueurCartes, actif && styles.longueurCartesActif]}>
+                      {cartes} cartes
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+
             <Pressable
               onPress={onStartFresh}
               style={({ pressed }) => [styles.cta, pressed && styles.ctaPressed]}
@@ -310,22 +378,46 @@ export function IntroScreen({
               </Text>
               <Ionicons name="arrow-forward" size={20} color={colors.onAccent} />
             </Pressable>
-            {/* Bouton plein et non lien discret. C'est ici, avant de lancer,
-                que choisir ses thèmes est à la fois utile et gratuit : une
-                fois la session commencée, en changer la redémarre. Traité
-                comme « Recommencer à zéro » — même gris muet — il se lisait
-                comme une note de bas de page. */}
+          </>
+        )}
+
+        {/* LES DEUX PORTES DE CÔTÉ, SUR UNE MÊME LIGNE.
+            Elles ne mènent pas au même endroit mais elles ont le même rang :
+            ni l'une ni l'autre n'est ce qu'on vient faire ici, et toutes deux
+            doivent rester à un toucher. Le choix des thèmes tenait jusqu'ici
+            un bouton pleine largeur sous le bouton principal, où il pesait
+            presque autant que lui pour un réglage qu'on utilise rarement ; le
+            code de défi, lui, était un lien discret en bas de page, alors que
+            c'est par là qu'arrivent ceux qui viennent d'un ami.
+
+            La porte des thèmes disparaît pendant une partie : en changer la
+            redémarre, et elle n'a rien à faire à côté d'un « Reprendre ». */}
+        <View style={styles.duo}>
+          {(!restorable || restorable.isComplete) && (
             <Pressable
               onPress={onCustomizeThemes}
-              style={({ pressed }) => [styles.themeCta, pressed && styles.themeCtaPressed]}
+              style={({ pressed }) => [styles.duoBouton, pressed && styles.duoPresse]}
               accessibilityRole="button"
               accessibilityLabel="Choisir les thèmes à swiper"
             >
-              <Ionicons name="pricetags-outline" size={18} color={colors.accentText} />
-              <Text style={styles.themeCtaText}>Choisir mes thèmes</Text>
+              <Ionicons name="pricetag-outline" size={18} color={colors.textPrimary} />
+              <Text style={styles.duoTexte} numberOfLines={1}>
+                Mes thèmes
+              </Text>
             </Pressable>
-          </>
-        )}
+          )}
+          <Pressable
+            onPress={onOpenDuel}
+            style={({ pressed }) => [styles.duoBouton, pressed && styles.duoPresse]}
+            accessibilityRole="button"
+            accessibilityLabel="Relever le défi de quelqu’un avec son code"
+          >
+            <Ionicons name="qr-code-outline" size={18} color={colors.textPrimary} />
+            <Text style={styles.duoTexte} numberOfLines={1}>
+              Code défi
+            </Text>
+          </Pressable>
+        </View>
 
         {/* La mention de la source est une obligation de la licence : elle
             reste. La garantie d'un nombre égal de propositions par candidat a
@@ -576,27 +668,93 @@ function makeStyles(colors: ColorTokens) {
     // Second bouton de l'accueil : même gabarit que le principal, mais posé
     // sur l'accent atténué au lieu de l'accent plein. Il se voit sans
     // disputer la primauté à « Commencer ».
-    themeCta: {
+    restartLinkWrap: {
+      alignItems: 'center',
+      paddingVertical: spacing.xs,
+    },
+    // Avis de partie perdue à la mise à jour. Gris et sans bouton : il ne
+    // demande rien, il explique.
+    avis: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: spacing.sm,
+      backgroundColor: colors.surfaceAlt,
+      borderRadius: radii.sm,
+      paddingVertical: spacing.sm + 2,
+      paddingHorizontal: spacing.md,
+    },
+    avisTexte: {
+      flex: 1,
+      fontSize: fonts.tiny,
+      lineHeight: fonts.tiny * 1.45,
+      color: colors.textSecondary,
+    },
+    // Les deux longueurs, sur un rail, à la façon du sélecteur des réglages.
+    longueurRail: {
+      flexDirection: 'row',
+      backgroundColor: colors.surfaceAlt,
+      borderRadius: radii.md,
+      padding: 4,
+      gap: 4,
+    },
+    longueur: {
+      flex: 1,
+      alignItems: 'center',
+      gap: 1,
+      paddingVertical: spacing.sm,
+      borderRadius: radii.sm,
+    },
+    longueurActive: {
+      backgroundColor: colors.surface,
+    },
+    longueurTitre: {
+      fontSize: fonts.small,
+      fontWeight: '700',
+      color: colors.textSecondary,
+    },
+    longueurTitreActif: {
+      color: colors.accentText,
+      fontWeight: '800',
+    },
+    longueurCartes: {
+      fontSize: fonts.tiny,
+      fontWeight: '600',
+      color: colors.textMuted,
+      fontVariant: ['tabular-nums'],
+    },
+    longueurCartesActif: {
+      color: colors.textSecondary,
+    },
+    // DEUX BOUTONS CERNÉS, À ÉGALITÉ DE LARGEUR.
+    //
+    // Cernés et non remplis : le seul aplat de l'écran reste « Commencer », et
+    // deux fonds pleins de plus en auraient fait trois de même poids. C'est le
+    // contour qui dit « ceci se touche », comme sur l'action « Thèmes » de la
+    // barre du bas.
+    duo: {
+      flexDirection: 'row',
+      gap: spacing.sm + 2,
+    },
+    duoBouton: {
+      flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       gap: spacing.sm,
-      marginTop: spacing.sm,
-      backgroundColor: colors.accentSoft,
-      borderRadius: radii.pill,
+      backgroundColor: colors.surface,
+      borderRadius: radii.md,
+      borderWidth: 1,
+      borderColor: colors.border,
       paddingVertical: spacing.md - 2,
+      paddingHorizontal: spacing.sm,
     },
-    themeCtaPressed: {
-      opacity: 0.65,
+    duoPresse: {
+      backgroundColor: colors.surfaceAlt,
     },
-    themeCtaText: {
-      fontSize: fonts.body,
+    duoTexte: {
+      fontSize: fonts.small + 2,
       fontWeight: '700',
-      color: colors.accentText,
-    },
-    restartLinkWrap: {
-      alignItems: 'center',
-      paddingVertical: spacing.xs,
+      color: colors.textPrimary,
     },
     // L'ACCENT CHOISI DANS LES RÉGLAGES, et non un gris de service.
     // Recommencer est une action ordinaire et volontaire : la teinte de l'app

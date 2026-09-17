@@ -37,6 +37,28 @@ module.exports = [
     },
   },
   {
+    // REANIMATED CONTRE LES RÈGLES DU COMPILATEUR REACT.
+    //
+    // `react-hooks/immutability` et `react-hooks/refs`, arrivées avec le SDK
+    // 57, interdisent d'écrire dans une valeur qu'on n'a pas créée sur place
+    // et de lire une référence pendant le rendu. Une `useSharedValue` de
+    // Reanimated est précisément une boîte faite pour être écrite — c'est son
+    // interface — et les écritures signalées ici sont toutes dans des
+    // fermetures de geste (`onBegin`, `onUpdate`, `onEnd`), qui s'exécutent au
+    // doigt et non au rendu. Les règles ne peuvent pas le savoir : elles
+    // voient un `useMemo` et supposent le pire.
+    //
+    // Désactivées pour ce seul fichier, le seul qui anime depuis des
+    // fermetures de geste ; partout ailleurs (Confetti, CurtainReveal,
+    // Podium…) les mêmes écritures ont lieu dans des effets et ne posent pas
+    // question.
+    files: ['src/components/SwipeCard.tsx'],
+    rules: {
+      'react-hooks/immutability': 'off',
+      'react-hooks/refs': 'off',
+    },
+  },
+  {
     // Les scripts de génération et d'outillage tournent sous Node, pas dans
     // React Native : ils utilisent `require`, `module` et `process`.
     files: ['scripts/**/*.js', 'eslint.config.js'],

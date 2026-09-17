@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { qrMatrix } from '../utils/qr';
 import { QR_BACKGROUND, qrModuleColor } from '../theme/qrColors';

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,6 +6,10 @@ import { ScreenHeader } from '../components/ScreenHeader';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 import { openSourceUrl, POLIGRAPH_LICENCE } from '../data/source';
+import { DATASET_DATE } from '../data/proposals';
+import { dateEnFrancais } from '../utils/date';
+
+const DATE_CATALOGUE = dateEnFrancais(DATASET_DATE);
 
 const SECTIONS: { icon: string; title: string; body: string }[] = [
   {
@@ -36,7 +40,10 @@ const SECTIONS: { icon: string; title: string; body: string }[] = [
     icon: '📚',
     title: 'D’où viennent les propositions',
     body:
-      'Les propositions viennent de Poligraph, qui recense les mesures des candidats et les relie à leur document d’origine (programme de parti, déclaration, interview). Le texte affiché en gros sur chaque carte est celui de la mesure, repris mot pour mot, sans coupe ni reformulation. Le lien vers la fiche de chaque mesure a été retiré des cartes : son adresse commence par le nom du candidat, ce qui revenait à te dire qui portait la carte que tu es en train de juger.',
+      (DATE_CATALOGUE
+        ? `Les propositions embarquées ont été arrêtées au ${DATE_CATALOGUE} : elles ne changent qu’avec une mise à jour de l’app, jamais en cours de route. `
+        : '') +
+      'Elles viennent de Poligraph, qui recense les mesures des candidats et les relie à leur document d’origine (programme de parti, déclaration, interview). Le texte affiché en gros sur chaque carte est celui de la mesure, repris mot pour mot, sans coupe ni reformulation. Le lien vers la fiche de chaque mesure a été retiré des cartes : son adresse commence par le nom du candidat, ce qui revenait à te dire qui portait la carte que tu es en train de juger.',
   },
   {
     icon: '⚖️',

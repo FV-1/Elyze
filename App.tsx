@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BackHandler, Linking } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
@@ -6,7 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { IntroScreen, RestorableSummary } from './src/screens/IntroScreen';
 import { ThemeSelectScreen } from './src/screens/ThemeSelectScreen';
-import { SwipeScreen } from './src/screens/SwipeScreen';
+import { SwipeScreen, SwipeTab } from './src/screens/SwipeScreen';
 import { ReviewScreen } from './src/screens/ReviewScreen';
 import { ResultsScreen } from './src/screens/ResultsScreen';
 import { DuelScreen } from './src/screens/DuelScreen';
@@ -19,15 +19,21 @@ import { Answers, Proposal } from './src/types';
 import { PROPOSALS, PROPOSALS_BY_ID } from './src/data/proposals';
 import { CANDIDATES } from './src/data/candidates';
 import { THEMES, THEMES_BY_ID } from './src/data/themes';
-import { buildSessionDeck } from './src/utils/deck';
+import {
+  buildSessionDeck,
+  FormatPartie,
+  quotaDuFormat,
+  QUOTA_PAR_CANDIDAT,
+} from './src/utils/deck';
 import { graineAleatoire, shuffleAvecGraine } from './src/utils/shuffle';
-import { codeDepuisUrl, Defi } from './src/utils/duel';
+import { codeDepuisUrl, comparerDefi, Defi } from './src/utils/duel';
 import { computeResults, pickTopMatch, topMatches } from './src/utils/scoring';
 
 import {
   clearSession,
   hasSeenTutorial,
-  loadSession,
+  loadSessionAvecEtat,
+  quotaDeLaSession,
   markTutorialSeen,
   resetAllData,
   saveSession,
@@ -89,6 +95,14 @@ function AppInner() {
   // Graine du mélange de la partie en cours. Conservée pour pouvoir refabriquer
   // son code de défi à tout moment (voir utils/duel.ts).
   const [graine, setGraine] = useState(0);
+  // Propositions par candidat de la partie en cours. Conservée avec la graine
+  // et pour la même raison : refabriquer le code de défi (voir utils/duel.ts).
+  const [quota, setQuota] = useState(QUOTA_PAR_CANDIDAT);
+  // Longueur choisie pour la PROCHAINE partie. La courte est le défaut, et
+  // elle le redevient à chaque lancement : c'est le parcours qu'on termine.
+  const [format, setFormat] = useState<FormatPartie>('court');
+  // Une partie était enregistrée, mais d'un autre catalogue.
+  const [sessionPerimee, setSessionPerimee] = useState(false);
   // Réponses de l'adversaire, quand cette partie est un défi relevé.
   const [adversaire, setAdversaire] = useState<Answers | undefined>(undefined);
 
@@ -100,23 +114,59 @@ function AppInner() {
   // Code de duel reçu par lien profond (elyze://d?c=…), le cas échéant.
   const [duelCode, setDuelCode] = useState<string | null>(null);
 
+  // Onglet courant de l'écran de swipe. Tenu ici parce que cet écran est
+  // démonté dès qu'on le quitte : sans cela, revenir du duel ou des réglages
+  // déposait sur les cartes, jamais sur l'onglet d'où l'on était parti.
+  const [swipeTab, setSwipeTab] = useState<SwipeTab>('swipe');
+
   const [showTutorial, setShowTutorial] = useState(false);
   // Le "moment de révélation" (haptique + animations) de l'écran de résultat
   // ne doit jouer qu'une fois par résultat, pas à chaque retour sur l'écran
   // (ex. après avoir ouvert l'explorateur ou "Comment ça marche").
   const [resultsRevealed, setResultsRevealed] = useState(false);
 
-  // Où revenir en quittant le duel. Calculé plutôt que mémorisé : on y entre
-  // aussi bien depuis l'écran de résultat que par un lien profond ouvert
-  // l'app fermée, cas où aucun « écran précédent » n'a jamais existé.
+  // OÙ REVENIR EN QUITTANT LE RÉSULTAT.
+  //
+  // Cet écran a cinq entrées : la révision, l'écran de fin du paquet, la carte
+  // « ton dernier résultat » de l'accueil, le lancement de l'app sur une
+  // partie déjà finie, et la sortie du duel. Le retour, lui, était écrit en
+  // dur sur la révision — la seule de ces cinq provenances pour laquelle il
+  // était juste. Ouvrir l'app sur son résultat de la veille et toucher le
+  // chevron déposait donc dans une liste de cent soixante-cinq lignes qu'on
+  // n'avait jamais demandée, à deux pas de plus de l'accueil.
+  //
+  // Même motif que `settingsReturnTo` et ses voisins : chaque entrée pose sa
+  // provenance, le retour la relit.
+  const [resultsReturnTo, setResultsReturnTo] = useState<Screen>('intro');
+  const openResults = (depuis: Screen) => {
+    setResultsReturnTo(depuis);
+    setScreen('results');
+  };
+
+  // Où revenir en quittant le duel.
+  //
+  // MÉMORISÉ QUAND ON VIENT DE QUELQUE PART, calculé sinon : on entre dans le
+  // duel depuis le résultat, l'accueil et l'onglet Classement, mais aussi par
+  // un lien profond qui ouvre l'app fermée — cas où aucun « écran précédent »
+  // n'a jamais existé, et où seul l'état de la partie peut décider.
+  const [duelReturnTo, setDuelReturnTo] = useState<Screen | null>(null);
+  const openDuel = (depuis: Screen) => {
+    setDuelReturnTo(depuis);
+    setScreen('duel');
+  };
   const quitterDuel = useCallback(() => {
     setDuelCode(null);
+    if (duelReturnTo) {
+      setScreen(duelReturnTo);
+      setDuelReturnTo(null);
+      return;
+    }
     if (sessionProposals.length === 0) {
       setScreen('intro');
       return;
     }
     setScreen(currentIndex >= sessionProposals.length ? 'results' : 'swipe');
-  }, [sessionProposals.length, currentIndex]);
+  }, [duelReturnTo, sessionProposals.length, currentIndex]);
 
   useEffect(() => {
     const handler = () => {
@@ -137,9 +187,9 @@ function AppInner() {
         return true;
       }
       if (screen === 'results') {
-        // Symétrique au bouton retour visible sur cet écran : on revient à la
-        // révision des réponses, pas à l'accueil (rien n'est perdu).
-        setScreen('review');
+        // Symétrique au bouton visible en haut à gauche de cet écran : on
+        // revient là d'où l'on est venu (voir `resultsReturnTo`).
+        setScreen(resultsReturnTo);
         return true;
       }
       if (screen === 'review') {
@@ -160,7 +210,7 @@ function AppInner() {
     };
     const subscription = BackHandler.addEventListener('hardwareBackPress', handler);
     return () => subscription.remove();
-  }, [screen, howItWorksReturnTo, settingsReturnTo, themesReturnTo, quitterDuel]);
+  }, [screen, howItWorksReturnTo, settingsReturnTo, themesReturnTo, resultsReturnTo, quitterDuel]);
 
   // Au lancement, on ne passe PAS par l'accueil quand une partie est en cours.
   //
@@ -186,6 +236,7 @@ function AppInner() {
       if (!code) return;
       lienTraite.current = true;
       setDuelCode(code);
+      setDuelReturnTo(null);
       setScreen('duel');
     };
 
@@ -199,7 +250,8 @@ function AppInner() {
   }, []);
 
   useEffect(() => {
-    loadSession().then((session) => {
+    loadSessionAvecEtat().then(({ session, perimee }) => {
+      setSessionPerimee(perimee);
       // LA SESSION EST TOUJOURS REMISE EN PLACE ; SEULE LA DESTINATION CÈDE.
       //
       // Une première version abandonnait toute la restauration dès qu'un lien
@@ -248,6 +300,7 @@ function AppInner() {
       setSelectedThemeIds(session.selectedThemeIds);
       setSessionProposals(proposals);
       setGraine(session.graine);
+      setQuota(quotaDeLaSession(session));
       setAdversaire(session.adversaire);
       setCurrentIndex(session.currentIndex);
       setAnswers(session.answers);
@@ -255,6 +308,8 @@ function AppInner() {
       // révélation : ce moment appartient à la fois où le paquet s'est
       // terminé, pas à chaque ouverture de l'app.
       setResultsRevealed(isComplete);
+      // On arrive de nulle part : la sortie est l'accueil.
+      if (isComplete) setResultsReturnTo('intro');
       aller(isComplete ? 'results' : 'swipe');
     });
 
@@ -309,13 +364,31 @@ function AppInner() {
 
   const restorable = liveRestorable ?? storedRestorable;
 
+  // CE QUE LA COMPARAISON DIRA, EN DEUX NOMBRES.
+  //
+  // C'est la raison d'être du duel, et elle vivait entièrement sur l'écran de
+  // duel : ailleurs, rien ne disait qu'il y avait quelque chose à aller voir.
+  // Annoncée en chiffres plutôt qu'en promesse — « 32 accords sur 48 cartes
+  // tranchées par vous deux » donne envie d'ouvrir, « vous pourrez comparer »
+  // non.
+  //
+  // Nul tant que le paquet n'est pas fini : une comparaison partielle changerait
+  // à chaque carte, et le défi ne se lit qu'une fois joué en entier.
+  const resumeDuel = useMemo(() => {
+    if (!adversaire || sessionProposals.length === 0) return null;
+    if (currentIndex < sessionProposals.length) return null;
+    const c = comparerDefi(sessionProposals, answers, adversaire);
+    return { accords: c.accords, tranchees: c.tranchees };
+  }, [adversaire, sessionProposals, currentIndex, answers]);
+
   const persist = (
     currentIndexToSave: number,
     answersToSave: Answers,
     proposalsToSave: Proposal[],
     themeIds: string[],
     graineASauver: number = graine,
-    adversaireASauver: Answers | undefined = adversaire
+    adversaireASauver: Answers | undefined = adversaire,
+    quotaASauver: number = quota
   ) => {
     saveSession({
       selectedThemeIds: themeIds,
@@ -324,6 +397,7 @@ function AppInner() {
       answers: answersToSave,
       graine: graineASauver,
       adversaire: adversaireASauver,
+      quota: quotaASauver,
     });
   };
 
@@ -331,7 +405,7 @@ function AppInner() {
   // y va directement, sans passer par la sélection des thèmes. Choisir des
   // thèmes en particulier reste possible, mais comme une option secondaire
   // (voir `handleCustomizeThemes`), pas comme une étape imposée.
-  const startSession = (themeIds: string[]) => {
+  const startSession = (themeIds: string[], quotaDemande: number) => {
     // DEUX FAÇONS DE COMPOSER LE PAQUET, selon l'étendue de la sélection.
     //
     // Sur TOUS les thèmes, il est TIRÉ du vivier embarqué et non pris en
@@ -352,19 +426,23 @@ function AppInner() {
     const order = buildSessionDeck(
       filtered,
       themeIds.length === ALL_THEME_IDS.length,
-      shuffleAvecGraine(nouvelleGraine)
+      shuffleAvecGraine(nouvelleGraine),
+      quotaDemande
     );
     setSelectedThemeIds(themeIds);
     setSessionProposals(order);
     setGraine(nouvelleGraine);
+    setQuota(quotaDemande);
+    setSessionPerimee(false);
     setAdversaire(undefined);
     setCurrentIndex(0);
     setAnswers({});
     setStoredRestorable(null);
     setPendingRestore(null);
     setResultsRevealed(false);
+    setSwipeTab('swipe');
     setScreen('swipe');
-    persist(0, {}, order, themeIds, nouvelleGraine, undefined);
+    persist(0, {}, order, themeIds, nouvelleGraine, undefined, quotaDemande);
   };
 
   // Relever un défi : on rejoue EXACTEMENT le paquet de l'autre, et l'on garde
@@ -374,6 +452,9 @@ function AppInner() {
     setSelectedThemeIds(defi.themeIds);
     setSessionProposals(defi.paquet);
     setGraine(defi.graine);
+    // La longueur est celle du défi : on rejoue SES cartes, pas les nôtres.
+    setQuota(defi.quota);
+    setSessionPerimee(false);
     setAdversaire(defi.reponses);
     setCurrentIndex(0);
     setAnswers({});
@@ -381,11 +462,13 @@ function AppInner() {
     setPendingRestore(null);
     setResultsRevealed(false);
     setDuelCode(null);
+    setDuelReturnTo(null);
+    setSwipeTab('swipe');
     setScreen('swipe');
-    persist(0, {}, defi.paquet, defi.themeIds, defi.graine, defi.reponses);
+    persist(0, {}, defi.paquet, defi.themeIds, defi.graine, defi.reponses, defi.quota);
   };
 
-  const handleStartFresh = () => startSession(ALL_THEME_IDS);
+  const handleStartFresh = () => startSession(ALL_THEME_IDS, quotaDuFormat(format));
 
   const handleCustomizeThemes = () => {
     setThemesReturnTo(screen);
@@ -393,14 +476,18 @@ function AppInner() {
   };
 
   const handleThemesConfirmed = (themeIds: string[]) => {
-    startSession(themeIds);
+    // Sur une sélection de thèmes, le paquet prend tout ce qu'ils contiennent
+    // et le quota ne s'applique pas (voir utils/deck.ts) ; il reste enregistré
+    // tel quel, pour que le code de défi refasse le même paquet en face.
+    startSession(themeIds, quotaDuFormat(format));
   };
 
   const handleResume = () => {
     // Session déjà chargée en mémoire (on est simplement repassé par
     // l'accueil) : il n'y a rien à recharger, juste à revenir au bon écran.
     if (sessionProposals.length > 0) {
-      setScreen(currentIndex >= sessionProposals.length ? 'results' : 'swipe');
+      if (currentIndex >= sessionProposals.length) openResults('intro');
+      else setScreen('swipe');
       return;
     }
     if (!pendingRestore) return;
@@ -411,7 +498,8 @@ function AppInner() {
     setAdversaire(pendingRestore.adversaire);
     setCurrentIndex(pendingRestore.currentIndex);
     setAnswers(pendingRestore.answers);
-    setScreen(pendingRestore.currentIndex >= proposals.length ? 'results' : 'swipe');
+    if (pendingRestore.currentIndex >= proposals.length) openResults('intro');
+    else setScreen('swipe');
   };
 
   const handleAnswer = (proposalId: string, direction: SwipeDirection) => {
@@ -446,7 +534,7 @@ function AppInner() {
     persist(currentIndex, nextAnswers, sessionProposals, selectedThemeIds);
   };
 
-  const handleReviewContinue = () => setScreen('results');
+  const handleReviewContinue = () => openResults('review');
 
   const handleRestart = () => {
     clearSession();
@@ -509,6 +597,10 @@ function AppInner() {
                 onResume={handleResume}
                 onOpenHowItWorks={openHowItWorks}
                 onOpenSettings={openSettings}
+                format={format}
+                onChangeFormat={setFormat}
+                onOpenDuel={() => openDuel('intro')}
+                sessionPerimee={sessionPerimee}
               />
             </ScreenTransition>
           )}
@@ -547,7 +639,7 @@ function AppInner() {
                 onAnswer={handleAnswer}
                 onUndo={handleUndo}
                 onFinish={handleSwipeFinish}
-                onSeeResult={() => setScreen('results')}
+                onSeeResult={() => openResults('swipe')}
                 onRestart={handleRestart}
                 onExit={() => setScreen('intro')}
                 onOpenThemeFilter={handleCustomizeThemes}
@@ -555,6 +647,13 @@ function AppInner() {
                 onOpenSettings={openSettings}
                 showTutorial={showTutorial}
                 onDismissTutorial={handleDismissTutorial}
+                tab={swipeTab}
+                onChangeTab={setSwipeTab}
+                duel={
+                  adversaire
+                    ? { resume: resumeDuel, onVoir: () => openDuel('swipe') }
+                    : null
+                }
               />
             </ScreenTransition>
           )}
@@ -581,14 +680,23 @@ function AppInner() {
               <ResultsScreen
                 proposals={sessionProposals}
                 answers={answers}
+                selectedThemeIds={selectedThemeIds}
                 onRestart={handleRestart}
-                onBack={() => setScreen('review')}
+                onBack={() => setScreen(resultsReturnTo)}
+                // L'icône du bouton de retour suit sa destination : une maison
+                // quand il ramène à l'accueil, un chevron quand il rend un vrai
+                // pas en arrière dans le parcours.
+                backIsHome={resultsReturnTo === 'intro'}
                 // Rien n'est effacé : la session complète reste enregistrée,
                 // et l'accueil rouvre ce résultat par sa carte dédiée.
                 onGoHome={() => setScreen('intro')}
                 onOpenHowItWorks={openHowItWorks}
                 onOpenSettings={openSettings}
-                onOpenDuel={() => setScreen('duel')}
+                // Le bloc du duel change de discours quand la partie EST un
+                // défi : il ne s'agit plus d'en lancer un, mais d'aller voir
+                // ce que l'autre a répondu.
+                duel={resumeDuel}
+                onOpenDuel={() => openDuel('results')}
                 alreadyRevealed={resultsRevealed}
                 onReveal={() => setResultsRevealed(true)}
               />
@@ -602,6 +710,7 @@ function AppInner() {
                 answers={answers}
                 graine={graine}
                 themeIds={selectedThemeIds}
+                quota={quota}
                 adversaire={adversaire}
                 deckDone={
                   sessionProposals.length > 0 && currentIndex >= sessionProposals.length

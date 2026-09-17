@@ -508,6 +508,10 @@ function ecrireFichiers({ raw, selection, retenus }) {
       `${selection.length} propositions — ${QUOTA_PAR_CANDIDAT} par candidat, réparties sur ses thèmes`
     ) +
     `import { Proposal } from '../types';\n\n` +
+    `// Date de l'export Poligraph qui a produit ce catalogue. Affichée dans\n` +
+    `// l'app : un comparateur de programmes qui ne dit pas de quand datent ses\n` +
+    `// données demande une confiance qu'il ne justifie pas.\n` +
+    `export const DATASET_DATE = ${q(raw.extrait_le)};\n\n` +
     `export const PROPOSALS: Proposal[] = [\n${lignes.join('\n')}\n];\n\n` +
     `export const PROPOSALS_BY_ID: Record<string, Proposal> = Object.fromEntries(\n` +
     `  PROPOSALS.map((p) => [p.id, p])\n);\n`;

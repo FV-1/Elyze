@@ -1,4 +1,3 @@
-import React from 'react';
 import renderer, { ReactTestRenderer } from 'react-test-renderer';
 import { EmitterSubscription, Linking, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -49,6 +48,17 @@ const SESSION_FINIE = JSON.stringify({
   currentIndex: DECK.length,
   answers: REPONSES,
   catalog: CATALOG_FINGERPRINT,
+  graine: 5,
+});
+
+// Une partie bien avancée, écrite face à un AUTRE catalogue : c'est ce que
+// devient une session en cours quand une mise à jour change les propositions.
+const SESSION_PERIMEE = JSON.stringify({
+  selectedThemeIds: [...new Set(DECK.map((p) => p.themeId))],
+  proposalIds: DECK.map((p) => p.id),
+  currentIndex: 120,
+  answers: REPONSES,
+  catalog: 'empreinte-d-une-autre-version',
   graine: 5,
 });
 
@@ -134,6 +144,20 @@ describe('démarrage de l’application', () => {
     preparer({ session: null, lien: null });
     const tree = await demarrer();
     expect(textes(tree)).toContain('Commencer');
+  });
+
+  it('explique la partie perdue quand le catalogue a changé', async () => {
+    preparer({ session: SESSION_PERIMEE, lien: null });
+    const tree = await demarrer();
+    const vu = textes(tree);
+    // On atterrit sur l'accueil, comme avant — mais on sait pourquoi.
+    expect(vu).toContain('Commencer');
+    expect(vu).toContain('propositions mises à jour depuis');
+  });
+
+  it('ne s’excuse pas quand il n’y avait rien d’enregistré', async () => {
+    preparer({ session: null, lien: null });
+    expect(textes(await demarrer())).not.toContain('propositions mises à jour depuis');
   });
 
   it('reprend une partie terminée sur son résultat', async () => {

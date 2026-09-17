@@ -7,7 +7,7 @@ import { ACCENT_PRESETS, buildColors } from '../theme';
 // même teinte. Le dosage doit tenir quelle que soit la couleur de départ, y
 // compris celles tirées au sort par le mode arc-en-ciel.
 const TEXT_RATIO = 4.5;
-const LIGHT_SURFACE = '#FFFFFF';
+const LIGHT_SURFACE = '#ffffff';
 const DARK_SURFACE = '#1C1A22';
 
 // Les graines de test sont TIRÉES D'UNE SUITE DÉTERMINISTE, pas de

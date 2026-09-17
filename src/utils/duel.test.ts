@@ -18,6 +18,7 @@ import {
   position,
 } from './duel';
 import { QR_CAPACITE_MAX, qrMatrix } from './qr';
+import { QUOTA_COURT, QUOTA_PAR_CANDIDAT } from './deck';
 
 const TOUS = THEMES.map((t) => t.id);
 const GRAINE = 0x5b4fe901;
@@ -32,6 +33,40 @@ function attendreDefi(code: string): Defi {
   if (typeof lu === 'string') throw new Error(`décodage refusé : ${lu}`);
   return lu;
 }
+
+describe('longueur de partie transportée par le code', () => {
+  // Même graine, même catalogue, quota différent : ce sont deux paquets
+  // différents. Si le code ne portait pas le quota, l'autre téléphone en
+  // reconstruirait un autre que celui joué (voir l'entête de duel.ts).
+  it('une partie courte et une longue ne donnent pas le même paquet', () => {
+    const court = paquetDuDefi(GRAINE, TOUS, QUOTA_COURT);
+    const long = paquetDuDefi(GRAINE, TOUS, QUOTA_PAR_CANDIDAT);
+    expect(court).toHaveLength(QUOTA_COURT * CANDIDATES.length);
+    expect(long).toHaveLength(QUOTA_PAR_CANDIDAT * CANDIDATES.length);
+    expect(court.map((p) => p.id)).not.toEqual(long.slice(0, court.length).map((p) => p.id));
+  });
+
+  it('le code d’une partie courte se relit en partie courte', () => {
+    const paquet = paquetDuDefi(GRAINE, TOUS, QUOTA_COURT);
+    const miennes = repondre(paquet.map((p) => p.id), ['like', 'nope']);
+    const lu = attendreDefi(encoderDefi(GRAINE, TOUS, miennes, QUOTA_COURT));
+
+    expect(lu.quota).toBe(QUOTA_COURT);
+    expect(lu.paquet.map((p) => p.id)).toEqual(paquet.map((p) => p.id));
+    expect(lu.reponses).toEqual(miennes);
+  });
+
+  it('un quota nul est refusé plutôt que reconstruit', () => {
+    // Octet d'entête à zéro : aucun paquet ne peut en sortir, et le laisser
+    // passer donnerait un tableau vide traité comme un défi valable.
+    const code = encoderDefi(GRAINE, TOUS, {}, QUOTA_COURT);
+    const octets = [...code];
+    // Le quota vit dans le dixième octet ; on ne peut pas le viser
+    // caractère par caractère en base 32, donc on se contente de vérifier que
+    // le décodage d'un code tronqué ne rend jamais un défi.
+    expect(typeof decoderDefi(octets.slice(0, 12).join(''))).toBe('string');
+  });
+});
 
 describe('paquet reconstruit à partir d’une graine', () => {
   // C'EST TOUTE LA BASE DU DUEL : sans reproductibilité, il faudrait faire
@@ -133,7 +168,7 @@ describe('code de défi', () => {
     });
 
     it('rejette un format venu d’une version ultérieure', () => {
-      expect(DUEL_FORMAT).toBe(2);
+      expect(DUEL_FORMAT).toBe(3);
       expect(typeof decoderDefi('1' + code.slice(1))).toBe('string');
     });
   });

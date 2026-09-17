@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Podium } from './Podium';
 import { topMatches } from '../utils/scoring';
@@ -13,9 +13,23 @@ export const SHARE_CARD_WIDTH = 360;
 // de carte, tous deux positionnés en absolu.
 export const SHARE_CARD_HEIGHT = 560;
 
+// La mention de portée ajoute une pastille et son interligne. Quarante pixels
+// de plus plutôt qu'une marge rognée : le contenu est centré entre une marque
+// et un pied de carte posés en absolu, et le serrer les ferait se toucher.
+// Hauteur inchangée pour un classement général, qui reste le cas courant.
+export const SHARE_CARD_HEIGHT_PORTEE = 600;
+
+export function shareCardHeight(portee: string | null): number {
+  return portee ? SHARE_CARD_HEIGHT_PORTEE : SHARE_CARD_HEIGHT;
+}
+
 type Props = {
   results: CandidateResult[];
   confidenceLabel: string | null;
+  // « Sur le thème Santé uniquement », ou `null` pour un classement général.
+  // C'est LA raison d'être de cette mention : l'image part seule, et un podium
+  // nu se lit comme un verdict sur tout un programme (voir utils/portee.ts).
+  portee: string | null;
 };
 
 // Carte dédiée au partage : capturée en image via react-native-view-shot,
@@ -24,7 +38,7 @@ type Props = {
 // seulement le vainqueur : l'écart avec les suivants fait partie du résultat,
 // et c'est bien plus parlant à partager qu'un seul nom.
 export const ShareCard = forwardRef<View, Props>(function ShareCard(
-  { results, confidenceLabel },
+  { results, confidenceLabel, portee },
   ref
 ) {
   const colors = useColors();
@@ -33,8 +47,19 @@ export const ShareCard = forwardRef<View, Props>(function ShareCard(
   const premiers = topMatches(results);
 
   return (
-    <View ref={ref} style={styles.card} collapsable={false}>
+    <View ref={ref} style={[styles.card, { height: shareCardHeight(portee) }]} collapsable={false}>
       <Text style={styles.brand}>ÉLYZE 2027</Text>
+
+      {/* Au-dessus du podium, et non en petits caractères sous le pied de
+          carte : qui regarde une image s'arrête au podium, et la portée doit
+          être lue avant lui, pas après. */}
+      {portee && (
+        <View style={styles.porteePill}>
+          <Text style={styles.porteeText} numberOfLines={2}>
+            {portee}
+          </Text>
+        </View>
+      )}
 
       <View style={styles.podiumWrap}>
         {/* `instant` : la capture peut avoir lieu avant la fin de l'animation
@@ -76,7 +101,6 @@ function makeStyles(colors: ColorTokens) {
   return StyleSheet.create({
     card: {
       width: SHARE_CARD_WIDTH,
-      height: SHARE_CARD_HEIGHT,
       backgroundColor: colors.surface,
       borderRadius: radii.lg,
       alignItems: 'center',
@@ -94,6 +118,21 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       letterSpacing: 2,
       color: colors.accentText,
+    },
+    // Teintée d'accent et non grise : c'est une précision qui change la
+    // lecture du chiffre, pas une note de bas de page.
+    porteePill: {
+      backgroundColor: colors.accentSoft,
+      borderRadius: radii.pill,
+      paddingVertical: 5,
+      paddingHorizontal: spacing.md,
+      maxWidth: SHARE_CARD_WIDTH - spacing.lg * 2,
+    },
+    porteeText: {
+      fontSize: fonts.tiny,
+      fontWeight: '700',
+      color: colors.accentText,
+      textAlign: 'center',
     },
     podiumWrap: {
       alignSelf: 'stretch',

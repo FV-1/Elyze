@@ -2,14 +2,14 @@ import React from 'react';
 import renderer, { ReactTestInstance, ReactTestRenderer } from 'react-test-renderer';
 import { Text } from 'react-native';
 import { IntroScreen } from './IntroScreen';
-import { SwipeScreen } from './SwipeScreen';
+import { SwipeScreen, SwipeTab } from './SwipeScreen';
 import { ReviewScreen } from './ReviewScreen';
 import { ResultsScreen } from './ResultsScreen';
 import { ThemeSelectScreen } from './ThemeSelectScreen';
 import { SettingsScreen } from './SettingsScreen';
 import { HowItWorksScreen } from './HowItWorksScreen';
 import { DuelScreen } from './DuelScreen';
-import { encoderDefi, paquetDuDefi } from '../utils/duel';
+import { comparerDefi, encoderDefi, paquetDuDefi } from '../utils/duel';
 import { ThemeProvider } from '../theme/ThemeContext';
 import { PROPOSALS } from '../data/proposals';
 import { THEMES, THEMES_BY_ID } from '../data/themes';
@@ -89,6 +89,17 @@ function expectUsable(tree: ReactTestRenderer, minTouchables = 1) {
 
 const noop = () => {};
 
+// L'onglet courant vit désormais dans l'écran parent (voir App.tsx) : ces
+// tests, qui touchent des onglets et observent ce qui change, doivent donc le
+// tenir eux-mêmes. Sans cela, appuyer sur « Classement » n'appellerait qu'une
+// fonction inerte.
+function SwipeAvecOnglets(
+  props: Omit<React.ComponentProps<typeof SwipeScreen>, 'tab' | 'onChangeTab'>
+) {
+  const [tab, setTab] = React.useState<SwipeTab>('swipe');
+  return <SwipeScreen {...props} tab={tab} onChangeTab={setTab} />;
+}
+
 describe('montage des écrans', () => {
   it("l'accueil propose de commencer et de choisir ses thèmes", () => {
     const tree = mount(
@@ -99,13 +110,87 @@ describe('montage des écrans', () => {
         onResume={noop}
         onOpenHowItWorks={noop}
         onOpenSettings={noop}
+        format="court"
+        onChangeFormat={noop}
+        onOpenDuel={noop}
+        sessionPerimee={false}
       />
     );
     expectUsable(tree, 3);
     expect(texts(tree)).toContain('Commencer');
     // Le choix des thèmes commande ce qu'on swipe : il doit rester atteignable
-    // depuis l'accueil, là où il ne coûte encore aucune progression.
-    expect(texts(tree)).toContain('Choisir mes thèmes');
+    // depuis l'accueil, là où il ne coûte encore aucune progression. Il y
+    // partage désormais une ligne avec l'entrée du duel, à égalité de largeur.
+    expect(texts(tree)).toContain('Mes thèmes');
+    expect(texts(tree)).toContain('Code défi');
+  });
+
+  it('l’accueil propose les deux longueurs, la courte par défaut', () => {
+    let choisi: string | null = null;
+    const tree = mount(
+      <IntroScreen
+        onStartFresh={noop}
+        onCustomizeThemes={noop}
+        restorable={null}
+        onResume={noop}
+        onOpenHowItWorks={noop}
+        onOpenSettings={noop}
+        format="court"
+        onChangeFormat={(f) => {
+          choisi = f;
+        }}
+        onOpenDuel={noop}
+        sessionPerimee={false}
+      />
+    );
+    // Le nombre de cartes est écrit : « courte » ne dit pas à quoi on s'engage.
+    // Chiffre et libellé sont deux enfants d'un même Text, d'où le recollage.
+    expect(texts(tree).join('')).toContain('55 cartes');
+    expect(texts(tree).join('')).toContain('165 cartes');
+
+    const courte = touchables(tree).find(
+      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Partie courte, 55 cartes'
+    );
+    expect(courte?.props.accessibilityState).toEqual({ checked: true });
+
+    const longue = touchables(tree).find(
+      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Partie longue, 165 cartes'
+    );
+    renderer.act(() => longue!.props.onPress());
+    expect(choisi).toBe('long');
+  });
+
+  it('l’accueil ouvre le duel, sans exiger d’avoir fini sa partie', () => {
+    // C'était la porte manquante : un code reçu par message ne pouvait être
+    // saisi que depuis l'écran de résultat.
+    let ouvert = false;
+    const tree = mount(
+      <IntroScreen
+        onStartFresh={noop}
+        onCustomizeThemes={noop}
+        restorable={{ currentIndex: 12, total: 55, isComplete: false }}
+        onResume={noop}
+        onOpenHowItWorks={noop}
+        onOpenSettings={noop}
+        format="court"
+        onChangeFormat={noop}
+        onOpenDuel={() => {
+          ouvert = true;
+        }}
+        sessionPerimee={false}
+      />
+    );
+    const lien = touchables(tree).find(
+      (n: ReactTestInstance) =>
+        n.props.accessibilityLabel === 'Relever le défi de quelqu’un avec son code'
+    );
+    expect(lien).toBeDefined();
+    renderer.act(() => lien!.props.onPress());
+    expect(ouvert).toBe(true);
+
+    // Les thèmes, eux, ne sont pas proposés à côté d'un « Reprendre » : en
+    // changer redémarre la partie, et rien ici ne le dirait.
+    expect(texts(tree)).not.toContain('Mes thèmes');
   });
 
   it("l'accueil propose de reprendre une session en cours", () => {
@@ -117,6 +202,10 @@ describe('montage des écrans', () => {
         onResume={noop}
         onOpenHowItWorks={noop}
         onOpenSettings={noop}
+        format="court"
+        onChangeFormat={noop}
+        onOpenDuel={noop}
+        sessionPerimee={false}
       />
     );
     expect(texts(tree).join(' ')).toContain('42');
@@ -124,7 +213,7 @@ describe('montage des écrans', () => {
 
   it('le swipe expose ses trois onglets et le choix des thèmes', () => {
     const tree = mount(
-      <SwipeScreen
+      <SwipeAvecOnglets
         proposals={DECK}
         currentIndex={0}
         answers={{}}
@@ -139,6 +228,7 @@ describe('montage des écrans', () => {
         onOpenSettings={noop}
         showTutorial={false}
         onDismissTutorial={noop}
+        duel={null}
       />
     );
     const found = texts(tree);
@@ -150,10 +240,138 @@ describe('montage des écrans', () => {
     expect(found).not.toContain('Candidats');
   });
 
+  it('paquet fini, l’onglet Classement renvoie au résultat au lieu de le doubler', async () => {
+    // Le panneau montrait le classement complet et l'accord par thème —
+    // exactement l'écran de résultat, sans le partage ni le duel. Il n'en
+    // garde que le résumé et la porte (voir RankingPanel).
+    let vuLeResultat = false;
+    const tree = mount(
+      <SwipeAvecOnglets
+        proposals={DECK}
+        currentIndex={DECK.length}
+        answers={ANSWERS}
+        onAnswer={noop}
+        onUndo={noop}
+        onFinish={noop}
+        onSeeResult={() => {
+          vuLeResultat = true;
+        }}
+        onRestart={noop}
+        onExit={noop}
+        onOpenThemeFilter={noop}
+        selectedThemeIds={THEMES.map((t) => t.id)}
+        onOpenSettings={noop}
+        showTutorial={false}
+        onDismissTutorial={noop}
+        duel={null}
+      />
+    );
+
+    // L'écran lit le réglage « montrer les candidats » au stockage, de façon
+    // asynchrone : on laisse cette promesse aboutir DANS un `act`, faute de
+    // quoi sa mise à jour d'état tombe entre deux et React s'en plaint.
+    await renderer.act(async () => {});
+
+    const onglet = touchables(tree).find(
+      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Classement'
+    );
+    expect(onglet).toBeDefined();
+    renderer.act(() => onglet!.props.onPress());
+
+    expect(texts(tree)).not.toContain('Qui a le plus de votes');
+    expect(texts(tree)).toContain('Ton classement est définitif');
+
+    const versResultat = touchables(tree).find(
+      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Voir mon résultat'
+    );
+    expect(versResultat).toBeDefined();
+    renderer.act(() => versResultat!.props.onPress());
+    expect(vuLeResultat).toBe(true);
+  });
+
+  it('un défi en cours est annoncé dans l’onglet Classement', async () => {
+    // Pendant qu'on joue le paquet de quelqu'un, rien ne disait qu'une
+    // comparaison attendait à l'arrivée : on voyait monter un classement
+    // provisoire comme dans n'importe quelle partie.
+    const tree = mount(
+      <SwipeAvecOnglets
+        proposals={DECK}
+        currentIndex={20}
+        answers={ANSWERS}
+        onAnswer={noop}
+        onUndo={noop}
+        onFinish={noop}
+        onSeeResult={noop}
+        onRestart={noop}
+        onExit={noop}
+        onOpenThemeFilter={noop}
+        selectedThemeIds={THEMES.map((t) => t.id)}
+        onOpenSettings={noop}
+        showTutorial={false}
+        onDismissTutorial={noop}
+        duel={{ resume: null, onVoir: noop }}
+      />
+    );
+    await renderer.act(async () => {});
+
+    const onglet = touchables(tree).find(
+      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Classement'
+    );
+    renderer.act(() => onglet!.props.onPress());
+    expect(texts(tree).join(' ')).toContain('Tu joues le défi de quelqu’un');
+  });
+
+  it('paquet fini, la comparaison passe devant le classement', async () => {
+    let vue = false;
+    const tree = mount(
+      <SwipeAvecOnglets
+        proposals={DECK}
+        currentIndex={DECK.length}
+        answers={ANSWERS}
+        onAnswer={noop}
+        onUndo={noop}
+        onFinish={noop}
+        onSeeResult={noop}
+        onRestart={noop}
+        onExit={noop}
+        onOpenThemeFilter={noop}
+        selectedThemeIds={THEMES.map((t) => t.id)}
+        onOpenSettings={noop}
+        showTutorial={false}
+        onDismissTutorial={noop}
+        duel={{
+          resume: { accords: 32, tranchees: 48 },
+          onVoir: () => {
+            vue = true;
+          },
+        }}
+      />
+    );
+    await renderer.act(async () => {});
+
+    const onglet = touchables(tree).find(
+      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Classement'
+    );
+    renderer.act(() => onglet!.props.onPress());
+
+    // Les chiffres, pas une promesse : c'est ce qui donne envie d'ouvrir.
+    const vu = texts(tree).join('');
+    expect(vu).toContain('48 cartes');
+    expect(vu).toContain('d’accord sur 32');
+
+    const comparer = touchables(tree).find(
+      (n: ReactTestInstance) =>
+        n.props.accessibilityLabel === 'Voir ce que chacun a validé, carte par carte'
+    );
+    expect(comparer).toBeDefined();
+    renderer.act(() => comparer!.props.onPress());
+    expect(vue).toBe(true);
+  });
+
   it('le swipe sort vers l’accueil par le bouton du haut', () => {
     let sorti = false;
     const tree = mount(
-      <SwipeScreen
+      <SwipeAvecOnglets
         proposals={DECK}
         currentIndex={12}
         answers={ANSWERS}
@@ -170,6 +388,7 @@ describe('montage des écrans', () => {
         onOpenSettings={noop}
         showTutorial={false}
         onDismissTutorial={noop}
+        duel={null}
       />
     );
     // Ce bouton quitte la session ; son libellé doit le dire, parce que son
@@ -185,7 +404,7 @@ describe('montage des écrans', () => {
 
   it('le swipe signale une sélection de thèmes restreinte', () => {
     const tree = mount(
-      <SwipeScreen
+      <SwipeAvecOnglets
         proposals={DECK}
         currentIndex={0}
         answers={{}}
@@ -200,6 +419,7 @@ describe('montage des écrans', () => {
         onOpenSettings={noop}
         showTutorial={false}
         onDismissTutorial={noop}
+        duel={null}
       />
     );
     expect(texts(tree)).toContain('3 thèmes');
@@ -207,7 +427,7 @@ describe('montage des écrans', () => {
 
   it('le swipe affiche son écran de fin quand le paquet est terminé', () => {
     const tree = mount(
-      <SwipeScreen
+      <SwipeAvecOnglets
         proposals={DECK}
         currentIndex={DECK.length}
         answers={ANSWERS}
@@ -222,6 +442,7 @@ describe('montage des écrans', () => {
         onOpenSettings={noop}
         showTutorial={false}
         onDismissTutorial={noop}
+        duel={null}
       />
     );
     expect(texts(tree)).toContain('Voir mon résultat');
@@ -276,11 +497,14 @@ describe('montage des écrans', () => {
       <ResultsScreen
         proposals={DECK}
         answers={ANSWERS}
+        selectedThemeIds={THEMES.map((t) => t.id)}
         onRestart={noop}
         onBack={noop}
+        backIsHome={false}
         onGoHome={noop}
         onOpenHowItWorks={noop}
         onOpenSettings={noop}
+        duel={null}
         onOpenDuel={noop}
         alreadyRevealed
         onReveal={noop}
@@ -298,11 +522,14 @@ describe('montage des écrans', () => {
       <ResultsScreen
         proposals={DECK}
         answers={ANSWERS}
+        selectedThemeIds={THEMES.map((t) => t.id)}
         onRestart={noop}
         onBack={() => sorties.push('review')}
+        backIsHome={false}
         onGoHome={() => sorties.push('accueil')}
         onOpenHowItWorks={noop}
         onOpenSettings={noop}
+        duel={null}
         onOpenDuel={noop}
         alreadyRevealed
         onReveal={noop}
@@ -319,6 +546,121 @@ describe('montage des écrans', () => {
     renderer.act(() => accueil!.props.onPress());
     // Sortir n'est pas revenir en arrière : les deux gestes cohabitent sur cet
     // écran et ne doivent pas mener au même endroit.
+    expect(sorties).toEqual(['accueil']);
+  });
+
+  it('après un défi, le résultat renvoie vers la comparaison et non vers un nouveau défi', () => {
+    let ouvert = false;
+    const tree = mount(
+      <ResultsScreen
+        proposals={DECK}
+        answers={ANSWERS}
+        selectedThemeIds={THEMES.map((t) => t.id)}
+        onRestart={noop}
+        onBack={noop}
+        backIsHome={false}
+        onGoHome={noop}
+        onOpenHowItWorks={noop}
+        onOpenSettings={noop}
+        duel={{ accords: 32, tranchees: 48 }}
+        onOpenDuel={() => {
+          ouvert = true;
+        }}
+        alreadyRevealed
+        onReveal={noop}
+      />
+    );
+    const vu = texts(tree).join('');
+    expect(vu).toContain('Voir qui a validé quoi');
+    expect(vu).toContain('d’accord sur 32');
+    expect(vu).not.toContain('Défier quelqu’un');
+
+    const bloc = touchables(tree).find(
+      (n: ReactTestInstance) =>
+        n.props.accessibilityLabel === 'Voir ce que chacun a validé, carte par carte'
+    );
+    renderer.act(() => bloc!.props.onPress());
+    expect(ouvert).toBe(true);
+  });
+
+  it('un classement sur une sélection de thèmes le dit, à l’écran comme sur l’image', () => {
+    // L'image de partage voyage seule : un podium nu se lit comme un verdict
+    // sur tout un programme (voir utils/portee.ts). La carte de partage est
+    // montée hors-écran par cet écran, donc la mention doit s'y trouver aussi.
+    const surSante = mount(
+      <ResultsScreen
+        proposals={DECK}
+        answers={ANSWERS}
+        selectedThemeIds={['sante']}
+        onRestart={noop}
+        onBack={noop}
+        backIsHome={false}
+        onGoHome={noop}
+        onOpenHowItWorks={noop}
+        onOpenSettings={noop}
+        duel={null}
+        onOpenDuel={noop}
+        alreadyRevealed
+        onReveal={noop}
+      />
+    );
+    const mention = 'Sur le thème Santé uniquement';
+    expect(texts(surSante).filter((t) => t === mention)).toHaveLength(2);
+
+    // Sur tous les thèmes, c'est le classement général : rien à préciser.
+    const surTout = mount(
+      <ResultsScreen
+        proposals={DECK}
+        answers={ANSWERS}
+        selectedThemeIds={THEMES.map((t) => t.id)}
+        onRestart={noop}
+        onBack={noop}
+        backIsHome={false}
+        onGoHome={noop}
+        onOpenHowItWorks={noop}
+        onOpenSettings={noop}
+        duel={null}
+        onOpenDuel={noop}
+        alreadyRevealed
+        onReveal={noop}
+      />
+    );
+    // « uniquement » figure aussi dans la note de bas de page sur la portée du
+    // pourcentage : on vise les tournures de la mention, pas le mot seul.
+    expect(texts(surTout).join(' ')).not.toMatch(/Sur le thème|Sur les thèmes|thèmes choisis sur/);
+  });
+
+  it('venu de l’accueil, le résultat n’offre qu’une sortie, en haut à gauche', () => {
+    // Le chevron devient une maison et le bouton du pied de page disparaît :
+    // deux boutons pour la même destination, à deux endroits de l'écran, sont
+    // précisément ce qui rendait la sortie imprévisible (voir App.tsx).
+    const sorties: string[] = [];
+    const tree = mount(
+      <ResultsScreen
+        proposals={DECK}
+        answers={ANSWERS}
+        selectedThemeIds={THEMES.map((t) => t.id)}
+        onRestart={noop}
+        onBack={() => sorties.push('accueil')}
+        backIsHome
+        onGoHome={() => sorties.push('pied de page')}
+        onOpenHowItWorks={noop}
+        onOpenSettings={noop}
+        duel={null}
+        onOpenDuel={noop}
+        alreadyRevealed
+        onReveal={noop}
+      />
+    );
+    expect(texts(tree)).not.toContain('Accueil');
+    expect(texts(tree)).toContain('Partager');
+
+    const retour = touchables(tree).find(
+      (n: ReactTestInstance) =>
+        n.props.accessibilityLabel === 'Revenir à l’accueil, ton résultat est gardé'
+    );
+    expect(retour).toBeDefined();
+    renderer.act(() => retour!.props.onPress());
     expect(sorties).toEqual(['accueil']);
   });
 
@@ -347,7 +689,7 @@ describe('le voile sur les candidats', () => {
   // des noms — c'est un agrégat — mais jamais accolés au texte d'une carte.
   it('aucun nom de candidat n’apparaît sur les cartes en cours de partie', () => {
     const tree = mount(
-      <SwipeScreen
+      <SwipeAvecOnglets
         proposals={DECK}
         currentIndex={0}
         answers={{}}
@@ -362,6 +704,7 @@ describe('le voile sur les candidats', () => {
         onOpenSettings={noop}
         showTutorial={false}
         onDismissTutorial={noop}
+        duel={null}
       />
     );
 
@@ -411,6 +754,7 @@ describe('duel', () => {
         answers={TOUTES}
         graine={GRAINE}
         themeIds={TOUS}
+        quota={QUOTA_PAR_CANDIDAT}
         adversaire={undefined}
         deckDone
         codeRecu={null}
@@ -441,9 +785,45 @@ describe('duel', () => {
   it('la comparaison montre les accords, carte par carte et sans candidat', () => {
     const rendu = texts(duel({ adversaire: SIENNES })).join(' ');
     expect(rendu).toContain('propositions où vous êtes du même avis');
-    expect(rendu).toContain('désaccord');
     // La liste porte le texte des mesures, jamais leur auteur.
     expect(rendu).toContain(PAQUET[0].text);
+  });
+
+  it('la comparaison se filtre sur les accords ou les désaccords', () => {
+    const attendu = comparerDefi(PAQUET, TOUTES, SIENNES);
+    const unAccord = attendu.lignes.find((l) => l.accord)!;
+    const unDesaccord = attendu.lignes.find((l) => l.desaccord)!;
+    expect(unAccord).toBeDefined();
+    expect(unDesaccord).toBeDefined();
+
+    const tree = duel({ adversaire: SIENNES });
+    const chip = (libelle: string) =>
+      touchables(tree).find((n: ReactTestInstance) =>
+        String(n.props.accessibilityLabel ?? '').startsWith(libelle)
+      );
+
+    // Tout est là au départ, désaccords comme accords.
+    expect(texts(tree).join(' ')).toContain(unDesaccord.proposal.text);
+    expect(texts(tree).join(' ')).toContain(unAccord.proposal.text);
+
+    renderer.act(() => chip('Accords')!.props.onPress());
+    expect(texts(tree).join(' ')).toContain(unAccord.proposal.text);
+    expect(texts(tree).join(' ')).not.toContain(unDesaccord.proposal.text);
+
+    renderer.act(() => chip('Désaccords')!.props.onPress());
+    expect(texts(tree).join(' ')).toContain(unDesaccord.proposal.text);
+    expect(texts(tree).join(' ')).not.toContain(unAccord.proposal.text);
+  });
+
+  it('dit le pourcentage des têtes de classement, qui explique les égalités', () => {
+    // Deux listes de longueurs différentes ne sont pas une incohérence : ce
+    // sont les ex æquo de chacun. Le pourcentage affiché le rend lisible.
+    const attendu = comparerDefi(PAQUET, TOUTES, SIENNES);
+    const rendu = texts(duel({ adversaire: SIENNES })).join('');
+    expect(rendu).toContain(`${attendu.mesResultats[0].pct} %`);
+    if (attendu.sesPremiers.length > 1) {
+      expect(rendu).toContain(`${attendu.sesPremiers.length} à égalité`);
+    }
   });
 
   it('attend la fin du paquet avant de comparer', () => {

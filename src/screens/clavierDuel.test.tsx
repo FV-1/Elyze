@@ -1,8 +1,8 @@
-import React from 'react';
 import renderer, { ReactTestRenderer } from 'react-test-renderer';
 import { Keyboard, ScrollView } from 'react-native';
 import { DuelScreen } from './DuelScreen';
 import { ThemeProvider } from '../theme/ThemeContext';
+import { QUOTA_PAR_CANDIDAT } from '../utils/deck';
 import { THEMES } from '../data/themes';
 import { paquetDuDefi } from '../utils/duel';
 import { Answers } from '../types';
@@ -46,6 +46,7 @@ async function monter() {
           answers={REPONSES}
           graine={GRAINE}
           themeIds={THEMES.map((t) => t.id)}
+          quota={QUOTA_PAR_CANDIDAT}
           adversaire={undefined}
           deckDone
           codeRecu={null}

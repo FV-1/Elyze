@@ -1,12 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { FeedbackDialog } from '../components/FeedbackDialog';
 import { LegalScreen } from './LegalScreen';
 import { APP_VERSION } from '../data/appInfo';
+import { DATASET_DATE } from '../data/proposals';
+import { dateEnFrancais } from '../utils/date';
 import { LEGAL_DOCUMENTS, LEGAL_TOPICS, LegalTopic } from '../data/legal';
 import { ACCENT_PRESETS, ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors, useThemeSettings } from '../theme/ThemeContext';
@@ -98,6 +100,11 @@ export function SettingsScreen({
             <Text style={styles.sectionTitle}>Mode arc-en-ciel</Text>
 
             <View style={styles.switchRow}>
+              <Ionicons
+                name="color-wand-outline"
+                size={20}
+                color={gradientEnabled ? colors.accentText : colors.textSecondary}
+              />
               <Text style={styles.switchLabel}>Fond animé</Text>
               <Switch
                 value={gradientEnabled}
@@ -116,6 +123,11 @@ export function SettingsScreen({
             </Text>
 
             <View style={styles.switchRow}>
+              <Ionicons
+                name="color-palette-outline"
+                size={20}
+                color={rainbowEnabled ? colors.accentText : colors.textSecondary}
+              />
               <Text style={styles.switchLabel}>Couleurs au hasard</Text>
               <Switch
                 value={rainbowEnabled}
@@ -178,6 +190,17 @@ export function SettingsScreen({
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Retour haptique</Text>
           <View style={styles.switchRow}>
+            {/* L'ICÔNE DIT L'ÉTAT, ELLE AUSSI. Le trait barré de `vibrate-off`
+                se lit avant l'interrupteur, et se lit sans couleur — ce qui
+                vaut mieux qu'un vert et un gris pour qui les distingue mal.
+                C'est la seule icône de l'écran empruntée à Material : Ionicons
+                n'a rien pour la vibration, et `pulse` y désigne un rythme
+                cardiaque. */}
+            <MaterialCommunityIcons
+              name={hapticsEnabled ? 'vibrate' : 'vibrate-off'}
+              size={20}
+              color={hapticsEnabled ? colors.accentText : colors.textSecondary}
+            />
             <Text style={styles.switchLabel}>Vibrations</Text>
             <Switch
               value={hapticsEnabled}
@@ -237,8 +260,15 @@ export function SettingsScreen({
               </Pressable>
             ))}
           </View>
-          {/* La version, là où on la cherche quand on veut la donner. */}
-          <Text style={styles.sectionCaption}>Version {APP_VERSION}</Text>
+          {/* La version, là où on la cherche quand on veut la donner — et la
+              date des propositions, qui dit ce que l'app sait et depuis quand.
+              Un comparateur de programmes en campagne vieillit vite : les
+              candidatures bougent, les programmes s'écrivent, et rien ne se
+              met à jour tant qu'une version n'est pas publiée. */}
+          <Text style={styles.sectionCaption}>
+            Version {APP_VERSION}
+            {dateEnFrancais(DATASET_DATE) ? ` · Propositions arrêtées au ${dateEnFrancais(DATASET_DATE)}` : ''}
+          </Text>
         </View>
 
         <View style={styles.section}>
@@ -334,8 +364,8 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
       gap: spacing.sm,
       backgroundColor: colors.accentSoft,
-      borderRadius: radii.md,
-      paddingVertical: spacing.sm + 4,
+      borderRadius: radii.sm,
+      paddingVertical: spacing.md - 2,
     },
     rerollButtonPressed: {
       opacity: 0.75,
@@ -374,12 +404,19 @@ function makeStyles(colors: ColorTokens) {
     rows: {
       gap: spacing.sm,
     },
+    // DES BLOCS, PAS DES GÉLULES. Ces rangées portaient le rayon `md` (20 px)
+    // pour une hauteur d'une quarantaine de pixels : à ce rapport, l'arrondi
+    // dévore les angles, la ligne s'étrangle aux deux bouts et le bloc paraît
+    // plus mince qu'il n'est. Le rayon `sm` laisse des côtés droits, et deux
+    // pixels de hauteur en plus rendent aux rangées l'assise qui leur
+    // manquait. Le rayon `md` reste celui des surfaces plus hautes, où il ne
+    // touche pas le texte.
     row: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.sm + 2,
       backgroundColor: colors.surfaceAlt,
-      borderRadius: radii.md,
+      borderRadius: radii.sm,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.md,
     },
@@ -411,13 +448,17 @@ function makeStyles(colors: ColorTokens) {
     switchRow: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
+      gap: spacing.sm + 2,
       backgroundColor: colors.surfaceAlt,
-      borderRadius: radii.md,
-      paddingVertical: spacing.sm + 2,
+      borderRadius: radii.sm,
+      paddingVertical: spacing.md - 2,
       paddingHorizontal: spacing.md,
     },
+    // Le libellé prend toute la place laissée entre l'icône et l'interrupteur :
+    // c'est lui qui les écarte, sans quoi il faudrait un `space-between` qui
+    // collerait l'icône au texte.
     switchLabel: {
+      flex: 1,
       fontSize: fonts.small + 1,
       fontWeight: '600',
       color: colors.textPrimary,
@@ -427,8 +468,8 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       gap: spacing.sm,
       backgroundColor: colors.dangerSoft,
-      borderRadius: radii.md,
-      paddingVertical: spacing.sm + 2,
+      borderRadius: radii.sm,
+      paddingVertical: spacing.md - 2,
       paddingHorizontal: spacing.md,
     },
     dangerButtonPressed: {

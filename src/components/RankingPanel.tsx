@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Podium } from './Podium';
 import { ResultRow } from './ResultRow';
 import { ThemeAgreementList } from './ThemeAgreementList';
@@ -33,6 +34,9 @@ export function RankingPanel({
   themeAgreement,
   deckDone,
   showCandidates,
+  portee,
+  duel,
+  onSeeResult,
   onSelectCandidate,
   onOpenCandidateInfo,
 }: {
@@ -48,6 +52,26 @@ export function RankingPanel({
   // qui a écrit telle carte. La vue par thème, elle, s'en approche assez pour
   // devoir suivre la même bascule que la mosaïque (voir SwipeScreen).
   showCandidates: boolean;
+  // « Sur le thème Santé uniquement », ou `null` sur tous les thèmes. Le
+  // podium ne dit pas de lui-même sur quoi il porte (voir utils/portee.ts).
+  portee: string | null;
+  // LA PARTIE EN COURS EST-ELLE LE DÉFI DE QUELQU'UN ?
+  //
+  // Ce panneau n'en savait rien, et c'était un tort : la comparaison carte par
+  // carte est ce qu'on vient chercher en relevant un défi, et elle n'était
+  // annoncée nulle part ailleurs que sur l'écran de duel — qu'il fallait donc
+  // déjà savoir ouvrir. On swipait le paquet d'un ami en voyant son classement
+  // monter, sans qu'un mot ne dise que le meilleur restait à venir.
+  //
+  // `resume` arrive avec la dernière carte : avant, il n'y a rien à annoncer
+  // qu'une promesse.
+  duel: {
+    resume: { accords: number; tranchees: number } | null;
+    onVoir: () => void;
+  } | null;
+  // Ouvrir l'écran de résultat. Une fois le paquet terminé, c'est la seule
+  // chose que ce panneau propose de plus que le podium (voir plus bas).
+  onSeeResult: () => void;
   onSelectCandidate: (candidateId: string) => void;
   onOpenCandidateInfo: (candidateId: string) => void;
 }) {
@@ -72,14 +96,115 @@ export function RankingPanel({
     </View>
   );
 
+  // UNE FOIS LE PAQUET TERMINÉ, CE PANNEAU N'EST PLUS UN CLASSEMENT.
+  //
+  // Il en montrait un, complet, sujet par sujet — c'est-à-dire exactement ce
+  // que l'écran de résultat montre, à deux touchers de là et sans le partage
+  // ni le duel. Deux écrans disaient la même chose sans que rien ne désigne
+  // lequel était LE résultat, et l'écran de fin du paquet renvoyait vers « ton
+  // classement complet » alors qu'un onglet du même nom était visible juste en
+  // dessous.
+  //
+  // Il garde donc ce qu'il est seul à donner : le podium, en résumé, et la
+  // grille des candidats — la seule porte vers les notices Wikipédia. Le reste
+  // est derrière un bouton, et il n'y a plus qu'une réponse à la question
+  // « où est mon résultat ? ».
+  if (deckDone) {
+    return (
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        {portee && <Text style={styles.portee}>{portee}</Text>}
+        {topMatch && (
+          <>
+            <Podium results={results} instant onCandidatePress={onOpenCandidateInfo} />
+            {confidenceLabel && <Text style={styles.confidence}>{confidenceLabel}</Text>}
+          </>
+        )}
+
+        {/* LA COMPARAISON PASSE DEVANT LE CLASSEMENT quand la partie est un
+            défi. Le classement, on l'aurait eu de toute façon ; ce qu'on est
+            venu chercher en relevant le défi de quelqu'un, c'est de voir où
+            l'on se sépare. */}
+        {duel?.resume ? (
+          <View style={styles.finBloc}>
+            <Text style={styles.finTitre}>Votre comparaison t’attend</Text>
+            <Text style={styles.finTexte}>
+              Vous avez tranché {duel.resume.tranchees} carte
+              {duel.resume.tranchees > 1 ? 's' : ''} tous les deux, et vous êtes d’accord sur{' '}
+              {duel.resume.accords}. Carte par carte, voilà où vous vous séparez.
+            </Text>
+            <Pressable
+              onPress={duel.onVoir}
+              style={({ pressed }) => [styles.finBouton, pressed && styles.finBoutonPresse]}
+              accessibilityRole="button"
+              accessibilityLabel="Voir ce que chacun a validé, carte par carte"
+            >
+              <Ionicons name="git-compare-outline" size={18} color={colors.onAccent} />
+              <Text style={styles.finBoutonTexte}>Voir qui a validé quoi</Text>
+            </Pressable>
+            <Pressable
+              onPress={onSeeResult}
+              hitSlop={8}
+              style={styles.finLienWrap}
+              accessibilityRole="button"
+              accessibilityLabel="Voir mon résultat"
+            >
+              <Text style={styles.finLien}>Voir mon résultat</Text>
+            </Pressable>
+          </View>
+        ) : (
+          <View style={styles.finBloc}>
+            <Text style={styles.finTitre}>
+              {topMatch ? 'Ton classement est définitif' : 'Tu as répondu à toutes les cartes'}
+            </Text>
+            <Text style={styles.finTexte}>
+              {topMatch
+                ? 'Le classement complet, l’accord sujet par sujet et le partage t’attendent sur ton résultat.'
+                : 'Aucune de tes réponses n’a pu être comptabilisée. Ton résultat t’explique pourquoi.'}
+            </Text>
+            <Pressable
+              onPress={onSeeResult}
+              style={({ pressed }) => [styles.finBouton, pressed && styles.finBoutonPresse]}
+              accessibilityRole="button"
+              accessibilityLabel="Voir mon résultat"
+            >
+              <Text style={styles.finBoutonTexte}>Voir mon résultat</Text>
+              <Ionicons name="arrow-forward" size={18} color={colors.onAccent} />
+            </Pressable>
+          </View>
+        )}
+
+        <View>
+          <Text style={styles.sectionTitle}>Les candidats comparés</Text>
+          <CandidateGrid onSelect={onOpenCandidateInfo} />
+        </View>
+      </ScrollView>
+    );
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      {portee && <Text style={styles.portee}>{portee}</Text>}
+
+      {/* Le défi, annoncé PENDANT qu'on le joue. Sans cette ligne, le
+          classement provisoire qui monte est tout ce qu'on voit, et rien ne
+          laisse deviner qu'une comparaison carte par carte attend à l'arrivée. */}
+      {duel && (
+        <View style={styles.defiEnCours}>
+          <Ionicons name="git-compare-outline" size={17} color={colors.accentText} />
+          <Text style={styles.defiEnCoursTexte}>
+            Tu joues le défi de quelqu’un. À la dernière carte, vous verrez l’un et l’autre ce
+            que chacun a validé.
+          </Text>
+        </View>
+      )}
+
       {/* « Continue à répondre » n'a plus de sens une fois la dernière carte
           tranchée : il n'en reste aucune. La phrase invitait alors à une
           action impossible, et laissait croire que le classement affiché
-          n'était pas le résultat final. Elle disparaît avec la raison qui la
-          justifiait. */}
-      {montrerPodium && !deckDone && (
+          n'était pas le résultat final. Le paquet terminé part désormais dans
+          une autre branche (voir plus haut), si bien que le seul chemin qui
+          arrive ici est celui d'une partie en cours. */}
+      {montrerPodium && (
         <Text style={styles.hint}>
           Provisoire, ça va encore bouger. Continue à répondre pour un résultat plus fiable.
         </Text>
@@ -238,6 +363,78 @@ function makeStyles(colors: ColorTokens) {
       lineHeight: (fonts.tiny + 1) * 1.4,
       color: colors.textMuted,
       textAlign: 'center',
+    },
+    // Sur quoi porte ce classement, quand ce n'est pas sur tout.
+    portee: {
+      fontSize: fonts.small,
+      fontWeight: '700',
+      color: colors.accentText,
+      textAlign: 'center',
+    },
+    // Le rappel du défi en cours, pendant qu'on le joue.
+    defiEnCours: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: spacing.sm,
+      backgroundColor: colors.accentSoft,
+      borderRadius: radii.sm,
+      paddingVertical: spacing.sm + 2,
+      paddingHorizontal: spacing.md,
+    },
+    defiEnCoursTexte: {
+      flex: 1,
+      fontSize: fonts.tiny,
+      lineHeight: fonts.tiny * 1.45,
+      fontWeight: '600',
+      color: colors.accentText,
+    },
+    // Le bloc qui remplace le classement dupliqué une fois le paquet fini.
+    finBloc: {
+      backgroundColor: colors.surface,
+      borderRadius: radii.lg,
+      padding: spacing.lg,
+      gap: spacing.sm,
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: colors.border,
+    },
+    finTitre: {
+      fontSize: fonts.body,
+      fontWeight: '800',
+      color: colors.textPrimary,
+    },
+    finTexte: {
+      fontSize: fonts.small,
+      lineHeight: fonts.small * 1.45,
+      color: colors.textSecondary,
+    },
+    finBouton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: spacing.sm,
+      marginTop: spacing.xs,
+      backgroundColor: colors.accent,
+      borderRadius: radii.pill,
+      paddingVertical: spacing.md - 2,
+    },
+    finBoutonPresse: {
+      backgroundColor: colors.accentStrong,
+    },
+    finBoutonTexte: {
+      fontSize: fonts.small + 2,
+      fontWeight: '700',
+      color: colors.onAccent,
+    },
+    // Le classement devient le second choix quand une comparaison l'attend :
+    // un lien, pas un bouton, pour que le premier reste le premier.
+    finLienWrap: {
+      alignItems: 'center',
+      paddingVertical: spacing.xs,
+    },
+    finLien: {
+      fontSize: fonts.small,
+      fontWeight: '700',
+      color: colors.accentText,
     },
     listSection: {
       backgroundColor: colors.surface,

@@ -66,6 +66,7 @@ export function DuelScreen({
   answers,
   graine,
   themeIds,
+  quota,
   adversaire,
   deckDone,
   codeRecu,
@@ -76,6 +77,10 @@ export function DuelScreen({
   answers: Answers;
   graine: number;
   themeIds: string[];
+  // Propositions par candidat de la partie en cours. Avec la graine et les
+  // thèmes, c'est ce qui permet de refaire le paquet à l'identique en face :
+  // une partie courte et une longue n'ont pas les mêmes cartes.
+  quota: number;
   // Réponses de l'adversaire, si la partie en cours est un défi relevé.
   adversaire: Answers | undefined;
   deckDone: boolean;
@@ -88,8 +93,8 @@ export function DuelScreen({
   const styles = useMemo(() => makeStyles(colors), [colors]);
 
   const monCode = useMemo(
-    () => (proposals.length > 0 && deckDone ? encoderDefi(graine, themeIds, answers) : null),
-    [proposals.length, deckDone, graine, themeIds, answers]
+    () => (proposals.length > 0 && deckDone ? encoderDefi(graine, themeIds, answers, quota) : null),
+    [proposals.length, deckDone, graine, themeIds, quota, answers]
   );
 
   const [saisie, setSaisie] = useState('');
@@ -155,9 +160,15 @@ export function DuelScreen({
 
   // Un code reçu par lien profond s'ouvre sans rien demander : la personne
   // vient de scanner, elle n'a pas à appuyer sur un bouton de plus.
-  useEffect(() => {
+  //
+  // La lecture se fait pendant le rendu, à la façon d'un état dérivé : ce qui
+  // est à l'écran découle du code reçu, et le faire depuis un effet afficherait
+  // d'abord l'écran vide avant d'y poser le défi.
+  const [codeLu, setCodeLu] = useState<string | null>(null);
+  if (codeRecu !== codeLu) {
+    setCodeLu(codeRecu);
     if (codeRecu) lire(codeRecu);
-  }, [codeRecu, lire]);
+  }
 
   const comparaison = useMemo<DuelComparaison | null>(
     () => (adversaire && deckDone ? comparerDefi(proposals, answers, adversaire) : null),
@@ -441,6 +452,19 @@ export function DuelScreen({
 
 // --- La comparaison elle-même ----------------------------------------------
 
+// Les quatre vues de la comparaison. Mêmes principes que les filtres de
+// l'écran de révision : un libellé, un décompte, et l'ordre de lecture va du
+// plus intéressant au moins — les désaccords d'abord, puisque c'est là qu'il y
+// a quelque chose à se dire.
+type FiltreDuel = 'tout' | 'desaccord' | 'accord' | 'nonTranchee';
+
+const FILTRES_DUEL: { key: FiltreDuel; label: string }[] = [
+  { key: 'tout', label: 'Tout' },
+  { key: 'desaccord', label: 'Désaccords' },
+  { key: 'accord', label: 'Accords' },
+  { key: 'nonTranchee', label: 'Non tranchées' },
+];
+
 function Comparaison({
   comparaison,
   styles,
@@ -450,8 +474,51 @@ function Comparaison({
   styles: ReturnType<typeof makeStyles>;
   colors: ColorTokens;
 }) {
-  const { lignes, tranchees, accords, mesPremiers, sesPremiers, memePremier } = comparaison;
+  const {
+    lignes,
+    tranchees,
+    accords,
+    mesResultats,
+    sesResultats,
+    mesPremiers,
+    sesPremiers,
+    memePremier,
+  } = comparaison;
   const desaccords = tranchees - accords;
+
+  const [filtre, setFiltre] = useState<FiltreDuel>('tout');
+
+  const comptes: Record<FiltreDuel, number> = {
+    tout: lignes.length,
+    desaccord: desaccords,
+    accord: accords,
+    nonTranchee: lignes.length - tranchees,
+  };
+
+  const visibles = lignes.filter((l) => {
+    if (filtre === 'tout') return true;
+    if (filtre === 'accord') return l.accord;
+    if (filtre === 'desaccord') return l.desaccord;
+    return !l.accord && !l.desaccord;
+  });
+
+  const choisirFiltre = (suivant: FiltreDuel) => {
+    haptics.selection();
+    setFiltre(suivant);
+  };
+
+  // PLUSIEURS NOMS D'UN CÔTÉ, C'EST UNE ÉGALITÉ, et il faut le dire.
+  //
+  // Ces deux listes ne sont pas des « trois premiers » : ce sont les candidats
+  // arrivés en TÊTE, tous ceux qui partagent le meilleur pourcentage. Leur
+  // nombre n'a donc aucune raison d'être le même des deux côtés — il dépend des
+  // réponses de chacun. Des réponses très uniformes (tout approuvé, ou presque
+  // tout laissé sans avis) laissent une dizaine de candidats au même score,
+  // quand des réponses tranchées n'en laissent qu'un.
+  //
+  // Sans le pourcentage affiché à côté, « neuf noms contre quatre » se lit
+  // comme une incohérence de l'app. Avec lui, on comprend d'un coup d'œil.
+  const exAequo = mesPremiers.length > 1 || sesPremiers.length > 1;
 
   return (
     <>
@@ -473,11 +540,24 @@ function Comparaison({
         <Text style={styles.cardHint}>
           Vous avez répondu aux mêmes cartes : ces deux classements sont directement
           comparables.
+          {exAequo
+            ? ' Plusieurs noms du même côté, c’est une égalité parfaite : ces candidats ont exactement le même pourcentage, et leur nombre dépend des réponses données.'
+            : ''}
         </Text>
         <View style={styles.tetes}>
-          <Tete titre="Toi" candidats={mesPremiers.map((c) => c.name)} styles={styles} />
+          <Tete
+            titre="Toi"
+            candidats={mesPremiers.map((c) => c.name)}
+            pct={mesResultats[0]?.pct}
+            styles={styles}
+          />
           {!memePremier && (
-            <Tete titre="L’autre" candidats={sesPremiers.map((c) => c.name)} styles={styles} />
+            <Tete
+              titre="L’autre"
+              candidats={sesPremiers.map((c) => c.name)}
+              pct={sesResultats[0]?.pct}
+              styles={styles}
+            />
           )}
         </View>
       </View>
@@ -486,15 +566,42 @@ function Comparaison({
           ici est ce que vous avez répondu, pas qui portait la mesure : la
           proposition se juge sur son texte, exactement comme pendant le swipe.
           Le thème, lui, reste affiché : il situe sans rien trahir. */}
-      <View style={styles.legende}>
-        <Text style={styles.legendeTexte}>
-          {desaccords} désaccord{desaccords > 1 ? 's' : ''} d’abord, puis vos accords
-        </Text>
+      {/* Les désaccords restent EN TÊTE de la liste complète : c'est l'ordre
+          de lecture qui a du sens quand on ouvre la comparaison. Le filtre
+          sert ensuite à n'en garder qu'une sorte — parcourir cinquante-cinq
+          cartes pour retrouver les huit où l'on s'oppose n'était pas
+          raisonnable. */}
+      <View style={styles.filtres}>
+        {FILTRES_DUEL.map((f) => {
+          const actif = filtre === f.key;
+          return (
+            <Pressable
+              key={f.key}
+              onPress={() => choisirFiltre(f.key)}
+              style={({ pressed }) => [
+                styles.filtre,
+                actif && styles.filtreActif,
+                pressed && styles.presse,
+              ]}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: actif }}
+              accessibilityLabel={`${f.label}, ${comptes[f.key]} proposition${comptes[f.key] > 1 ? 's' : ''}`}
+            >
+              <Text style={[styles.filtreTexte, actif && styles.filtreTexteActif]}>
+                {f.label} {comptes[f.key]}
+              </Text>
+            </Pressable>
+          );
+        })}
       </View>
 
-      {lignes.map((ligne) => (
-        <LigneDuel key={ligne.proposal.id} ligne={ligne} styles={styles} colors={colors} />
-      ))}
+      {visibles.length === 0 ? (
+        <Text style={styles.filtreVide}>Aucune proposition dans cette catégorie.</Text>
+      ) : (
+        visibles.map((ligne) => (
+          <LigneDuel key={ligne.proposal.id} ligne={ligne} styles={styles} colors={colors} />
+        ))
+      )}
     </>
   );
 }
@@ -502,15 +609,26 @@ function Comparaison({
 function Tete({
   titre,
   candidats,
+  pct,
   styles,
 }: {
   titre: string;
   candidats: string[];
+  // Le pourcentage commun à cette tête de classement. C'est lui qui explique
+  // qu'il puisse y avoir neuf noms d'un côté et un seul de l'autre.
+  pct: number | undefined;
   styles: ReturnType<typeof makeStyles>;
 }) {
   return (
     <View style={styles.tete}>
-      <Text style={styles.teteTitre}>{titre}</Text>
+      <View style={styles.teteEntete}>
+        <Text style={styles.teteTitre}>{titre}</Text>
+        {pct !== undefined && (
+          <Text style={styles.tetePct}>
+            {pct} %{candidats.length > 1 ? ` · ${candidats.length} à égalité` : ''}
+          </Text>
+        )}
+      </View>
       <Text style={styles.teteNom}>{candidats.length > 0 ? candidats.join(', ') : 'aucun'}</Text>
     </View>
   );
@@ -813,6 +931,17 @@ function makeStyles(colors: ColorTokens) {
     tete: {
       gap: 1,
     },
+    teteEntete: {
+      flexDirection: 'row',
+      alignItems: 'baseline',
+      gap: spacing.sm,
+    },
+    tetePct: {
+      fontSize: fonts.tiny,
+      fontWeight: '700',
+      color: colors.accentText,
+      fontVariant: ['tabular-nums'],
+    },
     teteTitre: {
       fontSize: fonts.tiny,
       fontWeight: '800',
@@ -826,6 +955,41 @@ function makeStyles(colors: ColorTokens) {
       color: colors.textPrimary,
     },
 
+    // Mêmes pastilles que les filtres de l'écran de révision : c'est le même
+    // geste sur la même sorte de liste, il n'a pas à s'apprendre deux fois.
+    filtres: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 6,
+      paddingHorizontal: spacing.xs,
+    },
+    filtre: {
+      paddingVertical: 6,
+      paddingHorizontal: spacing.sm + 2,
+      borderRadius: radii.pill,
+      backgroundColor: colors.surfaceAlt,
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: colors.border,
+    },
+    filtreActif: {
+      backgroundColor: colors.accent,
+      borderColor: colors.accent,
+    },
+    filtreTexte: {
+      fontSize: fonts.tiny,
+      fontWeight: '700',
+      color: colors.textSecondary,
+      fontVariant: ['tabular-nums'],
+    },
+    filtreTexteActif: {
+      color: colors.onAccent,
+    },
+    filtreVide: {
+      fontSize: fonts.small,
+      color: colors.textMuted,
+      textAlign: 'center',
+      paddingVertical: spacing.xl,
+    },
     legende: {
       paddingHorizontal: spacing.xs,
     },

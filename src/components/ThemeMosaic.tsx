@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from './Avatar';
 import { CANDIDATES_BY_ID } from '../data/candidates';
 import { THEMES } from '../data/themes';
+import { alterneParCandidat } from '../utils/alternance';
 import { PROPOSAL_EXPLANATIONS } from '../data/proposalExplanations';
 import { Answers, AnswerValue, Proposal, ThemeTag } from '../types';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
@@ -65,6 +66,21 @@ export function ThemeMosaic({
     for (const p of proposals) {
       count[p.themeId] = (count[p.themeId] ?? 0) + 1;
       (byTheme[p.themeId] ??= []).push(p);
+    }
+    // CHAQUE THÈME ALTERNE SES CANDIDATS (voir utils/alternance.ts). Le
+    // catalogue arrive rangé candidat par candidat : sans cela, ouvrir un
+    // thème donnait toutes les mesures du même avant d'atteindre le suivant,
+    // et le même nom ouvrait les quinze listes.
+    //
+    // Le décalage vient du RANG DU THÈME dans la liste : un nombre stable, qui
+    // ne dépend ni du hasard ni des réponses, si bien que la liste est la même
+    // à chaque ouverture — mais il change d'un thème à l'autre, ce qui fait
+    // tourner la place de tête.
+    for (const themeId of Object.keys(byTheme)) {
+      byTheme[themeId] = alterneParCandidat(
+        byTheme[themeId],
+        THEMES.findIndex((t) => t.id === themeId)
+      );
     }
     return {
       countByTheme: count,

@@ -3,6 +3,12 @@
   "compilerOptions": {
     "strict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    // TypeScript 6 n'inclut plus automatiquement tout node_modules/@types :
+    // les paquets qui déclarent des GLOBALES doivent être nommés ici, sans
+    // quoi `describe`, `expect` ou `__dirname` deviennent des noms inconnus.
+    // Ceux qu'on importe explicitement (react, react-native…) n'ont rien à y
+    // faire : ils sont résolus par leurs imports.
+    "types": ["jest", "node"]
   }
 }

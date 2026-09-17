@@ -1,4 +1,12 @@
-import { buildDeck, buildSessionDeck, candidatesQuota } from './deck';
+import {
+  buildDeck,
+  buildSessionDeck,
+  candidatesQuota,
+  formatDuQuota,
+  QUOTA_COURT,
+  QUOTA_PAR_CANDIDAT,
+  quotaDuFormat,
+} from './deck';
 import { Proposal } from '../types';
 import { PROPOSALS } from '../data/proposals';
 
@@ -148,5 +156,28 @@ describe('composition du paquet selon l’étendue de la sélection', () => {
     // candidat, ce qui laisserait deviner qui porte quoi.
     const vingtPremiers = new Set(paquet.slice(0, 20).map((p) => p.candidateId));
     expect(vingtPremiers.size).toBe(2);
+  });
+});
+
+describe('longueur de partie', () => {
+  it('la partie courte tire cinq propositions par candidat', () => {
+    expect(quotaDuFormat('court')).toBe(QUOTA_COURT);
+    expect(quotaDuFormat('long')).toBe(QUOTA_PAR_CANDIDAT);
+
+    const deck = buildSessionDeck(pool({ a: 30, b: 30, c: 30 }), true, undefined, QUOTA_COURT);
+    expect(compte(deck, 'candidateId')).toEqual({ a: 5, b: 5, c: 5 });
+  });
+
+  it('une sélection de thèmes ignore le quota, comme avant', () => {
+    const p = pool({ a: 8, b: 3 });
+    expect(buildSessionDeck(p, false, undefined, QUOTA_COURT)).toHaveLength(p.length);
+  });
+
+  it('relit le format d’un quota, pour les sessions déjà enregistrées', () => {
+    expect(formatDuQuota(QUOTA_COURT)).toBe('court');
+    expect(formatDuQuota(QUOTA_PAR_CANDIDAT)).toBe('long');
+    // Tout autre quota est traité comme une partie longue : c'est ce qu'était
+    // une session écrite avant l'arrivée des parties courtes.
+    expect(formatDuQuota(12)).toBe('long');
   });
 });

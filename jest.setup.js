@@ -8,6 +8,14 @@
 // Chacun remplace une dépendance qui exige un environnement natif absent ici,
 // et aucun ne simule un comportement dont les tests dépendraient — ils ne font
 // que laisser le code s'exécuter.
+//
+// REANIMATED N'EST PAS SUBSTITUÉ ICI, mais dans `package.json` : le champ
+// `jest.resolver` y désigne `react-native-worklets/jest/resolver`, le résolveur
+// fourni par la bibliothèque. Depuis worklets 0.10 (SDK 57), importer
+// `react-native-reanimated` charge sa partie native dès la première ligne et
+// échoue hors appareil ; ce résolveur écarte les fichiers `.native` du paquet
+// et rend l'import inoffensif sous jest. C'est la marche à suivre officielle,
+// et elle tient en une ligne de configuration plutôt qu'en un faux module.
 
 // `@expo/vector-icons` tire `expo-font`, qui tire `expo-asset`, absent de
 // node_modules. Les icônes deviennent des composants hôtes inertes : leur nom

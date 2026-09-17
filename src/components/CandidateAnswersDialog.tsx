@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -64,9 +64,16 @@ export function CandidateAnswersDialog({
 
   // À chaque ouverture, revenir sur le premier onglet plutôt que de garder
   // celui consulté pour le candidat précédent.
-  useEffect(() => {
+  //
+  // La remise à zéro se fait PENDANT LE RENDU, en comparant à l'état
+  // d'ouverture précédent, et non depuis un effet : un effet ne s'exécute
+  // qu'après la peinture, et l'onglet de la fiche précédente s'afficherait
+  // une image avant d'être remplacé.
+  const [ouvertAvant, setOuvertAvant] = useState(visible);
+  if (ouvertAvant !== visible) {
+    setOuvertAvant(visible);
     if (visible) setActive('like');
-  }, [visible]);
+  }
 
   const tint = (key: AnswerValue) => {
     if (key === 'like') return { text: colors.successText, soft: colors.successSoft };

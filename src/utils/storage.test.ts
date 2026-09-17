@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { loadSession, saveSession } from './storage';
+import { loadSession, loadSessionAvecEtat, quotaDeLaSession, saveSession } from './storage';
+import { QUOTA_COURT, QUOTA_PAR_CANDIDAT } from './deck';
 import { CATALOG_FINGERPRINT } from './catalog';
 import { PROPOSALS } from '../data/proposals';
 
@@ -25,6 +26,51 @@ beforeEach(() => {
   store.getItem.mockReset().mockResolvedValue(null);
   store.setItem.mockReset().mockResolvedValue(undefined);
   store.removeItem.mockReset().mockResolvedValue(undefined);
+});
+
+describe('session d’un autre catalogue', () => {
+  const perimee = { ...SESSION_VALIDE, catalog: 'autre-chose', currentIndex: 120 };
+
+  it('le dit, au lieu de faire disparaître la progression en silence', async () => {
+    store.getItem.mockResolvedValue(JSON.stringify(perimee));
+    await expect(loadSessionAvecEtat()).resolves.toEqual({ session: null, perimee: true });
+    // Effacée dans la foulée : le message ne se montre qu'une fois.
+    expect(store.removeItem).toHaveBeenCalled();
+  });
+
+  it('ne s’excuse pas pour une partie où rien n’avait été répondu', async () => {
+    store.getItem.mockResolvedValue(JSON.stringify({ ...perimee, currentIndex: 0 }));
+    await expect(loadSessionAvecEtat()).resolves.toEqual({ session: null, perimee: false });
+  });
+
+  it('ne s’excuse pas pour un blob abîmé, qui ne dit rien d’une progression', async () => {
+    store.getItem.mockResolvedValue('{ pas du json');
+    await expect(loadSessionAvecEtat()).resolves.toEqual({ session: null, perimee: false });
+  });
+
+  it('ne s’excuse pas quand il n’y avait rien à reprendre', async () => {
+    store.getItem.mockResolvedValue(null);
+    await expect(loadSessionAvecEtat()).resolves.toEqual({ session: null, perimee: false });
+  });
+});
+
+describe('longueur de la partie enregistrée', () => {
+  it('relit le quota quand il est là', async () => {
+    store.getItem.mockResolvedValue(JSON.stringify({ ...SESSION_VALIDE, quota: QUOTA_COURT }));
+    const session = await loadSession();
+    expect(session && quotaDeLaSession(session)).toBe(QUOTA_COURT);
+  });
+
+  it('lit une session d’avant les parties courtes comme une partie longue', async () => {
+    store.getItem.mockResolvedValue(JSON.stringify(SESSION_VALIDE));
+    const session = await loadSession();
+    expect(session && quotaDeLaSession(session)).toBe(QUOTA_PAR_CANDIDAT);
+  });
+
+  it('refuse un quota absurde plutôt que de tirer un paquet vide', async () => {
+    store.getItem.mockResolvedValue(JSON.stringify({ ...SESSION_VALIDE, quota: 0 }));
+    await expect(loadSession()).resolves.toBeNull();
+  });
 });
 
 describe('session enregistrée', () => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -19,8 +19,9 @@ import {
   emptyAnswerGroups,
 } from '../components/CandidateAnswersDialog';
 import { CandidateInfoDialog } from '../components/CandidateInfoDialog';
-import { ShareCard, SHARE_CARD_HEIGHT, SHARE_CARD_WIDTH } from '../components/ShareCard';
+import { ShareCard, SHARE_CARD_WIDTH, shareCardHeight } from '../components/ShareCard';
 import { CANDIDATES, CANDIDATES_BY_ID } from '../data/candidates';
+import { DATASET_DATE } from '../data/proposals';
 import { THEMES } from '../data/themes';
 import {
   computeResults,
@@ -29,6 +30,8 @@ import {
   pickTopMatch,
   topMatches,
 } from '../utils/scoring';
+import { dateEnFrancais } from '../utils/date';
+import { porteeDesThemes } from '../utils/portee';
 import { Answers, Proposal } from '../types';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
@@ -46,25 +49,48 @@ type RankingView = 'overview' | 'byTheme';
 export function ResultsScreen({
   proposals,
   answers,
+  selectedThemeIds,
   onRestart,
   onBack,
+  backIsHome,
   onGoHome,
   onOpenHowItWorks,
   onOpenSettings,
+  duel,
   onOpenDuel,
   alreadyRevealed,
   onReveal,
 }: {
   proposals: Proposal[];
   answers: Answers;
+  // Les thèmes sur lesquels la partie a été jouée. Ils ne changent rien au
+  // calcul — le paquet en découle déjà — mais ils disent SUR QUOI porte le
+  // classement, mention qui part avec l'image partagée (voir utils/portee.ts).
+  selectedThemeIds: string[];
   onRestart: () => void;
-  // Retour à la révision des réponses — un pas en arrière dans le parcours.
+  // Retour à l'écran d'où l'on vient — la révision, l'écran de fin du paquet
+  // ou l'accueil selon le chemin emprunté (voir `resultsReturnTo` dans App).
   onBack: () => void;
-  // Sortie vers l'accueil. Distinct de `onBack` à dessein : le résultat reste
+  // Ce retour mène-t-il à l'accueil ? DEUX CHOSES EN DÉPENDENT.
+  //
+  // L'ICÔNE, d'abord : une maison plutôt qu'un chevron. Un chevron promet un
+  // pas en arrière dans un fil de navigation ; quand la destination est la
+  // sortie, la maison le dit — c'est déjà la règle de l'écran de swipe.
+  //
+  // LE PIED DE PAGE, ensuite : le bouton « Accueil » y disparaît, puisque le
+  // coin haut-gauche mène déjà là. Deux boutons pour une même destination, à
+  // deux endroits différents, c'est ce qui rendait la sortie imprévisible.
+  backIsHome: boolean;
+  // Sortie vers l'accueil, quand le retour va ailleurs. Le résultat reste
   // enregistré, et l'accueil le rouvre par sa carte « ton dernier résultat ».
   onGoHome: () => void;
   onOpenHowItWorks: () => void;
   onOpenSettings: () => void;
+  // Non nul quand la partie qui vient de se terminer ÉTAIT le défi de
+  // quelqu'un. Le bloc du duel change alors de discours : il ne s'agit plus
+  // d'en lancer un, mais d'aller voir ce que l'autre a répondu — la seule
+  // raison pour laquelle on a relevé ce défi.
+  duel: { accords: number; tranchees: number } | null;
   // Comparer son classement à celui de quelqu'un d'autre (écran Duel).
   onOpenDuel: () => void;
   // Le "moment de révélation" (haptique + animations d'entrée) ne doit avoir
@@ -91,6 +117,7 @@ export function ResultsScreen({
     haptics.selection();
     setRankingView(next);
   };
+  const portee = useMemo(() => porteeDesThemes(selectedThemeIds, THEMES), [selectedThemeIds]);
   const reducedMotion = useReducedMotion();
   // `alreadyRevealed` est FIGÉ au montage, et ce n'est pas un détail.
   //
@@ -175,9 +202,12 @@ export function ResultsScreen({
           .join('\n');
         const tete =
           premiers.length > 1 ? `\n\n${premiers.length} candidats à égalité en tête.` : '';
+        // Le repli dit exactement ce que dit l'image, portée comprise : c'est
+        // le même résultat qui circule, par un autre canal.
+        const surQuoi = portee ? `\n${portee}.` : '';
         await Share.share({
           message:
-            `Mon podium pour la présidentielle 2027 🗳️\n\n${podium}${tete}` +
+            `Mon podium pour la présidentielle 2027 🗳️${surQuoi}\n\n${podium}${tete}` +
             `\n\nDécouvre le tien avec Élyze, sans savoir qui propose quoi avant la fin.`,
         });
       }
@@ -200,9 +230,13 @@ export function ResultsScreen({
             pressed && styles.settingsButtonPressed,
           ]}
           accessibilityRole="button"
-          accessibilityLabel="Retour"
+          accessibilityLabel={backIsHome ? 'Revenir à l’accueil' : 'Retour'}
         >
-          <Ionicons name="chevron-back" size={22} color={colors.textSecondary} />
+          <Ionicons
+            name={backIsHome ? 'home-outline' : 'chevron-back'}
+            size={backIsHome ? 20 : 22}
+            color={colors.textSecondary}
+          />
         </Pressable>
         <Pressable
           onPress={onOpenSettings}
@@ -238,16 +272,19 @@ export function ResultsScreen({
           {/* Cet écran-ci est celui où l'on risque le plus de se sentir
               coincé : il n'offrait qu'un chevron et une action destructive.
               Une sortie franche évite d'avoir à choisir entre revenir en
-              arrière à l'aveugle et tout effacer. */}
-          <Pressable
-            onPress={onGoHome}
-            style={({ pressed }) => [styles.homeButton, pressed && styles.homePressed]}
-            accessibilityRole="button"
-            accessibilityLabel="Revenir à l’accueil"
-          >
-            <Ionicons name="home-outline" size={19} color={colors.accentText} />
-            <Text style={styles.homeText}>Accueil</Text>
-          </Pressable>
+              arrière à l'aveugle et tout effacer. Inutile en revanche quand le
+              coin haut-gauche est déjà une maison. */}
+          {!backIsHome && (
+            <Pressable
+              onPress={onGoHome}
+              style={({ pressed }) => [styles.homeButton, pressed && styles.homePressed]}
+              accessibilityRole="button"
+              accessibilityLabel="Revenir à l’accueil"
+            >
+              <Ionicons name="home-outline" size={19} color={colors.accentText} />
+              <Text style={styles.homeText}>Accueil</Text>
+            </Pressable>
+          )}
         </View>
 
         <ConfirmDialog
@@ -274,9 +311,13 @@ export function ResultsScreen({
           pressed && styles.settingsButtonPressed,
         ]}
         accessibilityRole="button"
-        accessibilityLabel="Retour"
+        accessibilityLabel={backIsHome ? 'Revenir à l’accueil, ton résultat est gardé' : 'Retour'}
       >
-        <Ionicons name="chevron-back" size={22} color={colors.textSecondary} />
+        <Ionicons
+          name={backIsHome ? 'home-outline' : 'chevron-back'}
+          size={backIsHome ? 20 : 22}
+          color={colors.textSecondary}
+        />
       </Pressable>
       <Pressable
         onPress={onOpenSettings}
@@ -293,17 +334,32 @@ export function ResultsScreen({
       </Pressable>
 
       {/* Carte de partage : montée mais hors-écran, uniquement pour la capture. */}
-      <View style={styles.offscreen} pointerEvents="none">
-        {topMatch && <ShareCard ref={shareCardRef} results={results} confidenceLabel={confidenceLabel} />}
+      <View
+        style={[styles.offscreen, { height: shareCardHeight(portee) }]}
+        pointerEvents="none"
+      >
+        {topMatch && (
+          <ShareCard
+            ref={shareCardRef}
+            results={results}
+            confidenceLabel={confidenceLabel}
+            portee={portee}
+          />
+        )}
       </View>
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.eyebrow}>
-          {premiers.length > 1 ? 'TES MEILLEURS MATCHS' : 'TON MEILLEUR MATCH'}
-        </Text>
+        <View style={styles.chapeau}>
+          <Text style={styles.eyebrow}>
+            {premiers.length > 1 ? 'TES MEILLEURS MATCHS' : 'TON MEILLEUR MATCH'}
+          </Text>
+          {/* Hors du rideau : la portée n'est pas une révélation, c'est ce
+              qu'il faut savoir pour lire celle qui vient. */}
+          {portee && <Text style={styles.portee}>{portee}</Text>}
+        </View>
 
         {topMatch && (
           <Animated.View
@@ -348,30 +404,43 @@ export function ResultsScreen({
             son résultat et où la seule question qui reste est de savoir ce que
             les autres ont eu.
 
-            Il entre APRÈS la révélation, pas pendant : une proposition qui
-            apparaît au milieu du rideau détournerait le regard du seul moment
-            que l'écran met en scène. */}
-        <Animated.View
-          entering={skipEntrance ? undefined : FadeInDown.delay(winnerAt + 500).duration(400)}
+            IL EST LÀ DÈS LE DÉPART, ET IL NE BOUGE PLUS. Il entrait autrefois
+            en fondu, une demi-seconde après le sacre du vainqueur : la
+            proposition principale de l'écran se mettait donc à exister sans
+            prévenir, sous le doigt de qui faisait défiler pendant ce temps,
+            et le contenu qui la suivait se décalait d'autant. Une invitation
+            qu'on peut manquer parce qu'elle n'était pas encore arrivée n'est
+            pas une invitation. Le rideau reste le seul moment mis en scène ;
+            le reste de l'écran l'attend en place. */}
+        <Pressable
+          onPress={onOpenDuel}
+          style={({ pressed }) => [styles.duelButton, pressed && styles.duelPressed]}
+          accessibilityRole="button"
+          accessibilityLabel={
+            duel
+              ? 'Voir ce que chacun a validé, carte par carte'
+              : 'Défier quelqu’un, comparer ton classement au sien'
+          }
         >
-          <Pressable
-            onPress={onOpenDuel}
-            style={({ pressed }) => [styles.duelButton, pressed && styles.duelPressed]}
-            accessibilityRole="button"
-            accessibilityLabel="Défier quelqu’un, comparer ton classement au sien"
-          >
-            <View style={styles.duelIcone}>
-              <Ionicons name="qr-code" size={22} color={colors.onAccent} />
-            </View>
-            <View style={styles.duelTexts}>
-              <Text style={styles.duelTitle}>Défier quelqu’un</Text>
-              <Text style={styles.duelHint}>
-                Il répondra aux mêmes cartes que toi, et vous verrez ce que chacun a validé.
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={colors.accentText} />
-          </Pressable>
-        </Animated.View>
+          <View style={styles.duelIcone}>
+            <Ionicons
+              name={duel ? 'git-compare' : 'qr-code'}
+              size={22}
+              color={colors.onAccent}
+            />
+          </View>
+          <View style={styles.duelTexts}>
+            <Text style={styles.duelTitle}>
+              {duel ? 'Voir qui a validé quoi' : 'Défier quelqu’un'}
+            </Text>
+            <Text style={styles.duelHint}>
+              {duel
+                ? `Vous avez tranché ${duel.tranchees} carte${duel.tranchees > 1 ? 's' : ''} tous les deux, et vous êtes d’accord sur ${duel.accords}.`
+                : 'Il répondra aux mêmes cartes que toi, et vous verrez ce que chacun a validé.'}
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color={colors.accentText} />
+        </Pressable>
 
         <View style={styles.subTabRow}>
           <Pressable
@@ -432,10 +501,15 @@ export function ResultsScreen({
           </View>
         )}
 
+        {/* La date est ici et pas ailleurs : c'est sous le classement qu'on
+            se demande sur quoi il repose, et un programme continue de s'écrire
+            après l'arrêt des données. */}
         <Text style={styles.footnote}>
           Propositions recensées par Poligraph (poligraph.fr), à raison du même nombre par
-          candidat. Le pourcentage reflète uniquement les propositions présentées dans cette
-          app, pas l’intégralité d’un programme.
+          candidat
+          {dateEnFrancais(DATASET_DATE) ? `, arrêtées au ${dateEnFrancais(DATASET_DATE)}` : ''}. Le
+          pourcentage reflète uniquement les propositions présentées dans cette app, pas
+          l’intégralité d’un programme.
         </Text>
       </ScrollView>
 
@@ -444,24 +518,28 @@ export function ResultsScreen({
           {/* Recommencer ne figure plus ici : il vit sur l'écran de fin de
               l'onglet Swiper, pour qu'une action destructive ne côtoie pas le
               résultat qu'on vient consulter.
-              L'accueil, lui, est ici et non en haut à gauche : le chevron de
-              l'en-tête revient à la révision des réponses, ce qui est un vrai
-              pas en arrière, et lui faire aussi porter « sortir » rendrait sa
-              destination imprévisible. Deux endroits, deux gestes distincts. */}
-          <Pressable
-            onPress={onGoHome}
-            style={({ pressed }) => [styles.homeButton, pressed && styles.homePressed]}
-            accessibilityRole="button"
-            accessibilityLabel="Revenir à l’accueil, ton résultat est gardé"
-          >
-            <Ionicons name="home-outline" size={19} color={colors.accentText} />
-            {/* Deux boutons se partagent une rangée de largeur fixe : au delà
-                de ce grossissement, l'un mange la place de l'autre. Le libellé
-                complet reste dans l'accessibilityLabel du bouton. */}
-            <Text style={styles.homeText} maxFontSizeMultiplier={FOOTER_MAX_SCALE} numberOfLines={1}>
-              Accueil
-            </Text>
-          </Pressable>
+              L'accueil, lui, n'apparaît QUE si le coin haut-gauche mène
+              ailleurs — c'est-à-dire quand on est arrivé par la révision ou
+              par l'écran de fin du paquet. Venu de l'accueil, le retour y
+              ramène déjà, et un second bouton pour la même destination, à
+              l'autre bout de l'écran, était précisément ce qui rendait la
+              sortie imprévisible. */}
+          {!backIsHome && (
+            <Pressable
+              onPress={onGoHome}
+              style={({ pressed }) => [styles.homeButton, pressed && styles.homePressed]}
+              accessibilityRole="button"
+              accessibilityLabel="Revenir à l’accueil, ton résultat est gardé"
+            >
+              <Ionicons name="home-outline" size={19} color={colors.accentText} />
+              {/* Deux boutons se partagent une rangée de largeur fixe : au delà
+                  de ce grossissement, l'un mange la place de l'autre. Le libellé
+                  complet reste dans l'accessibilityLabel du bouton. */}
+              <Text style={styles.homeText} maxFontSizeMultiplier={FOOTER_MAX_SCALE} numberOfLines={1}>
+                Accueil
+              </Text>
+            </Pressable>
+          )}
           <Pressable
             onPress={handleShare}
             disabled={sharing}
@@ -570,7 +648,15 @@ function makeStyles(colors: ColorTokens) {
       top: 0,
       left: -SHARE_CARD_WIDTH - 50,
       width: SHARE_CARD_WIDTH,
-      height: SHARE_CARD_HEIGHT,
+    },
+    chapeau: {
+      gap: spacing.xs,
+    },
+    portee: {
+      fontSize: fonts.small,
+      fontWeight: '600',
+      color: colors.accentText,
+      textAlign: 'center',
     },
     scrollContent: {
       paddingHorizontal: spacing.lg,

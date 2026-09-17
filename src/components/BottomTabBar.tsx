@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
@@ -27,11 +27,19 @@ export type BottomTabItem<K extends string> = {
 // session).
 //
 // Cette action n'est pas un onglet et ne doit pas se lire comme tel : un trait
-// vertical la sépare du groupe, et elle porte la couleur d'accent en
-// permanence au lieu de s'allumer à la sélection. Une version précédente la
-// grisait comme un onglet inactif, si bien qu'un réglage important passait
-// pour la quatrième vue de l'écran — et se remarquait moins que les trois
-// autres alors qu'il commande ce qu'on swipe.
+// vertical la sépare du groupe, et un contour la dessine comme un bouton.
+//
+// ELLE EST CERNÉE, PAS REMPLIE, et c'est tout le sujet. Deux versions s'y sont
+// trompées en sens inverse. La première la grisait comme un onglet inactif :
+// un réglage qui commande ce qu'on swipe se remarquait alors moins que les
+// vues entre lesquelles on bascule. La seconde lui a donné un fond d'accent
+// permanent — or un fond plein est, dans cette barre, la marque de ce qui est
+// sélectionné : « Thèmes » paraissait donc être l'écran en cours alors qu'on
+// était ailleurs, et rien dans la barre ne disait plus où l'on se trouvait.
+//
+// Un contour ne dit ni l'un ni l'autre. Aucun onglet n'en porte, sélectionné
+// ou non : la forme n'entre pas en concurrence avec l'état. Et l'icône garde
+// la teinte d'accent, assez pour que l'œil la trouve.
 //
 // L'état éventuel (« 4 thèmes » plutôt que « Thèmes ») passe par le libellé
 // lui-même, à la taille des autres. Il avait d'abord une pastille de 9 px
@@ -142,11 +150,12 @@ function makeStyles(colors: ColorTokens) {
       marginBottom: spacing.md,
       backgroundColor: colors.border,
     },
-    // Fond teinté permanent : l'action ne s'allume jamais (elle ne devient
-    // pas « active »), donc sans cela elle reste grise en toutes
-    // circonstances et se lit comme un onglet qu'on n'a pas sélectionné.
+    // Contour et non aplat : voir l'explication en tête de fichier. Le trait
+    // est celui qui sépare déjà les surfaces de l'app, à un pixel plein plutôt
+    // qu'au cheveu — sous 20 px de haut, un cheveu se perd.
     extraTab: {
-      backgroundColor: colors.accentSoft,
+      borderWidth: 1,
+      borderColor: colors.border,
       borderRadius: radii.md,
       marginHorizontal: spacing.xs,
       marginBottom: spacing.xs,
@@ -156,10 +165,11 @@ function makeStyles(colors: ColorTokens) {
     extraPressed: {
       opacity: 0.6,
     },
+    // Le libellé reste dans le gris des onglets non sélectionnés : l'accent y
+    // aurait redit ce que l'aplat disait de travers. C'est le contour, et lui
+    // seul, qui distingue l'action des onglets.
     extraLabel: {
-      // `accentText` est le jeton prévu pour de l'accent en TEXTE sur un fond
-      // neutre ou `accentSoft` — c'est exactement ce cas.
-      color: colors.accentText,
+      color: colors.textSecondary,
       fontWeight: '700',
     },
   });

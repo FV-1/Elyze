@@ -44,10 +44,32 @@ import { shuffle } from './shuffle';
 // prendre tout donnerait à un programme de trois cents mesures dix fois le
 // poids d'un programme de trente.
 
-// Nombre de propositions tirées par candidat. Doit rester aligné sur
-// QUOTA_PAR_CANDIDAT de scripts/generate-data.js, qui dimensionne le vivier
-// en conséquence.
+// --- DEUX LONGUEURS DE PARTIE ----------------------------------------------
+//
+// Onze candidats à quinze propositions font cent soixante-cinq cartes : onze
+// minutes sans s'arrêter, et une partie qui ne se termine pas ne donne aucun
+// résultat — juste un classement provisoire. La partie courte en tire cinq par
+// candidat, cinquante-cinq cartes, quatre minutes : de quoi arriver au bout.
+//
+// LE SCORE TIENT À CINQ CARTES PAR CANDIDAT, et ce n'est pas une concession :
+// le lissage est précisément fait pour ça (voir utils/scoring.ts). Cinq
+// propositions approuvées sur cinq donnent 86 % et non 100 % — l'app dit
+// qu'elle en sait moins, au lieu de faire comme si de rien n'était.
+//
+// QUOTA_PAR_CANDIDAT doit rester aligné sur celui de scripts/generate-data.js,
+// qui dimensionne le vivier en conséquence.
 export const QUOTA_PAR_CANDIDAT = 15;
+export const QUOTA_COURT = 5;
+
+export type FormatPartie = 'court' | 'long';
+
+export function quotaDuFormat(format: FormatPartie): number {
+  return format === 'court' ? QUOTA_COURT : QUOTA_PAR_CANDIDAT;
+}
+
+export function formatDuQuota(quota: number): FormatPartie {
+  return quota === QUOTA_COURT ? 'court' : 'long';
+}
 
 type ShuffleFn = <T>(items: T[]) => T[];
 
@@ -60,12 +82,17 @@ export function candidatesQuota(pool: Proposal[], quota: number): number {
 
 // Le paquet d'une partie. `complet` dit si la sélection porte sur TOUS les
 // thèmes : c'est le seul cas où le quota par candidat s'applique.
+//
+// Le quota voyage avec le défi (voir utils/duel.ts) : deux joueurs doivent
+// refaire le MÊME paquet, et une partie courte n'en tire pas les mêmes cartes
+// qu'une longue — même graine, même catalogue, autre paquet.
 export function buildSessionDeck(
   pool: Proposal[],
   complet: boolean,
-  melange: ShuffleFn = shuffle
+  melange: ShuffleFn = shuffle,
+  quota: number = QUOTA_PAR_CANDIDAT
 ): Proposal[] {
-  return complet ? buildDeck(pool, QUOTA_PAR_CANDIDAT, melange) : melange(pool);
+  return complet ? buildDeck(pool, quota, melange) : melange(pool);
 }
 
 export function buildDeck(

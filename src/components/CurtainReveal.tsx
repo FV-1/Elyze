@@ -221,7 +221,7 @@ function makeStyles(colors: ColorTokens) {
       overflow: 'hidden',
     },
     ombreCantonniere: {
-      ...StyleSheet.absoluteFillObject,
+      ...StyleSheet.absoluteFill,
       backgroundColor: 'rgba(0,0,0,0.30)',
     },
     galon: {

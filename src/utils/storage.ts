@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Answers } from '../types';
 import { CATALOG_FINGERPRINT } from './catalog';
+import { QUOTA_PAR_CANDIDAT } from './deck';
 
 // v2 : la session porte désormais l'empreinte du catalogue qui l'a produite
 // (voir `isValidSession`). Les sessions v1 n'en ont pas et ne sont pas
@@ -41,6 +42,14 @@ export type StoredSession = {
   // seule raison : pouvoir REFABRIQUER le code de défi de cette partie, à tout
   // moment, sans avoir à transmettre la liste des cartes (voir utils/duel.ts).
   graine: number;
+  // Propositions par candidat — la longueur de la partie. Comme la graine,
+  // elle sert à refabriquer le code de défi : même graine et même catalogue
+  // donnent deux paquets différents selon le quota.
+  //
+  // FACULTATIVE, ET C'EST VOULU : les sessions écrites avant l'arrivée des
+  // parties courtes n'en ont pas, et elles étaient toutes longues. Les lire
+  // comme telles vaut mieux que de les jeter (voir `quotaDeLaSession`).
+  quota?: number;
   // Réponses de l'adversaire, quand cette partie est un défi relevé. Absentes
   // d'une partie ordinaire.
   adversaire?: Answers;
@@ -75,6 +84,9 @@ function isValidSession(value: unknown): value is StoredSession {
   if (typeof s.currentIndex !== 'number' || !Number.isInteger(s.currentIndex)) return false;
   if (s.currentIndex < 0 || s.currentIndex > s.proposalIds.length) return false;
   if (typeof s.graine !== 'number' || !Number.isFinite(s.graine)) return false;
+  if (s.quota !== undefined && (!Number.isInteger(s.quota) || (s.quota as number) <= 0)) {
+    return false;
+  }
   if (!estDesReponses(s.answers)) return false;
   // L'adversaire est facultatif, mais s'il est là il doit être lisible : une
   // partie de défi dont les réponses adverses seraient abîmées vaut mieux
@@ -103,21 +115,56 @@ export async function saveSession(
   }
 }
 
-export async function loadSession(): Promise<StoredSession | null> {
+// Le quota d'une session, celles d'avant les parties courtes comprises.
+export function quotaDeLaSession(session: StoredSession): number {
+  return session.quota ?? QUOTA_PAR_CANDIDAT;
+}
+
+export type SessionChargee = {
+  session: StoredSession | null;
+  // UNE PARTIE ÉTAIT LÀ, ET ELLE NE VAUT PLUS RIEN.
+  //
+  // Le catalogue des propositions change à chaque mise à jour des données, et
+  // une session écrite face à d'autres cartes est inutilisable — ses
+  // identifiants ne désignent plus les mêmes mesures, son rang ne pointe plus
+  // au même endroit (voir utils/catalog.ts). Le refus est juste ; c'est le
+  // SILENCE qui ne l'était pas : quelqu'un arrêté à la cent-vingtième carte
+  // rouvrait l'app sur un accueil vide, sans un mot, et pouvait raisonnablement
+  // croire à une perte de ses données.
+  //
+  // Vrai seulement si quelque chose avait été répondu : une partie abandonnée
+  // à la première carte ne mérite pas qu'on s'excuse.
+  perimee: boolean;
+};
+
+export async function loadSessionAvecEtat(): Promise<SessionChargee> {
   try {
     const raw = await AsyncStorage.getItem(SESSION_KEY);
-    if (!raw) return null;
+    if (!raw) return { session: null, perimee: false };
     const parsed: unknown = JSON.parse(raw);
-    if (!isValidSession(parsed)) {
-      // Session illisible ou d'un autre catalogue : on l'efface plutôt que de
-      // la relire en vain à chaque lancement.
-      await AsyncStorage.removeItem(SESSION_KEY);
-      return null;
-    }
-    return parsed;
+    if (isValidSession(parsed)) return { session: parsed, perimee: false };
+
+    // Session illisible ou d'un autre catalogue : on l'efface plutôt que de
+    // la relire en vain à chaque lancement — le message ne se montre donc
+    // qu'une fois, au premier lancement qui suit la mise à jour.
+    await AsyncStorage.removeItem(SESSION_KEY);
+    return { session: null, perimee: estUneSessionDunAutreCatalogue(parsed) };
   } catch {
-    return null;
+    return { session: null, perimee: false };
   }
+}
+
+// Distingue « d'un autre catalogue » de « abîmée » : les deux se refusent, mais
+// seule la première s'explique à qui l'a vécue.
+function estUneSessionDunAutreCatalogue(value: unknown): boolean {
+  if (typeof value !== 'object' || value === null) return false;
+  const s = value as Record<string, unknown>;
+  if (typeof s.catalog !== 'string' || s.catalog === CATALOG_FINGERPRINT) return false;
+  return typeof s.currentIndex === 'number' && s.currentIndex > 0;
+}
+
+export async function loadSession(): Promise<StoredSession | null> {
+  return (await loadSessionAvecEtat()).session;
 }
 
 export async function clearSession(): Promise<void> {

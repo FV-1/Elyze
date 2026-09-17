@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import renderer, { ReactTestInstance, ReactTestRenderer } from 'react-test-renderer';
 import { BackHandler, Text } from 'react-native';
-import { SwipeScreen } from './SwipeScreen';
+import { SwipeScreen, SwipeTab } from './SwipeScreen';
 import { ThemeProvider } from '../theme/ThemeContext';
 import { PROPOSALS } from '../data/proposals';
 import { THEMES } from '../data/themes';
@@ -52,12 +52,21 @@ const montes: ReactTestRenderer[] = [];
 // tour de boucle des microtâches ici, cette résolution retombe au milieu du
 // test, hors de tout `act`, et l'arbre observé n'est pas celui que React aura
 // fini de rendre.
+// L'onglet est tenu par l'écran parent (voir App.tsx) : ce test observe
+// justement la navigation entre onglets, il doit donc jouer ce rôle.
+function SwipeAvecOnglets(
+  props: Omit<React.ComponentProps<typeof SwipeScreen>, 'tab' | 'onChangeTab'>
+) {
+  const [tab, setTab] = useState<SwipeTab>('swipe');
+  return <SwipeScreen {...props} tab={tab} onChangeTab={setTab} />;
+}
+
 async function monter() {
   let tree!: ReactTestRenderer;
   await renderer.act(async () => {
     tree = renderer.create(
       <ThemeProvider>
-        <SwipeScreen
+        <SwipeAvecOnglets
           proposals={DECK}
           currentIndex={30}
           answers={{}}
@@ -72,6 +81,7 @@ async function monter() {
           onOpenSettings={noop}
           showTutorial={false}
           onDismissTutorial={noop}
+          duel={null}
         />
       </ThemeProvider>
     );
