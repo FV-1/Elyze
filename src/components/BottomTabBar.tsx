@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
@@ -77,7 +78,15 @@ export function BottomTabBar<K extends string>({
             accessibilityState={{ selected: isActive }}
             accessibilityLabel={tab.label}
           >
-            <Ionicons name={tab.icon} size={22} color={isActive ? colors.accent : colors.textMuted} />
+            {/* L'onglet courant porte sa pastille d'accent sous l'icône : c'est
+                elle qui montre la couleur de l'écran, là où un glyphe lime
+                serait illisible sur une barre claire. */}
+            <View style={[styles.marque, isActive && styles.marqueActive]} />
+            <Ionicons
+              name={tab.icon}
+              size={22}
+              color={isActive ? colors.textPrimary : colors.textMuted}
+            />
             <Text
               style={[styles.label, isActive && styles.labelActive]}
               maxFontSizeMultiplier={MAX_LABEL_SCALE}
@@ -119,12 +128,24 @@ export function BottomTabBar<K extends string>({
 
 function makeStyles(colors: ColorTokens) {
   return StyleSheet.create({
+    // Le trait qui sépare la barre du contenu est un vrai trait d'encre : sans
+    // ombre pour la poser au-dessus, c'est lui qui dit où l'écran s'arrête.
     bar: {
       flexDirection: 'row',
-      borderTopWidth: StyleSheet.hairlineWidth,
-      borderTopColor: colors.border,
+      borderTopWidth: 2,
+      borderTopColor: colors.borderStrong,
       backgroundColor: colors.surface,
       paddingTop: spacing.sm,
+    },
+    marque: {
+      width: 22,
+      height: 4,
+      borderRadius: radii.pill,
+      backgroundColor: 'transparent',
+      marginBottom: 3,
+    },
+    marqueActive: {
+      backgroundColor: colors.accent,
     },
     tab: {
       flex: 1,
@@ -137,14 +158,17 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '600',
       color: colors.textMuted,
     },
+    // L'ONGLET ACTIF S'ÉCRIT EN ENCRE, PAS EN ACCENT. Le lime ne se lit pas sur
+    // une barre claire (1.2:1) : ce qui distingue l'onglet courant est la
+    // densité du trait, pas une couleur. Sa pastille, elle, prend l'accent.
     labelActive: {
-      color: colors.accent,
+      color: colors.textPrimary,
       fontWeight: '700',
     },
 
     // Le trait qui dit « ce qui suit n'est pas un onglet ».
     divider: {
-      width: StyleSheet.hairlineWidth,
+      width: 1,
       alignSelf: 'stretch',
       marginTop: 2,
       marginBottom: spacing.md,
@@ -154,8 +178,8 @@ function makeStyles(colors: ColorTokens) {
     // est celui qui sépare déjà les surfaces de l'app, à un pixel plein plutôt
     // qu'au cheveu — sous 20 px de haut, un cheveu se perd.
     extraTab: {
-      borderWidth: 1,
-      borderColor: colors.border,
+      borderWidth: 1.5,
+      borderColor: colors.borderStrong,
       borderRadius: radii.md,
       marginHorizontal: spacing.xs,
       marginBottom: spacing.xs,

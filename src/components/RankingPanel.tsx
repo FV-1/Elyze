@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { Podium } from './Podium';
 import { ResultRow } from './ResultRow';
@@ -138,7 +139,7 @@ export function RankingPanel({
               accessibilityRole="button"
               accessibilityLabel="Voir ce que chacun a validé, carte par carte"
             >
-              <Ionicons name="git-compare-outline" size={18} color={colors.onAccent} />
+              <Ionicons name="git-compare-outline" size={18} color={colors.onAction} />
               <Text style={styles.finBoutonTexte}>Voir qui a validé quoi</Text>
             </Pressable>
             <Pressable
@@ -168,7 +169,7 @@ export function RankingPanel({
               accessibilityLabel="Voir mon résultat"
             >
               <Text style={styles.finBoutonTexte}>Voir mon résultat</Text>
-              <Ionicons name="arrow-forward" size={18} color={colors.onAccent} />
+              <Ionicons name="arrow-forward" size={18} color={colors.onAction} />
             </Pressable>
           </View>
         )}
@@ -394,7 +395,7 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.lg,
       padding: spacing.lg,
       gap: spacing.sm,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     finTitre: {
@@ -413,17 +414,17 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
       gap: spacing.sm,
       marginTop: spacing.xs,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md - 2,
     },
     finBoutonPresse: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     finBoutonTexte: {
       fontSize: fonts.small + 2,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     // Le classement devient le second choix quand une comparaison l'attend :
     // un lien, pas un bouton, pour que le premier reste le premier.
@@ -441,7 +442,7 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.lg,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.lg,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     sectionTitle: {

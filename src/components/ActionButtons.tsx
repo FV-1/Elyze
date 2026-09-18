@@ -90,7 +90,7 @@ export function ActionButtons({
         accessibilityLabel="Pas pour moi"
         accessibilityState={{ disabled: !!disabled }}
       >
-        <Ionicons name="close" size={30} color={colors.danger} />
+        <Ionicons name="close" size={30} color={colors.onAccentDanger} />
       </Pressable>
 
       <Pressable
@@ -125,7 +125,7 @@ export function ActionButtons({
         accessibilityLabel="J’adhère"
         accessibilityState={{ disabled: !!disabled }}
       >
-        <Ionicons name="heart" size={26} color={colors.success} />
+        <Ionicons name="heart" size={26} color={colors.onAccentSuccess} />
       </Pressable>
 
       <Pressable
@@ -143,7 +143,7 @@ export function ActionButtons({
         accessibilityLabel="Super like, compte plus dans le résultat"
         accessibilityState={{ disabled: !!disabled }}
       >
-        <Ionicons name="star" size={20} color={colors.warning} />
+        <Ionicons name="star" size={20} color={colors.onAccentWarning} />
       </Pressable>
     </View>
   );
@@ -160,6 +160,14 @@ function makeStyles(colors: ColorTokens) {
       // 320 px de large. À 12, l'ensemble tient en 308.
       gap: spacing.sm + 4,
     },
+    // LA COULEUR EST DANS L'APLAT, PAS DANS LE GLYPHE.
+    //
+    // Ces boutons portaient un signe coloré sur un fond blanc cerné de la même
+    // couleur en plus pâle. Sur cette palette, cela ne pouvait plus tenir : un
+    // cœur lime sur du blanc ne se lit pas, et le document demande justement
+    // l'inverse — des aplats francs, cernés d'encre, avec un signe d'encre
+    // dessus. Chaque réponse devient donc une pastille pleine, et les quatre se
+    // distinguent par leur couleur autant que par leur signe.
     button: {
       width: 64,
       height: 64,
@@ -167,30 +175,30 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.surface,
-      borderWidth: 1.5,
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 6 },
-      shadowOpacity: 0.08,
-      shadowRadius: 12,
-      elevation: 3,
+      borderWidth: 2,
+      borderColor: colors.borderStrong,
     },
     smallButton: {
       width: 44,
       height: 44,
     },
     nopeButton: {
-      borderColor: colors.dangerSoft,
+      backgroundColor: colors.danger,
     },
     likeButton: {
-      borderColor: colors.successSoft,
+      backgroundColor: colors.success,
     },
+    // Le super like prend le contraire du fond : c'est la réponse la plus
+    // appuyée des quatre, et elle le montre sans ajouter une couleur de plus.
     superlikeButton: {
-      borderColor: colors.warningSoft,
+      backgroundColor: colors.warning,
     },
     skipButton: {
-      borderColor: colors.border,
+      backgroundColor: colors.surfaceAlt,
     },
+    // Annuler n'est pas une réponse : pas d'aplat, juste le trait.
     undoButton: {
+      backgroundColor: 'transparent',
       borderColor: colors.border,
     },
     buttonDisabled: {

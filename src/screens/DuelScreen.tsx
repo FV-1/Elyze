@@ -1,14 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Keyboard,
-  Pressable,
-  ScrollView,
-  Share,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Keyboard, Pressable, ScrollView, Share, StyleSheet, TextInput, View } from 'react-native';
+import { Texte as Text } from '../components/Texte';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
@@ -33,7 +25,7 @@ import {
   Position,
 } from '../utils/duel';
 import { Answers, Proposal } from '../types';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors, useThemeColor } from '../theme/ThemeContext';
 
 // Hauteur réservée sous le contenu pendant la saisie, quand le système ne dit
@@ -729,7 +721,7 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.lg,
       padding: spacing.lg,
       gap: spacing.sm,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     cardTitle: {
@@ -761,6 +753,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       color: colors.accentText,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     chiffreLibelle: {
       fontSize: fonts.tiny,
@@ -786,6 +779,7 @@ function makeStyles(colors: ColorTokens) {
       letterSpacing: 1.4,
       color: colors.textPrimary,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
       textAlign: 'center',
     },
 
@@ -794,7 +788,7 @@ function makeStyles(colors: ColorTokens) {
       maxHeight: 160,
       backgroundColor: colors.surfaceAlt,
       borderRadius: radii.md,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.md,
@@ -810,11 +804,12 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '600',
       color: colors.textMuted,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
 
     principal: {
       alignItems: 'center',
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
       marginTop: spacing.xs,
@@ -825,7 +820,7 @@ function makeStyles(colors: ColorTokens) {
     principalTexte: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     lien: {
       alignItems: 'center',
@@ -912,6 +907,7 @@ function makeStyles(colors: ColorTokens) {
       letterSpacing: -1,
       color: colors.accentText,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     resumeSur: {
       fontSize: fonts.title,
@@ -941,12 +937,14 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '700',
       color: colors.accentText,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     teteTitre: {
       fontSize: fonts.tiny,
       fontWeight: '800',
       letterSpacing: 0.6,
       textTransform: 'uppercase',
+      fontFamily: police.mono[500],
       color: colors.textMuted,
     },
     teteNom: {
@@ -968,7 +966,7 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: spacing.sm + 2,
       borderRadius: radii.pill,
       backgroundColor: colors.surfaceAlt,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     filtreActif: {
@@ -980,6 +978,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '700',
       color: colors.textSecondary,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     filtreTexteActif: {
       color: colors.onAccent,
@@ -1002,15 +1001,18 @@ function makeStyles(colors: ColorTokens) {
     ligne: {
       backgroundColor: colors.surface,
       borderRadius: radii.md,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
       padding: spacing.md,
       gap: spacing.xs,
     },
-    // Un liseré, pas un fond : le désaccord se repère au coup d'œil sans que
-    // la carte change de nature.
+    // UN FOND TEINTÉ, ET NON UN LISERÉ. La pêche posée en trait sur du blanc
+    // ne se voit pas (1.85:1, quand un signe graphique en demande 3) ; en
+    // aplat très pâle sous toute la ligne, le désaccord se repère d'un coup
+    // d'œil et le texte garde son contraste.
     ligneDesaccord: {
-      borderColor: colors.danger,
+      backgroundColor: colors.dangerSoft,
+      borderColor: colors.borderStrong,
     },
     ligneEntete: {
       flexDirection: 'row',

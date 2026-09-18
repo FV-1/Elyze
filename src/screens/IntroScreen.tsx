@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Texte as Text } from '../components/Texte';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, MONO_SPACING, police, radii, spacing } from '../theme';
 import { useColors, useThemeSettings } from '../theme/ThemeContext';
 import { haptics } from '../utils/haptics';
 import { PROPOSALS } from '../data/proposals';
 import { CANDIDATES } from '../data/candidates';
+import { Blob } from '../components/Blob';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { FormatPartie, QUOTA_COURT, QUOTA_PAR_CANDIDAT } from '../utils/deck';
 
@@ -149,6 +151,12 @@ export function IntroScreen({
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+      {/* DEUX CERCLES, PAS TROIS, ET COUPÉS PAR LE BORD. Ils sont la seule
+          décoration de l'app, et c'est l'accueil qui les porte : l'écran où
+          l'on arrive, le seul qui ait de la place à leur donner. */}
+      <Blob taille={320} haut={-140} droite={-110} />
+      <Blob taille={220} bas={-90} gauche={-80} />
+
       <Pressable
         onPress={onOpenSettings}
         hitSlop={10}
@@ -211,7 +219,7 @@ export function IntroScreen({
         >
           <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
             <View style={[styles.legendIcon, styles.legendIconNope]}>
-              <Ionicons name="close" size={18} color={colors.danger} />
+              <Ionicons name="close" size={18} color={colors.onAccentDanger} />
             </View>
             <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
               Pas pour moi
@@ -227,7 +235,7 @@ export function IntroScreen({
           </View>
           <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
             <View style={[styles.legendIcon, styles.legendIconLike]}>
-              <Ionicons name="heart" size={16} color={colors.success} />
+              <Ionicons name="heart" size={16} color={colors.onAccentSuccess} />
             </View>
             <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
               J’adhère
@@ -235,7 +243,7 @@ export function IntroScreen({
           </View>
           <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
             <View style={[styles.legendIcon, styles.legendIconSuper]}>
-              <Ionicons name="star" size={16} color={colors.warningText} />
+              <Ionicons name="star" size={16} color={colors.onAccentWarning} />
               <View style={styles.legendMultiplier}>
                 <Text style={styles.legendMultiplierText}>×3</Text>
               </View>
@@ -317,7 +325,7 @@ export function IntroScreen({
               <Text style={styles.ctaText}>
                 Reprendre ({restorable.currentIndex}/{restorable.total})
               </Text>
-              <Ionicons name="arrow-forward" size={20} color={colors.onAccent} />
+              <Ionicons name="arrow-forward" size={20} color={colors.onAction} />
             </Pressable>
             <Pressable
               onPress={handleStartFreshPress}
@@ -376,7 +384,7 @@ export function IntroScreen({
               <Text style={styles.ctaText}>
                 {restorable?.isComplete ? 'Refaire le test' : 'Commencer'}
               </Text>
-              <Ionicons name="arrow-forward" size={20} color={colors.onAccent} />
+              <Ionicons name="arrow-forward" size={20} color={colors.onAction} />
             </Pressable>
           </>
         )}
@@ -459,6 +467,8 @@ function makeStyles(colors: ColorTokens) {
     container: {
       flex: 1,
       backgroundColor: colors.bg,
+      // Sans quoi les cercles de fond débordent au lieu d'être coupés.
+      overflow: 'hidden',
     },
     // `space-between` a déménagé du conteneur vers le contenu défilant : c'est
     // lui qui, avec `flexGrow`, tient le pied de page en bas quand l'écran est
@@ -494,24 +504,29 @@ function makeStyles(colors: ColorTokens) {
       paddingTop: spacing.xl,
       gap: spacing.md,
     },
+    // La pastille « sombre sur fond clair » du document : un aplat d'encre qui
+    // porte l'accent, en mono capitales.
     badge: {
-      backgroundColor: colors.accentSoft,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
-      paddingVertical: 6,
+      paddingVertical: 7,
       paddingHorizontal: spacing.md,
       marginBottom: spacing.sm,
     },
     badgeText: {
+      fontFamily: police.mono[500],
       fontSize: fonts.tiny,
-      fontWeight: '800',
-      letterSpacing: 1,
-      color: colors.accentText,
+      letterSpacing: MONO_SPACING,
+      color: colors.onAction,
     },
+    // Le titre suit l'échelle du document : géométrique, gras, très resserré
+    // (-0.045em, soit environ -2.3 à cette taille).
     title: {
-      fontSize: 56,
-      fontWeight: '800',
+      fontSize: fonts.hero,
+      fontWeight: '700',
       color: colors.textPrimary,
-      letterSpacing: -1,
+      letterSpacing: -2.3,
+      lineHeight: fonts.hero * 1.02,
     },
     pitch: {
       fontSize: fonts.body + 2,
@@ -534,19 +549,22 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       gap: spacing.xs,
     },
+    // LES MÊMES PASTILLES QUE SOUS LES CARTES, en plus petit : aplat de
+    // couleur, signe d'encre, contour d'encre. La légende ne servirait à rien
+    // si elle ne montrait pas exactement ce qu'on va toucher.
     legendIcon: {
       width: 40,
       height: 40,
       borderRadius: radii.pill,
       alignItems: 'center',
       justifyContent: 'center',
-      borderWidth: 1.5,
+      borderWidth: 2,
+      borderColor: colors.borderStrong,
       // Le multiplicateur deborde du cercle : il doit rester visible.
       overflow: 'visible',
     },
     legendIconSuper: {
-      borderColor: colors.warningSoft,
-      backgroundColor: colors.warningSoft,
+      backgroundColor: colors.warning,
     },
     legendMultiplier: {
       position: 'absolute',
@@ -555,27 +573,25 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: 5,
       paddingVertical: 1,
       borderRadius: radii.pill,
-      backgroundColor: colors.warningText,
+      backgroundColor: colors.action,
     },
     legendMultiplierText: {
       // Jamais sous le plus petit jeton de police de l'app.
       fontSize: fonts.tiny,
       lineHeight: fonts.tiny + 3,
       fontWeight: '800',
-      color: colors.bg,
+      color: colors.onAction,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     legendIconNope: {
-      borderColor: colors.dangerSoft,
-      backgroundColor: colors.dangerSoft,
+      backgroundColor: colors.danger,
     },
     legendIconSkip: {
-      borderColor: colors.border,
       backgroundColor: colors.surfaceAlt,
     },
     legendIconLike: {
-      borderColor: colors.successSoft,
-      backgroundColor: colors.successSoft,
+      backgroundColor: colors.success,
     },
     legendText: {
       fontSize: fonts.tiny,
@@ -653,17 +669,17 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       gap: spacing.sm,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md + 2,
     },
     ctaPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     ctaText: {
       fontSize: fonts.body + 1,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     // Second bouton de l'accueil : même gabarit que le principal, mais posé
     // sur l'accent atténué au lieu de l'accent plein. Il se voit sans
@@ -721,6 +737,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '600',
       color: colors.textMuted,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     longueurCartesActif: {
       color: colors.textSecondary,

@@ -179,11 +179,6 @@ const styles = StyleSheet.create({
     // Le code est toujours sur blanc : l'ombre est ce qui le détache d'un fond
     // sombre sans avoir à lui coller une bordure, laquelle empiéterait sur la
     // zone de silence.
-    shadowColor: '#1A1730',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.16,
-    shadowRadius: 20,
-    elevation: 4,
   },
   rangee: {
     flexDirection: 'row',

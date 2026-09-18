@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
+import { Texte as Text } from '../components/Texte';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -266,7 +267,7 @@ export function ResultsScreen({
             accessibilityRole="button"
             accessibilityLabel="Recommencer"
           >
-            <Ionicons name="refresh" size={18} color={colors.onAccent} />
+            <Ionicons name="refresh" size={18} color={colors.onAction} />
             <Text style={styles.restartText}>Recommencer</Text>
           </Pressable>
           {/* Cet écran-ci est celui où l'on risque le plus de se sentir
@@ -547,7 +548,7 @@ export function ResultsScreen({
             accessibilityRole="button"
             accessibilityLabel="Partager mon résultat en image"
           >
-            <Ionicons name="share-outline" size={20} color={colors.onAccent} />
+            <Ionicons name="share-outline" size={20} color={colors.onAction} />
             <Text style={styles.shareText} maxFontSizeMultiplier={FOOTER_MAX_SCALE} numberOfLines={1}>
               Partager
             </Text>
@@ -678,13 +679,8 @@ function makeStyles(colors: ColorTokens) {
       paddingVertical: spacing.xl,
       paddingHorizontal: spacing.lg,
       gap: spacing.xs,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 10 },
-      shadowOpacity: 0.08,
-      shadowRadius: 20,
-      elevation: 3,
     },
     confidencePill: {
       marginTop: spacing.sm,
@@ -726,7 +722,7 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.lg,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.lg,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     sectionTitle: {
@@ -810,17 +806,17 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       gap: spacing.sm,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
     },
     restartPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     restartText: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     // Accent atténué contre accent plein : sortir et partager sont deux
     // actions ordinaires, mais une seule est celle qu'on vient chercher sur
@@ -850,17 +846,17 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       gap: spacing.sm,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
     },
     sharePressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     shareText: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
   });
 }

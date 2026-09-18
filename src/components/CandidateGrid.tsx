@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from './Avatar';
 import { CANDIDATES } from '../data/candidates';
@@ -175,11 +176,6 @@ function makeStyles(colors: ColorTokens) {
       paddingVertical: spacing.lg,
       paddingHorizontal: spacing.sm,
       gap: 3,
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 6 },
-      shadowOpacity: 0.07,
-      shadowRadius: 18,
-      elevation: 2,
     },
     tilePressed: {
       opacity: 0.65,

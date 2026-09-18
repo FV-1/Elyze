@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import * as Haptics from 'expo-haptics';
 import { haptics } from '../utils/haptics';
@@ -612,6 +613,13 @@ function makeStyles(colors: ColorTokens) {
     cardOnGradient: {
       backgroundColor: 'transparent',
     },
+    // LE CADRE D'ENCRE, ET RIEN D'AUTRE POUR LA DÉTACHER.
+    //
+    // L'identité est plate : aucune ombre ne porte plus la carte au-dessus du
+    // fond. C'est ce trait de deux pixels qui le fait, comme le cadre de
+    // téléphone des captures du document. Deux pixels et pas un : à un, il
+    // disparaît sur les écrans les moins denses et la carte flotte sans
+    // contour ; à trois, il devient un objet en soi.
     card: {
       position: 'absolute',
       top: 0,
@@ -619,18 +627,13 @@ function makeStyles(colors: ColorTokens) {
       right: 0,
       bottom: 0,
       backgroundColor: colors.surface,
-      borderRadius: radii.lg,
+      borderRadius: radii.xl,
       paddingVertical: spacing.xl,
       paddingHorizontal: spacing.lg,
       alignItems: 'center',
       justifyContent: 'space-between',
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 14 },
-      shadowOpacity: 0.12,
-      shadowRadius: 24,
-      elevation: 6,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: colors.border,
+      borderWidth: 2,
+      borderColor: colors.borderStrong,
     },
     textWrap: {
       flex: 1,
@@ -644,7 +647,7 @@ function makeStyles(colors: ColorTokens) {
       textAlign: 'center',
     },
     divider: {
-      height: StyleSheet.hairlineWidth,
+      height: 1,
       backgroundColor: colors.border,
       marginVertical: spacing.lg,
     },
@@ -717,22 +720,30 @@ function makeStyles(colors: ColorTokens) {
     stamp: {
       position: 'absolute',
       top: spacing.xl,
-      borderWidth: 3,
+      borderWidth: 2,
+      borderColor: colors.borderStrong,
       borderRadius: radii.sm,
       paddingVertical: spacing.xs,
       paddingHorizontal: spacing.md,
     },
+    // LES TAMPONS SONT PLEINS, ET NON PLUS CERNÉS.
+    //
+    // Ils portaient un contour de couleur vive et un texte assorti. Avec cette
+    // palette, un contour lime sur du blanc ne se voit pas (1.16:1, quand un
+    // élément graphique en demande 3). Le tampon devient donc un aplat de la
+    // couleur de la réponse, cerné d'encre, avec le mot en encre dessus — la
+    // même pastille que le bouton qu'on vient de toucher, en plus grand.
     likeStamp: {
       left: spacing.lg,
-      borderColor: colors.success,
+      backgroundColor: colors.success,
       transform: [{ rotate: '-14deg' }],
     },
     superlikeStamp: {
-      borderColor: colors.warning,
+      backgroundColor: colors.warning,
     },
     nopeStamp: {
       right: spacing.lg,
-      borderColor: colors.danger,
+      backgroundColor: colors.danger,
       transform: [{ rotate: '14deg' }],
     },
     stampText: {
@@ -740,11 +751,10 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       letterSpacing: 1,
     },
-    // Les bordures gardent la couleur vive ; le TEXTE passe par les variantes
-    // dédiées, qui tiennent le contraste sur `surface` en mode clair (le vert
-    // vif n'y atteignait que 3.02:1).
-    likeStampText: { color: colors.successText },
-    superlikeStampText: { color: colors.warningText },
-    nopeStampText: { color: colors.dangerText },
+    // Le mot posé sur l'aplat : de l'encre sur le lime et la pêche, du lime
+    // sur l'encre du super like.
+    likeStampText: { color: colors.onAccentSuccess },
+    superlikeStampText: { color: colors.onAccentWarning },
+    nopeStampText: { color: colors.onAccentDanger },
   });
 }

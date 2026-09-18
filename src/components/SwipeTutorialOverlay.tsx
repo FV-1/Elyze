@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, {
   useAnimatedStyle,
@@ -8,18 +9,19 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, PALETTE, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
-// Ce panneau s'affiche toujours sur un voile sombre, quel que soit le thème :
-// les icônes y sont donc des couleurs fixes calibrées sur fond sombre, et non
-// `colors.danger`/`success`/`warning`, qui sont calibrés pour le fond clair et
-// n'y atteignaient que 2.27:1, 2.82:1 et 2.34:1 (minimum 3:1).
-const ON_SCRIM_NOPE = '#FF7D93';
-const ON_SCRIM_LIKE = '#4ED696';
-const ON_SCRIM_STAR = '#F0B54E';
-const ON_SCRIM_NEUTRAL = 'rgba(255,255,255,0.85)';
+// Ce panneau s'affiche toujours sur un voile sombre, quel que soit le thème.
+// Les trois accents de la palette y tiennent tels quels — ils sont clairs, et
+// c'est sur du sombre qu'ils donnent le meilleur d'eux-mêmes (la pêche à
+// 8.9:1, le lime à 14.3:1). Aucune couleur calibrée à part n'est plus
+// nécessaire : ce sont les couleurs de l'app, à pleine valeur.
+const ON_SCRIM_NOPE = PALETTE.peach;
+const ON_SCRIM_LIKE = PALETTE.lime;
+const ON_SCRIM_STAR = PALETTE.cream;
+const ON_SCRIM_NEUTRAL = PALETTE.mutedOnNight;
 
 export function SwipeTutorialOverlay({ onDismiss }: { onDismiss: () => void }) {
   const colors = useColors();
@@ -161,18 +163,18 @@ function makeStyles(colors: ColorTokens) {
       color: '#FFFFFF',
     },
     button: {
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.xxl,
     },
     buttonPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     buttonText: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
   });
 }

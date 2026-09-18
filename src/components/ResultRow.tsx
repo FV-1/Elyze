@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from './Avatar';
 import { CandidateResult } from '../types';
-import { ColorTokens, fonts, spacing } from '../theme';
+import { ColorTokens, fonts, spacing, police } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
 const BAR_HEIGHT = 10;
@@ -126,6 +127,7 @@ function makeStyles(colors: ColorTokens) {
       minWidth: 46,
       textAlign: 'right',
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     pctEmphasized: {
       color: colors.accentText,

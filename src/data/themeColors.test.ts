@@ -1,14 +1,14 @@
 import { THEME_COLORS, themeChipColors } from './themeColors';
 import { buildRainbowThemeColors, contrastRatio } from '../theme/rainbow';
 import { THEMES } from './themes';
-import { ACCENT_PRESETS, buildColors } from '../theme';
+import { ACCENTS, AccentId, buildColors } from '../theme';
 
 // Les pastilles de thème posent un texte teinté sur un fond très pâle de la
 // même teinte. Le dosage doit tenir quelle que soit la couleur de départ, y
 // compris celles tirées au sort par le mode arc-en-ciel.
 const TEXT_RATIO = 4.5;
 const LIGHT_SURFACE = '#ffffff';
-const DARK_SURFACE = '#1C1A22';
+const DARK_SURFACE = '#241A33';
 
 // Les graines de test sont TIRÉES D'UNE SUITE DÉTERMINISTE, pas de
 // `Math.random()`.
@@ -111,19 +111,18 @@ describe('couleurs des tuiles de la mosaïque', () => {
 
 // Le multiplicateur « ×3 » de la légende d'accueil est une pastille pleine :
 // du texte pris dans `bg` posé sur un fond `warningText`. C'est un usage
-// inversé de ce jeton, prévu à l'origine comme couleur de TEXTE, donc le
-// contraste ne va pas de soi — d'autant qu'il doit tenir pour les deux thèmes
-// ET les quatre accents proposés dans les réglages.
+// inversé de ce jeton, donc le contraste ne va pas de soi — d'autant qu'il doit
+// tenir pour les deux thèmes ET les trois accents d'écran.
 describe('pastille du multiplicateur', () => {
-  it('reste lisible dans les deux thèmes et pour les quatre accents', () => {
+  it('reste lisible dans les deux thèmes et pour les trois accents', () => {
     const failures: string[] = [];
 
     for (const scheme of ['light', 'dark'] as const) {
-      for (const accent of ACCENT_PRESETS) {
-        const c = buildColors(scheme, accent.id);
+      for (const accent of Object.keys(ACCENTS) as AccentId[]) {
+        const c = buildColors(scheme, accent);
         const ratio = contrastRatio(c.bg, c.warningText);
         if (ratio < TEXT_RATIO) {
-          failures.push(`${scheme}/${accent.id} : ${ratio.toFixed(2)}`);
+          failures.push(`${scheme}/${accent} : ${ratio.toFixed(2)}`);
         }
       }
     }
@@ -145,14 +144,17 @@ describe('interrupteur de révélation', () => {
     const failures: string[] = [];
 
     for (const scheme of ['light', 'dark'] as const) {
-      for (const accent of ACCENT_PRESETS) {
-        const c = buildColors(scheme, accent.id);
+      for (const accent of Object.keys(ACCENTS) as AccentId[]) {
+        const c = buildColors(scheme, accent);
 
         const eteint = contrastRatio(c.textMuted, c.neutralTrack);
-        if (eteint < UI_RATIO) failures.push(`${scheme}/${accent.id} éteint : ${eteint.toFixed(2)}`);
+        if (eteint < UI_RATIO) failures.push(`${scheme}/${accent} éteint : ${eteint.toFixed(2)}`);
 
-        const allume = contrastRatio('#FFFFFF', c.accent);
-        if (allume < UI_RATIO) failures.push(`${scheme}/${accent.id} allumé : ${allume.toFixed(2)}`);
+        // Le curseur allumé porte la couleur du texte posé sur l'accent, et
+        // non du blanc : sur cette palette, ce qui se pose sur un aplat est de
+        // l'encre ou de la crème selon l'accent (voir theme/index.ts).
+        const allume = contrastRatio(c.onAccent, c.accent);
+        if (allume < UI_RATIO) failures.push(`${scheme}/${accent} allumé : ${allume.toFixed(2)}`);
       }
     }
 

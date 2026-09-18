@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Texte as Text } from '../components/Texte';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenHeader } from '../components/ScreenHeader';
@@ -9,7 +10,7 @@ import { PROPOSALS } from '../data/proposals';
 import { CANDIDATES } from '../data/candidates';
 import { candidatesQuota, QUOTA_PAR_CANDIDAT } from '../utils/deck';
 import { ThemeTag } from '../types';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
 const COUNT_BY_THEME: Record<string, number> = {};
@@ -279,6 +280,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       letterSpacing: 0.3,
       textTransform: 'uppercase',
+      fontFamily: police.mono[500],
       color: colors.textMuted,
     },
     row: {
@@ -289,7 +291,7 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.md,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.md,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
       marginBottom: spacing.sm,
     },
@@ -362,7 +364,7 @@ function makeStyles(colors: ColorTokens) {
       color: colors.textPrimary,
     },
     cta: {
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md + 2,
       alignItems: 'center',
@@ -371,12 +373,12 @@ function makeStyles(colors: ColorTokens) {
       opacity: 0.4,
     },
     ctaPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     ctaText: {
       fontSize: fonts.body + 1,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
   });
 }

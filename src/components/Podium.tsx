@@ -1,21 +1,30 @@
 import { useEffect, useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withSpring } from 'react-native-reanimated';
 import { Avatar } from './Avatar';
 import { AnimatedPercent } from './AnimatedPercent';
 import { CandidateResult } from '../types';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, MONO_SPACING, PALETTE, police, radii, spacing } from '../theme';
 import { useColors, useMedalColors } from '../theme/ThemeContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
-const MEDALS: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
+// PLUS DE MÉDAILLES EN ÉMOJI.
+//
+// Trois émojis sur un écran, quand le document en tolère un seul et seulement
+// s'il vient du texte fourni. Et surtout : elles disaient une deuxième fois ce
+// que la marche dit déjà — sa hauteur, sa couleur, son chiffre. Le rang se lit
+// maintenant sur la marche, en mono, comme tous les chiffres de l'app.
+//
+// Les couleurs des marches ne sont plus l'or, l'argent et le bronze : la
+// palette n'en a pas. Le lime prend la première place, la pêche la troisième,
+// le sable celle du milieu (voir ThemeContext).
 const STEP_HEIGHTS: Record<number, number> = { 1: 84, 2: 58, 3: 42 };
 const AVATAR_SIZES: Record<number, number> = { 1: 64, 2: 52, 3: 48 };
 
 // Un rang peut dépasser trois quand des ex æquo occupent les places du dessus
 // (1, 1, 3 : il n'y a pas de deuxième). On retombe alors sur l'apparence du
 // bronze, faute de médaille au-delà.
-const medal = (rank: number) => MEDALS[rank] ?? MEDALS[3];
 const stepHeight = (rank: number) => STEP_HEIGHTS[rank] ?? STEP_HEIGHTS[3];
 const avatarSize = (rank: number) => AVATAR_SIZES[rank] ?? AVATAR_SIZES[3];
 
@@ -202,9 +211,6 @@ function PodiumColumn({
       }
     >
       <Animated.View style={[styles.head, contentStyle]}>
-        <Text style={styles.medal} accessibilityElementsHidden importantForAccessibility="no">
-          {medal(rank)}
-        </Text>
         <Avatar
           candidate={result.candidate}
           size={avatarSize(rank)}
@@ -263,9 +269,6 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       gap: 4,
     },
-    medal: {
-      fontSize: 20,
-    },
     name: {
       fontSize: fonts.tiny + 1,
       fontWeight: '700',
@@ -278,12 +281,14 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       color: colors.textSecondary,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     pctPrimary: {
       fontSize: fonts.title,
       fontWeight: '800',
       color: colors.accentText,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     // Boîte de la marche : sa hauteur est fixe et réservée dès le premier
     // rendu. Elle ne porte aucune couleur, seulement le rognage.
@@ -300,10 +305,15 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
     },
+    // Le rang, en mono, sur la marche. Blanc sur toutes les marches
+    // auparavant : les trois nouvelles couleurs sont claires, c'est donc
+    // l'encre qui s'y écrit — 15:1 sur le lime, 10:1 sur le sable, 9.5:1 sur
+    // la pêche.
     stepNumber: {
-      fontSize: fonts.body + 2,
-      fontWeight: '800',
-      color: '#FFFFFF',
+      fontFamily: police.mono[500],
+      fontSize: fonts.body,
+      letterSpacing: MONO_SPACING,
+      color: PALETTE.ink,
     },
   });
 }

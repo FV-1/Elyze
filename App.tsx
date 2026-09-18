@@ -2,6 +2,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BackHandler, Linking } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from 'expo-font';
+import {
+  SpaceGrotesk_400Regular,
+  SpaceGrotesk_500Medium,
+  SpaceGrotesk_600SemiBold,
+  SpaceGrotesk_700Bold,
+} from '@expo-google-fonts/space-grotesk';
+import { DMMono_400Regular, DMMono_500Medium } from '@expo-google-fonts/dm-mono';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { IntroScreen, RestorableSummary } from './src/screens/IntroScreen';
@@ -39,8 +47,7 @@ import {
   saveSession,
   StoredSession,
 } from './src/utils/storage';
-import { ThemeProvider, useColors, useThemeSettings } from './src/theme/ThemeContext';
-import { DEFAULT_ACCENT_ID } from './src/theme';
+import { ThemeProvider, useColors, useThemeSettings, ZoneAccent } from './src/theme/ThemeContext';
 
 type Screen =
   // Écran d'attente du tout premier rendu, le temps de savoir s'il y a une
@@ -79,7 +86,6 @@ function AppInner() {
   const {
     effectiveScheme,
     setSchemePreference,
-    setAccentId,
     setHapticsEnabled,
     setRainbowUnlocked,
   } = useThemeSettings();
@@ -118,6 +124,23 @@ function AppInner() {
   // démonté dès qu'on le quitte : sans cela, revenir du duel ou des réglages
   // déposait sur les cartes, jamais sur l'onglet d'où l'on était parti.
   const [swipeTab, setSwipeTab] = useState<SwipeTab>('swipe');
+
+  // LES DEUX POLICES SONT EMBARQUÉES, PAS TÉLÉCHARGÉES. L'app ne fait aucun
+  // appel réseau, et ce n'est pas une police qui va commencer : les fichiers
+  // partent dans le paquet et se chargent depuis le disque.
+  //
+  // Le second membre du couple est ignoré : une police qui ne se charge pas
+  // laisse le système prendre le relais, ce qui est moche mais lisible. Faire
+  // dépendre le démarrage de leur succès serait échanger un défaut d'aspect
+  // contre un écran vide.
+  const [policesPretes] = useFonts({
+    SpaceGrotesk_400Regular,
+    SpaceGrotesk_500Medium,
+    SpaceGrotesk_600SemiBold,
+    SpaceGrotesk_700Bold,
+    DMMono_400Regular,
+    DMMono_500Medium,
+  });
 
   const [showTutorial, setShowTutorial] = useState(false);
   // Le "moment de révélation" (haptique + animations) de l'écran de résultat
@@ -330,14 +353,17 @@ function AppInner() {
   // sans rien pour en sortir ni le moindre message pour l'expliquer : c'est la
   // panne la plus déroutante pour qui la subit, et la moins chère à rendre
   // impossible.
+  // Les polices entrent dans la même condition : découvrir l'app avec la
+  // police du système, puis la voir sauter une fraction de seconde plus tard,
+  // est exactement ce que le logo est là pour éviter.
   useEffect(() => {
-    if (screen !== 'booting') {
+    if (screen !== 'booting' && policesPretes) {
       SplashScreen.hideAsync().catch(() => {});
       return;
     }
     const filet = setTimeout(() => SplashScreen.hideAsync().catch(() => {}), 3000);
     return () => clearTimeout(filet);
-  }, [screen]);
+  }, [screen, policesPretes]);
 
   // Une session démarrée pendant cette exécution de l'app reste "reprenable"
   // tant qu'elle n'a pas été explicitement effacée. Sans ce calcul, revenir à
@@ -556,7 +582,6 @@ function AppInner() {
   const handleResetAllData = () => {
     resetAllData();
     setSchemePreference('system');
-    setAccentId(DEFAULT_ACCENT_ID);
     setHapticsEnabled(true);
     // Reverrouiller éteint déjà le mode arc-en-ciel (voir ThemeContext).
     setRainbowUnlocked(false);
@@ -589,6 +614,7 @@ function AppInner() {
 
         <ErrorBoundary>
           {screen === 'intro' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <IntroScreen
                 onStartFresh={handleStartFresh}
@@ -603,24 +629,30 @@ function AppInner() {
                 sessionPerimee={sessionPerimee}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'settings' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <SettingsScreen
                 onBack={() => setScreen(settingsReturnTo)}
                 onResetAllData={handleResetAllData}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'howItWorks' && (
+            <ZoneAccent accent="violet">
             <ScreenTransition>
               <HowItWorksScreen onBack={() => setScreen(howItWorksReturnTo)} />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'themes' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <ThemeSelectScreen
                 initialSelection={selectedThemeIds}
@@ -628,9 +660,11 @@ function AppInner() {
                 onBack={() => setScreen(themesReturnTo)}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'swipe' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <SwipeScreen
                 proposals={sessionProposals}
@@ -656,9 +690,11 @@ function AppInner() {
                 }
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'review' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <ReviewScreen
                 proposals={sessionProposals}
@@ -673,9 +709,11 @@ function AppInner() {
                 onBack={() => setScreen('swipe')}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'results' && (
+            <ZoneAccent accent="violet">
             <ScreenTransition>
               <ResultsScreen
                 proposals={sessionProposals}
@@ -701,9 +739,11 @@ function AppInner() {
                 onReveal={() => setResultsRevealed(true)}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'duel' && (
+            <ZoneAccent accent="peach">
             <ScreenTransition>
               <DuelScreen
                 proposals={sessionProposals}
@@ -720,6 +760,7 @@ function AppInner() {
                 onBack={quitterDuel}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
         </ErrorBoundary>
       </SafeAreaProvider>

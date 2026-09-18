@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from './Avatar';
 import { haptics } from '../utils/haptics';
 import { ThemeAgreement } from '../types';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors, useThemeColor } from '../theme/ThemeContext';
 
 // Sujet par sujet : ce qu'on a retenu, et de qui. Chaque thème est replié au
@@ -108,7 +109,7 @@ function makeStyles(colors: ColorTokens) {
       paddingVertical: spacing.sm,
     },
     block: {
-      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopWidth: 1,
       borderTopColor: colors.border,
     },
     header: {
@@ -142,6 +143,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       color: colors.textSecondary,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     note: {
       fontSize: fonts.tiny,
@@ -168,6 +170,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '700',
       color: colors.textMuted,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
   });
 }

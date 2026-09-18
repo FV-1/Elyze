@@ -67,7 +67,7 @@ describe('mode arc-en-ciel', () => {
       for (const scheme of SCHEMES) {
         const c = buildRainbowColors(scheme, seed);
         // Fonds pleins portant du texte blanc.
-        for (const [name, hex] of Object.entries({ accent: c.accent, accentStrong: c.accentStrong })) {
+        for (const [name, hex] of Object.entries({ accent: c.accent, action: c.action })) {
           const ratio = contrastRatio(c.onAccent, hex);
           if (ratio < TEXT_RATIO) failures.push(`${scheme}/${seed} ${name} : ${ratio.toFixed(2)}`);
         }

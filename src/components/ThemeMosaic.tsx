@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from './Avatar';
 import { CANDIDATES_BY_ID } from '../data/candidates';
@@ -330,7 +331,7 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: spacing.md,
       borderRadius: radii.md,
       backgroundColor: colors.surfaceAlt,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     revealIcon: {
@@ -370,8 +371,11 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.pill,
       backgroundColor: colors.textMuted,
     },
+    // Le curseur allumé prend ce qui se lit sur l'accent — de l'encre sur le
+    // lime et la pêche, du blanc sur le violet. Un blanc figé disparaissait sur
+    // un lime allumé (1.2:1 : le test du dépôt exige 3:1).
     switchKnobOn: {
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.onAccent,
     },
     // Occupe tout l'espace entre l'icone et l'interrupteur : c'est ce qui
     // colle le titre a gauche et l'interrupteur a droite, sans marge morte.
@@ -474,7 +478,7 @@ function makeStyles(colors: ColorTokens) {
       gap: spacing.sm,
       backgroundColor: colors.surface,
       borderRadius: radii.md,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
       padding: spacing.sm + 2,
     },

@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { themeChipColors } from '../data/themeColors';
 import { ThemeTag } from '../types';
-import { fonts, radii, spacing } from '../theme';
+import { fonts, MONO_SPACING, police, radii, spacing } from '../theme';
 import { useColors, useThemeColor, useThemeSettings } from '../theme/ThemeContext';
 
 // L'étiquette de thème posée en haut de chaque carte.
@@ -31,7 +32,7 @@ export function ThemeBadge({ theme }: { theme: ThemeTag }) {
   );
 
   return (
-    <View style={[styles.badge, { backgroundColor: tint.background }]}>
+    <View style={[styles.badge, { backgroundColor: tint.background, borderColor: tint.text }]}>
       <Text style={styles.icon}>{theme.icon}</Text>
       <Text style={[styles.label, { color: tint.text }]}>{theme.label}</Text>
     </View>
@@ -41,21 +42,26 @@ export function ThemeBadge({ theme }: { theme: ThemeTag }) {
 // Fond et couleur de texte sont posés à l'inline, puisqu'ils changent avec le
 // thème de la carte : ce qui reste ici ne dépend d'aucune couleur.
 const styles = StyleSheet.create({
+  // LA PASTILLE DU SYSTÈME : mono, capitales, interlettrage large, et un trait
+  // qui la pose sur la carte. C'est la forme que DESIGN.md donne à toutes les
+  // étiquettes ; la couleur, elle, reste celle du thème.
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',
     borderRadius: radii.pill,
-    paddingVertical: spacing.xs + 2,
+    paddingVertical: spacing.xs + 3,
     paddingHorizontal: spacing.md,
-    gap: spacing.xs,
+    gap: spacing.xs + 2,
+    borderWidth: 1.5,
   },
   icon: {
-    fontSize: fonts.body,
+    fontSize: fonts.small + 1,
   },
   label: {
-    fontSize: fonts.small,
-    fontWeight: '700',
-    letterSpacing: 0.2,
+    fontFamily: police.mono[500],
+    fontSize: fonts.tiny,
+    letterSpacing: MONO_SPACING,
+    textTransform: 'uppercase',
   },
 });

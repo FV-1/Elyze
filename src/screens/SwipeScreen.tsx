@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
+import { BackHandler, Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from '../components/Texte';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { ProgressBar } from '../components/ProgressBar';
@@ -361,7 +362,7 @@ export function SwipeScreen({
               accessibilityLabel="Voir mon résultat"
             >
               <Text style={styles.donePrimaryText}>Voir mon résultat</Text>
-              <Ionicons name="arrow-forward" size={18} color={colors.onAccent} />
+              <Ionicons name="arrow-forward" size={18} color={colors.onAction} />
             </Pressable>
 
             <Pressable
@@ -607,17 +608,17 @@ function makeStyles(colors: ColorTokens) {
       gap: spacing.sm,
       alignSelf: 'stretch',
       maxWidth: 320,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
     },
     donePrimaryPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     donePrimaryText: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     // LA COULEUR CHOISIE DANS LES RÉGLAGES, pas un gris de service.
     //

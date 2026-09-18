@@ -1,3 +1,4 @@
+import { contrastRatio } from '../utils/color';
 import { ColorTokens } from './index';
 
 // --- Mode arc-en-ciel -------------------------------------------------------
@@ -41,25 +42,10 @@ function hslToHex(h: number, s: number, l: number): string {
   return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`.toUpperCase();
 }
 
-function channelLuminance(c: number): number {
-  const v = c / 255;
-  return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-}
-
-function luminance(hex: string): number {
-  const clean = hex.replace('#', '');
-  const r = parseInt(clean.slice(0, 2), 16);
-  const g = parseInt(clean.slice(2, 4), 16);
-  const b = parseInt(clean.slice(4, 6), 16);
-  return 0.2126 * channelLuminance(r) + 0.7152 * channelLuminance(g) + 0.0722 * channelLuminance(b);
-}
-
-export function contrastRatio(a: string, b: string): number {
-  const la = luminance(a);
-  const lb = luminance(b);
-  const [hi, lo] = la > lb ? [la, lb] : [lb, la];
-  return (hi + 0.05) / (lo + 0.05);
-}
+// Réexporté depuis utils/color, où il a déménagé : la palette fixe s'en sert
+// autant que le mode arc-en-ciel, et les tests l'importent d'ici depuis
+// toujours.
+export { contrastRatio };
 
 // Cherche la clarté la MOINS extrême qui atteigne `minRatio` face à tous les
 // fonds donnés : on garde ainsi la couleur aussi vive que possible, sans
@@ -122,7 +108,11 @@ export function buildRainbowColors(scheme: 'light' | 'dark', seed: number): Colo
   // qu'elles doivent tenir le contraste, pas face au fond.
   const onAccent = '#FFFFFF';
   const accent = pickReadable(hue(), between(55, 95), [onAccent], TEXT_RATIO, 'darker');
-  const accentStrong = pickReadable(hue(), between(55, 95), [onAccent], 7, 'darker');
+  // L'action forte du mode arc-en-ciel : même teinte que l'accent, en plus
+  // contrastée, et son état pressé encore un cran au-dessus.
+  const action = accent;
+  const onAction = onAccent;
+  const actionPressed = pickReadable(hue(), between(55, 95), [onAccent], 7, 'darker');
   const success = pickReadable(hue(), between(55, 95), [onAccent], GRAPHIC_RATIO, 'darker');
   const warning = pickReadable(hue(), between(55, 95), [onAccent], GRAPHIC_RATIO, 'darker');
   const danger = pickReadable(hue(), between(55, 95), [onAccent], GRAPHIC_RATIO, 'darker');
@@ -137,29 +127,38 @@ export function buildRainbowColors(scheme: 'light' | 'dark', seed: number): Colo
   const neutralFill = pickReadable(hue(), between(35, 75), [bg, surface], GRAPHIC_RATIO, textDirection);
   const neutralTrack = hslToHex(hue(), between(20, 55), isDark ? between(22, 30) : between(85, 92));
   const border = hslToHex(hue(), between(20, 60), isDark ? between(26, 34) : between(78, 86));
+  // Le trait d'encre du mode arc-en-ciel : c'est la couleur du texte principal,
+  // la seule dont on sache qu'elle tient sur tous les fonds tirés au sort.
+  const borderStrong = textPrimary;
 
   return {
     bg,
     surface,
     surfaceAlt,
     border,
+    borderStrong,
     textPrimary,
     textSecondary,
     textMuted,
     accent,
-    accentStrong,
+    onAccent,
     accentSoft,
     accentText,
-    onAccent,
+    action,
+    onAction,
+    actionPressed,
     success,
     successSoft,
     successText,
+    onAccentSuccess: onAccent,
     warning,
     warningSoft,
     warningText,
+    onAccentWarning: onAccent,
     danger,
     dangerSoft,
     dangerText,
+    onAccentDanger: onAccent,
     neutralFill,
     neutralTrack,
   };

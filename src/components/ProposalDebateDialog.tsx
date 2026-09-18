@@ -1,12 +1,13 @@
 import { useMemo } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { PROPOSAL_ARGUMENTS } from '../data/proposalArguments';
 import { PROPOSAL_EXPLANATIONS } from '../data/proposalExplanations';
 import { Proposal, ThemeTag } from '../types';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
-import { useColors } from '../theme/ThemeContext';
+import { ColorTokens, fonts, radii, spacing, police } from '../theme';
+import { useColors, ZoneAccent } from '../theme/ThemeContext';
 
 // Le débat autour d'une mesure, ouvert depuis la carte.
 //
@@ -17,17 +18,28 @@ import { useColors } from '../theme/ThemeContext';
 // L'écran ne nomme jamais le candidat, et n'affiche aucun lien vers la fiche
 // de la mesure : l'adresse d'une fiche Poligraph commence par le nom de son
 // auteur, ce qui suffirait à trahir le paquet.
-export function ProposalDebateDialog({
-  visible,
-  proposal,
-  theme,
-  onClose,
-}: {
+type ProposDebatProps = {
   visible: boolean;
   proposal: Proposal | null;
   theme: ThemeTag | null;
   onClose: () => void;
-}) {
+};
+
+// LES ARGUMENTS SONT VIOLETS, où qu'on les ouvre.
+//
+// C'est la répartition de DESIGN.md : le swipe est lime, les arguments violets,
+// les candidats pêche. Cette boîte s'ouvre depuis une carte, donc depuis un
+// écran lime, et impose son accent le temps qu'elle est là — d'où cette
+// enveloppe, qui doit se trouver AU-DESSUS du composant qui lit les couleurs.
+export function ProposalDebateDialog(props: ProposDebatProps) {
+  return (
+    <ZoneAccent accent="violet">
+      <Debat {...props} />
+    </ZoneAccent>
+  );
+}
+
+function Debat({ visible, proposal, theme, onClose }: ProposDebatProps) {
   const colors = useColors();
   const styles = useMemo(() => makeStyles(colors), [colors]);
 
@@ -109,11 +121,6 @@ export function ProposalDebateDialog({
 
 function makeStyles(colors: ColorTokens) {
   const soft = {
-    shadowColor: '#1A1730',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.07,
-    shadowRadius: 18,
-    elevation: 2,
   } as const;
 
   return StyleSheet.create({
@@ -141,6 +148,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       letterSpacing: 0.8,
       textTransform: 'uppercase',
+      fontFamily: police.mono[500],
       color: colors.textSecondary,
     },
 

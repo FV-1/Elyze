@@ -7,19 +7,17 @@ import React, {
   useState,
 } from 'react';
 import { useColorScheme } from 'react-native';
-import { buildColors, ColorTokens, DEFAULT_ACCENT_ID, isKnownAccentId } from './index';
+import { AccentId, buildColors, ColorTokens, DEFAULT_ACCENT } from './index';
 import { buildRainbowColors, buildRainbowMedals, buildRainbowThemeColors, randomSeed } from './rainbow';
 import { getThemeColor as fixedThemeColor } from '../data/themeColors';
 import { THEMES } from '../data/themes';
 import { setHapticsFlag } from '../utils/haptics';
 import {
-  loadAccentId,
   loadHapticsEnabled,
   loadRainbow,
   loadSchemePreference,
   loadRainbowGradient,
   loadRainbowUnlocked,
-  saveAccentId,
   saveHapticsEnabled,
   saveRainbow,
   saveSchemePreference,
@@ -28,17 +26,22 @@ import {
   SchemePreference,
 } from '../utils/storage';
 
-// Or / argent / bronze du podium hors mode arc-en-ciel (voir Podium.tsx pour
-// le détail des contrastes).
-const FIXED_MEDALS: [string, string, string] = ['#8F6A00', '#6B7280', '#B45309'];
+// Les trois marches du podium, hors mode arc-en-ciel.
+//
+// Ce ne sont plus l'or, l'argent et le bronze : la palette n'en a pas, et
+// DESIGN.md donne les siennes — le lime pour la première place, la pêche pour
+// la troisième, le sable pour celle qui reste. Les trois portent de l'encre,
+// vérifié au contraste (voir theme/palette.test.ts).
+const FIXED_MEDALS: [string, string, string] = ['#D4FF3F', '#CFC6B8', '#FFAB76'];
 
 type ThemeContextValue = {
+  // La palette de l'accent par défaut, pour les rares appels hors d'un écran.
   colors: ColorTokens;
+  // Les trois palettes, une par accent (voir `useColors`).
+  palettes: Record<AccentId, ColorTokens>;
   effectiveScheme: 'light' | 'dark';
   schemePreference: SchemePreference;
   setSchemePreference: (pref: SchemePreference) => void;
-  accentId: string;
-  setAccentId: (id: string) => void;
   hapticsEnabled: boolean;
   setHapticsEnabled: (enabled: boolean) => void;
   // Le mode arc-en-ciel est caché tant que l'easter egg de l'accueil n'a pas
@@ -64,7 +67,6 @@ const ThemeCtx = createContext<ThemeContextValue | null>(null);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const systemScheme = useColorScheme();
   const [schemePreference, setSchemePreferenceState] = useState<SchemePreference>('system');
-  const [accentId, setAccentIdState] = useState<string>(DEFAULT_ACCENT_ID);
   const [hapticsEnabled, setHapticsEnabledState] = useState<boolean>(true);
   const [rainbowUnlocked, setRainbowUnlockedState] = useState(false);
   const [gradientEnabled, setGradientFlag] = useState(false);
@@ -78,9 +80,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       if (saved) setRainbow(saved);
     });
     loadSchemePreference().then(setSchemePreferenceState);
-    loadAccentId().then((id) => {
-      if (id && isKnownAccentId(id)) setAccentIdState(id);
-    });
     loadRainbowUnlocked().then(setRainbowUnlockedState);
     loadRainbowGradient().then(setGradientFlag);
     loadHapticsEnabled().then((value) => {
@@ -94,10 +93,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     saveSchemePreference(pref);
   };
 
-  const setAccentId = (id: string) => {
-    setAccentIdState(id);
-    saveAccentId(id);
-  };
 
   const setHapticsEnabled = (value: boolean) => {
     setHapticsEnabledState(value);
@@ -160,13 +155,27 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // verrou remis) ne doit pas repeindre l'app.
   const rainbowActive = rainbow.enabled && rainbowUnlocked;
 
-  const colors = useMemo(
-    () =>
-      rainbowActive
-        ? buildRainbowColors(effectiveScheme, rainbow.seed)
-        : buildColors(effectiveScheme, accentId),
-    [effectiveScheme, accentId, rainbowActive, rainbow.seed]
-  );
+  // UN JEU DE COULEURS PAR ACCENT, construit une fois pour les trois.
+  //
+  // C'est `useColors()` qui choisit lequel, en lisant l'accent de l'écran où il
+  // se trouve (voir `ZoneAccent` plus bas). Le calcul est trivial et les trois
+  // palettes tiennent en mémoire sans qu'on y pense.
+  //
+  // Le mode arc-en-ciel écrase la distinction : il n'a qu'une palette, tirée au
+  // sort, et la même sur tous les écrans.
+  const palettes = useMemo<Record<AccentId, ColorTokens>>(() => {
+    if (rainbowActive) {
+      const bariolee = buildRainbowColors(effectiveScheme, rainbow.seed);
+      return { lime: bariolee, violet: bariolee, peach: bariolee };
+    }
+    return {
+      lime: buildColors(effectiveScheme, 'lime'),
+      violet: buildColors(effectiveScheme, 'violet'),
+      peach: buildColors(effectiveScheme, 'peach'),
+    };
+  }, [effectiveScheme, rainbowActive, rainbow.seed]);
+
+  const colors = palettes[DEFAULT_ACCENT];
 
   const rainbowThemeColors = useMemo(
     () =>
@@ -189,11 +198,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       colors,
+      palettes,
       effectiveScheme,
       schemePreference,
       setSchemePreference,
-      accentId,
-      setAccentId,
       hapticsEnabled,
       setHapticsEnabled,
       rainbowUnlocked,
@@ -208,9 +216,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }),
     [
       colors,
+      palettes,
       effectiveScheme,
       schemePreference,
-      accentId,
       hapticsEnabled,
       rainbowUnlocked,
       rainbowActive,
@@ -237,8 +245,36 @@ function useThemeContext(): ThemeContextValue {
   return ctx;
 }
 
+// --- UN ACCENT DOMINANT PAR ÉCRAN -------------------------------------------
+//
+// Chaque écran déclare le sien en enveloppant son contenu dans une
+// `ZoneAccent`. Tout ce qui est dessous — y compris les boîtes de dialogue
+// qu'il ouvre — prend cette couleur, sans avoir à se la passer de composant en
+// composant.
+//
+// Le défaut est le lime : un composant monté hors de toute zone (un test, une
+// vue d'erreur) reste dans l'identité plutôt que de perdre ses couleurs.
+const AccentCtx = createContext<AccentId>(DEFAULT_ACCENT);
+
+export function ZoneAccent({
+  accent,
+  children,
+}: {
+  accent: AccentId;
+  children: React.ReactNode;
+}) {
+  return <AccentCtx.Provider value={accent}>{children}</AccentCtx.Provider>;
+}
+
 export function useColors(): ColorTokens {
-  return useThemeContext().colors;
+  const { palettes } = useThemeContext();
+  return palettes[useContext(AccentCtx)];
+}
+
+// L'accent de l'écran courant, pour le rare composant qui doit le nommer
+// plutôt que l'utiliser (une pastille qui change de forme, par exemple).
+export function useAccentId(): AccentId {
+  return useContext(AccentCtx);
 }
 
 // Couleur de la tuile d'un thème (mosaïque des propositions, pastilles).
@@ -256,8 +292,6 @@ export function useThemeSettings() {
     effectiveScheme,
     schemePreference,
     setSchemePreference,
-    accentId,
-    setAccentId,
     hapticsEnabled,
     setHapticsEnabled,
     rainbowUnlocked,
@@ -272,8 +306,6 @@ export function useThemeSettings() {
     effectiveScheme,
     schemePreference,
     setSchemePreference,
-    accentId,
-    setAccentId,
     hapticsEnabled,
     setHapticsEnabled,
     rainbowUnlocked,

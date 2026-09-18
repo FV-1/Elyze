@@ -1,182 +1,261 @@
-import { mixHex } from '../utils/color';
+import { contrastRatio, mixHex } from '../utils/color';
+
+// --- LA PALETTE, ET RIEN D'AUTRE --------------------------------------------
+//
+// Ces onze valeurs sont celles de DESIGN.md. Elles ne se dérivent pas, ne se
+// mélangent pas à la main et ne se complètent pas : toute couleur affichée par
+// l'app en sort, directement ou par un mélange calculé plus bas.
+//
+// Deux fonds, jamais trois : la crème et la nuit. Le blanc n'est pas un fond,
+// c'est la carte qu'on pose SUR la crème. Le lime, le violet et la pêche sont
+// des accents, donc des petites surfaces — un badge, une marche de podium, un
+// état actif. Jamais un aplat qui occupe l'écran.
+export const PALETTE = {
+  ink: '#1A1625',
+  ink2: '#3A2F47',
+  ink3: '#5D4F6E',
+
+  cream: '#F2ECDF',
+  cream2: '#E6DFD2',
+  white: '#FFFFFF',
+  sand: '#CFC6B8',
+
+  night: '#1E1233',
+  night2: '#241A33',
+  mutedOnNight: '#B4A6C6',
+  // Le document donne deux neutres sur fond sombre : la crème pour le texte
+  // principal, `mutedOnNight` pour les métadonnées. L'app en a trois niveaux,
+  // comme en thème clair — celui-ci est le palier du milieu, et il est nommé
+  // ici plutôt qu'inventé au fil des écrans.
+  creamDim: '#D8CEE6',
+
+  lime: '#D4FF3F',
+  violet: '#6B4FFF',
+  peach: '#FFAB76',
+  // Fonds décoratifs seulement (les cercles flous). Jamais du texte : sa
+  // clarté ne tient 4.5:1 sur aucun de nos deux fonds.
+  lavender: '#C9B4FF',
+} as const;
+
+// --- UN ACCENT DOMINANT PAR ÉCRAN -------------------------------------------
+//
+// C'est la règle principale de DESIGN.md, et elle a remplacé le choix de
+// couleur qui vivait dans les réglages. L'app utilise bien ses trois accents,
+// mais un écran donné n'en montre qu'un : le swipe est lime, le classement
+// violet, les propositions pêche. On ne mélange pas deux accents sur une même
+// vue, on change d'accent en changeant de vue.
+//
+// Le choix par l'utilisateur a disparu avec ça : une identité qui se repeint
+// au goût de chacun n'est plus une identité. Le mode arc-en-ciel, lui, reste —
+// c'est une farce assumée, pas un réglage d'apparence (voir theme/rainbow.ts).
+export type AccentId = 'lime' | 'violet' | 'peach';
+
+export const ACCENTS: Record<AccentId, string> = {
+  lime: PALETTE.lime,
+  violet: PALETTE.violet,
+  peach: PALETTE.peach,
+};
+
+export const DEFAULT_ACCENT: AccentId = 'lime';
+
+export function isKnownAccentId(id: string): id is AccentId {
+  return id === 'lime' || id === 'violet' || id === 'peach';
+}
 
 export type ColorTokens = {
   bg: string;
   surface: string;
   surfaceAlt: string;
+  // Trait de séparation ordinaire : le sable sur crème, un violet sourd sur la
+  // nuit. Discret, il range sans souligner.
   border: string;
+  // LE TRAIT D'ENCRE. L'identité est plate — pas d'ombre portée, pas de
+  // dégradé — donc ce qui détache un élément de son fond est son contour.
+  // Réservé à ce qui doit tenir tout seul : un cadre de carte, un avatar, une
+  // pastille cernée.
+  borderStrong: string;
 
   textPrimary: string;
   textSecondary: string;
   textMuted: string;
 
+  // L'ACCENT LUI-MÊME, pour les PETITES surfaces : badge, état actif, marche
+  // de podium, jauge remplie. C'est là que la couleur de l'écran se voit.
+  // `onAccent` est ce qu'on écrit dessus — de l'encre sur le lime et la pêche,
+  // du blanc sur le violet, qui ne tient pas la crème (4.26:1).
   accent: string;
-  accentStrong: string;
-  accentSoft: string;
-  // Couleur d'accent à utiliser comme TEXTE/ICÔNE directement sur un fond
-  // neutre (surface, accentSoft) — distincte d'`accent`, qui reste réservée
-  // aux fonds pleins avec du texte blanc dessus. En clair, `accent` seul
-  // passe déjà le contraste AA sur texte, donc accentText = accentStrong
-  // (identique à avant). En sombre, `accent`/`accentStrong` sont trop foncés
-  // pour du texte sur fond sombre (contraste < 4.5:1 vérifié) : accentText y
-  // est une version éclaircie de l'accent, réservée à cet usage.
-  accentText: string;
   onAccent: string;
+  accentSoft: string;
 
+  // L'ACTION FORTE — le bouton plein, celui qu'on vient toucher.
+  //
+  // Le document le montre en pastille d'encre portant l'accent : c'est le cas
+  // du lime et de la pêche. Le violet, lui, ne se lit pas sur l'encre (3.53:1)
+  // et devient donc le fond, avec du blanc dessus. Un bouton n'est pas une
+  // « grande surface » au sens du document — un fond d'écran l'est.
+  action: string;
+  onAction: string;
+  // L'état pressé de cette action.
+  actionPressed: string;
+  // L'accent en TEXTE sur un fond neutre, quand il peut s'y lire. Le violet le
+  // peut, le lime et la pêche non : ils cèdent la place à l'encre plutôt que
+  // de s'assombrir en une couleur qui n'est plus la leur.
+  accentText: string;
+
+  // Les quatre réponses du swipe. Ce sont des FONDS, pas des couleurs de
+  // glyphe : sur cette palette, la couleur vit dans l'aplat et le signe qu'on
+  // pose dessus reste de l'encre. Les variantes `…Text` servent aux rares
+  // endroits où il faut écrire la notion sans pouvoir la remplir.
   success: string;
   successSoft: string;
-  // Variantes de `success`/`danger` réservées au TEXTE (et petites icônes) sur
-  // fond neutre — même logique que `accentText` : `success`/`danger` sont
-  // calibrés pour des fonds pleins/bordures et ne passent pas 4.5:1 en tant
-  // que texte sur `bg`/`surface` en mode clair (ex. success clair ≈ 3:1).
-  // En sombre, `success`/`danger` passent déjà largement, donc identiques.
   successText: string;
-  dangerText: string;
+  onAccentSuccess: string;
   warning: string;
   warningSoft: string;
-  // `warning` lui-même ne passe 4.5:1 comme texte sur aucun fond neutre en
-  // clair (≈3.2-3.6:1, voir Podium.tsx qui a le même souci pour ses fonds) ;
-  // réservé à un usage graphique (icônes, bordures) où le seuil est 3:1.
-  // `warningText` est la même teinte "or" que Podium.tsx utilise déjà comme
-  // fond de la médaille d'or (vérifiée ≥4.5:1 sur fond clair), réutilisée ici
-  // comme couleur de TEXTE.
   warningText: string;
+  onAccentWarning: string;
   danger: string;
   dangerSoft: string;
+  dangerText: string;
+  onAccentDanger: string;
 
   neutralFill: string;
   neutralTrack: string;
 };
 
-// Couleurs qui ne dépendent pas de l'accent choisi.
-type BaseColors = Omit<
-  ColorTokens,
-  'accent' | 'accentStrong' | 'accentSoft' | 'accentText' | 'onAccent'
->;
+const base = {
+  light: {
+    bg: PALETTE.cream,
+    surface: PALETTE.white,
+    surfaceAlt: PALETTE.cream2,
+    border: PALETTE.sand,
+    borderStrong: PALETTE.ink,
+    textPrimary: PALETTE.ink,
+    textSecondary: PALETTE.ink2,
+    textMuted: PALETTE.ink3,
+    neutralFill: PALETTE.ink3,
+    neutralTrack: PALETTE.cream2,
+  },
+  dark: {
+    bg: PALETTE.night,
+    surface: PALETTE.night2,
+    // Un cran au-dessus de la surface : sur la nuit, un panneau secondaire ne
+    // peut pas être plus sombre que la carte qui le porte.
+    surfaceAlt: '#2E2240',
+    border: '#3B2F4E',
+    borderStrong: PALETTE.cream,
+    textPrimary: PALETTE.cream,
+    textSecondary: PALETTE.creamDim,
+    textMuted: PALETTE.mutedOnNight,
+    neutralFill: PALETTE.mutedOnNight,
+    // Plus sombre que le trait de séparation, et pour une raison mesurée : une
+    // jauge remplie de violet ne se détachait pas d'une piste à #3B2F4E
+    // (2.46:1). À cette valeur, elle tient 3.4:1 — et les trois accents avec.
+    neutralTrack: '#2A2039',
+  },
+} as const;
 
-const lightBase: BaseColors = {
-  bg: '#FAFAF8',
-  surface: '#FFFFFF',
-  surfaceAlt: '#F4F3F8',
-  border: 'rgba(19,18,24,0.08)',
-
-  textPrimary: '#131218',
-  textSecondary: '#6C6A78',
-  // #9997A3 ne passait pas le contraste WCAG AA (2.87:1 sur blanc, minimum
-  // requis 4.5:1) ; ce ton passe à 4.68:1.
-  textMuted: '#757379',
-
-  success: '#1FAA59',
-  successSoft: '#E4F8EC',
-  successText: '#0E7A3D',
-  dangerText: '#C81E3A',
-  warning: '#B8790E',
-  warningSoft: '#FBF0DA',
-  // Légèrement plus sombre que l'or du podium (#8F6A00) : il faut aussi tenir
-  // 4.5:1 sur `warningSoft`, où cet or ne donnait que 4.39:1. Ici : 5.27:1 sur
-  // surface, 4.67:1 sur warningSoft, 5.05:1 sur le fond.
-  warningText: '#8A6600',
-  danger: '#F0405C',
-  dangerSoft: '#FDE8EC',
-
-  neutralFill: '#8D8B99',
-  neutralTrack: '#E7E6ED',
-};
-
-const darkBase: BaseColors = {
-  bg: '#121016',
-  surface: '#1C1A22',
-  surfaceAlt: '#26242E',
-  border: 'rgba(255,255,255,0.09)',
-
-  textPrimary: '#F6F5F8',
-  textSecondary: '#B7B5C0',
-  textMuted: '#8A8894',
-
-  success: '#34C77B',
-  successSoft: '#173323',
-  successText: '#34C77B',
-  dangerText: '#FF5C7A',
-  warning: '#E3A83D',
-  warningSoft: '#3A2C12',
-  warningText: '#E3A83D',
-  danger: '#FF5C7A',
-  dangerSoft: '#3A1620',
-
-  neutralFill: '#9E9CAA',
-  neutralTrack: '#322F3B',
-};
-
-export type AccentPreset = {
-  id: string;
-  label: string;
-  // Même teinte utilisée en clair et en sombre : vérifié au contraste WCAG
-  // (≥ 4.5:1 sur blanc et ≥ 3:1 sur les deux fonds), une teinte "éclaircie"
-  // pour le sombre donnait un contraste insuffisant avec le texte blanc.
-  accent: string;
-  accentStrong: string;
-};
-
-export const ACCENT_PRESETS: AccentPreset[] = [
-  { id: 'violet', label: 'Violet', accent: '#5B4FE9', accentStrong: '#4638C2' },
-  { id: 'bleu', label: 'Bleu', accent: '#2E6BE6', accentStrong: '#1E4FB8' },
-  { id: 'rose', label: 'Rose', accent: '#D6336C', accentStrong: '#A82753' },
-  { id: 'orange', label: 'Orange', accent: '#C2410C', accentStrong: '#963309' },
-];
-
-export const DEFAULT_ACCENT_ID = ACCENT_PRESETS[0].id;
-
-function getAccentPreset(id: string): AccentPreset {
-  return ACCENT_PRESETS.find((a) => a.id === id) ?? ACCENT_PRESETS[0];
+// Ce qu'on peut écrire sur un aplat d'accent : de l'encre, ou du blanc. Deux
+// valeurs de la palette, et on garde celle qui se lit le mieux — sans jamais
+// fabriquer une troisième couleur pour s'en sortir.
+function surAccent(hue: string): string {
+  return contrastRatio(PALETTE.ink, hue) >= contrastRatio(PALETTE.white, hue)
+    ? PALETTE.ink
+    : PALETTE.white;
 }
 
-export function isKnownAccentId(id: string): boolean {
-  return ACCENT_PRESETS.some((a) => a.id === id);
+// Le bouton plein. Sur fond clair, c'est une pastille d'encre qui porte
+// l'accent — sauf si l'accent ne s'y lit pas, auquel cas les rôles s'inversent.
+// Sur fond sombre, l'encre disparaîtrait dans la nuit : c'est l'accent qui
+// devient le fond.
+function actionColors(scheme: 'light' | 'dark', hue: string) {
+  if (scheme === 'dark' || contrastRatio(hue, PALETTE.ink) < 4.5) {
+    return {
+      action: hue,
+      onAction: surAccent(hue),
+      actionPressed: mixHex(PALETTE.ink, hue, 0.2),
+    };
+  }
+  return {
+    action: PALETTE.ink,
+    onAction: hue,
+    actionPressed: mixHex(PALETTE.white, PALETTE.ink, 0.16),
+  };
 }
 
 export function buildColors(scheme: 'light' | 'dark', accentId: string): ColorTokens {
-  const base = scheme === 'dark' ? darkBase : lightBase;
-  const preset = getAccentPreset(accentId);
-  const isDark = scheme === 'dark';
+  const b = base[scheme];
+  const hue = ACCENTS[isKnownAccentId(accentId) ? accentId : DEFAULT_ACCENT];
+  const sombre = scheme === 'dark';
 
-  // Teinte pastel dérivée automatiquement (accent mélangé à la surface),
-  // plutôt qu'une valeur choisie à la main par accent et par mode. En sombre,
-  // le mélange se fait avec `surfaceAlt` (plus claire que `surface`) et à un
-  // ratio plus faible, pour rester un fond légèrement teinté plutôt qu'une
-  // teinte sombre et saturée trop proche d'`accentStrong` (contraste texte
-  // insuffisant, voir `accentText`).
-  const accentSoft = isDark
-    ? mixHex(preset.accent, base.surfaceAlt, 0.08)
-    : mixHex(preset.accent, base.surface, 0.12);
-
-  // Voir le commentaire sur `ColorTokens.accentText` : en clair, `accentStrong`
-  // passe déjà largement le contraste AA sur fond neutre. En sombre, ni
-  // `accent` ni `accentStrong` n'atteignent 4.5:1 sur `surface`/`accentSoft` —
-  // on éclaircit l'accent vers le blanc pour cet usage précis.
-  const accentText = isDark ? mixHex('#FFFFFF', preset.accent, 0.32) : preset.accentStrong;
+  // UN ACCENT EN TEXTE, OU PAS D'ACCENT DU TOUT.
+  //
+  // DESIGN.md est net là-dessus : « les accents à pleine opacité pour le
+  // texte ; jamais de opacity ou color-mix sur de la typo ». Une teinte qui ne
+  // tient pas le contraste ne s'assombrit donc pas jusqu'à passer — elle
+  // deviendrait une autre couleur, absente de la palette. Elle cède la place à
+  // l'encre, ou à la crème sur fond sombre.
+  //
+  // Concrètement : le violet s'écrit en violet, le lime et la pêche s'écrivent
+  // en encre. C'est pour cela que le violet est, dans le document, l'accent
+  // des libellés et des liens.
+  // Et il doit tenir sur LES TROIS FONDS, pas seulement sur la carte blanche :
+  // le violet passe à 5.01 sur le blanc, mais retombe à 4.26 sur la crème et à
+  // 3.79 sur un panneau. Un accent de texte qui ne vaut que sur un fond serait
+  // un piège tendu au premier écran qui l'emploie ailleurs.
+  const fonds = [b.bg, b.surface, b.surfaceAlt];
+  const versLisible = sombre ? PALETTE.cream : PALETTE.ink;
+  const enTexte = (c: string) =>
+    fonds.every((fond) => contrastRatio(c, fond) >= 4.5) ? c : versLisible;
 
   return {
-    ...base,
-    accent: preset.accent,
-    accentStrong: preset.accentStrong,
-    accentSoft,
-    accentText,
-    onAccent: '#FFFFFF',
+    ...b,
+
+    accent: hue,
+    onAccent: surAccent(hue),
+    accentSoft: mixHex(hue, b.surface, sombre ? 0.16 : 0.22),
+    accentText: enTexte(hue),
+    ...actionColors(scheme, hue),
+
+    // Validation : le lime, toujours.
+    success: PALETTE.lime,
+    successSoft: mixHex(PALETTE.lime, b.surface, sombre ? 0.16 : 0.26),
+    successText: enTexte(PALETTE.lime),
+    onAccentSuccess: surAccent(PALETTE.lime),
+
+    // Le super like ne prend pas un troisième accent : il prend le contraire
+    // du fond, ce qui en fait la réponse la plus appuyée des quatre sans
+    // ajouter une couleur à l'écran.
+    warning: sombre ? PALETTE.cream : PALETTE.ink,
+    warningSoft: b.surfaceAlt,
+    warningText: sombre ? PALETTE.cream : PALETTE.ink,
+    onAccentWarning: sombre ? PALETTE.ink : PALETTE.lime,
+
+    // Rejet : la pêche.
+    danger: PALETTE.peach,
+    dangerSoft: mixHex(PALETTE.peach, b.surface, sombre ? 0.16 : 0.28),
+    dangerText: enTexte(PALETTE.peach),
+    onAccentDanger: surAccent(PALETTE.peach),
   };
 }
 
 // Palettes fixes, indépendantes du contexte de thème — utilisées uniquement
 // par l'ErrorBoundary, qui doit pouvoir s'afficher même si le système de thème
-// lui-même est en cause. Il choisit entre les deux avec `useColorScheme()` de
-// React Native, sans passer par le contexte de l'app : on garde l'indépendance
-// vis-à-vis du code suspect, sans envoyer un écran blanc en pleine nuit.
-export const lightColors: ColorTokens = buildColors('light', DEFAULT_ACCENT_ID);
-export const darkColors: ColorTokens = buildColors('dark', DEFAULT_ACCENT_ID);
+// lui-même est en cause.
+export const lightColors: ColorTokens = buildColors('light', DEFAULT_ACCENT);
+export const darkColors: ColorTokens = buildColors('dark', DEFAULT_ACCENT);
 
+// --- RAYONS -----------------------------------------------------------------
+//
+// Généreux : DESIGN.md va de 24 px pour une ligne de liste à 56 px pour un
+// cadre de téléphone, sur un canevas de 1080. Ramenés à la largeur d'un
+// téléphone, ces rapports donnent l'échelle ci-dessous — plus ronde que
+// l'ancienne, ce qui est tout le sujet.
 export const radii = {
-  sm: 12,
-  md: 20,
-  lg: 28,
+  sm: 16,
+  md: 24,
+  lg: 32,
+  xl: 44,
   pill: 999,
 } as const;
 
@@ -189,11 +268,39 @@ export const spacing = {
   xxl: 48,
 } as const;
 
-export const fonts = {
-  hero: 56,
-  title: 26,
-  cardText: 23,
-  body: 16,
-  small: 13,
-  tiny: 11,
+// --- TYPOGRAPHIE ------------------------------------------------------------
+//
+// Space Grotesk pour tout, DM Mono pour les étiquettes, les compteurs et les
+// pourcentages. Les deux sont embarquées (voir App.tsx) : aucune police n'est
+// téléchargée à l'exécution, l'app ne fait aucun appel réseau.
+//
+// LA GRAISSE EST DANS LE NOM DE LA FAMILLE, et ce n'est pas un détail : avec
+// une police embarquée, `fontWeight` n'a aucun effet sur Android. C'est le
+// composant `Texte` qui traduit l'un en l'autre, une fois pour toutes.
+export const police = {
+  sans: {
+    400: 'SpaceGrotesk_400Regular',
+    500: 'SpaceGrotesk_500Medium',
+    600: 'SpaceGrotesk_600SemiBold',
+    700: 'SpaceGrotesk_700Bold',
+  },
+  mono: {
+    400: 'DMMono_400Regular',
+    500: 'DMMono_500Medium',
+  },
 } as const;
+
+// L'échelle du document, divisée par ~2.5 pour un écran de téléphone, arrondie
+// à des tailles qui tombent juste. Le plancher est à 12 : en dessous, un
+// libellé mono espacé de 0.12em cesse d'être lisible.
+export const fonts = {
+  hero: 52,
+  title: 30,
+  cardText: 24,
+  body: 17,
+  small: 14,
+  tiny: 12,
+} as const;
+
+// Interlettrage des étiquettes mono, toujours en capitales (DESIGN.md §2).
+export const MONO_SPACING = 1.2;

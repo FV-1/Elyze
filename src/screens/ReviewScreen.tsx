@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from '../components/Texte';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenHeader } from '../components/ScreenHeader';
@@ -7,7 +8,7 @@ import { ProposalDebateDialog } from '../components/ProposalDebateDialog';
 import { haptics } from '../utils/haptics';
 import { Answers, AnswerValue, Proposal, ThemeTag } from '../types';
 import { SwipeDirection } from '../components/SwipeCard';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
 type Props = {
@@ -137,7 +138,7 @@ export function ReviewScreen({
           accessibilityLabel="Voir mon résultat"
         >
           <Text style={styles.ctaText}>Voir mon résultat</Text>
-          <Ionicons name="arrow-forward" size={18} color={colors.onAccent} />
+          <Ionicons name="arrow-forward" size={18} color={colors.onAction} />
         </Pressable>
       </View>
 
@@ -197,7 +198,11 @@ function ReviewRow({
           accessibilityState={{ checked: answer === 'nope' }}
           accessibilityLabel="Pas pour moi"
         >
-          <Ionicons name="close" size={16} color={answer === 'nope' ? colors.onAccent : colors.danger} />
+          <Ionicons
+            name="close"
+            size={16}
+            color={answer === 'nope' ? colors.onAccentDanger : colors.textMuted}
+          />
         </Pressable>
         <Pressable
           onPress={() => onChange(proposal.id, 'skip')}
@@ -210,7 +215,7 @@ function ReviewRow({
           <Ionicons
             name="remove-outline"
             size={14}
-            color={answer === 'skip' ? colors.onAccent : colors.textSecondary}
+            color={answer === 'skip' ? colors.bg : colors.textMuted}
           />
         </Pressable>
         <Pressable
@@ -221,7 +226,11 @@ function ReviewRow({
           accessibilityState={{ checked: answer === 'like' }}
           accessibilityLabel="J’adhère"
         >
-          <Ionicons name="heart" size={14} color={answer === 'like' ? colors.onAccent : colors.success} />
+          <Ionicons
+            name="heart"
+            size={14}
+            color={answer === 'like' ? colors.onAccentSuccess : colors.textMuted}
+          />
         </Pressable>
         <Pressable
           onPress={() => onChange(proposal.id, 'superlike')}
@@ -231,7 +240,11 @@ function ReviewRow({
           accessibilityState={{ checked: answer === 'superlike' }}
           accessibilityLabel="Super like, compte plus dans le résultat"
         >
-          <Ionicons name="star" size={13} color={answer === 'superlike' ? colors.onAccent : colors.warning} />
+          <Ionicons
+            name="star"
+            size={13}
+            color={answer === 'superlike' ? colors.onAccentWarning : colors.textMuted}
+          />
         </Pressable>
       </View>
     </View>
@@ -265,7 +278,7 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: spacing.sm + 2,
       borderRadius: radii.pill,
       backgroundColor: colors.surfaceAlt,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     filterChipActive: {
@@ -280,6 +293,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '700',
       color: colors.textSecondary,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     filterTextActive: {
       color: colors.onAccent,
@@ -303,7 +317,7 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.sm,
       paddingVertical: spacing.sm,
       paddingHorizontal: spacing.sm,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     // La zone de lecture occupe toute la place laissee par les trois boutons
@@ -331,6 +345,9 @@ function makeStyles(colors: ColorTokens) {
       flexDirection: 'row',
       gap: 6,
     },
+    // Même principe que les boutons du swipe : au repos, un signe d'encre pâle
+    // sur du neutre ; choisi, un aplat de couleur avec le signe en encre. La
+    // couleur ne sert qu'à dire ce qui est retenu.
     toggleBtn: {
       width: 28,
       height: 28,
@@ -338,24 +355,24 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.surfaceAlt,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     toggleNopeActive: {
       backgroundColor: colors.danger,
-      borderColor: colors.danger,
+      borderColor: colors.borderStrong,
     },
     toggleSkipActive: {
-      backgroundColor: colors.textMuted,
-      borderColor: colors.textMuted,
+      backgroundColor: colors.neutralFill,
+      borderColor: colors.borderStrong,
     },
     toggleLikeActive: {
       backgroundColor: colors.success,
-      borderColor: colors.success,
+      borderColor: colors.borderStrong,
     },
     toggleSuperlikeActive: {
       backgroundColor: colors.warning,
-      borderColor: colors.warning,
+      borderColor: colors.borderStrong,
     },
     // Le bouton descend d'une douzaine de pixels : il montait presque contre
     // la dernière ligne de la liste, si bien qu'on le touchait en croyant
@@ -371,17 +388,17 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       gap: spacing.sm,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
     },
     ctaPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     ctaText: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
   });
 }

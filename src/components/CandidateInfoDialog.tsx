@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -10,8 +11,8 @@ import { CANDIDATE_BIOS } from '../data/candidateBios';
 import { openUrl, POLIGRAPH_SOURCE_URL } from '../data/source';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { Answers, Candidate, Proposal } from '../types';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
-import { useColors, useThemeColor, useThemeSettings } from '../theme/ThemeContext';
+import { ColorTokens, fonts, radii, spacing, police } from '../theme';
+import { useColors, useThemeColor, useThemeSettings, ZoneAccent } from '../theme/ThemeContext';
 
 // Fiche d'un candidat : une notice biographique, puis sa présence dans le
 // questionnaire.
@@ -21,14 +22,7 @@ import { useColors, useThemeColor, useThemeSettings } from '../theme/ThemeContex
 // un lien vers l'article. Rédiger nous-mêmes sur des personnes réelles
 // finirait par produire une date ou un mandat faux que rien ne signalerait ;
 // ici la source est citée et vérifiable d'un toucher.
-export function CandidateInfoDialog({
-  visible,
-  candidate,
-  proposals,
-  answers,
-  revealThemes,
-  onClose,
-}: {
+type FicheCandidatProps = {
   visible: boolean;
   candidate: Candidate | null;
   proposals: Proposal[];
@@ -39,7 +33,27 @@ export function CandidateInfoDialog({
   // n'apparaît donc qu'une fois le voile levé, ou le paquet terminé.
   revealThemes: boolean;
   onClose: () => void;
-}) {
+};
+
+// LES CANDIDATS SONT PÊCHE (DESIGN.md §1). Même raison que pour les
+// arguments : l'enveloppe doit être au-dessus du composant qui lit les
+// couleurs, sans quoi la fiche garderait l'accent de l'écran qui l'ouvre.
+export function CandidateInfoDialog(props: FicheCandidatProps) {
+  return (
+    <ZoneAccent accent="peach">
+      <FicheCandidat {...props} />
+    </ZoneAccent>
+  );
+}
+
+function FicheCandidat({
+  visible,
+  candidate,
+  proposals,
+  answers,
+  revealThemes,
+  onClose,
+}: FicheCandidatProps) {
   const colors = useColors();
   const getThemeColor = useThemeColor();
   const { effectiveScheme } = useThemeSettings();
@@ -256,7 +270,7 @@ export function CandidateInfoDialog({
                 accessibilityLabel={`Ouvrir la fiche de ${candidate.name} sur Poligraph`}
               >
                 <Text style={styles.ctaText}>Toutes ses mesures sur Poligraph</Text>
-                <Ionicons name="open-outline" size={18} color={colors.onAccent} />
+                <Ionicons name="open-outline" size={18} color={colors.onAction} />
               </Pressable>
 
               <Text style={styles.note}>
@@ -301,11 +315,6 @@ function makeStyles(colors: ColorTokens) {
   // Ombre douce commune aux cartes : c'est elle qui les détache du fond, à la
   // place des bordures d'un pixel qui donnaient un rendu très "formulaire".
   const soft = {
-    shadowColor: '#1A1730',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.07,
-    shadowRadius: 18,
-    elevation: 2,
   } as const;
 
   return StyleSheet.create({
@@ -386,6 +395,7 @@ function makeStyles(colors: ColorTokens) {
       letterSpacing: -0.5,
       color: colors.accentText,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     statLabel: {
       fontSize: fonts.tiny,
@@ -428,6 +438,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       letterSpacing: 0.9,
       textTransform: 'uppercase',
+      fontFamily: police.mono[500],
       color: colors.textSecondary,
     },
     wrap: {
@@ -452,6 +463,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       color: colors.accentText,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     lockedRow: {
       flexDirection: 'row',
@@ -488,6 +500,7 @@ function makeStyles(colors: ColorTokens) {
       fontSize: fonts.tiny,
       fontWeight: '800',
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
 
     cta: {
@@ -496,17 +509,17 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
       gap: spacing.sm,
       marginTop: spacing.md,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md + 2,
     },
     ctaPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     ctaText: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     note: {
       fontSize: fonts.tiny,

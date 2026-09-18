@@ -1,5 +1,6 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { Pressable, StyleSheet, useColorScheme, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { ColorTokens, darkColors, lightColors, radii, spacing, fonts } from '../theme';
 import { clearSession } from '../utils/storage';
 
@@ -98,18 +99,18 @@ function makeStyles(colors: ColorTokens) {
       marginBottom: spacing.md,
     },
     button: {
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.xl,
     },
     buttonPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     buttonText: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
   });
 }

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
+import { Texte as Text } from '../components/Texte';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScreenHeader } from '../components/ScreenHeader';
@@ -10,7 +11,7 @@ import { APP_VERSION } from '../data/appInfo';
 import { DATASET_DATE } from '../data/proposals';
 import { dateEnFrancais } from '../utils/date';
 import { LEGAL_DOCUMENTS, LEGAL_TOPICS, LegalTopic } from '../data/legal';
-import { ACCENT_PRESETS, ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors, useThemeSettings } from '../theme/ThemeContext';
 import { SchemePreference } from '../utils/storage';
 
@@ -39,8 +40,6 @@ export function SettingsScreen({
   const {
     schemePreference,
     setSchemePreference,
-    accentId,
-    setAccentId,
     hapticsEnabled,
     setHapticsEnabled,
     rainbowUnlocked,
@@ -158,36 +157,6 @@ export function SettingsScreen({
         )}
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Couleur d’accent</Text>
-          <View style={styles.accentRow}>
-            {ACCENT_PRESETS.map((preset) => {
-              const isActive = accentId === preset.id;
-              return (
-                <Pressable
-                  key={preset.id}
-                  onPress={() => setAccentId(preset.id)}
-                  style={styles.accentOption}
-                  accessibilityRole="radio"
-                  accessibilityState={{ checked: isActive }}
-                  accessibilityLabel={`Accent ${preset.label}`}
-                >
-                  <View style={[styles.swatch, { backgroundColor: preset.accent }]}>
-                    {isActive && <Ionicons name="checkmark" size={18} color="#FFFFFF" />}
-                  </View>
-                  <Text style={styles.accentLabel}>{preset.label}</Text>
-                </Pressable>
-              );
-            })}
-          </View>
-          {rainbowEnabled && (
-            <Text style={styles.sectionCaption}>
-              Sans effet tant que le mode arc-en-ciel est actif. Ton choix sera repris dès que
-              tu le désactiveras.
-            </Text>
-          )}
-        </View>
-
-        <View style={styles.section}>
           <Text style={styles.sectionTitle}>Retour haptique</Text>
           <View style={styles.switchRow}>
             {/* L'ICÔNE DIT L'ÉTAT, ELLE AUSSI. Le trait barré de `vibrate-off`
@@ -279,7 +248,7 @@ export function SettingsScreen({
             accessibilityRole="button"
             accessibilityLabel="Réinitialiser les données de l’application"
           >
-            <Ionicons name="trash-outline" size={18} color={colors.danger} />
+            <Ionicons name="trash-outline" size={18} color={colors.dangerText} />
             <Text style={styles.dangerButtonText}>Réinitialiser les données de l’application</Text>
           </Pressable>
         </View>
@@ -324,6 +293,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       letterSpacing: 0.4,
       textTransform: 'uppercase',
+      fontFamily: police.mono[500],
       color: colors.textMuted,
       paddingHorizontal: spacing.xs,
     },
@@ -374,28 +344,6 @@ function makeStyles(colors: ColorTokens) {
       fontSize: fonts.small + 1,
       fontWeight: '700',
       color: colors.accentText,
-    },
-    accentRow: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: spacing.lg,
-      paddingHorizontal: spacing.xs,
-    },
-    accentOption: {
-      alignItems: 'center',
-      gap: 6,
-    },
-    swatch: {
-      width: 44,
-      height: 44,
-      borderRadius: radii.pill,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    accentLabel: {
-      fontSize: fonts.tiny,
-      fontWeight: '600',
-      color: colors.textSecondary,
     },
     // Les trois textes légaux sont des DESTINATIONS distinctes, pas les trois
     // lignes d'une même liste : à 2 px d'écart, leurs fonds se touchaient et
@@ -475,10 +423,12 @@ function makeStyles(colors: ColorTokens) {
     dangerButtonPressed: {
       opacity: 0.8,
     },
+    // La pêche est un FOND ici, pas une couleur d'écriture : le texte du
+    // bouton est donc de l'encre, posée sur son aplat pâle.
     dangerButtonText: {
       fontSize: fonts.small + 1,
       fontWeight: '700',
-      color: colors.danger,
+      color: colors.dangerText,
     },
   });
 }
