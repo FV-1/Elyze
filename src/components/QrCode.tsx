@@ -2,17 +2,28 @@ import { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { qrMatrix } from '../utils/qr';
 import { QR_BACKGROUND, qrModuleColor } from '../theme/qrColors';
-import { radii } from '../theme';
-import { useColors } from '../theme/ThemeContext';
+import { PALETTE, radii } from '../theme';
+import { useColors, useThemeSettings } from '../theme/ThemeContext';
 
 // Affichage d'un QR code, dessiné avec des vues ordinaires.
 //
-// AUX COULEURS DE L'APP, MAIS PAS À N'IMPORTE QUEL PRIX. Les modules prennent
-// l'accent choisi dans les réglages, assombri juste ce qu'il faut pour rester
-// franchement lisible par un appareil photo (voir theme/qrColors.ts, qui porte
-// tout le raisonnement). Le fond, lui, reste blanc en toutes circonstances,
-// thème sombre compris : un décodeur attend des modules sombres sur fond
-// clair, et beaucoup refusent l'inverse.
+// IL EST EN ENCRE, ET PLUS À L'ACCENT DE L'ÉCRAN.
+//
+// Les modules prenaient l'accent courant, assombri jusqu'à 7:1 pour rester
+// lisible par un appareil photo. Le raisonnement était bon et le résultat
+// laid : une couleur claire qu'on assombrit de moitié perd sa teinte et garde
+// sa boue. La pêche donnait un marron, le lime un kaki. Un QR code est un
+// objet technique posé sur une carte qui, elle, porte déjà la couleur de
+// l'écran ; l'encre de l'app lui va mieux que n'importe quel accent noirci,
+// et elle le fait décoder à 16:1 au lieu de 7.
+//
+// Le mode arc-en-ciel garde la dérivation : là-bas, tout est repeint au
+// hasard, et un QR resté sage serait la seule chose qui ne joue pas le jeu
+// (voir theme/qrColors.ts, qui porte le raisonnement sur la lisibilité).
+//
+// Le fond, lui, reste blanc en toutes circonstances, thème sombre compris :
+// un décodeur attend des modules sombres sur fond clair, et beaucoup refusent
+// l'inverse.
 //
 // LA MARGE DE QUATRE MODULES N'EST PAS UN ESPACEMENT. La norme l'appelle
 // « zone de silence » et l'impose : c'est elle qui permet au décodeur de
@@ -25,7 +36,11 @@ const REPERE = 7;
 
 export function QrCode({ value, size }: { value: string; size: number }) {
   const colors = useColors();
-  const couleur = useMemo(() => qrModuleColor(colors.accent), [colors.accent]);
+  const { rainbowEnabled } = useThemeSettings();
+  const couleur = useMemo(
+    () => (rainbowEnabled ? qrModuleColor(colors.accent) : PALETTE.ink),
+    [rainbowEnabled, colors.accent]
+  );
 
   const { matrice, module, cote } = useMemo(() => {
     const m = qrMatrix(value);
