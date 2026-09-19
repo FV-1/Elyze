@@ -644,7 +644,7 @@ function AppInner() {
           )}
 
           {screen === 'howItWorks' && (
-            <ZoneAccent accent="violet">
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <HowItWorksScreen onBack={() => setScreen(howItWorksReturnTo)} />
             </ScreenTransition>
@@ -712,8 +712,13 @@ function AppInner() {
             </ZoneAccent>
           )}
 
+          {/* LE RÉSULTAT REPREND L'ACCENT DE L'APP, et non un accent à lui.
+              Il a porté le violet, au nom d'un accent par écran : l'écran le
+              plus regardé de l'app se retrouvait alors seul de sa couleur,
+              podium, boutons et sous-onglets compris, sans rien qui le relie à
+              la partie qu'on venait de jouer. */}
           {screen === 'results' && (
-            <ZoneAccent accent="violet">
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <ResultsScreen
                 proposals={sessionProposals}

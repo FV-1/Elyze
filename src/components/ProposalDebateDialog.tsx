@@ -25,15 +25,17 @@ type ProposDebatProps = {
   onClose: () => void;
 };
 
-// LES ARGUMENTS SONT VIOLETS, où qu'on les ouvre.
+// LES ARGUMENTS GARDENT L'ACCENT DE L'ÉCRAN D'OÙ ILS SORTENT.
 //
-// C'est la répartition de DESIGN.md : le swipe est lime, les arguments violets,
-// les candidats pêche. Cette boîte s'ouvre depuis une carte, donc depuis un
-// écran lime, et impose son accent le temps qu'elle est là — d'où cette
-// enveloppe, qui doit se trouver AU-DESSUS du composant qui lit les couleurs.
+// Ils ont été violets, au nom d'un accent par zone : le swipe lime, les
+// arguments violets, les candidats pêche. Mais cette boîte s'ouvre EN TOUCHANT
+// UNE CARTE, sans changer d'écran, et elle changeait de couleur en s'ouvrant —
+// un violet posé sur une page lime, le temps d'une lecture, sans que rien ne
+// justifie la bascule. Elle prend le lime de l'app ; l'enveloppe reste, parce
+// qu'elle doit se trouver AU-DESSUS du composant qui lit les couleurs.
 export function ProposalDebateDialog(props: ProposDebatProps) {
   return (
-    <ZoneAccent accent="violet">
+    <ZoneAccent accent="lime">
       <Debat {...props} />
     </ZoneAccent>
   );
