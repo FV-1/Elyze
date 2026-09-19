@@ -247,6 +247,11 @@ function makeStyles(colors: ColorTokens) {
       maxHeight: 200,
       backgroundColor: colors.surfaceAlt,
       borderRadius: radii.md,
+      // Un trait qui dit où l'on écrit. Sans lui, seul le fond distinguait le
+      // champ de la feuille qui le porte, à 1.32:1, sous les 3:1 qu'un élément
+      // non textuel doit tenir pour être identifiable.
+      borderWidth: 1,
+      borderColor: colors.borderStrong,
       padding: spacing.md,
       fontSize: fonts.small + 2,
       lineHeight: (fonts.small + 2) * 1.45,

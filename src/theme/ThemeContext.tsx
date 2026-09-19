@@ -9,7 +9,7 @@ import React, {
 import { useColorScheme } from 'react-native';
 import { AccentId, buildColors, ColorTokens, DEFAULT_ACCENT } from './index';
 import { buildRainbowColors, buildRainbowMedals, buildRainbowThemeColors, randomSeed } from './rainbow';
-import { getThemeColor as fixedThemeColor } from '../data/themeColors';
+import { getThemeColor as fixedThemeColor, themeColorForScheme } from '../data/themeColors';
 import { THEMES } from '../data/themes';
 import { setHapticsFlag } from '../utils/haptics';
 import {
@@ -185,9 +185,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     [rainbowActive, rainbow.seed]
   );
 
+  // L'ADAPTATION AU FOND SE FAIT ICI, et pas dans chaque composant : une tuile
+  // de mosaïque, une pastille de duel et un point de liste demandent tous la
+  // même couleur, et aucun n'a de raison de savoir qu'elle s'éclaircit la nuit
+  // (voir data/themeColors.ts).
   const themeColor = useMemo(
-    () => (themeId: string) => rainbowThemeColors?.[themeId] ?? fixedThemeColor(themeId),
-    [rainbowThemeColors]
+    () => (themeId: string) =>
+      themeColorForScheme(
+        rainbowThemeColors?.[themeId] ?? fixedThemeColor(themeId),
+        effectiveScheme === 'dark'
+      ),
+    [rainbowThemeColors, effectiveScheme]
   );
 
   const medalColors = useMemo<[string, string, string]>(

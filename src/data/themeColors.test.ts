@@ -1,4 +1,4 @@
-import { THEME_COLORS, themeChipColors } from './themeColors';
+import { THEME_COLORS, themeChipColors, themeColorForScheme } from './themeColors';
 import { buildRainbowThemeColors, contrastRatio } from '../theme/rainbow';
 import { THEMES } from './themes';
 import { ACCENTS, AccentId, buildColors } from '../theme';
@@ -9,6 +9,7 @@ import { ACCENTS, AccentId, buildColors } from '../theme';
 const TEXT_RATIO = 4.5;
 const LIGHT_SURFACE = '#ffffff';
 const DARK_SURFACE = '#241A33';
+const DARK_BG = '#1E1233';
 
 // Les graines de test sont TIRÉES D'UNE SUITE DÉTERMINISTE, pas de
 // `Math.random()`.
@@ -159,5 +160,53 @@ describe('interrupteur de révélation', () => {
     }
 
     expect(failures).toEqual([]);
+  });
+});
+
+
+// LA TUILE EST UN APLAT, ET UN APLAT DOIT SE DÉTACHER DE CE QU'IL Y A DESSOUS.
+//
+// Les quinze couleurs ne changeaient pas avec le thème : sur une carte sombre,
+// huit d'entre elles tombaient entre 2.87:1 et 2.94:1, sous le seuil des
+// éléments non textuels. Elles sont maintenant remontées vers le blanc juste
+// ce que le texte blanc qu'elles portent permet (voir themeColorForScheme).
+//
+// Le test tient les DEUX bouts : la couleur remontée doit encore porter son
+// texte blanc à 4.5:1, et se détacher de la carte comme du fond à 3:1. C'est
+// ce qui interdit de régler le plancher d'un côté sans regarder l'autre.
+describe('couleurs de tuile adaptées au thème sombre', () => {
+  const UI_RATIO = 3;
+
+  function verifie(base: string, nom: string, failures: string[]) {
+    const sombre = themeColorForScheme(base, true);
+    const blanc = contrastRatio('#FFFFFF', sombre);
+    const carte = contrastRatio(sombre, DARK_SURFACE);
+    const fond = contrastRatio(sombre, DARK_BG);
+    if (blanc < TEXT_RATIO) failures.push(`${nom} blanc ${blanc.toFixed(2)}`);
+    if (carte < UI_RATIO) failures.push(`${nom} carte ${carte.toFixed(2)}`);
+    if (fond < UI_RATIO) failures.push(`${nom} fond ${fond.toFixed(2)}`);
+    // En thème clair, rien ne bouge : la teinte est déjà celle qui a été
+    // choisie pour le fond crème.
+    if (themeColorForScheme(base, false) !== base) failures.push(`${nom} clair modifié`);
+  }
+
+  it('tient les deux seuils pour les quinze thèmes', () => {
+    const failures: string[] = [];
+    for (const [id, base] of Object.entries(THEME_COLORS)) verifie(base, id, failures);
+    expect(failures).toEqual([]);
+  });
+
+  it('les tient aussi pour les couleurs tirées au sort', () => {
+    const failures: string[] = [];
+    const themeIds = THEMES.map((t) => t.id);
+    for (const seed of seeds(200, 0x7a11e)) {
+      for (const base of Object.values(buildRainbowThemeColors(themeIds, seed))) {
+        verifie(base, base, failures);
+      }
+    }
+    expect({ total: failures.length, premiers: failures.slice(0, 5) }).toEqual({
+      total: 0,
+      premiers: [],
+    });
   });
 });

@@ -793,8 +793,13 @@ function makeStyles(colors: ColorTokens) {
       maxHeight: 160,
       backgroundColor: colors.surfaceAlt,
       borderRadius: radii.md,
+      // LE TRAIT FORT, ET NON LE TRAIT ORDINAIRE. Une zone de saisie doit se
+      // distinguer de la page à 3:1 — c'est le cas d'école de la règle sur les
+      // éléments non textuels. Ici le fond n'était qu'à 1.13:1 de la page et
+      // le trait à 1.28:1 de ce fond : rien ne disait où l'on pouvait écrire,
+      // sinon le filigrane, qui s'en va dès la première lettre.
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.borderStrong,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.md,
       fontSize: fonts.small + 1,

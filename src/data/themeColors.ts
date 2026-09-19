@@ -1,4 +1,4 @@
-import { mixHex } from '../utils/color';
+import { contrastRatio, mixHex } from '../utils/color';
 
 // Une couleur par thème pour la mosaïque de l'onglet « Propositions » — fixe,
 // indépendante de l'accent choisi dans les réglages (le but est ici la variété
@@ -49,6 +49,38 @@ export const THEME_COLORS: Record<string, string> = {
 };
 
 const FALLBACK_COLOR = '#4338CA';
+
+// Plancher de contraste du texte blanc posé sur une tuile. Au-dessus du seuil
+// AA (4.5) d'une marge volontaire : c'est la contrainte qu'on relâche pour en
+// gagner une autre, et la relâcher jusqu'au seuil exact ne laisserait rien
+// pour l'arrondi d'un futur réglage.
+const PLANCHER_BLANC = 4.75;
+
+// LA MÊME TEINTE, ÉCLAIRCIE SUR LA NUIT.
+//
+// Les quinze couleurs sont calculées pour porter du texte blanc, et elles le
+// font dans les deux thèmes. Mais elles sont les mêmes partout, et sur une
+// carte sombre huit d'entre elles tombaient entre 2.87:1 et 2.94:1 — sous les
+// 3:1 qu'un aplat doit tenir pour qu'on voie où il commence.
+//
+// Plutôt que de réécrire à la main quinze valeurs pour le thème sombre, on
+// remonte chaque teinte vers le blanc TANT QUE le texte blanc qu'elle porte
+// reste au-dessus du plancher. La contrainte la plus dure garde la main, la
+// teinte ne bouge que de ce qu'elle peut, et les couleurs tirées au sort par
+// le mode arc-en-ciel passent par la même règle sans rien à prévoir.
+//
+// Mesuré sur les quinze : blanc de 4.60:1 à 5.03:1, tuile sur carte sombre de
+// 3.40:1 à 3.74:1.
+export function themeColorForScheme(baseColor: string, isDark: boolean): string {
+  if (!isDark) return baseColor;
+  let choisie = baseColor;
+  for (let pas = 1; pas <= 30; pas++) {
+    const essai = mixHex('#FFFFFF', baseColor, pas / 100);
+    if (contrastRatio('#FFFFFF', essai) < PLANCHER_BLANC) break;
+    choisie = essai;
+  }
+  return choisie;
+}
 
 export function getThemeColor(themeId: string): string {
   return THEME_COLORS[themeId] ?? FALLBACK_COLOR;

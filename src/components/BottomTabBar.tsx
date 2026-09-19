@@ -228,20 +228,33 @@ function makeStyles(colors: ColorTokens) {
       flexDirection: 'row',
     },
     // LA BOÎTE QUI GLISSE fait la largeur de la colonne, pour que la mesure
-    // de l'onglet lui serve telle quelle ; le trait, lui, reste un repère de
-    // 22 px, centré dedans. Elle est posée en haut de la rangée, dans la
+    // de l'onglet lui serve telle quelle ; la marque, elle, reste un repère de
+    // 24 px, centré dedans. Elle est posée en haut de la rangée, dans la
     // hauteur que les onglets réservent au-dessus de leur icône.
     marqueGlissante: {
       position: 'absolute',
       left: 0,
       top: 0,
-      height: 4,
+      height: 7,
       alignItems: 'center',
     },
+    // ELLE EST CERNÉE, ET C'EST CE QUI LA REND VISIBLE.
+    //
+    // C'est le seul signe qui dise quel onglet est ouvert, et il était posé en
+    // accent nu : sur une barre claire, le lime vaut 1.16:1, là où un élément
+    // qui porte une information en demande 3. Le libellé courant, en encre
+    // face à l'encre pâle des autres, n'ajoutait que 2.37:1 — et la graisse ne
+    // compte pas, personne ne la perçoit sans point de comparaison.
+    //
+    // Le contour règle l'affaire sans toucher à la couleur : c'est la FORME
+    // qui porte l'état, à 17:1 sur la barre claire, et l'accent n'a plus qu'à
+    // l'habiller.
     marque: {
-      width: 22,
-      height: 4,
+      width: 24,
+      height: 7,
       borderRadius: radii.pill,
+      borderWidth: 1,
+      borderColor: colors.borderStrong,
       backgroundColor: colors.accent,
     },
     // La place de la marque est retenue en haut, qu'un onglet la porte ou
@@ -250,7 +263,7 @@ function makeStyles(colors: ColorTokens) {
     tab: {
       flex: 1,
       alignItems: 'center',
-      paddingTop: 4 + spacing.xs,
+      paddingTop: 7 + spacing.xs,
       paddingBottom: spacing.xs + 2,
     },
     // Ce qui grossit et se comprime est le CONTENU, pas la zone tactile : la

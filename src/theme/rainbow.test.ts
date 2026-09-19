@@ -107,6 +107,41 @@ describe('mode arc-en-ciel', () => {
     expect(failures).toEqual([]);
   });
 
+  // LA JAUGE DOIT SE VOIR, ET CE N'EST PAS UNE ÉVIDENCE ICI.
+  //
+  // Le tirage vérifiait le texte et les aplats, jamais les formes. La piste
+  // d'une jauge était tirée comme un fond, au hasard dans une plage de clarté,
+  // et le remplissage qui vient dessus n'en savait rien : sur trois cents
+  // tirages, le pire couple mesuré était à 1.01:1, c'est-à-dire une barre de
+  // progression rigoureusement invisible pendant toute une partie.
+  //
+  // Les deux remplissages qui se posent sur cette piste sont vérifiés : celui
+  // de la barre de progression (`action`) et celui des barres du classement
+  // (`neutralFill`).
+  it('détache de sa piste ce qui la remplit', () => {
+    const failures: string[] = [];
+
+    for (const scheme of SCHEMES) {
+      for (const seed of seeds(RUNS)) {
+        const c = buildRainbowColors(scheme, seed);
+        for (const [nom, fill] of [
+          ['action', c.action],
+          ['neutralFill', c.neutralFill],
+        ] as const) {
+          const r = contrastRatio(fill, c.neutralTrack);
+          if (r < GRAPHIC_RATIO) {
+            failures.push(`${scheme} ${seed} ${nom}/piste : ${r.toFixed(2)}`);
+          }
+        }
+      }
+    }
+
+    expect({ total: failures.length, premiers: failures.slice(0, 5) }).toEqual({
+      total: 0,
+      premiers: [],
+    });
+  });
+
   it('redonne exactement la même palette pour une même graine', () => {
     const seed = randomSeed();
     expect(buildRainbowColors('light', seed)).toEqual(buildRainbowColors('light', seed));
