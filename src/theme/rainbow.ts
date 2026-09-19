@@ -127,9 +127,12 @@ export function buildRainbowColors(scheme: 'light' | 'dark', seed: number): Colo
   const neutralFill = pickReadable(hue(), between(35, 75), [bg, surface], GRAPHIC_RATIO, textDirection);
   const neutralTrack = hslToHex(hue(), between(20, 55), isDark ? between(22, 30) : between(85, 92));
   const border = hslToHex(hue(), between(20, 60), isDark ? between(26, 34) : between(78, 86));
-  // Le trait d'encre du mode arc-en-ciel : c'est la couleur du texte principal,
-  // la seule dont on sache qu'elle tient sur tous les fonds tirés au sort.
-  const borderStrong = textPrimary;
+  // Le trait d'encre du mode arc-en-ciel. Il a été la couleur du texte
+  // principal, la seule dont on sache qu'elle tient sur tous les fonds tirés
+  // au sort — mais à 7:1 sur un fond sombre, un contour se lit avant ce qu'il
+  // entoure. `neutralFill` tient le 3:1 des éléments graphiques sur le fond
+  // comme sur la carte : franc, et pas éclatant.
+  const borderStrong = neutralFill;
 
   return {
     bg,

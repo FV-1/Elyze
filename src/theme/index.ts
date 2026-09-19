@@ -143,7 +143,18 @@ const base = {
     // peut pas être plus sombre que la carte qui le porte.
     surfaceAlt: '#2E2240',
     border: '#3B2F4E',
-    borderStrong: PALETTE.cream,
+    // LE TRAIT FORT N'EST PAS LA CRÈME, SUR LA NUIT.
+    //
+    // À pleine valeur, il cernait d'un blanc cassé les cartes, la barre du
+    // bas, les avatars et le cadre du téléphone : sur un fond sombre, quinze
+    // contours clairs se voient avant ce qu'ils entourent. Le document
+    // demande un trait d'encre, pas une lumière.
+    //
+    // Cette teinte reste un trait franc — 3.64:1 sur la carte, 3.88:1 sur le
+    // fond, au-dessus des 3:1 que le test exige — sans virer au blanc. Elle
+    // ne peut pas descendre beaucoup plus bas : cette identité n'a pas
+    // d'ombre, et c'est le contour, seul, qui dit où une surface s'arrête.
+    borderStrong: '#7E6F99',
     textPrimary: PALETTE.cream,
     textSecondary: PALETTE.creamDim,
     textMuted: PALETTE.mutedOnNight,
