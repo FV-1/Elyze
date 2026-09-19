@@ -197,10 +197,14 @@ function makeStyles(colors: ColorTokens) {
     skipButton: {
       backgroundColor: colors.surfaceAlt,
     },
-    // Annuler n'est pas une réponse : pas d'aplat, juste le trait.
+    // ANNULER N'EST PAS UNE RÉPONSE, et cela se disait par un contour vide :
+    // pas d'aplat, juste le trait. Les contours ayant quitté l'app, ce bouton
+    // s'est retrouvé sans rien — un fond transparent, plus de trait, et une
+    // ombre qui n'avait plus de forme à porter. Il reprend l'aplat de la
+    // carte, le plus neutre de la rangée : c'est sa taille, la moitié des
+    // autres, qui dit qu'il n'est pas une réponse.
     undoButton: {
-      backgroundColor: 'transparent',
-      borderColor: colors.border,
+      backgroundColor: colors.surface,
     },
     buttonDisabled: {
       opacity: 0.4,

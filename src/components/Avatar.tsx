@@ -95,9 +95,9 @@ export function Avatar({ candidate, size, emphasized, onPress }: Props) {
 
 function makeStyles() {
   return StyleSheet.create({
-    photo: {
-      borderWidth: 1,
-    },
+    // L'épaisseur vient du composant : zéro, ou trois pour le premier du
+    // podium. Ce style ne garde que ce qui ne dépend pas de l'état.
+    photo: {},
     fallback: {
       alignItems: 'center',
       justifyContent: 'center',
