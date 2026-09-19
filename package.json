@@ -48,7 +48,8 @@
     "check-data": "node scripts/check-data.js",
     "check-worklets": "node scripts/check-worklets.js",
     "doctor": "npx --yes expo-doctor",
-    "verify": "npm run typecheck && npm run lint && npm test && npm run check-data && npm run check-worklets && npm run doctor"
+    "verify": "npm run typecheck && npm run lint && npm test && npm run check-data && npm run check-worklets && npm run doctor",
+    "comparer": "bash scripts/comparer-branches.sh"
   },
   "private": true,
   "jest": {
