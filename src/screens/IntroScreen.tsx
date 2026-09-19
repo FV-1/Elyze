@@ -222,7 +222,7 @@ export function IntroScreen({
         >
           <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
             <View style={[styles.legendIcon, styles.legendIconNope]}>
-              <Ionicons name="close" size={18} color={colors.onAccentDanger} />
+              <Ionicons name="close" size={18} color={colors.dangerText} />
             </View>
             <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
               Pas pour moi
@@ -238,7 +238,7 @@ export function IntroScreen({
           </View>
           <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
             <View style={[styles.legendIcon, styles.legendIconLike]}>
-              <Ionicons name="heart" size={16} color={colors.onAccentSuccess} />
+              <Ionicons name="heart" size={16} color={colors.successText} />
             </View>
             <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
               J’adhère
@@ -246,7 +246,7 @@ export function IntroScreen({
           </View>
           <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
             <View style={[styles.legendIcon, styles.legendIconSuper]}>
-              <Ionicons name="star" size={16} color={colors.onAccentWarning} />
+              <Ionicons name="star" size={16} color={colors.warningText} />
               <View style={styles.legendMultiplier}>
                 <Text style={styles.legendMultiplierText}>×3</Text>
               </View>
@@ -609,8 +609,10 @@ function makeStyles(colors: ColorTokens) {
       // Le multiplicateur deborde du cercle : il doit rester visible.
       overflow: 'visible',
     },
+    // Les mêmes pastilles teintées que les boutons de réponse : la légende
+    // doit montrer exactement ce qu'on va toucher (voir ActionButtons).
     legendIconSuper: {
-      backgroundColor: colors.warning,
+      backgroundColor: colors.warningSoft,
     },
     legendMultiplier: {
       position: 'absolute',
@@ -631,13 +633,13 @@ function makeStyles(colors: ColorTokens) {
       fontFamily: police.mono[500],
     },
     legendIconNope: {
-      backgroundColor: colors.danger,
+      backgroundColor: colors.dangerSoft,
     },
     legendIconSkip: {
       backgroundColor: colors.surfaceAlt,
     },
     legendIconLike: {
-      backgroundColor: colors.success,
+      backgroundColor: colors.successSoft,
     },
     legendText: {
       fontSize: fonts.tiny,

@@ -90,7 +90,7 @@ export function ActionButtons({
         accessibilityLabel="Pas pour moi"
         accessibilityState={{ disabled: !!disabled }}
       >
-        <Ionicons name="close" size={30} color={colors.onAccentDanger} />
+        <Ionicons name="close" size={30} color={colors.dangerText} />
       </Pressable>
 
       <Pressable
@@ -125,7 +125,7 @@ export function ActionButtons({
         accessibilityLabel="J’adhère"
         accessibilityState={{ disabled: !!disabled }}
       >
-        <Ionicons name="heart" size={26} color={colors.onAccentSuccess} />
+        <Ionicons name="heart" size={26} color={colors.successText} />
       </Pressable>
 
       <Pressable
@@ -143,7 +143,7 @@ export function ActionButtons({
         accessibilityLabel="Super like, compte plus dans le résultat"
         accessibilityState={{ disabled: !!disabled }}
       >
-        <Ionicons name="star" size={20} color={colors.onAccentWarning} />
+        <Ionicons name="star" size={20} color={colors.warningText} />
       </Pressable>
     </View>
   );
@@ -183,16 +183,26 @@ function makeStyles(colors: ColorTokens) {
       width: 44,
       height: 44,
     },
+    // TEINTE SUR TEINTE : un signe rouge sur un rond rouge pâle, un vert sur
+    // du vert pâle, un jaune sur du jaune pâle.
+    //
+    // Les quatre pastilles étaient des aplats pleins portant un signe d'encre,
+    // et le super like un rond noir — quatre taches franches sous une carte
+    // qu'on regarde pendant onze minutes. Le fond très pâle rend la rangée
+    // beaucoup plus calme, et la couleur dit toujours la même chose, puisque
+    // c'est maintenant elle qu'on lit dans le signe.
+    //
+    // Les deux valeurs de chaque couple viennent du thème (`…Soft` et
+    // `…Text`), et leur contraste est vérifié par le test de palette : ce
+    // n'est pas un dosage fait à l'œil.
     nopeButton: {
-      backgroundColor: colors.danger,
+      backgroundColor: colors.dangerSoft,
     },
     likeButton: {
-      backgroundColor: colors.success,
+      backgroundColor: colors.successSoft,
     },
-    // Le super like prend le contraire du fond : c'est la réponse la plus
-    // appuyée des quatre, et elle le montre sans ajouter une couleur de plus.
     superlikeButton: {
-      backgroundColor: colors.warning,
+      backgroundColor: colors.warningSoft,
     },
     skipButton: {
       backgroundColor: colors.surfaceAlt,

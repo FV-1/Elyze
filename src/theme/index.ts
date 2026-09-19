@@ -45,6 +45,31 @@ export const PALETTE = {
   lime: '#C7DE77',
   violet: '#7059C9',
   peach: '#F0B48D',
+
+  // LES TROIS RÉPONSES ONT LEUR PROPRE COULEUR, ET NON CELLE DE L'ACCENT.
+  //
+  // Valider, c'était le lime — la couleur de l'écran de swipe ; refuser,
+  // c'était la pêche ; et le super like prenait l'encre, donc un rond noir au
+  // milieu de la rangée. Trois choix qui tenaient à une palette de trois
+  // teintes, et qui demandaient à l'œil d'apprendre ce que chacune veut dire.
+  // Le vert, le rouge et le jaune, eux, n'ont rien à apprendre à personne.
+  //
+  // Chaque teinte a trois valeurs, parce qu'une couleur ne fait pas le même
+  // travail selon l'endroit : l'APLAT porte un signe d'encre (bouton plein,
+  // tampon de swipe), l'ENCRE colorée s'écrit sur un fond très pâle de la même
+  // teinte (le glyphe d'un bouton teinté), et la NUIT remplace les deux à la
+  // fois — sur un fond sombre, une teinte claire sert d'aplat comme de signe.
+  green: '#86BE72',
+  greenInk: '#3A6C33',
+  greenNight: '#9CCB8C',
+
+  red: '#E3736B',
+  redInk: '#A8352E',
+  redNight: '#EC9C95',
+
+  amber: '#E8C25A',
+  amberInk: '#7D6010',
+  amberNight: '#E6C169',
   // Fonds décoratifs seulement (les cercles flous). Jamais du texte : sa
   // clarté ne tient 4.5:1 sur aucun de nos deux fonds.
   lavender: '#C3B7DF',
@@ -254,25 +279,27 @@ export function buildColors(scheme: 'light' | 'dark', accentId: string): ColorTo
     accentText: enTexte(hue),
     ...actionColors(scheme, hue),
 
-    // Validation : le lime, toujours.
-    success: PALETTE.lime,
-    successSoft: mixHex(PALETTE.lime, b.surface, sombre ? 0.1 : 0.26),
-    successText: enTexte(PALETTE.lime),
-    onAccentSuccess: surAccent(PALETTE.lime),
+    // LES TROIS RÉPONSES, chacune sur sa teinte (voir PALETTE).
+    //
+    // Le fond très pâle et l'encre colorée vont ENSEMBLE : c'est le couple qui
+    // habille un bouton teinté, un glyphe vert sur un rond vert pâle. Le
+    // mélange est plus faible qu'avant (0.10 au lieu de 0.26) parce que le
+    // glyphe se pose dessus : plus le fond est teinté, moins on lit ce qui est
+    // écrit par-dessus. En thème sombre, une seule valeur fait les deux rôles.
+    success: sombre ? PALETTE.greenNight : PALETTE.green,
+    successSoft: mixHex(sombre ? PALETTE.greenNight : PALETTE.green, b.surface, sombre ? 0.08 : 0.1),
+    successText: sombre ? PALETTE.greenNight : PALETTE.greenInk,
+    onAccentSuccess: surAccent(sombre ? PALETTE.greenNight : PALETTE.green),
 
-    // Le super like ne prend pas un troisième accent : il prend le contraire
-    // du fond, ce qui en fait la réponse la plus appuyée des quatre sans
-    // ajouter une couleur à l'écran.
-    warning: sombre ? PALETTE.cream : PALETTE.ink,
-    warningSoft: b.surfaceAlt,
-    warningText: sombre ? PALETTE.cream : PALETTE.ink,
-    onAccentWarning: sombre ? PALETTE.ink : PALETTE.lime,
+    warning: sombre ? PALETTE.amberNight : PALETTE.amber,
+    warningSoft: mixHex(sombre ? PALETTE.amberNight : PALETTE.amber, b.surface, sombre ? 0.08 : 0.1),
+    warningText: sombre ? PALETTE.amberNight : PALETTE.amberInk,
+    onAccentWarning: surAccent(sombre ? PALETTE.amberNight : PALETTE.amber),
 
-    // Rejet : la pêche.
-    danger: PALETTE.peach,
-    dangerSoft: mixHex(PALETTE.peach, b.surface, sombre ? 0.1 : 0.28),
-    dangerText: enTexte(PALETTE.peach),
-    onAccentDanger: surAccent(PALETTE.peach),
+    danger: sombre ? PALETTE.redNight : PALETTE.red,
+    dangerSoft: mixHex(sombre ? PALETTE.redNight : PALETTE.red, b.surface, sombre ? 0.08 : 0.1),
+    dangerText: sombre ? PALETTE.redNight : PALETTE.redInk,
+    onAccentDanger: surAccent(sombre ? PALETTE.redNight : PALETTE.red),
   };
 }
 
