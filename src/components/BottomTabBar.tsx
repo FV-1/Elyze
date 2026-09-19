@@ -221,7 +221,10 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: spacing.xs,
       backgroundColor: colors.surface,
       borderRadius: radii.lg,
-      borderWidth: 2,
+      // UN TRAIT, PAS UN CADRE. Deux pixels d'encre pleine autour d'une barre
+      // large de tout l'écran pesaient plus lourd que ce qu'elle contient ;
+      // avec l'encre pâle de `borderStrong`, un pixel suffit à la poser.
+      borderWidth: 1,
       borderColor: colors.borderStrong,
     },
     rangee: {
@@ -296,7 +299,7 @@ function makeStyles(colors: ColorTokens) {
     // est celui qui sépare déjà les surfaces de l'app, à un pixel plein plutôt
     // qu'au cheveu — sous 20 px de haut, un cheveu se perd.
     extraTab: {
-      borderWidth: 1.5,
+      borderWidth: 1,
       borderColor: colors.borderStrong,
       borderRadius: radii.md,
       marginHorizontal: spacing.xs,

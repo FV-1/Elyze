@@ -53,14 +53,14 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs + 3,
     paddingHorizontal: spacing.md,
     gap: spacing.xs + 2,
-    borderWidth: 1.5,
+    borderWidth: 1,
   },
   icon: {
-    fontSize: fonts.small + 1,
+    fontSize: fonts.etiquette,
   },
   label: {
     fontFamily: police.mono[500],
-    fontSize: fonts.tiny,
+    fontSize: fonts.etiquette,
     letterSpacing: MONO_SPACING,
     textTransform: 'uppercase',
   },

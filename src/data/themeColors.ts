@@ -25,27 +25,35 @@ import { contrastRatio, mixHex } from '../utils/color';
 //  3. LES VOISINES DE GRILLE D'ABORD. La mosaïque a deux colonnes, et deux
 //     cibles de contraste sont alternées EN DAMIER — alterner sur le seul
 //     rang ne séparait que les voisines horizontales, jamais celles l'une
-//     sous l'autre. Distance minimale entre deux tuiles qui se touchent : 57
+//     sous l'autre. Distance minimale entre deux tuiles qui se touchent : 45
 //     sur l'échelle RVB.
+//
+//  4. ELLES SONT ADOUCIES, depuis. Quinze aplats à 74 % de saturation alignés
+//     sur un même écran donnaient une mosaïque qui criait ; ils sont à 53 %.
+//     La clarté, elle, n'a pas bougé d'un pouce : chaque teinte a été ramenée
+//     au contraste qu'elle avait face au blanc, à deux centièmes près, ce qui
+//     préserve le damier de la contrainte 3. C'est la distance entre voisines
+//     qui paie, de 57 à 45 — assez pour qu'on les distingue encore, et c'est
+//     le prix d'une mosaïque qu'on peut regarder.
 export const THEME_COLORS: Record<string, string> = {
-  economie: '#6F61E7',
-  emploi: '#855F14',
-  retraites: '#BF1D83',
-  solidarites: '#DF2A48',
+  economie: '#7166D0',
+  emploi: '#7F6127',
+  retraites: '#B13684',
+  solidarites: '#C7495E',
 
-  sante: '#DC3021',
-  education: '#127638',
-  numerique: '#803EE2',
+  sante: '#C54C42',
+  education: '#247442',
+  numerique: '#7D4BC8',
 
-  logement: '#B731E0',
-  transports: '#476BE3',
-  environnement: '#267612',
-  agriculture: '#497111',
+  logement: '#AA4AC8',
+  transports: '#536FCA',
+  environnement: '#347424',
+  agriculture: '#4F6F22',
 
-  securite: '#2074D5',
-  immigration: '#CE1FBD',
-  defense: '#15708A',
-  institutions: '#AF471A',
+  securite: '#3A76BD',
+  immigration: '#C13BB4',
+  defense: '#286F83',
+  institutions: '#A05231',
 };
 
 const FALLBACK_COLOR = '#4338CA';

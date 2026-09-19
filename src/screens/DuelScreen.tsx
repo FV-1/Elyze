@@ -1050,12 +1050,12 @@ function makeStyles(colors: ColorTokens) {
       color: colors.textMuted,
     },
     etiquetteDesaccord: {
-      fontSize: fonts.tiny,
+      fontSize: fonts.etiquette,
       fontWeight: '800',
       color: colors.dangerText,
     },
     etiquetteAccord: {
-      fontSize: fonts.tiny,
+      fontSize: fonts.etiquette,
       fontWeight: '800',
       color: colors.successText,
     },

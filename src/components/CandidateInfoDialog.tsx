@@ -459,7 +459,7 @@ function makeStyles(colors: ColorTokens) {
       backgroundColor: colors.accentSoft,
     },
     moreChipText: {
-      fontSize: fonts.tiny + 1,
+      fontSize: fonts.etiquette,
       fontWeight: '800',
       color: colors.accentText,
       fontVariant: ['tabular-nums'],
@@ -486,10 +486,10 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.pill,
     },
     chipIcon: {
-      fontSize: 12,
+      fontSize: fonts.etiquette,
     },
     chipLabel: {
-      fontSize: fonts.tiny + 1,
+      fontSize: fonts.etiquette,
       fontWeight: '700',
     },
     // Pas d'opacité ici. Le nombre est posé sur une pastille déjà teintée, et
@@ -497,7 +497,7 @@ function makeStyles(colors: ColorTokens) {
     // pour un seuil de 4,5 — mesuré sur les quinze couleurs de thème. À pleine
     // opacité il tient 4,85:1. Sa discrétion vient de sa taille.
     chipCount: {
-      fontSize: fonts.tiny,
+      fontSize: fonts.etiquette,
       fontWeight: '800',
       fontVariant: ['tabular-nums'],
       fontFamily: police.mono[500],

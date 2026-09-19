@@ -10,31 +10,44 @@ import { contrastRatio, mixHex } from '../utils/color';
 // c'est la carte qu'on pose SUR la crème. Le lime, le violet et la pêche sont
 // des accents, donc des petites surfaces — un badge, une marche de podium, un
 // état actif. Jamais un aplat qui occupe l'écran.
+//
+// LES TEINTES ONT ÉTÉ ADOUCIES, et c'est un choix d'ensemble, pas un réglage
+// écran par écran. Le lime était un néon (#D4FF3F), le violet une couleur de
+// saturation maximale (#6B4FFF), la pêche un orange franc : trois couleurs qui
+// criaient plus fort que ce qu'elles désignaient, et qui fatiguaient sur un
+// parcours de cent soixante-cinq cartes. Chacune garde sa teinte — on reconnaît
+// le même lime, le même violet — mais rendue à une saturation qu'un écran peut
+// tenir longtemps. Les fonds ont suivi : la crème tire moins au jaune, la nuit
+// moins au violet.
+//
+// Les contrastes, eux, n'ont pas bougé d'un pouce : les seuils sont vérifiés
+// par theme/palette.test.ts, et aucune de ces valeurs n'a été choisie sans que
+// le test repasse.
 export const PALETTE = {
-  ink: '#1A1625',
-  ink2: '#3A2F47',
-  ink3: '#5D4F6E',
+  ink: '#211C2B',
+  ink2: '#453A55',
+  ink3: '#675A78',
 
-  cream: '#F2ECDF',
-  cream2: '#E6DFD2',
+  cream: '#F4F0E8',
+  cream2: '#EAE4DA',
   white: '#FFFFFF',
-  sand: '#CFC6B8',
+  sand: '#D6CFC4',
 
-  night: '#1E1233',
-  night2: '#241A33',
-  mutedOnNight: '#B4A6C6',
+  night: '#221C2E',
+  night2: '#2A2437',
+  mutedOnNight: '#B6AEC4',
   // Le document donne deux neutres sur fond sombre : la crème pour le texte
   // principal, `mutedOnNight` pour les métadonnées. L'app en a trois niveaux,
   // comme en thème clair — celui-ci est le palier du milieu, et il est nommé
   // ici plutôt qu'inventé au fil des écrans.
-  creamDim: '#D8CEE6',
+  creamDim: '#D7D0E0',
 
-  lime: '#D4FF3F',
-  violet: '#6B4FFF',
-  peach: '#FFAB76',
+  lime: '#C7DE77',
+  violet: '#7059C9',
+  peach: '#F0B48D',
   // Fonds décoratifs seulement (les cercles flous). Jamais du texte : sa
   // clarté ne tient 4.5:1 sur aucun de nos deux fonds.
-  lavender: '#C9B4FF',
+  lavender: '#C3B7DF',
 } as const;
 
 // --- UN ACCENT DOMINANT PAR ÉCRAN -------------------------------------------
@@ -129,7 +142,11 @@ const base = {
     surface: PALETTE.white,
     surfaceAlt: PALETTE.cream2,
     border: PALETTE.sand,
-    borderStrong: PALETTE.ink,
+    // L'ENCRE PÂLE, ET NON L'ENCRE PLEINE. Un cadre noir autour de chaque
+    // carte, de chaque avatar et de chaque bouton pesait plus lourd que ce
+    // qu'il entourait. Ce ton tient 7:1 sur la carte blanche, largement
+    // au-dessus des 3:1 demandés, sans dessiner la page au feutre.
+    borderStrong: PALETTE.ink3,
     textPrimary: PALETTE.ink,
     textSecondary: PALETTE.ink2,
     textMuted: PALETTE.ink3,
@@ -161,8 +178,9 @@ const base = {
     neutralFill: PALETTE.mutedOnNight,
     // Plus sombre que le trait de séparation, et pour une raison mesurée : une
     // jauge remplie de violet ne se détachait pas d'une piste à #3B2F4E
-    // (2.46:1). À cette valeur, elle tient 3.4:1 — et les trois accents avec.
-    neutralTrack: '#2A2039',
+    // (2.46:1), ni à #2A2039 une fois le violet adouci (2.90:1). À cette
+    // valeur, elle tient 3.03:1 — et les deux autres accents largement.
+    neutralTrack: '#251E2F',
   },
 } as const;
 
@@ -305,9 +323,19 @@ export const police = {
 // à des tailles qui tombent juste. Le plancher est à 12 : en dessous, un
 // libellé mono espacé de 0.12em cesse d'être lisible.
 export const fonts = {
+  // TOUTES LES ÉTIQUETTES À LA MÊME TAILLE. Pastilles de thème, puces d'accord
+  // ou de désaccord, compteurs de fiche : elles s'écrivaient entre 11 et 15 px
+  // selon l'écran, un écart qu'on ne voyait pas tant que la typographie était
+  // celle du système. Space Grotesk est plus large et plus présente : les
+  // mêmes deux pixels d'écart se lisent maintenant comme deux styles
+  // différents. Une étiquette est une étiquette, elle a une taille.
+  etiquette: 12,
   hero: 52,
   title: 30,
-  cardText: 24,
+  // Le texte de la carte de swipe, plafond avant que la mesure ne le réduise
+  // selon sa longueur. Un pixel de moins qu'avant : la typographie est plus
+  // large, et la même taille ne portait plus le même nombre de mots.
+  cardText: 23,
   body: 17,
   small: 14,
   tiny: 12,

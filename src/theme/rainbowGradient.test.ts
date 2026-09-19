@@ -152,10 +152,11 @@ describe('barre de progression', () => {
       const attendu = progressSweep(scheme);
       // Reconstruire le balayage à la clarté optimale doit redonner le même.
       expect({ scheme, sweep: attendu }).toEqual({ scheme, sweep: attendu });
-      // La piste a changé de couleur avec la palette (le sable en clair, un
-      // violet très sombre en sombre), donc l'optimum aussi : 28 et 64 au lieu
-      // de 30 et 67. C'est la constante du module qui doit le suivre.
-      expect(optimale).toBe(scheme === 'light' ? 28 : 64);
+      // La piste suit la palette, donc l'optimum aussi : il a valu 30 et 67,
+      // puis 28 et 64, et 29 & 63 depuis que les teintes ont été adoucies et la
+      // piste claire éclaircie d'autant. C'est la constante du module qui doit
+      // suivre cette valeur, et ce test qui l'y oblige.
+      expect(optimale).toBe(scheme === 'light' ? 29 : 63);
     }
   });
 });

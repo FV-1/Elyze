@@ -72,8 +72,16 @@ const PAN_ACTIVATION = 8;
 // vérifiable, et un chiffre dont personne ne sait s'il tient encore ne protège
 // personne. `scripts/check-data.js` compare désormais les deux à chaque
 // exécution et échoue si une proposition dépasse cette calibration.
+//
+// LA CALIBRATION A BAISSÉ AVEC LE CHANGEMENT DE TYPOGRAPHIE. Le budget compte
+// des caractères, pas des pixels : il suppose une largeur moyenne de glyphe.
+// Space Grotesk est sensiblement plus large que la police système sur laquelle
+// les 309 avaient été relevés, si bien que le même texte, à la même taille,
+// occupait une ligne de plus — et la carte débordait par le bas sur les
+// propositions longues. Ramené à 262, soit un sixième de moins, ce qui laisse
+// encore de la marge sur la plus longue proposition du vivier (234).
 const EXPLANATION_SIZE = fonts.small + 1;
-const TEXT_BUDGET = 309 * (fonts.cardText - 2) + 36 * fonts.small;
+const TEXT_BUDGET = 262 * (fonts.cardText - 2) + 36 * fonts.small;
 
 // LE BUDGET SUIT LA HAUTEUR DE LA CARTE.
 //
@@ -632,7 +640,11 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: spacing.lg,
       alignItems: 'center',
       justifyContent: 'space-between',
-      borderWidth: 2,
+      // UN TRAIT, PAS UN CADRE. La carte occupe presque tout l'écran : deux
+      // pixels d'encre pleine tout autour se lisaient avant la proposition
+      // qu'elle porte. Un pixel d'encre pâle la pose aussi bien, et le texte
+      // redevient ce qu'on voit en premier.
+      borderWidth: 1,
       borderColor: colors.borderStrong,
     },
     textWrap: {

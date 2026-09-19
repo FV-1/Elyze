@@ -335,7 +335,7 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.pill,
     },
     themeChipIcon: {
-      fontSize: 12,
+      fontSize: fonts.etiquette,
     },
     // La couleur du texte vient de `themeChipColors`, appariée au fond de la
     // pastille : elle est posée à l'usage, pas ici.

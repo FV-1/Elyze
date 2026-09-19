@@ -365,7 +365,7 @@ function makeStyles(colors: ColorTokens) {
       marginTop: 2,
     },
     badgeText: {
-      fontSize: fonts.tiny - 1,
+      fontSize: fonts.etiquette,
       fontWeight: '700',
     },
     grid: {
