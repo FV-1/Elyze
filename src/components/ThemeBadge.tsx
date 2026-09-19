@@ -33,10 +33,26 @@ export function ThemeBadge({ theme }: { theme: ThemeTag }) {
     effectiveScheme === 'dark'
   );
 
+  // ELLE DIT LE SUJET, PAS L'INTITULÉ COMPLET.
+  //
+  // « Solidarités & protection sociale » fait trente-trois caractères, et en
+  // capitales monospace interlettrées cela dépasse la largeur de la carte :
+  // l'étiquette passait sur deux lignes, cadrées à gauche dans une pastille
+  // centrée, ce qui se voyait comme un défaut d'alignement. Le premier terme
+  // suffit à dire de quoi parle la carte — l'intitulé entier reste sur la
+  // mosaïque, où il a la place.
+  //
+  // La coupure se fait à l'esperluette et nulle part ailleurs : c'est la
+  // charnière de tous les intitulés doubles de la liste, et le terme de tête
+  // y est toujours le sujet principal.
+  const sujet = theme.label.split(' & ')[0];
+
   return (
     <View style={[styles.badge, { backgroundColor: tint.background }]}>
       <Text style={styles.icon}>{theme.icon}</Text>
-      <Text style={[styles.label, { color: tint.text }]}>{theme.label}</Text>
+      <Text style={[styles.label, { color: tint.text }]} numberOfLines={1}>
+        {sujet}
+      </Text>
     </View>
   );
 }
@@ -51,6 +67,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',
+    // Filet de sécurité : si un intitulé devenait trop long malgré la coupure,
+    // la pastille s'arrête au bord de la carte et le texte se centre dedans
+    // plutôt que de déborder.
+    maxWidth: '100%',
     borderRadius: radii.pill,
     paddingVertical: spacing.xs + 3,
     paddingHorizontal: spacing.md,
@@ -60,6 +80,8 @@ const styles = StyleSheet.create({
     fontSize: fonts.etiquette,
   },
   label: {
+    flexShrink: 1,
+    textAlign: 'center',
     fontFamily: police.mono[500],
     fontSize: fonts.etiquette,
     letterSpacing: MONO_SPACING,
