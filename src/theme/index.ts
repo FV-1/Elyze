@@ -54,21 +54,30 @@ export const PALETTE = {
   // teintes, et qui demandaient à l'œil d'apprendre ce que chacune veut dire.
   // Le vert, le rouge et le jaune, eux, n'ont rien à apprendre à personne.
   //
+  // LE VERT ET LE ROUGE SONT LA PAIRE QUE 8 % DES HOMMES CONFONDENT, et c'est
+  // l'ennui du choix le plus évident qui soit. Le pictogramme les distingue
+  // déjà — un cœur, une croix, et le sens du geste — mais la couleur peut
+  // aider au lieu de s'en remettre à lui. Les deux teintes ont donc été
+  // écartées EN CLARTÉ, la seule dimension qu'une vision deutéranope
+  // conserve : simulées, elles passent d'une distance de 8 à 19 sur 100 en
+  // thème clair, de 4 à 20 en sombre. Le rouge ne peut pas descendre plus bas
+  // sans que l'encre du tampon cesse de s'y lire.
+  //
   // Chaque teinte a trois valeurs, parce qu'une couleur ne fait pas le même
   // travail selon l'endroit : l'APLAT porte un signe d'encre (bouton plein,
   // tampon de swipe), l'ENCRE colorée s'écrit sur un fond très pâle de la même
   // teinte (le glyphe d'un bouton teinté), et la NUIT remplace les deux à la
   // fois — sur un fond sombre, une teinte claire sert d'aplat comme de signe.
-  green: '#86BE72',
+  green: '#93C97F',
   greenInk: '#3A6C33',
-  greenNight: '#9CCB8C',
+  greenNight: '#ADD79E',
 
-  red: '#E3736B',
+  red: '#D96860',
   redInk: '#A8352E',
-  redNight: '#EC9C95',
+  redNight: '#E28881',
 
   amber: '#E8C25A',
-  amberInk: '#7D6010',
+  amberInk: '#755A0E',
   amberNight: '#E6C169',
   // Fonds décoratifs seulement (les cercles flous). Jamais du texte : sa
   // clarté ne tient 4.5:1 sur aucun de nos deux fonds.

@@ -64,7 +64,23 @@ describe('contrastes', () => {
     chaquePalette((c, nom) => {
       const fonds = [c.bg, c.surface, c.surfaceAlt, c.accentSoft, c.successSoft, c.dangerSoft];
       for (const fond of fonds) {
-        for (const jeton of ['textPrimary', 'textSecondary', 'textMuted', 'accentText'] as const) {
+        // LES TROIS ENCRES DE RÉPONSE SONT DU TEXTE, ELLES AUSSI.
+        //
+        // Elles ne figuraient pas ici, et le trou s'est vu : l'or du super
+        // like tenait ses 4.5:1 sur les fonds neutres et sur les pastilles
+        // vertes, rouges ou jaunes, mais tombait à 4.36 sur le violet très
+        // pâle d'un écran au classement. Un jeton de texte doit tenir sur
+        // TOUS les fonds où l'app peut le poser, pas sur ceux auxquels on
+        // pense en l'écrivant.
+        for (const jeton of [
+          'textPrimary',
+          'textSecondary',
+          'textMuted',
+          'accentText',
+          'successText',
+          'warningText',
+          'dangerText',
+        ] as const) {
           const r = contrastRatio(c[jeton], fond);
           if (r < TEXTE) echecs.push(`${nom} ${jeton} sur ${fond} : ${r.toFixed(2)}`);
         }
