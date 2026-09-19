@@ -107,8 +107,12 @@ function makeStyles(colors: ColorTokens) {
       width: SHARE_CARD_WIDTH,
       backgroundColor: colors.bg,
       borderRadius: radii.xl,
-      borderWidth: 3,
-      borderColor: colors.borderStrong,
+      // L'image est posée sur le fond de n'importe quelle messagerie : elle
+      // garde un filet pour ne pas s'y dissoudre, mais un filet discret, et
+      // non le cadre d'encre d'avant. Pas d'ombre ici : la capture d'écran ne
+      // la rend pas de la même façon selon les plateformes.
+      borderWidth: 1,
+      borderColor: colors.border,
       alignItems: 'center',
       justifyContent: 'center',
       // Marges latérales resserrées par rapport au reste de l'app : les trois
@@ -168,8 +172,8 @@ function makeStyles(colors: ColorTokens) {
     },
     partyPill: {
       backgroundColor: 'transparent',
-      borderWidth: 1.5,
-      borderColor: colors.borderStrong,
+      borderWidth: 1,
+      borderColor: colors.border,
       borderRadius: radii.pill,
       paddingVertical: 4,
       paddingHorizontal: spacing.md,

@@ -367,21 +367,20 @@ function makeStyles(colors: ColorTokens) {
       borderWidth: 1,
       borderColor: colors.border,
     },
+    // L'APLAT SUFFIT À DIRE LEQUEL EST CHOISI. Le contour d'encre qui le
+    // doublait a disparu avec les autres : la réponse retenue est déjà la
+    // seule des quatre à être remplie.
     toggleNopeActive: {
       backgroundColor: colors.danger,
-      borderColor: colors.borderStrong,
     },
     toggleSkipActive: {
       backgroundColor: colors.neutralFill,
-      borderColor: colors.borderStrong,
     },
     toggleLikeActive: {
       backgroundColor: colors.success,
-      borderColor: colors.borderStrong,
     },
     toggleSuperlikeActive: {
       backgroundColor: colors.warning,
-      borderColor: colors.borderStrong,
     },
     // Le bouton descend d'une douzaine de pixels : il montait presque contre
     // la dernière ligne de la liste, si bien qu'on le touchait en croyant

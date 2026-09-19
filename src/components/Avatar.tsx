@@ -20,14 +20,15 @@ export function Avatar({ candidate, size, emphasized, onPress }: Props) {
   const colors = useColors();
   const styles = useMemo(() => makeStyles(), []);
   const photo = CANDIDATE_PHOTOS[candidate.id];
-  // LE TRAIT D'ENCRE FAIT LE TOUR DE CHAQUE VISAGE.
+  // PLUS DE TRAIT AUTOUR DES VISAGES, SAUF POUR DIRE QUELQUE CHOSE.
   //
-  // C'est la règle du document pour les portraits, et elle remplace le liseré
-  // gris pâle d'avant : sans ombre pour les détacher, ce sont ces contours qui
-  // posent les avatars sur le fond. Le premier du podium le porte plus épais,
-  // ce qui suffit à le distinguer sans changer sa couleur.
-  const borderColor = colors.borderStrong;
-  const borderWidth = emphasized ? 3 : 2;
+  // Chaque portrait portait un contour d'encre, épaissi pour le premier du
+  // podium. Les contours ont quitté l'app : une photo se détache très bien
+  // toute seule, et onze visages cerclés d'encre faisaient une planche de
+  // timbres. Il n'en reste qu'un, en accent, autour de celui qui arrive en
+  // tête — un trait qui n'est plus un cadre mais une médaille.
+  const borderColor = colors.accent;
+  const borderWidth = emphasized ? 3 : 0;
   const shape = {
     width: size,
     height: size,

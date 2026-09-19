@@ -4,7 +4,7 @@ import Animated from 'react-native-reanimated';
 import { Texte as Text } from './Texte';
 import { useGlissiere, usePression } from './mouvement';
 import { Ionicons } from '@expo/vector-icons';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, ombre, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
 // Plafond de grossissement des libellés. Au delà, une barre d'une seule ligne
@@ -221,11 +221,9 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: spacing.xs,
       backgroundColor: colors.surface,
       borderRadius: radii.lg,
-      // UN TRAIT, PAS UN CADRE. Deux pixels d'encre pleine autour d'une barre
-      // large de tout l'écran pesaient plus lourd que ce qu'elle contient ;
-      // avec l'encre pâle de `borderStrong`, un pixel suffit à la poser.
-      borderWidth: 1,
-      borderColor: colors.borderStrong,
+      // Sans contour : c'est l'ombre qui la pose au-dessus du contenu, comme
+      // la carte de swipe.
+      ...ombre,
     },
     rangee: {
       flexDirection: 'row',
@@ -238,27 +236,26 @@ function makeStyles(colors: ColorTokens) {
       position: 'absolute',
       left: 0,
       top: 0,
-      height: 7,
+      height: 6,
       alignItems: 'center',
     },
-    // ELLE EST CERNÉE, ET C'EST CE QUI LA REND VISIBLE.
+    // ELLE PREND LA COULEUR DE L'ACTION, ET C'EST CE QUI LA REND VISIBLE.
     //
-    // C'est le seul signe qui dise quel onglet est ouvert, et il était posé en
-    // accent nu : sur une barre claire, le lime vaut 1.16:1, là où un élément
-    // qui porte une information en demande 3. Le libellé courant, en encre
-    // face à l'encre pâle des autres, n'ajoutait que 2.37:1 — et la graisse ne
-    // compte pas, personne ne la perçoit sans point de comparaison.
+    // C'est le seul signe qui dise quel onglet est ouvert. Posée en accent nu,
+    // elle valait 1.16:1 sur une barre claire, là où un élément qui porte une
+    // information en demande 3 ; le libellé courant, en encre face à l'encre
+    // pâle des autres, n'ajoutait que 2.37:1. Elle a d'abord été cernée d'un
+    // filet d'encre, puis les contours ont été retirés de toute l'app.
     //
-    // Le contour règle l'affaire sans toucher à la couleur : c'est la FORME
-    // qui porte l'état, à 17:1 sur la barre claire, et l'accent n'a plus qu'à
-    // l'habiller.
+    // `action` règle l'affaire sans contour et sans exception : c'est, par
+    // construction, la couleur qui se lit sur le fond courant — l'encre quand
+    // l'accent est clair, l'accent lui-même quand il est sombre ou que la nuit
+    // avale l'encre (voir actionColors dans theme/index.ts).
     marque: {
       width: 24,
-      height: 7,
+      height: 6,
       borderRadius: radii.pill,
-      borderWidth: 1,
-      borderColor: colors.borderStrong,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
     },
     // La place de la marque est retenue en haut, qu'un onglet la porte ou
     // non : sans cela, la rangée sauterait de quatre pixels au premier
@@ -266,7 +263,7 @@ function makeStyles(colors: ColorTokens) {
     tab: {
       flex: 1,
       alignItems: 'center',
-      paddingTop: 7 + spacing.xs,
+      paddingTop: 6 + spacing.xs,
       paddingBottom: spacing.xs + 2,
     },
     // Ce qui grossit et se comprime est le CONTENU, pas la zone tactile : la
@@ -295,12 +292,13 @@ function makeStyles(colors: ColorTokens) {
       marginVertical: spacing.xs,
       backgroundColor: colors.border,
     },
-    // Contour et non aplat : voir l'explication en tête de fichier. Le trait
-    // est celui qui sépare déjà les surfaces de l'app, à un pixel plein plutôt
-    // qu'au cheveu — sous 20 px de haut, un cheveu se perd.
+    // APLAT ET NON CONTOUR, depuis que les contours ont quitté l'app. Le
+    // raisonnement de l'en-tête de fichier tient toujours : cette action ne
+    // doit ressembler ni à un onglet sélectionné, ni à un onglet éteint. Un
+    // fond neutre — celui des panneaux secondaires, pas celui de l'accent — la
+    // distingue des trois onglets sans prétendre être l'écran courant.
     extraTab: {
-      borderWidth: 1,
-      borderColor: colors.borderStrong,
+      backgroundColor: colors.surfaceAlt,
       borderRadius: radii.md,
       marginHorizontal: spacing.xs,
       paddingHorizontal: 2,

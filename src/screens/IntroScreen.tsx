@@ -5,7 +5,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import Animated from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { ColorTokens, fonts, MONO_SPACING, police, radii, spacing } from '../theme';
+import { ColorTokens, fonts, MONO_SPACING, ombre, police, radii, spacing } from '../theme';
 import { useColors, useThemeSettings } from '../theme/ThemeContext';
 import { haptics } from '../utils/haptics';
 import { PROPOSALS } from '../data/proposals';
@@ -603,8 +603,9 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.pill,
       alignItems: 'center',
       justifyContent: 'center',
-      borderWidth: 2,
-      borderColor: colors.borderStrong,
+      // Les mêmes pastilles que les boutons de réponse, donc le même
+      // traitement : une ombre, pas un contour.
+      ...ombre,
       // Le multiplicateur deborde du cercle : il doit rester visible.
       overflow: 'visible',
     },

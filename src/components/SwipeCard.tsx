@@ -19,7 +19,7 @@ import { ThemeBadge } from './ThemeBadge';
 import { PROPOSAL_ARGUMENTS } from '../data/proposalArguments';
 import { PROPOSAL_EXPLANATIONS } from '../data/proposalExplanations';
 import { Proposal, ThemeTag } from '../types';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, ombre, radii, spacing } from '../theme';
 import { useColors, useThemeSettings } from '../theme/ThemeContext';
 import { RainbowGradient } from './RainbowGradient';
 import { cardFrameSweep, cardSweep } from '../theme/rainbowGradient';
@@ -640,12 +640,13 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: spacing.lg,
       alignItems: 'center',
       justifyContent: 'space-between',
-      // UN TRAIT, PAS UN CADRE. La carte occupe presque tout l'écran : deux
-      // pixels d'encre pleine tout autour se lisaient avant la proposition
-      // qu'elle porte. Un pixel d'encre pâle la pose aussi bien, et le texte
-      // redevient ce qu'on voit en premier.
-      borderWidth: 1,
-      borderColor: colors.borderStrong,
+      // PLUS DE CADRE DU TOUT. La carte occupe presque tout l'écran, et le
+      // trait qui en faisait le tour se lisait avant la proposition qu'elle
+      // porte — d'abord deux pixels d'encre pleine, puis un d'encre pâle, puis
+      // plus rien. Ce qui la pose maintenant est une ombre, et sur le thème
+      // sombre, où une ombre ne se voit pas, l'écart entre son fond et celui
+      // de la page (voir theme/index.ts).
+      ...ombre,
     },
     textWrap: {
       flex: 1,
@@ -732,8 +733,7 @@ function makeStyles(colors: ColorTokens) {
     stamp: {
       position: 'absolute',
       top: spacing.xl,
-      borderWidth: 2,
-      borderColor: colors.borderStrong,
+      ...ombre,
       borderRadius: radii.sm,
       paddingVertical: spacing.xs,
       paddingHorizontal: spacing.md,

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { haptics } from '../utils/haptics';
-import { ColorTokens, radii, spacing } from '../theme';
+import { ColorTokens, ombre, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
 type Props = {
@@ -175,8 +175,9 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.surface,
-      borderWidth: 2,
-      borderColor: colors.borderStrong,
+      // Sans contour : l'ombre suffit à poser les quatre pastilles sur la
+      // page, et un aplat de couleur cerné d'encre pesait deux fois.
+      ...ombre,
     },
     smallButton: {
       width: 44,

@@ -35,7 +35,7 @@ export const PALETTE = {
 
   night: '#221C2E',
   night2: '#2A2437',
-  mutedOnNight: '#B6AEC4',
+  mutedOnNight: '#BCB4C9',
   // Le document donne deux neutres sur fond sombre : la crème pour le texte
   // principal, `mutedOnNight` pour les métadonnées. L'app en a trois niveaux,
   // comme en thème clair — celui-ci est le palier du milieu, et il est nommé
@@ -155,10 +155,18 @@ const base = {
   },
   dark: {
     bg: PALETTE.night,
-    surface: PALETTE.night2,
+    // LA CARTE SE DÉTACHE PAR SON FOND, PLUS PAR SON CONTOUR.
+    //
+    // Les traits d'encre qui cernaient chaque surface ont été retirés ; sur la
+    // nuit, une ombre ne se voit pas, et il ne restait rien pour dire où une
+    // carte commence — la carte valait 1.08:1 sur la page. Les deux surfaces
+    // sont donc remontées d'un cran : 1.35:1 pour la carte, comme la plupart
+    // des thèmes sombres du commerce, où c'est l'écart de fond qui fait le
+    // relief.
+    surface: '#38304C',
     // Un cran au-dessus de la surface : sur la nuit, un panneau secondaire ne
     // peut pas être plus sombre que la carte qui le porte.
-    surfaceAlt: '#2E2240',
+    surfaceAlt: '#423A58',
     border: '#3B2F4E',
     // LE TRAIT FORT N'EST PAS LA CRÈME, SUR LA NUIT.
     //
@@ -171,7 +179,7 @@ const base = {
     // fond, au-dessus des 3:1 que le test exige — sans virer au blanc. Elle
     // ne peut pas descendre beaucoup plus bas : cette identité n'a pas
     // d'ombre, et c'est le contour, seul, qui dit où une surface s'arrête.
-    borderStrong: '#7E6F99',
+    borderStrong: '#8878A4',
     textPrimary: PALETTE.cream,
     textSecondary: PALETTE.creamDim,
     textMuted: PALETTE.mutedOnNight,
@@ -242,13 +250,13 @@ export function buildColors(scheme: 'light' | 'dark', accentId: string): ColorTo
 
     accent: hue,
     onAccent: surAccent(hue),
-    accentSoft: mixHex(hue, b.surface, sombre ? 0.16 : 0.22),
+    accentSoft: mixHex(hue, b.surface, sombre ? 0.1 : 0.22),
     accentText: enTexte(hue),
     ...actionColors(scheme, hue),
 
     // Validation : le lime, toujours.
     success: PALETTE.lime,
-    successSoft: mixHex(PALETTE.lime, b.surface, sombre ? 0.16 : 0.26),
+    successSoft: mixHex(PALETTE.lime, b.surface, sombre ? 0.1 : 0.26),
     successText: enTexte(PALETTE.lime),
     onAccentSuccess: surAccent(PALETTE.lime),
 
@@ -262,7 +270,7 @@ export function buildColors(scheme: 'light' | 'dark', accentId: string): ColorTo
 
     // Rejet : la pêche.
     danger: PALETTE.peach,
-    dangerSoft: mixHex(PALETTE.peach, b.surface, sombre ? 0.16 : 0.28),
+    dangerSoft: mixHex(PALETTE.peach, b.surface, sombre ? 0.1 : 0.28),
     dangerText: enTexte(PALETTE.peach),
     onAccentDanger: surAccent(PALETTE.peach),
   };
@@ -280,6 +288,24 @@ export const darkColors: ColorTokens = buildColors('dark', DEFAULT_ACCENT);
 // cadre de téléphone, sur un canevas de 1080. Ramenés à la largeur d'un
 // téléphone, ces rapports donnent l'échelle ci-dessous — plus ronde que
 // l'ancienne, ce qui est tout le sujet.
+// CE QUI POSE UN OBJET SUR LA PAGE, MAINTENANT QUE LES CONTOURS SONT PARTIS.
+//
+// L'identité était plate et cernée : chaque carte, chaque bouton, chaque
+// avatar portait un trait d'encre. À l'usage, ces traits dessinaient la page
+// au feutre et se lisaient avant leur contenu. Ils sont remplacés par une
+// ombre douce — la même partout, pour que deux objets posés côte à côte
+// flottent à la même hauteur.
+//
+// Elle ne se voit pas sur la nuit, et c'est normal : là-bas, ce sont les fonds
+// qui font le relief (voir `surface` du thème sombre).
+export const ombre = {
+  shadowColor: PALETTE.ink,
+  shadowOffset: { width: 0, height: 6 },
+  shadowOpacity: 0.1,
+  shadowRadius: 16,
+  elevation: 3,
+} as const;
+
 export const radii = {
   sm: 16,
   md: 24,

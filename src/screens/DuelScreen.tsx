@@ -1025,7 +1025,6 @@ function makeStyles(colors: ColorTokens) {
     // d'œil et le texte garde son contraste.
     ligneDesaccord: {
       backgroundColor: colors.dangerSoft,
-      borderColor: colors.borderStrong,
     },
     ligneEntete: {
       flexDirection: 'row',

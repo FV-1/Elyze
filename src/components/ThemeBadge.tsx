@@ -14,6 +14,8 @@ import { useColors, useThemeColor, useThemeSettings } from '../theme/ThemeContex
 // travail avant la lecture — c'est la même que celle de la mosaïque et des
 // fiches candidat, si bien qu'un thème garde sa couleur d'un écran à l'autre.
 //
+// Sans contour depuis que l'app en a fini avec eux : le fond teinté dit déjà
+// que c'est une étiquette, et le trait ne faisait que redoubler la couleur.
 // Le dosage passe par `themeChipColors`, qui pose la teinte en fond très pâle
 // et reprend la même assombrie pour le texte : les quinze aplats saturés de
 // la palette sont faits pour porter du blanc, et une pastille de cette
@@ -32,7 +34,7 @@ export function ThemeBadge({ theme }: { theme: ThemeTag }) {
   );
 
   return (
-    <View style={[styles.badge, { backgroundColor: tint.background, borderColor: tint.text }]}>
+    <View style={[styles.badge, { backgroundColor: tint.background }]}>
       <Text style={styles.icon}>{theme.icon}</Text>
       <Text style={[styles.label, { color: tint.text }]}>{theme.label}</Text>
     </View>
@@ -53,7 +55,6 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs + 3,
     paddingHorizontal: spacing.md,
     gap: spacing.xs + 2,
-    borderWidth: 1,
   },
   icon: {
     fontSize: fonts.etiquette,
