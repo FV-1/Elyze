@@ -8,6 +8,7 @@ import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { ResultRow } from '../components/ResultRow';
+import { Bascule } from '../components/Bascule';
 import { Podium, podiumRevealDelay } from '../components/Podium';
 import { Confetti } from '../components/Confetti';
 import { CURTAIN_STAGE_MS, CurtainReveal } from '../components/CurtainReveal';
@@ -467,39 +468,44 @@ export function ResultsScreen({
           </Pressable>
         </View>
 
-        {rankingView === 'overview' ? (
-          <View style={styles.listSection}>
-            <Text style={styles.sectionTitle}>Classement complet</Text>
-            <Pressable onPress={onOpenHowItWorks} accessibilityRole="link" accessibilityLabel="Comment ce classement est calculé">
+        {/* Les deux vues occupent la même place et se ressemblent assez
+            pour que React garde la même instance : sans clé, le fondu
+            d'entrée n'aurait jamais lieu. */}
+        <Bascule cle={rankingView}>
+          {rankingView === 'overview' ? (
+            <View style={styles.listSection}>
+              <Text style={styles.sectionTitle}>Classement complet</Text>
+              <Pressable onPress={onOpenHowItWorks} accessibilityRole="link" accessibilityLabel="Comment ce classement est calculé">
+                <Text style={styles.sectionCaption}>
+                  Le pourcentage tient compte du nombre de propositions auxquelles tu as répondu :
+                  approuver deux mesures ne vaut pas approuver quinze.{' '}
+                  <Text style={styles.sectionCaptionLink}>Comment ça marche →</Text>
+                </Text>
+              </Pressable>
+              {results.map((result) => (
+                <ResultRow
+                  key={result.candidate.id}
+                  result={result}
+                  // Le rang, égalités comprises : deux ex æquo portent la même
+                  // médaille, comme sur le podium juste au-dessus.
+                  rank={result.rank}
+                  emphasized={result.rank === 1}
+                  onPress={() => setSelectedCandidateId(result.candidate.id)}
+                />
+              ))}
+            </View>
+          ) : (
+            <View style={styles.listSection}>
+              <Text style={styles.sectionTitle}>Avec qui tu es d’accord, sujet par sujet</Text>
               <Text style={styles.sectionCaption}>
-                Le pourcentage tient compte du nombre de propositions auxquelles tu as répondu :
-                approuver deux mesures ne vaut pas approuver quinze.{' '}
-                <Text style={styles.sectionCaptionLink}>Comment ça marche →</Text>
+                Les nombres sont ceux de tes réponses, pas des pourcentages : sur un sujet donné,
+                un candidat n’a souvent qu’une ou deux propositions dans le paquet.
               </Text>
-            </Pressable>
-            {results.map((result) => (
-              <ResultRow
-                key={result.candidate.id}
-                result={result}
-                // Le rang, égalités comprises : deux ex æquo portent la même
-                // médaille, comme sur le podium juste au-dessus.
-                rank={result.rank}
-                emphasized={result.rank === 1}
-                onPress={() => setSelectedCandidateId(result.candidate.id)}
-              />
-            ))}
-          </View>
-        ) : (
-          <View style={styles.listSection}>
-            <Text style={styles.sectionTitle}>Avec qui tu es d’accord, sujet par sujet</Text>
-            <Text style={styles.sectionCaption}>
-              Les nombres sont ceux de tes réponses, pas des pourcentages : sur un sujet donné,
-              un candidat n’a souvent qu’une ou deux propositions dans le paquet.
-            </Text>
-            {/* Le questionnaire est terminé : plus rien à masquer ici. */}
-            <ThemeAgreementList entries={themeAgreement} showCandidates hiddenNote="" />
-          </View>
-        )}
+              {/* Le questionnaire est terminé : plus rien à masquer ici. */}
+              <ThemeAgreementList entries={themeAgreement} showCandidates hiddenNote="" />
+            </View>
+          )}
+        </Bascule>
 
         {/* La date est ici et pas ailleurs : c'est sous le classement qu'on
             se demande sur quoi il repose, et un programme continue de s'écrire

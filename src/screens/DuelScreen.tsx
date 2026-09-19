@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import { ScreenHeader } from '../components/ScreenHeader';
+import { Bascule } from '../components/Bascule';
 import { QrCode } from '../components/QrCode';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { THEMES_BY_ID } from '../data/themes';
@@ -595,13 +596,17 @@ function Comparaison({
         })}
       </View>
 
-      {visibles.length === 0 ? (
-        <Text style={styles.filtreVide}>Aucune proposition dans cette catégorie.</Text>
-      ) : (
-        visibles.map((ligne) => (
-          <LigneDuel key={ligne.proposal.id} ligne={ligne} styles={styles} colors={colors} />
-        ))
-      )}
+      {/* L'écart entre les lignes est repris ici : il venait du conteneur
+          de la page, et les lignes ne sont plus ses enfants directes. */}
+      <Bascule cle={filtre} style={styles.listeFiltree}>
+        {visibles.length === 0 ? (
+          <Text style={styles.filtreVide}>Aucune proposition dans cette catégorie.</Text>
+        ) : (
+          visibles.map((ligne) => (
+            <LigneDuel key={ligne.proposal.id} ligne={ligne} styles={styles} colors={colors} />
+          ))
+        )}
+      </Bascule>
     </>
   );
 }
@@ -957,6 +962,9 @@ function makeStyles(colors: ColorTokens) {
 
     // Mêmes pastilles que les filtres de l'écran de révision : c'est le même
     // geste sur la même sorte de liste, il n'a pas à s'apprendre deux fois.
+    listeFiltree: {
+      gap: spacing.md,
+    },
     filtres: {
       flexDirection: 'row',
       flexWrap: 'wrap',

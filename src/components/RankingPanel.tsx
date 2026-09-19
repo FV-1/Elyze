@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { Podium } from './Podium';
 import { ResultRow } from './ResultRow';
@@ -8,6 +9,8 @@ import { CandidateGrid } from './CandidateGrid';
 import { CandidateResult, ThemeAgreement } from '../types';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
+import { Bascule } from './Bascule';
+import { usePression } from './mouvement';
 
 // Contenu de l'onglet « Classement » pendant le swipe : le podium provisoire,
 // puis au choix le classement complet ou l'accord thème par thème.
@@ -39,6 +42,7 @@ export function RankingPanel({
   onSeeResult,
   onSelectCandidate,
   onOpenCandidateInfo,
+  paddingBas = 0,
 }: {
   results: CandidateResult[];
   // `null` tant qu'aucune réponse comptabilisée n'a été donnée : le panneau
@@ -74,6 +78,11 @@ export function RankingPanel({
   onSeeResult: () => void;
   onSelectCandidate: (candidateId: string) => void;
   onOpenCandidateInfo: (candidateId: string) => void;
+  // Hauteur à dégager sous le contenu : la barre de navigation flotte
+  // au-dessus de l'écran, et le défilement passe derrière elle. Sans cette
+  // réserve, la dernière ligne s'arrêterait sous la barre sans qu'on puisse
+  // la faire remonter.
+  paddingBas?: number;
 }) {
   const colors = useColors();
   const styles = useMemo(() => makeStyles(colors), [colors]);
@@ -111,7 +120,10 @@ export function RankingPanel({
   // « où est mon résultat ? ».
   if (deckDone) {
     return (
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={[styles.content, { paddingBottom: spacing.xl + paddingBas }]}
+        showsVerticalScrollIndicator={false}
+      >
         {portee && <Text style={styles.portee}>{portee}</Text>}
         {topMatch && (
           <>
@@ -182,7 +194,10 @@ export function RankingPanel({
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={[styles.content, { paddingBottom: spacing.xl + paddingBas }]}
+      showsVerticalScrollIndicator={false}
+    >
       {portee && <Text style={styles.portee}>{portee}</Text>}
 
       {/* Le défi, annoncé PENDANT qu'on le joue. Sans cette ligne, le
@@ -241,9 +256,14 @@ export function RankingPanel({
         />
       </View>
 
-      {view === 'candidats' && <CandidateGrid onSelect={onOpenCandidateInfo} />}
+      {/* Les trois vues partagent une seule bascule : elles s'excluent, donc
+          une seule est montée à la fois, et la clé dit laquelle. Le podium et
+          la rangée de sous-onglets, eux, restent en place : c'est la page qui
+          change de vue, pas l'écran qui change de page. */}
+      <Bascule cle={view}>
+        {view === 'candidats' && <CandidateGrid onSelect={onOpenCandidateInfo} />}
 
-      {view === 'overview' &&
+        {view === 'overview' &&
         (topMatch ? (
         <View style={styles.listSection}>
           <Text style={styles.sectionTitle}>Qui a le plus de votes</Text>
@@ -263,7 +283,7 @@ export function RankingPanel({
           vide
         ))}
 
-      {view === 'byTheme' &&
+        {view === 'byTheme' &&
         (topMatch ? (
         <View style={styles.listSection}>
           <Text style={styles.sectionTitle}>Avec qui tu es d’accord, sujet par sujet</Text>
@@ -281,6 +301,7 @@ export function RankingPanel({
         ) : (
           vide
         ))}
+      </Bascule>
     </ScrollView>
   );
 }
@@ -298,22 +319,32 @@ function SubTab({
   selected: boolean;
   onPress: () => void;
 }) {
+  // Comme le rail des thèmes dans les réglages, ce groupe s'allume sur place
+  // plutôt que de faire glisser une pastille : le libellé choisi passe au
+  // blanc pour se lire sur l'accent, et ce blanc serait illisible sur le fond
+  // clair du rail pendant tout le trajet (voir components/mouvement.ts).
+  const pression = usePression(0.95);
+
   return (
     <Pressable
       onPress={onPress}
-      style={[styles.subTab, selected && styles.subTabActive]}
+      onPressIn={pression.onPressIn}
+      onPressOut={pression.onPressOut}
+      style={styles.subTabSlot}
       accessibilityRole="tab"
       accessibilityState={{ selected }}
       accessibilityLabel={accessibilityLabel}
     >
-      <Text
-        style={[styles.subTabText, selected && styles.subTabTextActive]}
-        numberOfLines={1}
-        adjustsFontSizeToFit
-        minimumFontScale={0.8}
-      >
-        {label}
-      </Text>
+      <Animated.View style={[styles.subTab, selected && styles.subTabActive, pression.style]}>
+        <Text
+          style={[styles.subTabText, selected && styles.subTabTextActive]}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.8}
+        >
+          {label}
+        </Text>
+      </Animated.View>
     </Pressable>
   );
 }
@@ -334,8 +365,11 @@ function makeStyles(colors: ColorTokens) {
       padding: 4,
       gap: 4,
     },
-    subTab: {
+    // La zone tactile garde sa largeur ; c'est le bloc coloré qui s'enfonce.
+    subTabSlot: {
       flex: 1,
+    },
+    subTab: {
       alignItems: 'center',
       paddingVertical: spacing.sm,
       borderRadius: radii.pill,

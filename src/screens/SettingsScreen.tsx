@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScreenHeader } from '../components/ScreenHeader';
+import { usePression } from '../components/mouvement';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { FeedbackDialog } from '../components/FeedbackDialog';
 import { LegalScreen } from './LegalScreen';
@@ -62,28 +64,17 @@ export function SettingsScreen({
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Apparence</Text>
           <View style={styles.schemeRow}>
-            {SCHEME_OPTIONS.map((opt) => {
-              const isActive = schemePreference === opt.value;
-              return (
-                <Pressable
-                  key={opt.value}
-                  onPress={() => setSchemePreference(opt.value)}
-                  style={[styles.schemeOption, isActive && styles.schemeOptionActive]}
-                  accessibilityRole="radio"
-                  accessibilityState={{ checked: isActive }}
-                  accessibilityLabel={`Thème ${opt.label}`}
-                >
-                  <Ionicons
-                    name={opt.icon}
-                    size={20}
-                    color={isActive ? colors.onAccent : colors.textSecondary}
-                  />
-                  <Text style={[styles.schemeOptionText, isActive && styles.schemeOptionTextActive]}>
-                    {opt.label}
-                  </Text>
-                </Pressable>
-              );
-            })}
+            {SCHEME_OPTIONS.map((opt) => (
+              <OptionTheme
+                key={opt.value}
+                label={opt.label}
+                icon={opt.icon}
+                actif={schemePreference === opt.value}
+                onPress={() => setSchemePreference(opt.value)}
+                colors={colors}
+                styles={styles}
+              />
+            ))}
           </View>
         </View>
 
@@ -160,24 +151,16 @@ export function SettingsScreen({
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Couleur d’accent</Text>
           <View style={styles.accentRow}>
-            {ACCENT_PRESETS.map((preset) => {
-              const isActive = accentId === preset.id;
-              return (
-                <Pressable
-                  key={preset.id}
-                  onPress={() => setAccentId(preset.id)}
-                  style={styles.accentOption}
-                  accessibilityRole="radio"
-                  accessibilityState={{ checked: isActive }}
-                  accessibilityLabel={`Accent ${preset.label}`}
-                >
-                  <View style={[styles.swatch, { backgroundColor: preset.accent }]}>
-                    {isActive && <Ionicons name="checkmark" size={18} color="#FFFFFF" />}
-                  </View>
-                  <Text style={styles.accentLabel}>{preset.label}</Text>
-                </Pressable>
-              );
-            })}
+            {ACCENT_PRESETS.map((preset) => (
+              <OptionAccent
+                key={preset.id}
+                label={preset.label}
+                teinte={preset.accent}
+                actif={accentId === preset.id}
+                onPress={() => setAccentId(preset.id)}
+                styles={styles}
+              />
+            ))}
           </View>
           {rainbowEnabled && (
             <Text style={styles.sectionCaption}>
@@ -305,6 +288,88 @@ export function SettingsScreen({
   );
 }
 
+// LE CHOIX DU THÈME S'ALLUME SUR PLACE, il ne glisse pas.
+//
+// Les trois options sont un rail comme celui de la longueur de partie sur
+// l'accueil, et la même pastille glissante y aurait sa place — sauf que le
+// libellé choisi passe ici au blanc pour se lire sur l'accent. Pendant le
+// trajet de la pastille, ce blanc serait posé sur le fond clair du rail :
+// illisible un quart de seconde, à chaque changement. L'appui, lui, s'anime.
+function OptionTheme({
+  label,
+  icon,
+  actif,
+  onPress,
+  colors,
+  styles,
+}: {
+  label: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  actif: boolean;
+  onPress: () => void;
+  colors: ColorTokens;
+  styles: ReturnType<typeof makeStyles>;
+}) {
+  const pression = usePression(0.95);
+
+  return (
+    <Pressable
+      onPress={onPress}
+      onPressIn={pression.onPressIn}
+      onPressOut={pression.onPressOut}
+      style={styles.schemeSlot}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: actif }}
+      accessibilityLabel={`Thème ${label}`}
+    >
+      <Animated.View
+        style={[styles.schemeOption, actif && styles.schemeOptionActive, pression.style]}
+      >
+        <Ionicons name={icon} size={20} color={actif ? colors.onAccent : colors.textSecondary} />
+        <Text style={[styles.schemeOptionText, actif && styles.schemeOptionTextActive]}>
+          {label}
+        </Text>
+      </Animated.View>
+    </Pressable>
+  );
+}
+
+// La pastille de couleur grossit quand elle est choisie, et se comprime sous
+// le doigt. Les deux facteurs se multiplient : appuyer sur la couleur déjà
+// choisie part de sa taille à elle.
+function OptionAccent({
+  label,
+  teinte,
+  actif,
+  onPress,
+  styles,
+}: {
+  label: string;
+  teinte: string;
+  actif: boolean;
+  onPress: () => void;
+  styles: ReturnType<typeof makeStyles>;
+}) {
+  const pression = usePression(undefined, actif ? 1.08 : 1);
+
+  return (
+    <Pressable
+      onPress={onPress}
+      onPressIn={pression.onPressIn}
+      onPressOut={pression.onPressOut}
+      style={styles.accentOption}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: actif }}
+      accessibilityLabel={`Accent ${label}`}
+    >
+      <Animated.View style={[styles.swatch, { backgroundColor: teinte }, pression.style]}>
+        {actif && <Ionicons name="checkmark" size={18} color="#FFFFFF" />}
+      </Animated.View>
+      <Text style={styles.accentLabel}>{label}</Text>
+    </Pressable>
+  );
+}
+
 function makeStyles(colors: ColorTokens) {
   return StyleSheet.create({
     container: {
@@ -334,8 +399,12 @@ function makeStyles(colors: ColorTokens) {
       padding: 4,
       gap: 4,
     },
-    schemeOption: {
+    // La zone tactile garde sa largeur quoi qu'il arrive ; c'est le bloc
+    // coloré à l'intérieur qui s'enfonce.
+    schemeSlot: {
       flex: 1,
+    },
+    schemeOption: {
       alignItems: 'center',
       gap: 4,
       paddingVertical: spacing.md,
