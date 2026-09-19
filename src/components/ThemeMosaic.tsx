@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import Animated, { useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
 import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from './Avatar';
@@ -10,6 +11,7 @@ import { PROPOSAL_EXPLANATIONS } from '../data/proposalExplanations';
 import { Answers, AnswerValue, Proposal, ThemeTag } from '../types';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors, useThemeColor } from '../theme/ThemeContext';
+import { RESSORT, usePression } from './mouvement';
 
 // Mosaïque colorée des thèmes, portant sur TOUT LE CATALOGUE embarqué et non
 // sur le seul paquet de la session.
@@ -45,6 +47,7 @@ export function ThemeMosaic({
   onToggleReveal,
   selectedTheme,
   onSelectTheme,
+  paddingBas = 0,
 }: {
   // Tout le catalogue, pas seulement le paquet en cours.
   proposals: Proposal[];
@@ -56,9 +59,15 @@ export function ThemeMosaic({
   // Thème dont on lit les propositions, ou `null` pour la mosaïque.
   selectedTheme: ThemeTag | null;
   onSelectTheme: (theme: ThemeTag | null) => void;
+  // Hauteur à dégager sous le contenu : la barre de navigation flotte
+  // au-dessus de l'écran, et le défilement passe derrière elle. Sans cette
+  // réserve, la dernière ligne s'arrêterait sous la barre sans qu'on puisse
+  // la faire remonter.
+  paddingBas?: number;
 }) {
   const colors = useColors();
   const getThemeColor = useThemeColor();
+  const pressionReveal = usePression(0.98);
   const styles = useMemo(() => makeStyles(colors), [colors]);
 
   const { countByTheme, proposalsByTheme, themes } = useMemo(() => {
@@ -104,11 +113,9 @@ export function ThemeMosaic({
   const revealToggle = (
     <Pressable
       onPress={toggleReveal}
-      style={({ pressed }) => [
-        styles.revealToggle,
-        revealCandidates && styles.revealToggleOn,
-        pressed && styles.revealTogglePressed,
-      ]}
+      onPressIn={pressionReveal.onPressIn}
+      onPressOut={pressionReveal.onPressOut}
+      style={styles.revealPressable}
       accessibilityRole="switch"
       accessibilityState={{ checked: revealCandidates }}
       accessibilityLabel={
@@ -117,33 +124,42 @@ export function ThemeMosaic({
           : 'Afficher les candidats, cela révélera qui propose quoi'
       }
     >
-      <View style={[styles.revealIcon, revealCandidates && styles.revealIconOn]}>
-        <Ionicons
-          name={revealCandidates ? 'eye-outline' : 'eye-off-outline'}
-          size={18}
-          color={revealCandidates ? colors.accentText : colors.textSecondary}
-        />
-      </View>
-      <View style={styles.revealTexts}>
-        <Text style={[styles.revealToggleText, revealCandidates && styles.revealToggleTextOn]}>
-          {revealCandidates ? 'Candidats visibles' : 'Candidats masqués'}
-        </Text>
-        <Text style={styles.revealHint}>
-          {revealCandidates
-            ? 'Le nom s’affiche sous chaque proposition. Touche pour le masquer.'
-            : 'Les propositions sont visibles, pas leurs auteurs. Touche pour les découvrir.'}
-        </Text>
-      </View>
-      {/* Interrupteur dessiné, et non une icône.
-          `toggle` et `toggle-outline` d'Ionicons portent TOUTES DEUX le
-          curseur à droite : elles ne diffèrent que par le remplissage. L'état
-          éteint s'affichait donc avec le curseur du côté allumé, ce qui disait
-          exactement le contraire de la vérité. Deux vues suffisent, et la
-          position du curseur devient la conséquence de l'état plutôt qu'une
-          ressemblance approximative. */}
-      <View style={[styles.switchTrack, revealCandidates && styles.switchTrackOn]}>
-        <View style={[styles.switchKnob, revealCandidates && styles.switchKnobOn]} />
-      </View>
+      {/* Un bloc large s'enfonce peu : 2 %, là où un petit bouton descend à
+          7 %. À réduction égale, un bloc de trois cents pixels reculerait de
+          dix à chaque bord, ce qui n'est plus un appui mais un saut. */}
+      <Animated.View
+        style={[
+          styles.revealToggle,
+          revealCandidates && styles.revealToggleOn,
+          pressionReveal.style,
+        ]}
+      >
+        <View style={[styles.revealIcon, revealCandidates && styles.revealIconOn]}>
+          <Ionicons
+            name={revealCandidates ? 'eye-outline' : 'eye-off-outline'}
+            size={18}
+            color={revealCandidates ? colors.accentText : colors.textSecondary}
+          />
+        </View>
+        <View style={styles.revealTexts}>
+          <Text style={[styles.revealToggleText, revealCandidates && styles.revealToggleTextOn]}>
+            {revealCandidates ? 'Candidats visibles' : 'Candidats masqués'}
+          </Text>
+          <Text style={styles.revealHint}>
+            {revealCandidates
+              ? 'Le nom s’affiche sous chaque proposition. Touche pour le masquer.'
+              : 'Les propositions sont visibles, pas leurs auteurs. Touche pour les découvrir.'}
+          </Text>
+        </View>
+        {/* Interrupteur dessiné, et non une icône.
+            `toggle` et `toggle-outline` d'Ionicons portent TOUTES DEUX le
+            curseur à droite : elles ne diffèrent que par le remplissage.
+            L'état éteint s'affichait donc avec le curseur du côté allumé, ce
+            qui disait exactement le contraire de la vérité. Deux vues
+            suffisent, et la position du curseur devient la conséquence de
+            l'état plutôt qu'une ressemblance approximative. */}
+        <Interrupteur actif={revealCandidates} colors={colors} styles={styles} />
+      </Animated.View>
     </Pressable>
   );
 
@@ -169,7 +185,10 @@ export function ThemeMosaic({
           </Pressable>
         </View>
 
-        <ScrollView contentContainerStyle={styles.detailList} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          contentContainerStyle={[styles.detailList, { paddingBottom: spacing.xl + paddingBas }]}
+          showsVerticalScrollIndicator={false}
+        >
           {themeProposals.map((proposal) => {
             const candidate = revealCandidates ? CANDIDATES_BY_ID[proposal.candidateId] : null;
             if (revealCandidates && !candidate) return null;
@@ -204,7 +223,10 @@ export function ThemeMosaic({
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.grid} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={[styles.grid, { paddingBottom: spacing.xl + paddingBas }]}
+      showsVerticalScrollIndicator={false}
+    >
       <View style={styles.gridToggleRow}>
         {revealToggle}
         {/* Les deux nombres sont dits explicitement : la mosaïque montre tout
@@ -290,6 +312,44 @@ function AnswerBadge({
   );
 }
 
+// LE CURSEUR GLISSE, LA PISTE SE TEINTE.
+//
+// Le déplacement se fait en dur, et c'est voulu : la piste et le curseur ont
+// des tailles fixes (46 et 22, 3 de marge), donc le trajet aussi. Le mesurer
+// coûterait une passe de mise en page pour retrouver un nombre écrit deux
+// lignes plus haut dans la feuille de style.
+//
+// Les couleurs des deux états ne changent pas : ce sont celles qu'un test de
+// contraste vérifie (data/themeColors.test.ts), curseur éteint sur piste
+// éteinte et curseur allumé sur accent. Allumé, il prend `onAccent` et non un
+// blanc figé : sur un accent lime, le blanc ne donnerait que 1.2:1.
+const TRAJET_CURSEUR = 46 - 3 * 2 - 22;
+
+function Interrupteur({
+  actif,
+  colors,
+  styles,
+}: {
+  actif: boolean;
+  colors: ColorTokens;
+  styles: ReturnType<typeof makeStyles>;
+}) {
+  const stylePiste = useAnimatedStyle(() => ({
+    backgroundColor: withTiming(actif ? colors.accent : colors.neutralTrack, { duration: 160 }),
+  }));
+
+  const styleCurseur = useAnimatedStyle(() => ({
+    backgroundColor: withTiming(actif ? colors.onAccent : colors.textMuted, { duration: 160 }),
+    transform: [{ translateX: withSpring(actif ? TRAJET_CURSEUR : 0, RESSORT) }],
+  }));
+
+  return (
+    <Animated.View style={[styles.switchTrack, stylePiste]}>
+      <Animated.View style={[styles.switchKnob, styleCurseur]} />
+    </Animated.View>
+  );
+}
+
 function makeStyles(colors: ColorTokens) {
   return StyleSheet.create({
     catalogueNote: {
@@ -322,10 +382,12 @@ function makeStyles(colors: ColorTokens) {
       lineHeight: fonts.tiny * 1.4,
       color: colors.textSecondary,
     },
+    revealPressable: {
+      alignSelf: 'stretch',
+    },
     revealToggle: {
       flexDirection: 'row',
       alignItems: 'center',
-      alignSelf: 'stretch',
       gap: spacing.sm,
       paddingVertical: spacing.sm + 2,
       paddingHorizontal: spacing.md,
@@ -345,9 +407,9 @@ function makeStyles(colors: ColorTokens) {
     revealIconOn: {
       backgroundColor: colors.accentSoft,
     },
-    // Piste et curseur de l'interrupteur. La position du curseur vient de
-    // `alignItems` : pas de positionnement absolu, donc rien a recalculer si
-    // les dimensions changent.
+    // Piste et curseur de l'interrupteur. Le curseur part du bord gauche et
+    // se déplace de `TRAJET_CURSEUR` : sa position n'est plus une affaire
+    // d'alignement, puisqu'elle s'anime (voir `Interrupteur`).
     switchTrack: {
       width: 46,
       height: 28,
@@ -356,10 +418,6 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
       alignItems: 'flex-start',
       backgroundColor: colors.neutralTrack,
-    },
-    switchTrackOn: {
-      alignItems: 'flex-end',
-      backgroundColor: colors.accent,
     },
     // Le curseur change de couleur avec l'etat, et pas seulement de cote.
     // Un curseur en `surface` ne donnait que 1.24:1 sur la piste en theme
@@ -371,12 +429,6 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.pill,
       backgroundColor: colors.textMuted,
     },
-    // Le curseur allumé prend ce qui se lit sur l'accent — de l'encre sur le
-    // lime et la pêche, du blanc sur le violet. Un blanc figé disparaissait sur
-    // un lime allumé (1.2:1 : le test du dépôt exige 3:1).
-    switchKnobOn: {
-      backgroundColor: colors.onAccent,
-    },
     // Occupe tout l'espace entre l'icone et l'interrupteur : c'est ce qui
     // colle le titre a gauche et l'interrupteur a droite, sans marge morte.
     revealTexts: {
@@ -386,9 +438,6 @@ function makeStyles(colors: ColorTokens) {
     revealToggleOn: {
       backgroundColor: colors.accentSoft,
       borderColor: colors.accentSoft,
-    },
-    revealTogglePressed: {
-      opacity: 0.7,
     },
     revealToggleText: {
       fontSize: fonts.tiny + 1,

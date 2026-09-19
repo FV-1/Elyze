@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { LayoutChangeEvent, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Texte as Text } from '../components/Texte';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { ColorTokens, fonts, MONO_SPACING, police, radii, spacing } from '../theme';
@@ -11,6 +12,7 @@ import { PROPOSALS } from '../data/proposals';
 import { CANDIDATES } from '../data/candidates';
 import { Blob } from '../components/Blob';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { useGlissiere, usePression } from '../components/mouvement';
 import { FormatPartie, QUOTA_COURT, QUOTA_PAR_CANDIDAT } from '../utils/deck';
 
 // Easter egg : sept appuis rapides sur le titre débloquent un accent caché.
@@ -77,6 +79,7 @@ export function IntroScreen({
   sessionPerimee,
 }: Props) {
   const colors = useColors();
+  const glissiereLongueur = useGlissiere(format);
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const insets = useSafeAreaInsets();
   const [confirmingRestart, setConfirmingRestart] = useState(false);
@@ -348,27 +351,26 @@ export function IntroScreen({
                 Le nombre de cartes est écrit sous le nom : « courte » ne veut
                 rien dire tant qu'on ne sait pas à quoi on s'engage. */}
             <View style={styles.longueurRail}>
-              {LONGUEURS.map((longueur) => {
-                const actif = format === longueur.format;
-                const cartes = longueur.quota * CANDIDATES.length;
-                return (
-                  <Pressable
+              {/* La rangée est nue : c'est le rail qui porte la marge, sinon
+                  la pastille et les mesures ne seraient pas comptées depuis
+                  le même bord (voir components/mouvement.ts). */}
+              <View style={styles.longueurPiste}>
+                <Animated.View
+                  style={[styles.longueurPastille, glissiereLongueur.style]}
+                  pointerEvents="none"
+                />
+                {LONGUEURS.map((longueur) => (
+                  <OptionLongueur
                     key={longueur.format}
+                    label={longueur.label}
+                    cartes={longueur.quota * CANDIDATES.length}
+                    actif={format === longueur.format}
                     onPress={() => onChangeFormat(longueur.format)}
-                    style={[styles.longueur, actif && styles.longueurActive]}
-                    accessibilityRole="radio"
-                    accessibilityState={{ checked: actif }}
-                    accessibilityLabel={`${longueur.label}, ${cartes} cartes`}
-                  >
-                    <Text style={[styles.longueurTitre, actif && styles.longueurTitreActif]}>
-                      {longueur.label}
-                    </Text>
-                    <Text style={[styles.longueurCartes, actif && styles.longueurCartesActif]}>
-                      {cartes} cartes
-                    </Text>
-                  </Pressable>
-                );
-              })}
+                    onMesure={glissiereLongueur.mesurer(longueur.format)}
+                    styles={styles}
+                  />
+                ))}
+              </View>
             </View>
 
             <Pressable
@@ -459,6 +461,49 @@ export function IntroScreen({
         onCancel={() => setSecretRevealed(false)}
       />
     </SafeAreaView>
+  );
+}
+
+// Une longueur de partie. Elle s'enfonce sous le doigt ; le fond du choix
+// courant, lui, ne lui appartient pas : c'est la pastille du rail qui vient
+// se poser dessous.
+function OptionLongueur({
+  label,
+  cartes,
+  actif,
+  onPress,
+  onMesure,
+  styles,
+}: {
+  label: string;
+  cartes: number;
+  actif: boolean;
+  onPress: () => void;
+  onMesure: (e: LayoutChangeEvent) => void;
+  styles: ReturnType<typeof makeStyles>;
+}) {
+  // Moins d'enfoncement que sur un petit bouton : sur un bloc large, 7 % de
+  // réduction donnent un déplacement de plusieurs pixels à chaque bord.
+  const pression = usePression(0.97);
+
+  return (
+    <Pressable
+      onPress={onPress}
+      onLayout={onMesure}
+      onPressIn={pression.onPressIn}
+      onPressOut={pression.onPressOut}
+      style={styles.longueur}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: actif }}
+      accessibilityLabel={`${label}, ${cartes} cartes`}
+    >
+      <Animated.View style={[styles.longueurContenu, pression.style]}>
+        <Text style={[styles.longueurTitre, actif && styles.longueurTitreActif]}>{label}</Text>
+        <Text style={[styles.longueurCartes, actif && styles.longueurCartesActif]}>
+          {cartes} cartes
+        </Text>
+      </Animated.View>
+    </Pressable>
   );
 }
 
@@ -707,21 +752,31 @@ function makeStyles(colors: ColorTokens) {
     },
     // Les deux longueurs, sur un rail, à la façon du sélecteur des réglages.
     longueurRail: {
-      flexDirection: 'row',
       backgroundColor: colors.surfaceAlt,
       borderRadius: radii.md,
       padding: 4,
+    },
+    longueurPiste: {
+      flexDirection: 'row',
       gap: 4,
+    },
+    // Le fond du choix courant, qui glisse d'une option à l'autre.
+    longueurPastille: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      borderRadius: radii.sm,
+      backgroundColor: colors.surface,
     },
     longueur: {
       flex: 1,
-      alignItems: 'center',
-      gap: 1,
       paddingVertical: spacing.sm,
       borderRadius: radii.sm,
     },
-    longueurActive: {
-      backgroundColor: colors.surface,
+    longueurContenu: {
+      alignItems: 'center',
+      gap: 1,
     },
     longueurTitre: {
       fontSize: fonts.small,

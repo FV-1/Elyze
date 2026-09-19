@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { BackHandler, Pressable, StyleSheet, View } from 'react-native';
 import { Texte as Text } from '../components/Texte';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { ProgressBar } from '../components/ProgressBar';
+import { usePression } from '../components/mouvement';
 import { SwipeDeck, SwipeDeckHandle } from '../components/SwipeDeck';
 import { ActionButtons } from '../components/ActionButtons';
 import { SwipeTutorialOverlay } from '../components/SwipeTutorialOverlay';
 import { BottomTabBar, BottomTabItem } from '../components/BottomTabBar';
+import { Bascule } from '../components/Bascule';
 import { ThemeMosaic } from '../components/ThemeMosaic';
 import { RankingPanel } from '../components/RankingPanel';
 import { ConfirmDialog } from '../components/ConfirmDialog';
@@ -90,6 +93,12 @@ export type SwipeTab = 'swipe' | 'ranking' | 'propositions';
 // bouton permanent, et son départ rend à « Propositions » la largeur qui lui
 // manquait pour tenir sans rétrécir (voir CandidateGrid pour le raisonnement
 // complet).
+// Hauteur retenue au bas de chaque vue tant que la barre du bas n'a pas été
+// mesurée, c'est-à-dire le temps d'une seule passe de mise en page. Prise
+// large : trop peu cacherait une ligne du classement pendant une image, trop
+// ne laisse qu'un blanc qui se referme aussitôt.
+const DEGAGEMENT_PAR_DEFAUT = 96;
+
 const SWIPE_TABS: BottomTabItem<SwipeTab>[] = [
   { key: 'swipe', label: 'Swiper', icon: 'layers-outline' },
   { key: 'ranking', label: 'Classement', icon: 'trophy-outline' },
@@ -118,6 +127,13 @@ export function SwipeScreen({
   const colors = useColors();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const deckRef = useRef<SwipeDeckHandle>(null);
+  const insets = useSafeAreaInsets();
+  // LA BARRE DU BAS FLOTTE AU-DESSUS DU CONTENU : elle est sortie du flux, et
+  // rien ne lui réserve donc de place. Chaque vue dégage elle-même la hauteur
+  // qu'elle occupe, mesurée plutôt que devinée — elle change avec la marge de
+  // sécurité de l'appareil et avec le grossissement des libellés.
+  const [hauteurBarre, setHauteurBarre] = useState(DEGAGEMENT_PAR_DEFAUT);
+  const degagement = hauteurBarre + spacing.md;
   // Rattrapage silencieux : les paliers déjà franchis au montage sont marqués
   // comme vus sans rien afficher. Cet écran est démonté dès qu'on le quitte
   // (accueil, révision, relance de l'app) ; sans ce rattrapage, une reprise de
@@ -302,7 +318,16 @@ export function SwipeScreen({
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {/* L'EN-TÊTE EST AU BORD, ET C'EST VOULU. Il a brièvement été une île
+          flottante, en écho à la barre du bas : deux objets posés, deux
+          ombres, deux fois quatre coins arrondis, et la page prise en
+          sandwich entre eux. Rien dans les deux systèmes ne fait ça — là où
+          ils font flotter une barre du haut, elle est en verre translucide,
+          pas en carte opaque.
+          Et l'en-tête PARLE DU CONTENU, il dit où l'on en est dans le paquet.
+          Ce qui décrit le contenu lui reste attaché ; ce qui commande la
+          navigation, en bas, a le droit de flotter au-dessus. */}
       <View style={styles.header}>
         {/* UNE MAISON, PAS UN CHEVRON.
             Ce bouton n'a jamais fait « page précédente » : il quitte la
@@ -315,145 +340,168 @@ export function SwipeScreen({
             attend sur place.
             Sans ce bouton, iOS n'offrirait aucune sortie, le retour n'étant
             câblé que sur la touche matérielle d'Android. */}
-        <Pressable
+        <BoutonRond
+          icon="home-outline"
           onPress={onExit}
-          hitSlop={8}
-          style={({ pressed }) => [styles.headerButton, pressed && styles.headerButtonPressed]}
-          accessibilityRole="button"
           accessibilityLabel="Revenir à l’accueil, ta progression est gardée"
-        >
-          <Ionicons name="home-outline" size={20} color={colors.textSecondary} />
-        </Pressable>
+          colors={colors}
+          styles={styles}
+        />
         <View style={styles.progressWrap}>
           <ProgressBar current={currentIndex} total={proposals.length} />
         </View>
         {/* Les thèmes ne sont PAS ici. L'en-tête n'a pas la place d'un
-            libellé : la piste de la barre de progression n'y fait déjà qu'une
-            centaine de pixels, et un troisième bouton la réduisait de moitié.
+            libellé : la piste de la barre de progression n'a pas de largeur à
+            revendre, et un troisième bouton la réduisait de moitié.
             L'accès aux thèmes est dans la barre du bas, où il peut porter son
             nom et son état. */}
-        <Pressable
+        <BoutonRond
+          icon="options-outline"
           onPress={onOpenSettings}
-          hitSlop={8}
-          style={({ pressed }) => [styles.headerButton, pressed && styles.headerButtonPressed]}
-          accessibilityRole="button"
           accessibilityLabel="Réglages"
-        >
-          <Ionicons name="options-outline" size={20} color={colors.textSecondary} />
-        </Pressable>
+          colors={colors}
+          styles={styles}
+        />
       </View>
 
-      {tab === 'swipe' &&
-        (isDeckDone ? (
-          <View style={styles.doneArea}>
-            <View style={styles.doneBadge}>
-              <Ionicons name="checkmark" size={34} color={colors.onAccent} />
-            </View>
-            <Text style={styles.doneTitle}>Tu as répondu à toutes les propositions</Text>
-            <Text style={styles.doneText}>
-              Il n’y a plus de carte à swiper. Ton classement complet t’attend, et tu peux
-              toujours parcourir les propositions par thème.
-            </Text>
+      {/* CHAQUE ONGLET ENTRE EN FONDU. Les trois vues se remplaçaient d'une
+          image à la suivante, ce qui ressemblait plus à un écran de plus qu'à
+          la même page qui change de vue. Pas de clé à donner : la condition
+          monte et démonte déjà la vue, donc l'entrée a lieu à chaque bascule. */}
+      {tab === 'swipe' && (
+        <Bascule style={styles.zoneOnglet}>
+          {isDeckDone ? (
+            <View style={[styles.doneArea, { paddingBottom: degagement }]}>
+              <View style={styles.doneBadge}>
+                <Ionicons name="checkmark" size={34} color={colors.onAccent} />
+              </View>
+              <Text style={styles.doneTitle}>Tu as répondu à toutes les propositions</Text>
+              <Text style={styles.doneText}>
+                Il n’y a plus de carte à swiper. Ton classement complet t’attend, et tu peux
+                toujours parcourir les propositions par thème.
+              </Text>
 
-            <Pressable
-              onPress={onSeeResult}
-              style={({ pressed }) => [styles.donePrimary, pressed && styles.donePrimaryPressed]}
-              accessibilityRole="button"
-              accessibilityLabel="Voir mon résultat"
-            >
-              <Text style={styles.donePrimaryText}>Voir mon résultat</Text>
-              <Ionicons name="arrow-forward" size={18} color={colors.onAction} />
-            </Pressable>
+              <Pressable
+                onPress={onSeeResult}
+                style={({ pressed }) => [styles.donePrimary, pressed && styles.donePrimaryPressed]}
+                accessibilityRole="button"
+                accessibilityLabel="Voir mon résultat"
+              >
+                <Text style={styles.donePrimaryText}>Voir mon résultat</Text>
+                <Ionicons name="arrow-forward" size={18} color={colors.onAction} />
+              </Pressable>
 
-            <Pressable
-              onPress={() => setConfirmingRestart(true)}
-              style={({ pressed }) => [styles.doneSecondary, pressed && styles.doneSecondaryPressed]}
-              accessibilityRole="button"
-              accessibilityLabel="Recommencer à zéro"
-            >
-              <Ionicons name="refresh" size={16} color={colors.accentText} />
-              <Text style={styles.doneSecondaryText}>Recommencer</Text>
-            </Pressable>
-          </View>
-        ) : (
-          <>
-            <View style={styles.deckArea}>
-              <SwipeDeck
-                ref={deckRef}
-                proposals={proposals}
-                currentIndex={currentIndex}
-                themesById={THEMES_BY_ID}
-                onSwipe={onAnswer}
-                onOpenDebate={setDebateProposal}
-              />
+              <Pressable
+                onPress={() => setConfirmingRestart(true)}
+                style={({ pressed }) => [styles.doneSecondary, pressed && styles.doneSecondaryPressed]}
+                accessibilityRole="button"
+                accessibilityLabel="Recommencer à zéro"
+              >
+                <Ionicons name="refresh" size={16} color={colors.accentText} />
+                <Text style={styles.doneSecondaryText}>Recommencer</Text>
+              </Pressable>
             </View>
+          ) : (
+            <>
+              <View style={styles.deckArea}>
+                <SwipeDeck
+                  ref={deckRef}
+                  proposals={proposals}
+                  currentIndex={currentIndex}
+                  themesById={THEMES_BY_ID}
+                  onSwipe={onAnswer}
+                  onOpenDebate={setDebateProposal}
+                />
+              </View>
 
-            <View style={styles.actionsArea}>
-              <ActionButtons
-                canUndo={canUndo}
-                disabled={swiping}
-                onUndo={onUndo}
-                onNope={() => triggerSwipe('nope')}
-                onSkip={() => triggerSwipe('skip')}
-                onLike={() => triggerSwipe('like')}
-                onSuperlike={() => triggerSwipe('superlike')}
-              />
-            </View>
-          </>
-        ))}
+              <View style={[styles.actionsArea, { paddingBottom: degagement }]}>
+                <ActionButtons
+                  canUndo={canUndo}
+                  disabled={swiping}
+                  onUndo={onUndo}
+                  onNope={() => triggerSwipe('nope')}
+                  onSkip={() => triggerSwipe('skip')}
+                  onLike={() => triggerSwipe('like')}
+                  onSuperlike={() => triggerSwipe('superlike')}
+                />
+              </View>
+            </>
+          )}
+        </Bascule>
+      )}
 
       {tab === 'propositions' && (
-        <ThemeMosaic
-          // Tout le catalogue embarqué, et non le seul paquet tiré : cet
-          // onglet sert à parcourir ce que l'app contient, pas à refléter
-          // la partie en cours.
-          proposals={PROPOSALS}
-          deckIds={deckIds}
-          answers={answers}
-          revealCandidates={showCandidates}
-          onToggleReveal={toggleReveal}
-          selectedTheme={openTheme}
-          onSelectTheme={setOpenTheme}
-        />
+        <Bascule style={styles.zoneOnglet}>
+          <ThemeMosaic
+            // Tout le catalogue embarqué, et non le seul paquet tiré : cet
+            // onglet sert à parcourir ce que l'app contient, pas à refléter
+            // la partie en cours.
+            proposals={PROPOSALS}
+            deckIds={deckIds}
+            answers={answers}
+            revealCandidates={showCandidates}
+            onToggleReveal={toggleReveal}
+            selectedTheme={openTheme}
+            onSelectTheme={setOpenTheme}
+            paddingBas={degagement}
+          />
+        </Bascule>
       )}
 
       {tab === 'ranking' && (
-        <RankingPanel
-          results={results}
-          topMatch={topMatch}
-          confidenceLabel={confidenceLabel}
-          themeAgreement={themeAgreement}
-          deckDone={isDeckDone}
-          showCandidates={showCandidates}
-          portee={portee}
-          duel={duel}
-          onSeeResult={onSeeResult}
-          onSelectCandidate={setSelectedCandidateId}
-          onOpenCandidateInfo={setInfoCandidateId}
-        />
+        <Bascule style={styles.zoneOnglet}>
+          <RankingPanel
+            results={results}
+            topMatch={topMatch}
+            confidenceLabel={confidenceLabel}
+            themeAgreement={themeAgreement}
+            deckDone={isDeckDone}
+            showCandidates={showCandidates}
+            portee={portee}
+            duel={duel}
+            onSeeResult={onSeeResult}
+            onSelectCandidate={setSelectedCandidateId}
+            onOpenCandidateInfo={setInfoCandidateId}
+            paddingBas={degagement}
+          />
+        </Bascule>
       )}
 
       {showTutorial && currentIndex === 0 && tab === 'swipe' && !isDeckDone && (
         <SwipeTutorialOverlay onDismiss={onDismissTutorial} />
       )}
 
-      <BottomTabBar
-        tabs={SWIPE_TABS}
-        active={tab}
-        onChange={onChangeTab}
-        extra={{
-          // Le compte ne s'affiche que s'il y a quelque chose à signaler :
-          // « 15 thèmes » en permanence banaliserait le repère, alors que
-          // c'est en swipant une sélection restreinte qu'on a besoin de s'en
-          // souvenir sans quitter l'écran.
-          label: themeFilter.filtered ? `${themeFilter.selected} thèmes` : 'Thèmes',
-          icon: 'pricetags-outline',
-          onPress: handleOpenThemeFilter,
-          accessibilityLabel: themeFilter.filtered
-            ? `Thèmes : ${themeFilter.selected} sur ${themeFilter.total} sélectionnés. En changer redémarrera la session.`
-            : 'Choisir les thèmes à swiper. En changer redémarrera la session.',
+      {/* La marge de sécurité du bas est posée ICI et non plus par
+          `SafeAreaView` : la barre étant en position absolue, c'est à elle de
+          rester au-dessus de la barre d'accueil de l'appareil. Le reste de
+          l'écran, lui, a le droit de passer dessous. */}
+      <View
+        style={[styles.barreFlottante, { paddingBottom: insets.bottom }]}
+        onLayout={(e) => {
+          const hauteur = e.nativeEvent.layout.height;
+          setHauteurBarre((precedente) =>
+            Math.abs(precedente - hauteur) < 1 ? precedente : hauteur
+          );
         }}
-      />
+      >
+        <BottomTabBar
+          tabs={SWIPE_TABS}
+          active={tab}
+          onChange={onChangeTab}
+          extra={{
+            // Le compte ne s'affiche que s'il y a quelque chose à signaler :
+            // « 15 thèmes » en permanence banaliserait le repère, alors que
+            // c'est en swipant une sélection restreinte qu'on a besoin de s'en
+            // souvenir sans quitter l'écran.
+            label: themeFilter.filtered ? `${themeFilter.selected} thèmes` : 'Thèmes',
+            icon: 'pricetags-outline',
+            onPress: handleOpenThemeFilter,
+            accessibilityLabel: themeFilter.filtered
+              ? `Thèmes : ${themeFilter.selected} sur ${themeFilter.total} sélectionnés. En changer redémarrera la session.`
+              : 'Choisir les thèmes à swiper. En changer redémarrera la session.',
+          }}
+        />
+      </View>
 
       <ConfirmDialog
         visible={milestoneVisible}
@@ -533,22 +581,77 @@ export function SwipeScreen({
   );
 }
 
+// Les deux boutons de l'en-tête. Ils s'enfoncent sous le doigt comme ceux de
+// la barre du bas ; c'est le seul mouvement qu'un bouton d'en-tête doit faire,
+// puisqu'il ouvre un autre écran plutôt que de changer celui-ci.
+function BoutonRond({
+  icon,
+  onPress,
+  accessibilityLabel,
+  colors,
+  styles,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  onPress: () => void;
+  accessibilityLabel: string;
+  colors: ColorTokens;
+  styles: ReturnType<typeof makeStyles>;
+}) {
+  const pression = usePression();
+
+  return (
+    <Pressable
+      onPress={onPress}
+      onPressIn={pression.onPressIn}
+      onPressOut={pression.onPressOut}
+      hitSlop={8}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+    >
+      <Animated.View style={[styles.headerButton, pression.style]}>
+        <Ionicons name={icon} size={20} color={colors.textSecondary} />
+      </Animated.View>
+    </Pressable>
+  );
+}
+
 function makeStyles(colors: ColorTokens) {
   return StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.bg,
     },
+    // La barre du bas est hors du flux, donc au-dessus du contenu. `zIndex`
+    // tranche l'ordre d'empilement ; la barre ne porte aucune ombre ni
+    // `elevation`, la charte n'en veut pas.
+    // Chaque onglet occupe toute la place restante entre l'en-tête et la
+    // barre du bas.
+    zoneOnglet: {
+      flex: 1,
+    },
+    barreFlottante: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 2,
+    },
     header: {
       flexDirection: 'row',
       alignItems: 'center',
+      paddingHorizontal: spacing.md,
       paddingTop: spacing.sm,
       paddingBottom: spacing.md,
     },
     progressWrap: {
       flex: 1,
+      paddingHorizontal: spacing.sm,
     },
 
+    // La marge tombe de 16 à 4 px de chaque côté. C'est ce qui, avec les
+    // 24 px repris à la barre de progression elle-même, rend à la piste une
+    // cinquantaine de pixels : elle n'en faisait qu'une centaine pour dire
+    // l'avancement d'une partie qui peut compter cent soixante-cinq cartes.
     headerButton: {
       width: 32,
       height: 32,
@@ -556,10 +659,7 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.surfaceAlt,
-      marginHorizontal: spacing.md,
-    },
-    headerButtonPressed: {
-      opacity: 0.7,
+      marginHorizontal: spacing.xs,
     },
     deckArea: {
       flex: 1,

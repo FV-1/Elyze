@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from './Avatar';
 import { THEMES_BY_ID } from '../data/themes';
+import { Bascule } from './Bascule';
 import { themeChipColors } from '../data/themeColors';
 import { AnswerValue, Candidate, Proposal } from '../types';
 import { ColorTokens, fonts, radii, spacing, police } from '../theme';
@@ -150,47 +151,51 @@ export function CandidateAnswersDialog({
         </View>
 
         <ScrollView contentContainerStyle={styles.list} showsVerticalScrollIndicator={false}>
-          {!revealProposals ? (
-            <View style={styles.emptyWrap}>
-              <Ionicons name="eye-off-outline" size={26} color={colors.textMuted} />
-              <Text style={styles.lockedTitle}>Propositions masquées</Text>
-              <Text style={styles.emptyText}>
-                Les décomptes ci-dessus sont à toi, mais dire quelles propositions viennent de ce
-                candidat reviendrait à te montrer qui a écrit les cartes que tu es en train de
-                swiper. Tu peux lever le voile depuis l’onglet Propositions, ou finir le paquet.
-              </Text>
-            </View>
-          ) : items.length === 0 ? (
-            <View style={styles.emptyWrap}>
-              <Ionicons name={activeTab.icon} size={26} color={colors.textMuted} />
-              <Text style={styles.emptyText}>{activeTab.empty}</Text>
-            </View>
-          ) : (
-            items.map((p) => {
-              const theme = THEMES_BY_ID[p.themeId];
-              return (
-                <View key={p.id} style={styles.item}>
-                  {theme && (
-                    <ThemeChip
-                      label={theme.label}
-                      icon={theme.icon}
-                      // Pastille en teinte douce, comme la fiche du candidat :
-                      // le thème reste reconnaissable à sa couleur, mais une
-                      // pastille par proposition en aplat saturé saturait
-                      // l'écran, celles-ci s'empilant verticalement.
-                      tint={themeChipColors(
-                        getThemeColor(theme.id),
-                        colors.surface,
-                        effectiveScheme === 'dark'
-                      )}
-                      styles={styles}
-                    />
-                  )}
-                  <Text style={styles.itemText}>{p.text}</Text>
-                </View>
-              );
-            })
-          )}
+          {/* L'écart entre les fiches est repris ici : il venait du conteneur
+              de la liste, et les fiches ne sont plus ses enfants directes. */}
+          <Bascule cle={active} style={styles.bascule}>
+            {!revealProposals ? (
+              <View style={styles.emptyWrap}>
+                <Ionicons name="eye-off-outline" size={26} color={colors.textMuted} />
+                <Text style={styles.lockedTitle}>Propositions masquées</Text>
+                <Text style={styles.emptyText}>
+                  Les décomptes ci-dessus sont à toi, mais dire quelles propositions viennent de ce
+                  candidat reviendrait à te montrer qui a écrit les cartes que tu es en train de
+                  swiper. Tu peux lever le voile depuis l’onglet Propositions, ou finir le paquet.
+                </Text>
+              </View>
+            ) : items.length === 0 ? (
+              <View style={styles.emptyWrap}>
+                <Ionicons name={activeTab.icon} size={26} color={colors.textMuted} />
+                <Text style={styles.emptyText}>{activeTab.empty}</Text>
+              </View>
+            ) : (
+              items.map((p) => {
+                const theme = THEMES_BY_ID[p.themeId];
+                return (
+                  <View key={p.id} style={styles.item}>
+                    {theme && (
+                      <ThemeChip
+                        label={theme.label}
+                        icon={theme.icon}
+                        // Pastille en teinte douce, comme la fiche du candidat :
+                        // le thème reste reconnaissable à sa couleur, mais une
+                        // pastille par proposition en aplat saturé saturait
+                        // l'écran, celles-ci s'empilant verticalement.
+                        tint={themeChipColors(
+                          getThemeColor(theme.id),
+                          colors.surface,
+                          effectiveScheme === 'dark'
+                        )}
+                        styles={styles}
+                      />
+                    )}
+                    <Text style={styles.itemText}>{p.text}</Text>
+                  </View>
+                );
+              })
+            )}
+          </Bascule>
         </ScrollView>
       </SafeAreaView>
     </Modal>
@@ -306,8 +311,10 @@ function makeStyles(colors: ColorTokens) {
     },
     list: {
       padding: spacing.md,
-      gap: spacing.md,
       paddingBottom: spacing.xxl,
+    },
+    bascule: {
+      gap: spacing.md,
     },
     item: {
       backgroundColor: colors.surface,

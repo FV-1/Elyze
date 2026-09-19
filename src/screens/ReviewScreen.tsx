@@ -4,6 +4,7 @@ import { Texte as Text } from '../components/Texte';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenHeader } from '../components/ScreenHeader';
+import { Bascule } from '../components/Bascule';
 import { ProposalDebateDialog } from '../components/ProposalDebateDialog';
 import { haptics } from '../utils/haptics';
 import { Answers, AnswerValue, Proposal, ThemeTag } from '../types';
@@ -109,26 +110,31 @@ export function ReviewScreen({
         })}
       </View>
 
-      <FlatList
-        data={visible}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <Text style={styles.emptyFilter}>Aucune proposition dans cette catégorie.</Text>
-        }
-        renderItem={({ item }) => (
-          <ReviewRow
-            proposal={item}
-            theme={themesById[item.themeId]}
-            answer={answers[item.id]}
-            onChange={onChangeAnswer}
-            onOpen={setOpenProposal}
-            colors={colors}
-            styles={styles}
-          />
-        )}
-      />
+      {/* Changer de filtre remonte la liste : la clé la démonte, et elle
+          revient du haut plutôt que de garder la position d'une liste qui
+          n'existe plus. */}
+      <Bascule cle={filter} style={styles.liste}>
+        <FlatList
+          data={visible}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <Text style={styles.emptyFilter}>Aucune proposition dans cette catégorie.</Text>
+          }
+          renderItem={({ item }) => (
+            <ReviewRow
+              proposal={item}
+              theme={themesById[item.themeId]}
+              answer={answers[item.id]}
+              onChange={onChangeAnswer}
+              onOpen={setOpenProposal}
+              colors={colors}
+              styles={styles}
+            />
+          )}
+        />
+      </Bascule>
 
       <View style={styles.footer}>
         <Pressable
@@ -303,6 +309,9 @@ function makeStyles(colors: ColorTokens) {
       color: colors.textMuted,
       textAlign: 'center',
       paddingVertical: spacing.xl,
+    },
+    liste: {
+      flex: 1,
     },
     list: {
       paddingHorizontal: spacing.lg,

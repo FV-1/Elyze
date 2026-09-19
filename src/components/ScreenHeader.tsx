@@ -1,12 +1,19 @@
 import React, { useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { ColorTokens, fonts, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
+import { usePression } from './mouvement';
 
 // En-tête partagé (chevron retour + titre) pour les écrans secondaires, afin
 // qu'ils restent visuellement alignés entre eux.
+//
+// IL RESTE AU BORD, sans fond ni ombre. Il a brièvement été une île posée,
+// en écho à la barre du bas ; sur six écrans qui ne sont que du titre et du
+// contenu, la carte n'ajoutait rien qu'un cadre de plus à regarder. Seul le
+// chevron a gardé quelque chose de ce passage : il s'enfonce sous le doigt.
 export function ScreenHeader({
   title,
   onBack,
@@ -22,15 +29,7 @@ export function ScreenHeader({
   return (
     <View style={styles.row}>
       {onBack ? (
-        <Pressable
-          onPress={onBack}
-          hitSlop={12}
-          style={styles.side}
-          accessibilityRole="button"
-          accessibilityLabel="Retour"
-        >
-          <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
-        </Pressable>
+        <BoutonRetour onPress={onBack} colors={colors} styles={styles} />
       ) : (
         <View style={styles.side} />
       )}
@@ -39,6 +38,33 @@ export function ScreenHeader({
       </Text>
       <View style={styles.side}>{rightAccessory}</View>
     </View>
+  );
+}
+
+function BoutonRetour({
+  onPress,
+  colors,
+  styles,
+}: {
+  onPress: () => void;
+  colors: ColorTokens;
+  styles: ReturnType<typeof makeStyles>;
+}) {
+  const pression = usePression();
+
+  return (
+    <Pressable
+      onPress={onPress}
+      onPressIn={pression.onPressIn}
+      onPressOut={pression.onPressOut}
+      hitSlop={12}
+      accessibilityRole="button"
+      accessibilityLabel="Retour"
+    >
+      <Animated.View style={[styles.side, pression.style]}>
+        <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
+      </Animated.View>
+    </Pressable>
   );
 }
 
@@ -53,7 +79,9 @@ function makeStyles(colors: ColorTokens) {
     },
     side: {
       width: 32,
+      height: 32,
       alignItems: 'center',
+      justifyContent: 'center',
     },
     title: {
       flex: 1,

@@ -106,11 +106,14 @@ function Segment({
 
 function makeStyles(colors: ColorTokens) {
   return StyleSheet.create({
+    // SANS MARGE HORIZONTALE : c'est l'en-tête qui la porte, une fois pour
+    // les trois éléments de sa rangée. Les 24 px d'avant s'ajoutaient à la
+    // sienne et à celle des boutons, et il ne restait qu'une centaine de
+    // pixels de piste pour dire où en est une partie de cent soixante cartes.
     container: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.sm,
-      paddingHorizontal: spacing.lg,
     },
     track: {
       flex: 1,
