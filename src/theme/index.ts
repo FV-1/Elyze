@@ -33,8 +33,8 @@ export const PALETTE = {
   white: '#FFFFFF',
   sand: '#D6CFC4',
 
-  night: '#221C2E',
-  night2: '#2A2437',
+  night: '#171220',
+  night2: '#292236',
   mutedOnNight: '#BCB4C9',
   // Le document donne deux neutres sur fond sombre : la crème pour le texte
   // principal, `mutedOnNight` pour les métadonnées. L'app en a trois niveaux,
@@ -184,14 +184,16 @@ const base = {
     //
     // Les traits d'encre qui cernaient chaque surface ont été retirés ; sur la
     // nuit, une ombre ne se voit pas, et il ne restait rien pour dire où une
-    // carte commence — la carte valait 1.08:1 sur la page. Les deux surfaces
-    // sont donc remontées d'un cran : 1.35:1 pour la carte, comme la plupart
-    // des thèmes sombres du commerce, où c'est l'écart de fond qui fait le
-    // relief.
-    surface: '#38304C',
+    // carte commence. Les deux surfaces ont d'abord été remontées d'un cran —
+    // mais une nuit qui s'éclaircit n'est plus une nuit : c'est la PAGE qui
+    // est redescendue, et l'écart qui s'est fait en dessous plutôt qu'au
+    // dessus. La carte vaut 1.20:1 sur la page, entre le thème sombre d'iOS
+    // (1.23) et celui de la version principale (1.10), sur un fond bien plus
+    // noir qu'avant.
+    surface: PALETTE.night2,
     // Un cran au-dessus de la surface : sur la nuit, un panneau secondaire ne
     // peut pas être plus sombre que la carte qui le porte.
-    surfaceAlt: '#423A58',
+    surfaceAlt: '#352E45',
     border: '#3B2F4E',
     // LE TRAIT FORT N'EST PAS LA CRÈME, SUR LA NUIT.
     //
@@ -213,7 +215,7 @@ const base = {
     // jauge remplie de violet ne se détachait pas d'une piste à #3B2F4E
     // (2.46:1), ni à #2A2039 une fois le violet adouci (2.90:1). À cette
     // valeur, elle tient 3.03:1 — et les deux autres accents largement.
-    neutralTrack: '#251E2F',
+    neutralTrack: '#110D18',
   },
 } as const;
 
