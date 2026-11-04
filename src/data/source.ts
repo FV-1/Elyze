@@ -3,8 +3,8 @@ import { Proposal } from '../types';
 
 // Poligraph recense les mesures des candidats et les rattache à leur document
 // d'origine. La licence des données (AGPL-3.0) impose de citer la source :
-// cette mention apparaît sur l'accueil, l'écran de résultat et « Comment ça
-// marche ».
+// cette mention apparaît sur l'accueil, l'écran de résultat, « Comment ça
+// marche » et les crédits — avec celle de « 2027 et moi », plus bas.
 //
 // AUCUNE CARTE NE RENVOIE À LA FICHE DE SA PROPRE MESURE, et ce n'est pas un
 // oubli : l'adresse d'une fiche Poligraph commence par le nom de son auteur,
@@ -14,6 +14,14 @@ import { Proposal } from '../types';
 const POLIGRAPH_NAME = 'Poligraph';
 export const POLIGRAPH_SOURCE_URL = 'https://poligraph.fr/elections/presidentielle-2027';
 export const POLIGRAPH_LICENCE = 'AGPL-3.0, réutilisation libre avec mention de la source';
+
+// Deuxième source, depuis novembre 2026 : « 2027 et moi » publie ses données
+// sur GitHub, chaque mesure avec son document d'origine, sa date et sa nature
+// (programme, déclaration, presse). La Licence Ouverte 2.0 demande de citer
+// la source ET la date de mise à jour des données (voir ETMOI_DATE).
+export const ETMOI_NAME = '2027 et moi';
+export const ETMOI_SOURCE_URL = 'https://2027etmoi.fr';
+export const ETMOI_LICENCE = 'Licence Ouverte 2.0 (Etalab)';
 
 // `Linking.openURL` rejette si aucune application ne sait ouvrir le lien
 // (appareil sans navigateur, profil restreint...). Non attrapé, ce rejet

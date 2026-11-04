@@ -12,8 +12,8 @@ const candidateB: Candidate = { id: 'b', name: 'Candidat B', initials: 'B', part
 const candidateC: Candidate = { id: 'c', name: 'Candidat C', initials: 'C', party: 'Parti C' };
 const CANDIDATES = [candidateA, candidateB, candidateC];
 
-const themeEco: ThemeTag = { id: 'eco', label: 'Économie', icon: '💶', categoryId: 'x' };
-const themeSoc: ThemeTag = { id: 'soc', label: 'Social', icon: '🤝', categoryId: 'x' };
+const themeEco: ThemeTag = { id: 'eco', label: 'Économie', icon: '💶' };
+const themeSoc: ThemeTag = { id: 'soc', label: 'Social', icon: '🤝' };
 const THEMES = [themeEco, themeSoc];
 
 function proposal(id: string, candidateId: string, themeId: string): Proposal {
@@ -266,7 +266,9 @@ describe('matchConfidenceLabel', () => {
   // Ces cas fabriquent des résultats sans passer par computeResults ; il faut
   // donc leur donner un rang cohérent, sinon deux scores différents
   // passeraient tous deux pour des premiers ex æquo.
-  const classer = (...scores: number[]): CandidateResult[] => {
+  // Par défaut, une partie longue : quinze réponses par candidat.
+  const classer = (...scores: number[]): CandidateResult[] => classerSur(15, ...scores);
+  const classerSur = (answered: number, ...scores: number[]): CandidateResult[] => {
     const noms = 'abcdefgh'.split('');
     const rangs = scores.map((score, i) =>
       i > 0 && Math.round(scores[i - 1]) === Math.round(score) ? -1 : i + 1
@@ -278,7 +280,7 @@ describe('matchConfidenceLabel', () => {
       score,
       agree: 1,
       total: 1,
-      answered: 1,
+      answered,
       rank: rangs[i],
       tied: rangs.filter((r) => r === rangs[i]).length > 1,
     }));
@@ -289,11 +291,11 @@ describe('matchConfidenceLabel', () => {
     expect(matchConfidenceLabel(classer(80))).toBeNull();
   });
 
-  it('signale un résultat serré quand l’écart est petit (< 6 points)', () => {
+  it('signale un résultat serré quand l’écart est petit (< 8 points)', () => {
     expect(matchConfidenceLabel(classer(80, 76))).toMatch(/serré/i);
   });
 
-  it('signale une bonne avance pour un écart moyen (6 à 14 points)', () => {
+  it('signale une bonne avance pour un écart moyen (8 à 14 points)', () => {
     expect(matchConfidenceLabel(classer(80, 70))).toMatch(/avance/i);
   });
 
@@ -324,6 +326,25 @@ describe('matchConfidenceLabel', () => {
   // ce que ce fichier s'interdit depuis le début.
   it('traite comme égaux deux scores qui affichent le même pourcentage', () => {
     expect(matchConfidenceLabel(classer(82.4, 81.6))).toMatch(/égalité/i);
+  });
+
+  // Partie courte : cinq cartes par candidat. Une seule carte d'écart y fait
+  // déjà quatorze points (86 % contre 71 %), et la simulation montre que le
+  // tirage, plus que les avis, désigne alors le premier.
+  it('ne prétend à aucune avance sur une partie courte, même avec un gros écart', () => {
+    const label = matchConfidenceLabel(classerSur(5, 86, 71));
+    expect(label).toMatch(/indicatif/i);
+    expect(label).not.toMatch(/net|avance/i);
+  });
+
+  it('juge sur le moins renseigné des deux premiers', () => {
+    const results = classer(90, 70);
+    results[1].answered = 9;
+    expect(matchConfidenceLabel(results)).toMatch(/indicatif/i);
+  });
+
+  it('annonce encore l’égalité sur une partie courte', () => {
+    expect(matchConfidenceLabel(classerSur(5, 86, 86))).toMatch(/égalité/i);
   });
 });
 

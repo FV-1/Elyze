@@ -13,6 +13,9 @@ import { useColors } from '../theme/ThemeContext';
 import { Bascule } from './Bascule';
 import { usePression } from './mouvement';
 
+// Réponses par candidat, en moyenne, avant que le podium provisoire apparaisse.
+const MIN_REPONSES_PODIUM = 3;
+
 // Contenu de l'onglet « Classement » pendant le swipe : le podium provisoire,
 // puis au choix le classement complet ou l'accord thème par thème.
 //
@@ -92,7 +95,15 @@ export function RankingPanel({
   // Le podium ne coiffe que les deux vues qui parlent de TES réponses. Au
   // dessus du trombinoscope il donnerait à lire une grille alphabétique comme
   // la suite d’un classement, ce qu’elle n’est pas.
-  const montrerPodium = topMatch !== null && view !== 'candidats';
+  //
+  // Et pas avant d'avoir de quoi le remplir. Après une douzaine de cartes, un
+  // candidat n'a qu'une réponse ou deux : trois candidats s'affichaient alors
+  // « 67 % » sur trois marches dorées, pour une seule proposition chacun. Un
+  // podium a l'air définitif ; à ce stade, il ne l'est en rien.
+  const reponsesParCandidat =
+    results.reduce((total, r) => total + r.answered, 0) / Math.max(1, results.length);
+  const tropTot = topMatch !== null && reponsesParCandidat < MIN_REPONSES_PODIUM;
+  const montrerPodium = topMatch !== null && view !== 'candidats' && !tropTot;
 
   // L’absence de résultat ne vide plus tout le panneau. Elle ne concerne que
   // le classement et l’accord par thème ; les candidats, eux, sont
@@ -226,6 +237,13 @@ export function RankingPanel({
         </Text>
       )}
 
+      {tropTot && view !== 'candidats' && (
+        <Text style={styles.hint}>
+          Encore trop tôt pour un podium : chaque candidat n’a qu’une ou deux réponses. Il
+          apparaîtra vers {MIN_REPONSES_PODIUM} réponses par candidat.
+        </Text>
+      )}
+
       {montrerPodium && (
         <>
           <Podium results={results} instant onCandidatePress={onOpenCandidateInfo} />
@@ -267,7 +285,7 @@ export function RankingPanel({
         {view === 'overview' &&
         (topMatch ? (
         <View style={styles.listSection}>
-          <Text style={styles.sectionTitle}>Qui a le plus de votes</Text>
+          <Text style={styles.sectionTitle}>Ton classement provisoire</Text>
           {results.map((result) => (
             <ResultRow
               key={result.candidate.id}

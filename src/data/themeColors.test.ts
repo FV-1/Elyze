@@ -38,7 +38,7 @@ function check(base: string, surface: string, isDark: boolean): number {
 }
 
 describe('themeChipColors', () => {
-  it('reste lisible pour les quinze couleurs de thème, en clair comme en sombre', () => {
+  it('reste lisible pour chaque couleur de thème, en clair comme en sombre', () => {
     const failures: string[] = [];
 
     for (const [id, base] of Object.entries(THEME_COLORS)) {
@@ -81,7 +81,7 @@ describe('themeChipColors', () => {
 // désormais en blanc plein — ce test verrouille l'invariant qui rend ce choix
 // sûr : toute couleur de tuile doit tenir 4.5:1 face au blanc.
 describe('couleurs des tuiles de la mosaïque', () => {
-  it('tiennent le contraste avec du texte blanc, pour les quinze thèmes', () => {
+  it('tiennent le contraste avec du texte blanc, pour chaque thème', () => {
     const failures: string[] = [];
 
     for (const [id, color] of Object.entries(THEME_COLORS)) {
@@ -190,7 +190,7 @@ describe('couleurs de tuile adaptées au thème sombre', () => {
     if (themeColorForScheme(base, false) !== base) failures.push(`${nom} clair modifié`);
   }
 
-  it('tient les deux seuils pour les quinze thèmes', () => {
+  it('tient les deux seuils pour chaque thème', () => {
     const failures: string[] = [];
     for (const [id, base] of Object.entries(THEME_COLORS)) verifie(base, id, failures);
     expect(failures).toEqual([]);

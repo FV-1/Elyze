@@ -1,7 +1,7 @@
 import { porteeDesThemes } from './portee';
 import { ThemeTag } from '../types';
 
-const theme = (id: string, label: string): ThemeTag => ({ id, label, icon: '•', categoryId: 'x' });
+const theme = (id: string, label: string): ThemeTag => ({ id, label, icon: '•' });
 
 const THEMES: ThemeTag[] = [
   theme('sante', 'Santé'),

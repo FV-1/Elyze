@@ -1,6 +1,8 @@
 // FICHIER GÉNÉRÉ — ne pas modifier à la main.
 // Source : https://poligraph.fr/elections/presidentielle-2027
 // Export du 2026-08-29 · AGPL-3.0 / usage libre avec mention de la source (Poligraph)
+// Source : https://2027etmoi.fr (https://github.com/2027etmoi/2027etmoi, commit e497529)
+// Données du 2026-10-28 · Licence Ouverte 2.0 (Etalab), mention de la source et de la date de mise à jour
 // Régénérer avec : node scripts/generate-data.js
 // (11 candidats retenus : ceux ayant au moins 15 mesures publiées)
 

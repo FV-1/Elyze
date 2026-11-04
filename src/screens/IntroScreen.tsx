@@ -264,11 +264,14 @@ export function IntroScreen({
             La mention du « super like » a quitté cet écran : c'est un détail
             de règle, et il est déjà dit à l'endroit où il sert, le tutoriel du
             premier swipe, puis dans « comment ça marche ». */}
+        {/* Plus de point séparateur entre les deux : quand la ligne passe à
+            la ligne, et c'est le cas sur la plupart des téléphones, il
+            restait seul au bout de la première, accroché à rien. L'écart
+            suffit à les séparer quand ils tiennent côte à côte. */}
         <View style={styles.metaRow}>
           <Text style={styles.meta}>
             {PROPOSALS.length} propositions · {CANDIDATES.length} candidats
           </Text>
-          <Text style={styles.metaSep}>·</Text>
           <Pressable
             onPress={onOpenHowItWorks}
             hitSlop={10}
@@ -434,7 +437,7 @@ export function IntroScreen({
             rejoint « comment ça marche », où elle est expliquée plutôt
             qu'affirmée en une ligne. */}
         <Text style={styles.disclaimer}>
-          Propositions publiques recensées par Poligraph.
+          Propositions publiques recensées par Poligraph et 2027 et moi.
         </Text>
         </View>
       </ScrollView>
@@ -658,11 +661,8 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       flexWrap: 'wrap',
       justifyContent: 'center',
-      gap: 6,
-    },
-    metaSep: {
-      fontSize: fonts.tiny + 1,
-      color: colors.textMuted,
+      columnGap: spacing.md,
+      rowGap: 6,
     },
     exploreLinkWrap: {
       paddingVertical: spacing.xs,

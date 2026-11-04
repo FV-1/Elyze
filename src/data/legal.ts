@@ -1,4 +1,6 @@
-import { POLIGRAPH_LICENCE, POLIGRAPH_SOURCE_URL } from './source';
+import { ETMOI_DATE } from './proposals';
+import { ETMOI_LICENCE, ETMOI_NAME, ETMOI_SOURCE_URL, POLIGRAPH_LICENCE, POLIGRAPH_SOURCE_URL } from './source';
+import { dateEnFrancais } from '../utils/date';
 
 // Les trois textes légaux de l'app : confidentialité, conditions, crédits.
 //
@@ -79,7 +81,7 @@ export const LEGAL_DOCUMENTS: Record<LegalTopic, LegalDocument> = {
       {
         title: 'Les liens vers l’extérieur',
         body:
-          'Certaines pages proposent d’ouvrir une source : Poligraph, Wikipédia, Wikimedia Commons. Le lien s’ouvre dans ton navigateur, et c’est alors la politique de confidentialité de ces sites qui s’applique. L’app ne leur transmet rien d’autre que l’adresse demandée.',
+          'Certaines pages proposent d’ouvrir une source : Poligraph, 2027 et moi, Wikipédia, Wikimedia Commons. Le lien s’ouvre dans ton navigateur, et c’est alors la politique de confidentialité de ces sites qui s’applique. L’app ne leur transmet rien d’autre que l’adresse demandée.',
       },
       {
         title: 'Le partage de ton résultat',
@@ -116,7 +118,7 @@ export const LEGAL_DOCUMENTS: Record<LegalTopic, LegalDocument> = {
       {
         title: 'D’où viennent les textes, et lequel fait foi',
         body:
-          'Les mesures viennent de Poligraph et sont citées mot pour mot, sans coupe ni reformulation. L’app ne les vérifie pas et ne garantit ni leur exactitude ni leur exhaustivité : en cas de doute, c’est le document d’origine du candidat qui fait foi. La ligne « en clair » et les arguments pour et contre, eux, sont écrits par l’app ; ils reformulent et rapportent un débat, ils ne tranchent pas.',
+          'Les mesures viennent de Poligraph et de 2027 et moi, et sont citées telles que ces sources les résument, sans retouche de l’app. L’app ne les vérifie pas et ne garantit ni leur exactitude ni leur exhaustivité : en cas de doute, c’est le document d’origine du candidat qui fait foi. La ligne « en clair » et les arguments pour et contre, eux, sont écrits par l’app ; ils reformulent et rapportent un débat, ils ne tranchent pas.',
         link: { label: 'Voir la source', url: POLIGRAPH_SOURCE_URL },
       },
       {
@@ -145,6 +147,13 @@ export const LEGAL_DOCUMENTS: Record<LegalTopic, LegalDocument> = {
         title: 'Les propositions',
         body: `Recensées par Poligraph, qui relie chaque mesure à son document d’origine. Licence ${POLIGRAPH_LICENCE}.`,
         link: { label: 'poligraph.fr', url: POLIGRAPH_SOURCE_URL },
+      },
+      {
+        title: 'Les propositions, deuxième source',
+        body: `Recensées par ${ETMOI_NAME}, qui donne pour chaque mesure son document d’origine, sa date et sa nature${
+          ETMOI_DATE && dateEnFrancais(ETMOI_DATE) ? `. Données mises à jour le ${dateEnFrancais(ETMOI_DATE)}` : ''
+        }. ${ETMOI_LICENCE}.`,
+        link: { label: '2027etmoi.fr', url: ETMOI_SOURCE_URL },
       },
       {
         title: 'Les notices biographiques',

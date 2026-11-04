@@ -512,7 +512,7 @@ export function ResultsScreen({
             se demande sur quoi il repose, et un programme continue de s'écrire
             après l'arrêt des données. */}
         <Text style={styles.footnote}>
-          Propositions recensées par Poligraph (poligraph.fr), à raison du même nombre par
+          Propositions recensées par Poligraph (poligraph.fr) et 2027 et moi (2027etmoi.fr), à raison du même nombre par
           candidat
           {dateEnFrancais(DATASET_DATE) ? `, arrêtées au ${dateEnFrancais(DATASET_DATE)}` : ''}. Le
           pourcentage reflète uniquement les propositions présentées dans cette app, pas

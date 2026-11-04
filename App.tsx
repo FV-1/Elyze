@@ -656,6 +656,7 @@ function AppInner() {
             <ScreenTransition>
               <ThemeSelectScreen
                 initialSelection={selectedThemeIds}
+                quota={quotaDuFormat(format)}
                 onConfirm={handleThemesConfirmed}
                 onBack={() => setScreen(themesReturnTo)}
               />

@@ -278,7 +278,7 @@ describe('montage des écrans', () => {
     expect(onglet).toBeDefined();
     renderer.act(() => onglet!.props.onPress());
 
-    expect(texts(tree)).not.toContain('Qui a le plus de votes');
+    expect(texts(tree)).not.toContain('Ton classement provisoire');
     expect(texts(tree)).toContain('Ton classement est définitif');
 
     const versResultat = touchables(tree).find(
@@ -604,7 +604,7 @@ describe('montage des écrans', () => {
         onReveal={noop}
       />
     );
-    const mention = 'Sur le thème Santé uniquement';
+    const mention = 'Sur le thème Santé & solidarités uniquement';
     expect(texts(surSante).filter((t) => t === mention)).toHaveLength(2);
 
     // Sur tous les thèmes, c'est le classement général : rien à préciser.
@@ -669,7 +669,26 @@ describe('montage des écrans', () => {
       <ThemeSelectScreen initialSelection={['sante']} onConfirm={noop} onBack={noop} />
     );
     expectUsable(tree, 3);
-    expect(texts(tree)).toContain('Santé');
+    expect(texts(tree)).toContain('Santé & solidarités');
+  });
+
+  // L'écran annonçait toujours le paquet long : « Jouer : 165 cartes » pour
+  // une partie courte qui n'en tire que 55.
+  it('le choix des thèmes annonce le paquet du format choisi', () => {
+    const tous = THEMES.map((t) => t.id);
+    const court = mount(
+      <ThemeSelectScreen initialSelection={tous} quota={5} onConfirm={noop} onBack={noop} />
+    );
+    expect(texts(court)).toContain('Jouer : 55 cartes');
+    const long = mount(
+      <ThemeSelectScreen
+        initialSelection={tous}
+        quota={QUOTA_PAR_CANDIDAT}
+        onConfirm={noop}
+        onBack={noop}
+      />
+    );
+    expect(texts(long)).toContain('Jouer : 165 cartes');
   });
 
   it('les réglages se montent', () => {

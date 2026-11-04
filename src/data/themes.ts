@@ -1,27 +1,22 @@
 // FICHIER GÉNÉRÉ — ne pas modifier à la main.
 // Source : https://poligraph.fr/elections/presidentielle-2027
 // Export du 2026-08-29 · AGPL-3.0 / usage libre avec mention de la source (Poligraph)
+// Source : https://2027etmoi.fr (https://github.com/2027etmoi/2027etmoi, commit e497529)
+// Données du 2026-10-28 · Licence Ouverte 2.0 (Etalab), mention de la source et de la date de mise à jour
 // Régénérer avec : node scripts/generate-data.js
-// (les 15 thèmes de l’export Poligraph)
+// (les huit sujets affichés, qui regroupent les quinze thèmes des sources)
 
 import { ThemeTag } from '../types';
 
 export const THEMES: ThemeTag[] = [
-  { id: 'economie', label: 'Économie & budget', icon: '💶', categoryId: 'economie' },
-  { id: 'emploi', label: 'Emploi & travail', icon: '🤝', categoryId: 'economie' },
-  { id: 'retraites', label: 'Retraites', icon: '🧓', categoryId: 'economie' },
-  { id: 'solidarites', label: 'Solidarités & protection sociale', icon: '🫱', categoryId: 'economie' },
-  { id: 'sante', label: 'Santé', icon: '🏥', categoryId: 'education_sante' },
-  { id: 'education', label: 'Éducation & culture', icon: '🎓', categoryId: 'education_sante' },
-  { id: 'numerique', label: 'Numérique & tech', icon: '💻', categoryId: 'education_sante' },
-  { id: 'logement', label: 'Logement & urbanisme', icon: '🏠', categoryId: 'cadre_vie' },
-  { id: 'transports', label: 'Transports', icon: '🚆', categoryId: 'cadre_vie' },
-  { id: 'environnement', label: 'Environnement & énergie', icon: '🌱', categoryId: 'cadre_vie' },
-  { id: 'agriculture', label: 'Agriculture & alimentation', icon: '🌾', categoryId: 'cadre_vie' },
-  { id: 'securite', label: 'Sécurité & justice', icon: '⚖️', categoryId: 'regalien' },
-  { id: 'immigration', label: 'Immigration', icon: '🌍', categoryId: 'regalien' },
-  { id: 'defense', label: 'Affaires étrangères & défense', icon: '🛡️', categoryId: 'regalien' },
-  { id: 'institutions', label: 'Institutions', icon: '🏛️', categoryId: 'regalien' },
+  { id: 'economie', label: 'Économie & numérique', icon: '💶' },
+  { id: 'travail', label: 'Travail & retraites', icon: '🤝' },
+  { id: 'sante', label: 'Santé & solidarités', icon: '🏥' },
+  { id: 'education', label: 'École & culture', icon: '🎓' },
+  { id: 'ecologie', label: 'Écologie & agriculture', icon: '🌱' },
+  { id: 'logement', label: 'Logement & transports', icon: '🏠' },
+  { id: 'securite', label: 'Sécurité & immigration', icon: '⚖️' },
+  { id: 'institutions', label: 'Institutions & défense', icon: '🏛️' },
 ];
 
 export const THEMES_BY_ID: Record<string, ThemeTag> = Object.fromEntries(

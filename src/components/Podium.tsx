@@ -56,7 +56,7 @@ export function Podium({
   instant,
   countDelayMs = 0,
   revealAt,
-  nameLines = 1,
+  nameLines = 2,
   onCandidatePress,
 }: {
   results: CandidateResult[];
@@ -71,9 +71,10 @@ export function Podium({
   countDelayMs?: number;
   // Absent sur la carte de partage, qui est une image : rien n'y est tactile.
   onCandidatePress?: (candidateId: string) => void;
-  // Les colonnes sont étroites : sur la carte de partage, où la largeur est
-  // fixe et plus contrainte qu'à l'écran, deux lignes évitent de tronquer les
-  // noms longs. Les marches restent alignées en bas quoi qu'il arrive.
+  // Les colonnes sont étroites : sur une seule ligne, « Raphaël Glucksmann »
+  // ou « Dominique de Villepin » devenaient « Raphaël Gluck… », à l'écran
+  // comme sur la carte de partage. Deux lignes par défaut, donc. Les marches
+  // restent alignées en bas quoi qu'il arrive.
   nameLines?: number;
 }) {
   const colors = useColors();

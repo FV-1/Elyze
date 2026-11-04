@@ -24,7 +24,7 @@ import { useColors, useThemeSettings } from '../theme/ThemeContext';
 import { RainbowGradient } from './RainbowGradient';
 import { cardFrameSweep, cardSweep } from '../theme/rainbowGradient';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import { precisionLabel, proposalProvenance } from '../data/source';
+import { precisionLabel } from '../data/source';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.28;
@@ -443,7 +443,6 @@ export function SwipeCard({
 
   const isTop = stackPosition === 0;
   const precision = precisionLabel(proposal);
-  const provenance = proposalProvenance(proposal);
   const explanation = PROPOSAL_EXPLANATIONS[proposal.id];
   const hasDebate = Boolean(PROPOSAL_ARGUMENTS[proposal.id]) && Boolean(onOpenDebate);
   const proposalSize = proposalFontSize(
@@ -457,7 +456,10 @@ export function SwipeCard({
   const dividerMargin = dividerMarginFor(cardHeight);
   const cardA11yLabel = `Thème : ${themeTag.label}. Proposition : ${proposal.text}.${
     explanation ? ` En clair : ${explanation}` : ''
-  }${precision ? ` ${precision}.` : ''} Source : ${provenance}`;
+  }${precision ? ` ${precision}.` : ''}`;
+  // Pas de source dans ce libellé : elle trahirait l'auteur au lecteur
+  // d'écran, comme elle le ferait à l'écran. Elle est donnée une fois
+  // l'auteur dévoilé, dans la fiche du candidat.
 
   const cardContent = (
     <Animated.View

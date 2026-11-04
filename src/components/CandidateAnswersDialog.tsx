@@ -7,6 +7,7 @@ import { Avatar } from './Avatar';
 import { THEMES_BY_ID } from '../data/themes';
 import { Bascule } from './Bascule';
 import { themeChipColors } from '../data/themeColors';
+import { openUrl, proposalProvenance } from '../data/source';
 import { AnswerValue, Candidate, Proposal } from '../types';
 import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors, useThemeColor, useThemeSettings } from '../theme/ThemeContext';
@@ -191,6 +192,26 @@ export function CandidateAnswersDialog({
                       />
                     )}
                     <Text style={styles.itemText}>{p.text}</Text>
+                    {/* La provenance n'apparaît qu'ici, auteur dévoilé. Sur
+                        la carte de swipe, elle trahirait l'auteur : chaque
+                        document daté appartient à un seul candidat, et deux
+                        cartes de même date se reconnaîtraient vite. */}
+                    {p.sourceUrl ? (
+                      <Pressable
+                        onPress={() => openUrl(p.sourceUrl!)}
+                        hitSlop={6}
+                        accessibilityRole="link"
+                        accessibilityLabel={`Source : ${proposalProvenance(p)}. Ouvrir le document d’origine`}
+                      >
+                        <Text style={styles.itemSourceLink}>
+                          {proposalProvenance(p)} · Voir la source
+                        </Text>
+                      </Pressable>
+                    ) : (
+                      <Text style={styles.itemSource}>
+                        Recensée par Poligraph, sans document d’origine identifié
+                      </Text>
+                    )}
                   </View>
                 );
               })
@@ -350,6 +371,15 @@ function makeStyles(colors: ColorTokens) {
       lineHeight: (fonts.small + 2) * 1.45,
       fontWeight: '500',
       color: colors.textPrimary,
+    },
+    itemSource: {
+      fontSize: fonts.tiny,
+      color: colors.textMuted,
+    },
+    itemSourceLink: {
+      fontSize: fonts.tiny,
+      fontWeight: '700',
+      color: colors.accentText,
     },
     emptyWrap: {
       alignItems: 'center',

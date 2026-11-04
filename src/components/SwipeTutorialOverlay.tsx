@@ -109,8 +109,10 @@ function makeStyles(colors: ColorTokens) {
       ...StyleSheet.absoluteFill,
       // 0.86 plutôt que 0.72 : en thème clair, le fond de l'app transparaissait
       // assez pour ramener le voile à un gris moyen sur lequel plus aucune
-      // icône colorée ne passait le contraste.
-      backgroundColor: 'rgba(10,9,14,0.86)',
+      // icône colorée ne passait le contraste. Puis 0.94 : à 0.86, le texte
+      // de la carte, en gros caractères clairs, restait lisible SOUS les
+      // consignes et s'y mêlait ligne à ligne.
+      backgroundColor: 'rgba(10,9,14,0.94)',
     },
     content: {
       alignItems: 'center',

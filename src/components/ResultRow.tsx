@@ -55,18 +55,28 @@ export function ResultRow({
       <Avatar candidate={candidate} size={40} emphasized={emphasized} />
 
       <View style={styles.middle}>
+        {/* LE POURCENTAGE EST À CÔTÉ DE LA BARRE, PAS EN BOUT DE RANGÉE.
+            En colonne à droite, il prenait la largeur sur toute la hauteur, et
+            le nom n'avait plus qu'une centaine de points : « Édouard Phili… »
+            tronqué, puis sur deux lignes (rangées inégales), puis rétréci
+            (tailles inégales d'un nom à l'autre). Placé au bout de la barre
+            qu'il chiffre, il rend au nom toute la largeur. */}
         <Text style={styles.name} numberOfLines={1}>
           {candidate.name}
         </Text>
-        <View style={styles.track}>
-          <View style={[styles.fill, { width: `${pct}%`, backgroundColor: fillColor }]} />
+        <View style={styles.barLine}>
+          <View style={styles.track}>
+            <View style={[styles.fill, { width: `${pct}%`, backgroundColor: fillColor }]} />
+          </View>
+          <Text style={[styles.pct, emphasized && styles.pctEmphasized]}>{pct}%</Text>
         </View>
+        {/* Le décompte d'abord : c'est lui qui dit le poids du pourcentage. Quand
+            la ligne déborde, c'est le nom du parti qui se fait couper. */}
         <Text style={styles.caption} numberOfLines={1}>
-          {candidate.party} · {answered} proposition{answered > 1 ? 's' : ''}
+          {answered} proposition{answered > 1 ? 's' : ''} · {candidate.party}
         </Text>
       </View>
 
-      <Text style={[styles.pct, emphasized && styles.pctEmphasized]}>{pct}%</Text>
       <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
     </Pressable>
   );
@@ -105,7 +115,13 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '600',
       color: colors.textPrimary,
     },
+    barLine: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
     track: {
+      flex: 1,
       height: BAR_HEIGHT,
       borderRadius: BAR_RADIUS,
       backgroundColor: colors.neutralTrack,

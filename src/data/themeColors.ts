@@ -35,24 +35,22 @@ import { contrastRatio, mixHex } from '../utils/color';
 //     préserve le damier de la contrainte 3. C'est la distance entre voisines
 //     qui paie, de 57 à 45 — assez pour qu'on les distingue encore, et c'est
 //     le prix d'une mosaïque qu'on peut regarder.
+//
+// Depuis le passage à huit sujets (voir scripts/generate-data.js), la
+// palette n'en garde que huit, reprises TELLES QUELLES de l'ancienne : elles
+// tiennent déjà toutes les contraintes ci-dessus. Le choix évite seulement de
+// poser deux verts ou deux violets sur des tuiles qui se touchent.
 export const THEME_COLORS: Record<string, string> = {
   economie: '#7166D0',
-  emploi: '#7F6127',
-  retraites: '#B13684',
-  solidarites: '#C7495E',
+  travail: '#7F6127',
 
   sante: '#C54C42',
-  education: '#247442',
-  numerique: '#7D4BC8',
+  education: '#AA4AC8',
 
-  logement: '#AA4AC8',
-  transports: '#536FCA',
-  environnement: '#347424',
-  agriculture: '#4F6F22',
+  ecologie: '#347424',
+  logement: '#286F83',
 
   securite: '#3A76BD',
-  immigration: '#C13BB4',
-  defense: '#286F83',
   institutions: '#A05231',
 };
 

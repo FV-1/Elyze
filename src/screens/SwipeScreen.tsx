@@ -490,10 +490,12 @@ export function SwipeScreen({
           onChange={onChangeTab}
           extra={{
             // Le compte ne s'affiche que s'il y a quelque chose à signaler :
-            // « 15 thèmes » en permanence banaliserait le repère, alors que
+            // « 8 thèmes » en permanence banaliserait le repère, alors que
             // c'est en swipant une sélection restreinte qu'on a besoin de s'en
             // souvenir sans quitter l'écran.
-            label: themeFilter.filtered ? `${themeFilter.selected} thèmes` : 'Thèmes',
+            label: themeFilter.filtered
+              ? `${themeFilter.selected} thème${themeFilter.selected > 1 ? 's' : ''}`
+              : 'Thèmes',
             icon: 'pricetags-outline',
             onPress: handleOpenThemeFilter,
             accessibilityLabel: themeFilter.filtered

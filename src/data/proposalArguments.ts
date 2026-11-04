@@ -42,6 +42,12 @@ export type ProposalDebate = {
 
 export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
   // --- Bernard Cazeneuve -----------------------------------------------------
+  'cazeneuve-economie-baisse-des-impots-de-production-': {
+    pour:
+      'Taxer l’activité avant le bénéfice pénalise l’industrie française face à ses voisines : alléger cette charge aide à produire en France.',
+    contre:
+      'Les aides fiscales supprimées en contrepartie profitent souvent aux mêmes entreprises : le gain net pour elles pourrait être faible.',
+  },
   'cazeneuve-economie-instaurer-une-fiscalite-ciblant-': {
     pour:
       'Les revenus du capital sont aujourd\'hui moins taxés que ceux du travail : rééquilibrer rapporterait sans peser sur les salaires.',
@@ -60,17 +66,53 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Repousser l\'équilibre revient souvent à ne jamais l\'atteindre, et la dette sociale finit payée par les générations suivantes.',
   },
+  'cazeneuve-numerique-donner-force-de-loi-a-l-evaluati': {
+    pour:
+      'Les systèmes les plus puissants sont déployés sans qu\'aucune autorité ne puisse les examiner avant leur mise sur le marché.',
+    contre:
+      'Un examen préalable retarde l\'arrivée des services en Europe et suppose une expertise que peu d\'agences possèdent.',
+  },
+  'cazeneuve-numerique-stocker-les-donnees-des-francais': {
+    pour:
+      'Des lois étrangères permettent à des autorités d\'accéder aux données détenues par leurs entreprises, où qu\'elles soient stockées.',
+    contre:
+      'L\'offre européenne reste limitée : imposer une localisation renchérit le service et retarde certains projets publics.',
+  },
   'cazeneuve-emploi-generaliser-l-apprentissage-des-': {
     pour:
       'Trop de jeunes enchaînent stages et contrats courts pendant des années : ramener le CDI comme norme raccourcit cette période d\'attente.',
     contre:
       'Imposer le CDI pousse les employeurs à embaucher moins, faute de pouvoir se séparer d\'un salarié qui ne convient pas.',
   },
+  'cazeneuve-emploi-resorption-des-ecarts-de-salaire': {
+    pour:
+      'À poste égal, des écarts de paie subsistent, et ils se prolongent à la retraite : les corriger relève de l’égalité de traitement.',
+    contre:
+      'La mesure ne dit ni comment ni avec quel financement : relever ces pensions coûte cher à un système déjà en déficit.',
+  },
+  'cazeneuve-retraites-allongement-de-la-duree-de-cotis': {
+    pour:
+      'Jouer sur la durée plutôt que sur l’âge ménage ceux qui ont commencé tôt, et la négociation facilite l’acceptation.',
+    contre:
+      'Allonger la durée exigée pénalise ceux qui entrent tard sur le marché du travail ou ont des carrières hachées.',
+  },
   'cazeneuve-retraites-retablir-le-droit-a-un-depart-an': {
     pour:
       'Certains métiers usent le corps au point de réduire l\'espérance de vie : partir plus tôt y rétablit une égalité réelle.',
     contre:
       'Définir la pénibilité par une liste de critères revient à en oublier d\'autres, et ouvre un contentieux sans fin.',
+  },
+  'cazeneuve-sante-faire-de-la-prise-en-charge-des-': {
+    pour:
+      'Les troubles psychiques touchent un adulte sur cinq et sont repérés tard, faute de formation des adultes qui côtoient les jeunes.',
+    contre:
+      'Le label de grande cause nationale n\'apporte pas de moyens, alors que le manque de pédopsychiatres est le vrai goulot.',
+  },
+  'cazeneuve-sante-prise-en-charge-du-grand-age-de-': {
+    pour:
+      'Le nombre de personnes âgées dépendantes va fortement augmenter, et le coût d’un établissement dépasse souvent la pension.',
+    contre:
+      'La mesure ne chiffre pas son coût, alors que financer la dépendance suppose des milliards supplémentaires chaque année.',
   },
   'cazeneuve-solidarites-accorder-une-aide-supplementaire': {
     pour:
@@ -84,11 +126,17 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Verser une somme sans accompagnement change rarement la situation, et le dispositif se superposerait au contrat d\'engagement jeune.',
   },
-  'cazeneuve-sante-faire-de-la-prise-en-charge-des-': {
+  'cazeneuve-solidarites-simplification-unification-et-au': {
     pour:
-      'Les troubles psychiques touchent un adulte sur cinq et sont repérés tard, faute de formation des adultes qui côtoient les jeunes.',
+      'Beaucoup de personnes éligibles ne demandent pas leurs aides : un versement automatique réduit ce non-recours.',
     contre:
-      'Le label de grande cause nationale n\'apporte pas de moyens, alors que le manque de pédopsychiatres est le vrai goulot.',
+      'Unifier des aides aux règles différentes crée des perdants, et le versement automatique suppose des données fiables.',
+  },
+  'cazeneuve-education-au-moins-2-000-d-aide-supplement': {
+    pour:
+      'L’échec en première année touche surtout les étudiants modestes, souvent obligés de travailler à côté de leurs études.',
+    contre:
+      'Une aide limitée aux deux premières années ne règle pas la précarité de ceux qui poursuivent plus longtemps.',
   },
   'cazeneuve-education-former-massivement-les-enseignan': {
     pour:
@@ -102,17 +150,23 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Les bâtiments appartiennent aux communes et aux départements : un plan d\'État suppose un cofinancement rarement au rendez-vous.',
   },
-  'cazeneuve-numerique-donner-force-de-loi-a-l-evaluati': {
+  'cazeneuve-environnement-creer-une-datar-du-climat-rattac': {
     pour:
-      'Les systèmes les plus puissants sont déployés sans qu\'aucune autorité ne puisse les examiner avant leur mise sur le marché.',
+      'L\'adaptation demande une vision de long terme que des ministères remaniés tous les deux ans ne peuvent pas porter.',
     contre:
-      'Un examen préalable retarde l\'arrivée des services en Europe et suppose une expertise que peu d\'agences possèdent.',
+      'Une structure de coordination de plus ne remplace pas les moyens d\'agir, qui restent dans les ministères.',
   },
-  'cazeneuve-numerique-stocker-les-donnees-des-francais': {
+  'cazeneuve-environnement-filiere-electronucleaire-assumee': {
     pour:
-      'Des lois étrangères permettent à des autorités d\'accéder aux données détenues par leurs entreprises, où qu\'elles soient stockées.',
+      'Le nucléaire produit une électricité stable et peu émettrice : le planifier avec les renouvelables sécurise l’approvisionnement.',
     contre:
-      'L\'offre européenne reste limitée : imposer une localisation renchérit le service et retarde certains projets publics.',
+      'Les nouveaux réacteurs coûtent cher et prennent du retard, et la production nucléaire laisse des déchets à long terme.',
+  },
+  'cazeneuve-agriculture-agriculture-prix-dignes-pour-les': {
+    pour:
+      'Beaucoup d’agriculteurs vendent à perte et une grande partie partira bientôt à la retraite : il faut revenus et terres pour les remplacer.',
+    contre:
+      'La mesure ne dit pas comment garantir ces prix, alors que la concurrence européenne et mondiale pèse sur les cours.',
   },
   'cazeneuve-logement-lancer-un-grand-plan-de-construc': {
     pour:
@@ -120,11 +174,17 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'L\'annonce ne dit ni combien de logements ni avec quel financement, alors que le blocage est d\'abord foncier et bancaire.',
   },
-  'cazeneuve-environnement-creer-une-datar-du-climat-rattac': {
+  'cazeneuve-logement-renovation-massive-des-logements': {
     pour:
-      'L\'adaptation demande une vision de long terme que des ministères remaniés tous les deux ans ne peuvent pas porter.',
+      'Les logements mal isolés pèsent sur les factures des ménages modestes et sur les émissions : les rénover sert les deux.',
     contre:
-      'Une structure de coordination de plus ne remplace pas les moyens d\'agir, qui restent dans les ministères.',
+      'Les programmes de rénovation existants avancent lentement, faute d’artisans et à cause d’un reste à charge élevé.',
+  },
+  'cazeneuve-transports-developpement-des-transports-col': {
+    pour:
+      'Sans transports en commun, la voiture devient obligatoire : en développer réduit les dépenses des ménages et les émissions.',
+    contre:
+      'Dans les zones peu denses, les lignes régulières circulent souvent presque vides et coûtent cher aux collectivités.',
   },
   'cazeneuve-securite-mettre-en-place-une-police-de-pr': {
     pour:
@@ -162,19 +222,24 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Renoncer à l\'unanimité, c\'est accepter d\'être mis en minorité sur des sujets qui touchent à la souveraineté.',
   },
-
   // --- Bruno Retailleau ------------------------------------------------------
+  'retailleau-economie-creation-d-un-fonds-france-produ': {
+    pour:
+      'Les régions connaissent leur tissu industriel : leur confier l’enveloppe rapproche les décisions des entreprises qui investissent.',
+    contre:
+      'Rapporté à l’ensemble de l’industrie, le montant reste modeste, et le répartir entre régions risque de le disperser en petits projets.',
+  },
   'retailleau-economie-redonner-au-moins-30-milliards-d': {
     pour:
       'Baisser en même temps le coût du travail et les prélèvements sur les salaires soutient l\'emploi et le pouvoir d\'achat.',
     contre:
       'Trente milliards de recettes en moins doivent être trouvés ailleurs, et la mesure ne dit pas dans quel budget.',
   },
-  'retailleau-economie-relever-tres-fortement-le-plafon': {
+  'retailleau-economie-report-automatique-de-l-exigibil': {
     pour:
-      'Faire circuler l\'épargne des plus âgés vers les jeunes actifs finance logement et création d\'entreprise au bon moment.',
+      'Payer ces droits au moment de la transmission oblige parfois à vendre une partie de l’entreprise : différer l’impôt la garde intacte.',
     contre:
-      'L\'avantage ne profite qu\'aux familles déjà patrimoniales, et creuse l\'écart avec celles qui n\'ont rien à transmettre.',
+      'Un paiement repoussé sans terme fixe peut devenir une exonération de fait, au bénéfice des héritiers d’entreprises très valorisées.',
   },
   'retailleau-economie-supprimer-toutes-les-cotisations': {
     pour:
@@ -182,53 +247,47 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Les cotisations financent retraites et assurance maladie : les supprimer sur une part du travail creuse un trou à combler.',
   },
-  'retailleau-emploi-encadrer-les-refus-d-offres-rais': {
+  'retailleau-emploi-baisse-des-cotisations-de-30-mil': {
     pour:
-      'L\'assurance chômage est financée par ceux qui travaillent : refuser trois emplois adaptés sans conséquence pose un problème d\'équité.',
+      'Le coût du travail est élevé en France : baisser les cotisations augmente le salaire net et encourage les embauches.',
     contre:
-      'La notion d\'offre raisonnable reste floue, et couper l\'indemnisation peut contraindre à accepter un poste éloigné ou sous-payé.',
+      'Ces cotisations financent la protection sociale : les réduire impose de trouver ailleurs trente milliards chaque année.',
   },
-  'retailleau-emploi-lever-les-obstacles-au-retour-a-': {
+  'retailleau-emploi-code-du-travail-refonde-sur-un-s': {
     pour:
-      'Certains dispositifs font qu\'un retour à l\'emploi rapporte à peine plus que l\'inactivité : lever ces effets de seuil est un gain net.',
+      'Des règles négociées au plus près du terrain s’adaptent mieux aux réalités de chaque secteur qu’un code uniforme.',
     contre:
-      'L\'obstacle principal est souvent la garde d\'enfants ou le transport, que la mesure ne traite pas.',
+      'Dans les petites entreprises, le salarié pèse peu dans la négociation : renvoyer à l’accord local peut réduire ses protections.',
   },
-  'retailleau-emploi-limiter-la-duree-d-indemnisation': {
+  'retailleau-retraites-apres-l-age-legal-plus-aucune-co': {
     pour:
-      'Une indemnisation plus courte accélère le retour à l\'emploi, comme l\'ont montré plusieurs réformes menées en Europe.',
+      'Prolonger son activité deviendrait plus rentable, ce qui aide les entreprises à garder l’expérience et les savoir-faire des seniors.',
     contre:
-      'Six mois suffisent rarement après cinquante ans ou dans un bassin sinistré, où la recherche dure bien plus longtemps.',
+      'Ces retraités cesseraient de contribuer au système qui paie leur pension, ce qui réduit ses recettes au moment où il manque.',
   },
-  'retailleau-emploi-mettre-en-place-une-annualisatio': {
+  'retailleau-retraites-creation-d-un-etage-de-retraite-': {
     pour:
-      'Beaucoup d\'activités sont saisonnières : lisser sur l\'année évite de licencier en creux et de refuser des commandes en pointe.',
+      'Compléter la répartition par l’épargne diversifie les ressources des futurs retraités face au vieillissement de la population.',
     contre:
-      'L\'annualisation transfère l\'imprévisibilité sur le salarié, dont les semaines et les revenus deviennent irréguliers.',
+      'Seuls ceux qui ont les moyens d’épargner en profiteraient, et le montant obtenu dépendrait des marchés financiers.',
   },
-  'retailleau-emploi-rapprocher-le-systeme-d-assuranc': {
+  'retailleau-solidarites-compte-social-unique-total-des-a': {
     pour:
-      'Le régime français est parmi les plus longs d\'Europe en durée d\'indemnisation : converger réduirait son déficit.',
+      'Le travail doit toujours rapporter plus que les aides : plafonner leur cumul renforce l’incitation à reprendre un emploi.',
     contre:
-      'Comparer les seules durées ignore les écarts de salaire, de coût du logement et de protection entre pays.',
+      'Le plafond pénaliserait les familles nombreuses et les plus précaires, dont les besoins dépassent ce montant.',
   },
-  'retailleau-solidarites-accompagner-les-six-premiers-moi': {
+  'retailleau-solidarites-conge-de-naissance-facultatif-et': {
     pour:
-      'Le lien qui se noue les premiers mois conditionne la suite, et beaucoup de parents reprennent le travail sans y être préparés.',
+      'Un congé mieux payé et plus long permet de s’occuper de l’enfant sans renoncer à presque tout revenu.',
     contre:
-      'La mesure reste imprécise sur le contenu de cet accompagnement, sur ses moyens et sur qui l\'assurerait.',
+      'Rendu facultatif, ce congé reste surtout pris par les mères, ce qui peut freiner leur carrière, et son coût est élevé.',
   },
   'retailleau-solidarites-creer-un-revenu-d-incitation-a-l': {
     pour:
       'Trois aides distinctes créent des seuils où reprendre un travail fait perdre plus qu\'il ne rapporte : une allocation unique les supprime.',
     contre:
       'Fusionner trois dispositifs aux règles différentes fait toujours des perdants, rarement identifiés avant la réforme.',
-  },
-  'retailleau-solidarites-exclure-de-l-apl-les-etudiants-i': {
-    pour:
-      'Une aide au logement versée à des étudiants dont les parents sont parmi les plus aisés manque sa cible.',
-    contre:
-      'Cette aide ignore les revenus des parents parce que l\'étudiant est un foyer distinct : y revenir prolonge la dépendance familiale.',
   },
   'retailleau-solidarites-fusionner-12-dispositifs-d-aide-': {
     pour:
@@ -242,35 +301,11 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Doubler les diplômés suppose des enseignants-chercheurs qu\'on ne forme pas en cinq ans, et une demande qui suive.',
   },
-  'retailleau-numerique-doubler-le-nombre-d-ingenieurs-s': {
+  'retailleau-education-examen-d-entree-en-sixieme-deter': {
     pour:
-      'Les entreprises recrutent à l\'étranger faute de candidats formés ici dans ces spécialités.',
+      'Regrouper les élèves par niveau permet d’adapter l’enseignement et d’aider plus vite ceux qui ont des lacunes.',
     contre:
-      'Doubler les diplômés suppose des enseignants-chercheurs qu\'on ne forme pas en cinq ans, et une demande qui suive.',
-  },
-  'retailleau-logement-remettre-la-france-sur-une-traje': {
-    pour:
-      'La production est tombée bien en dessous des besoins, ce qui nourrit la hausse des prix et l\'allongement des files d\'attente.',
-    contre:
-      'Fixer un chiffre ne lève aucun des obstacles réels : coût du foncier, taux d\'intérêt, refus de permis.',
-  },
-  'retailleau-logement-rendre-aux-maires-la-liberte-de-': {
-    pour:
-      'Un maire qui accueille des logements en supporte le coût sans recette en face : lui rendre une part de la TVA change ce calcul.',
-    contre:
-      'Intéresser financièrement à la construction encourage l\'étalement là où le foncier est le moins cher, donc le plus éloigné.',
-  },
-  'retailleau-logement-retablir-la-rotation-dans-le-par': {
-    pour:
-      'Des logements sociaux restent occupés par des ménages dont les revenus ont beaucoup augmenté, pendant que d\'autres attendent des années.',
-    contre:
-      'Obliger à partir déracine des familles installées, et le parc privé n\'offre pas d\'alternative abordable pour les reloger.',
-  },
-  'retailleau-logement-supprimer-les-interdictions-de-l': {
-    pour:
-      'Interdire la location des logements mal notés retire du marché des biens que rien ne remplace, surtout en zone tendue.',
-    contre:
-      'Ces logements coûtent cher à chauffer et deviennent invivables l\'été : l\'interdiction protège d\'abord les locataires.',
+      'Classer les élèves dès onze ans risque de figer les inégalités, les groupes faibles ayant du mal à rattraper les autres.',
   },
   'retailleau-environnement-abroger-le-volet-electricite-de-': {
     pour:
@@ -278,11 +313,11 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Abroger sans remplacer laisse la filière sans visibilité et bloque des investissements déjà engagés.',
   },
-  'retailleau-environnement-consolider-le-parc-nucleaire-en-': {
+  'retailleau-environnement-fixer-d-emblee-a-80-ans-l-horizo': {
     pour:
-      'Le nucléaire fournit une électricité pilotable et décarbonée : les chantiers lancés doivent aboutir sans nouvelle dérive.',
+      'Prolonger les réacteurs existants fournit une électricité peu chère et décarbonée, comme le font déjà les États-Unis.',
     contre:
-      'Les chantiers récents ont connu des retards et des surcoûts considérables : reproduire le modèle expose au même risque.',
+      'Aucun réacteur de ce type n’a fonctionné quatre-vingts ans : fixer l’horizon d’emblée anticipe sur les contrôles de sûreté.',
   },
   'retailleau-environnement-inscrire-les-reacteurs-nucleaire': {
     pour:
@@ -290,29 +325,11 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Aucun réacteur au monde n\'a fonctionné aussi longtemps : la trajectoire est fixée avant la démonstration de sûreté.',
   },
-  'retailleau-environnement-proteger-le-parc-nucleaire-des-a': {
+  'retailleau-agriculture-reautorisation-de-certains-neoni': {
     pour:
-      'Les arrêts imprévus obligent à importer une électricité plus chère et plus carbonée.',
+      'Les agriculteurs français subissent une concurrence déloyale quand des voisins européens utilisent des produits interdits ici.',
     contre:
-      'La disponibilité dépend d\'abord de l\'état du parc et de la maintenance, que la mesure ne détaille pas.',
-  },
-  'retailleau-agriculture-autoriser-l-usage-de-neonicotino': {
-    pour:
-      'Interdire en France ce qui est autorisé chez les voisins fait perdre des marchés sans réduire l\'usage à l\'échelle européenne.',
-    contre:
-      'Ces substances sont mises en cause dans l\'effondrement des pollinisateurs, dont dépend une partie des cultures.',
-  },
-  'retailleau-agriculture-garantir-une-concurrence-effecti': {
-    pour:
-      'Le rapport de force est déséquilibré entre des centaines de milliers de producteurs et quelques centrales d\'achat.',
-    contre:
-      'Le contrôle de la concurrence existe déjà : sans moyens supplémentaires, un renforcement resterait théorique.',
-  },
-  'retailleau-agriculture-generaliser-un-mecanisme-de-diss': {
-    pour:
-      'Le prix des terres est devenu inaccessible : séparer le foncier de l\'exploitation permet de s\'installer sans tout acheter.',
-    contre:
-      'Dissocier fait entrer des investisseurs dans le foncier agricole, avec le risque d\'y voir un placement plutôt qu\'un métier.',
+      'Ces insecticides sont associés au déclin des abeilles et des pollinisateurs, et soulèvent des questions de santé.',
   },
   'retailleau-agriculture-reconnaitre-les-projets-de-stock': {
     pour:
@@ -320,17 +337,53 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Ce statut permet de passer outre des protections environnementales, et prélever en amont assèche les milieux en aval.',
   },
+  'retailleau-logement-programme-d-accession-pour-les-l': {
+    pour:
+      'Devenir propriétaire de son logement constitue un patrimoine et stabilise les quartiers, tout en finançant de nouvelles constructions.',
+    contre:
+      'Chaque logement vendu sort du parc social, alors que plus de deux millions de ménages attendent une attribution.',
+  },
+  'retailleau-logement-remettre-la-france-sur-une-traje': {
+    pour:
+      'La production est tombée bien en dessous des besoins, ce qui nourrit la hausse des prix et l\'allongement des files d\'attente.',
+    contre:
+      'Fixer un chiffre ne lève aucun des obstacles réels : coût du foncier, taux d\'intérêt, refus de permis.',
+  },
+  'retailleau-logement-supprimer-les-interdictions-de-l': {
+    pour:
+      'Interdire la location des logements mal notés retire du marché des biens que rien ne remplace, surtout en zone tendue.',
+    contre:
+      'Ces logements coûtent cher à chauffer et deviennent invivables l\'été : l\'interdiction protège d\'abord les locataires.',
+  },
   'retailleau-securite-autoriser-la-vision-par-ordinate': {
     pour:
       'Analyser automatiquement les images permet de repérer un comportement dangereux là où aucun opérateur ne peut tout regarder.',
     contre:
       'La frontière avec la reconnaissance faciale est technique et mouvante : l\'exclure par principe ne l\'empêche pas en pratique.',
   },
+  'retailleau-securite-verification-des-antecedents-de-': {
+    pour:
+      'Des agresseurs ont pu travailler avec des enfants faute de contrôle : une vérification systématique protège les mineurs.',
+    contre:
+      'Contrôler en permanence des millions d’intervenants, bénévoles compris, demande des moyens administratifs considérables.',
+  },
+  'retailleau-immigration-acces-des-etrangers-aux-prestati': {
+    pour:
+      'Lier les aides à une durée de résidence et de travail renforce la contribution préalable et limite l’attrait des prestations.',
+    contre:
+      'Conditionner des prestations à la durée de séjour se heurte au principe d’égalité, d’où le besoin de réviser la Constitution.',
+  },
   'retailleau-immigration-conditionner-le-benefice-plein-d': {
     pour:
       'Lier l\'accès aux aides à une durée de résidence et de travail rapproche les droits ouverts de la contribution versée.',
     contre:
       'Retarder l\'accès aux aides familiales touche d\'abord des enfants, qui n\'ont aucune part dans la situation de leurs parents.',
+  },
+  'retailleau-defense-moyens-consacres-a-l-ia-de-defen': {
+    pour:
+      'Les armées étrangères investissent massivement dans ces technologies : prendre du retard affaiblirait la défense.',
+    contre:
+      'L’enjeu dépasse le budget : il faut des ingénieurs et des données, et l’usage militaire de ces outils pose des questions éthiques.',
   },
   'retailleau-defense-multiplier-par-cinq-les-moyens-c': {
     pour:
@@ -344,189 +397,193 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Les départs ne surviennent pas là où les effectifs sont excédentaires, et le redéploiement suppose des compétences transférables.',
   },
-
+  'retailleau-institutions-seuil-du-referendum-d-initiative': {
+    pour:
+      'Le seuil actuel est si élevé qu’aucun référendum de ce type n’a abouti : l’abaisser rend l’outil utilisable.',
+    contre:
+      'Des référendums plus fréquents peuvent affaiblir le Parlement et se transformer en votes sur la popularité du pouvoir.',
+  },
   // --- Dominique de Villepin -------------------------------------------------
-  'villepin-economie-augmenter-les-impots-pour-que-le': {
+  'villepin-economie-constituer-un-fonds-national-de-': {
     pour:
-      'Un impôt unique remplace un empilement illisible, et la part environnementale fait payer ce qui abîme plutôt que ce qui produit.',
+      'Un fonds public permet d’investir sur le long terme dans des secteurs que les marchés financent mal, en gardant la maîtrise nationale.',
     contre:
-      'Taxer le patrimoine plutôt que le revenu frappe des biens qui ne rapportent rien, et pousse les capitaux à sortir du pays.',
+      'L’État n’a pas toujours su choisir ses investissements, et un tel fonds suppose des ressources que le budget actuel n’a pas.',
   },
-  'villepin-economie-renforcer-la-souverainete-indust': {
+  'villepin-economie-creer-un-impot-unique-sur-le-pat': {
     pour:
-      'Des normes communes évitent aux entreprises de refaire vingt-sept fois les mêmes démarches, et créent un marché à leur taille.',
+      'Un impôt unique sur le patrimoine est plus lisible, et les héritages concentrent une part croissante de la richesse des ménages.',
     contre:
-      'Harmoniser demande des années de négociation, et l\'alignement se fait parfois sur les exigences des pays les moins-disants.',
+      'Les patrimoines mobiles peuvent quitter le pays, et taxer davantage les héritages touche aussi des familles aux biens peu liquides.',
   },
-  'villepin-economie-simplifier-radicalement-le-syste': {
+  'villepin-economie-ramener-le-deficit-public-sous-3': {
     pour:
-      'Un système à neuf impôts serait compréhensible sans expert, et supprimerait des taxes qui coûtent plus à collecter qu\'elles ne rapportent.',
+      'La dette coûte de plus en plus cher en intérêts : réduire le déficit redonne des marges et respecte les règles européennes.',
     contre:
-      'Chaque impôt supprimé a ses bénéficiaires : regrouper fait mécaniquement des perdants, rarement annoncés à l\'avance.',
+      'Atteindre cet objectif exige des économies ou des hausses d’impôts importantes, qui peuvent freiner la croissance et l’emploi.',
   },
-  'villepin-emploi-conditionner-les-exonerations-de': {
+  'villepin-economie-ramener-toute-la-fiscalite-a-neu': {
     pour:
-      'Des dizaines de milliards d\'exonérations sont versées sans contrepartie vérifiable : les conditionner rend cet argent traçable.',
+      'Un système fiscal plus simple coûte moins à gérer, se contourne moins facilement et se comprend mieux par les contribuables.',
     contre:
-      'Ajouter des conditions alourdit les démarches des petites entreprises, qui n\'ont pas de service dédié pour les remplir.',
+      'Fusionner des impôts aux assiettes très différentes crée des gagnants et des perdants difficiles à prévoir pendant la transition.',
   },
-  'villepin-emploi-faire-de-l-insertion-professionn': {
+  'villepin-economie-supprimer-les-niches-fiscales-et': {
     pour:
-      'Le chômage des jeunes reste très supérieur à la moyenne, et l\'accès aux stages dépend encore du carnet d\'adresses familial.',
+      'Ces exceptions compliquent l’impôt et profitent souvent aux plus aisés, qui savent les utiliser : les supprimer élargit la base.',
     contre:
-      'Faire d\'un public la priorité absolue en déclasse d\'autres, notamment les seniors, déjà les plus longs à retrouver un emploi.',
+      'Beaucoup soutiennent l’emploi à domicile, le logement ou les dons : les retirer d’un coup frapperait des secteurs entiers.',
   },
-  'villepin-emploi-instaurer-un-28e-regime-fonde-su': {
+  'villepin-emploi-adopter-une-grande-loi-d-accompa': {
     pour:
-      'Une entreprise présente dans plusieurs pays n\'aurait plus à s\'adapter à vingt-sept droits du travail différents.',
+      'Cette technologie va transformer de nombreux emplois : planifier les formations limite les reconversions subies.',
     contre:
-      'Un régime parallèle risque d\'être choisi pour ce qu\'il permet d\'éviter, et de vider les règles nationales de leur portée.',
+      'Prévoir les compétences de demain est incertain, et une loi générale risque de rester sans effet concret sur les métiers.',
   },
-  'villepin-retraites-lancer-une-reforme-des-retraites': {
+  'villepin-emploi-basculer-plus-de-200-milliards-d': {
     pour:
-      'La dernière réforme a été adoptée sans vote, laissant une plaie ouverte : la délibération lui donnerait la légitimité qui manque.',
+      'Faire payer la solidarité par tous les revenus, et non par le seul travail, augmente le salaire net sans alourdir le coût d’embauche.',
     contre:
-      'Empiler quatre étapes en dix-huit mois est très optimiste, et un référendum peut rejeter sans dessiner d\'alternative.',
+      'La CSG frappe aussi les retraités et les revenus modestes du capital : le gain des salariés serait payé en partie par eux.',
   },
-  'villepin-solidarites-creer-un-guichet-unique-numeriqu': {
+  'villepin-retraites-reforme-des-retraites-preparee-p': {
     pour:
-      'Une part importante des aides n\'est jamais réclamée faute de savoir qu\'elles existent : les réunir en un point les rend visibles.',
+      'Les dernières réformes ont été imposées sans adhésion : associer syndicats et citoyens puis voter donne une légitimité forte.',
     contre:
-      'Tout faire passer par un compte en ligne écarte ceux qui en sont le plus éloignés, souvent ceux qui en ont le plus besoin.',
+      'Un référendum réduit un sujet technique à un oui ou un non, et risque de devenir un vote pour ou contre le pouvoir.',
   },
-  'villepin-solidarites-garantir-un-revenu-mensuel-minim': {
+  'villepin-education-au-moins-cent-heures-annuelles-d': {
     pour:
-      'Un artiste qui débute alterne petits cachets et périodes sans rien : un complément automatique stabilise sans assister.',
+      'Les activités artistiques développent la confiance et la créativité, et l’école est le seul lieu où tous y ont accès.',
     contre:
-      'Définir qui est un artiste en émergence relève de l\'arbitraire, et le dispositif peut se prolonger sans terme.',
+      'Ces heures se prendraient sur un emploi du temps déjà chargé, alors que les résultats en français et en calcul reculent.',
   },
-  'villepin-solidarites-instaurer-un-droit-au-repit-pour': {
+  'villepin-education-creer-signal-educ-plateforme-nat': {
     pour:
-      'Les canicules tuent d\'abord les personnes isolées et âgées : garantir un lieu frais quelques heures est une mesure simple.',
+      'Des faits graves ont été étouffés par la voie hiérarchique : un canal indépendant protège ceux qui signalent.',
     contre:
-      'Cela suppose que chaque commune dispose d\'un local climatisé et de personnel pour l\'ouvrir, ce que beaucoup n\'ont pas.',
+      'Un guichet national éloigné du terrain risque d’être engorgé et de court-circuiter les équipes qui connaissent la situation.',
   },
-  'villepin-sante-creer-un-conseil-scientifique-de': {
+  'villepin-education-interdiction-effective-des-telep': {
     pour:
-      'La dernière crise sanitaire a montré qu\'aucune instance permanente n\'était chargée d\'anticiper ni de préparer le pays.',
+      'Le portable nuit à la concentration et favorise le harcèlement : l’interdire dans l’établissement protège les élèves.',
     contre:
-      'Des agences sanitaires existent déjà : en créer une nouvelle ajoute un avis de plus sans clarifier qui décide.',
+      'L’interdiction existe déjà au collège et reste difficile à faire respecter sans moyens de contrôle supplémentaires.',
   },
-  'villepin-sante-lancer-une-grande-campagne-d-inf': {
+  'villepin-education-revalorisation-salariale-d-au-mo': {
     pour:
-      'La surmortalité pendant les canicules frappe davantage les femmes âgées, sans que ce risque soit connu du public.',
+      'Les métiers de l’école peinent à recruter : mieux payer l’ensemble des personnels rend ces postes plus attractifs.',
     contre:
-      'Une campagne d\'information ne remplace pas des logements rafraîchis, qui est la réponse au fond du problème.',
+      'Une hausse générale de 10 % coûterait plusieurs milliards par an, sans financement précisé dans la mesure.',
   },
-  'villepin-education-financer-la-politique-culturelle': {
+  'villepin-education-sanctuariser-le-budget-de-l-educ': {
     pour:
-      'Les plateformes tirent une part de leur audience de contenus culturels sans contribuer à leur financement.',
+      'Protéger ce budget des coupes donne de la visibilité aux établissements et traduit la priorité donnée à l’éducation.',
     contre:
-      'Étendre la contribution aux réseaux sociaux se heurte au droit européen, et le coût finit répercuté sur les abonnés.',
+      'Le nombre d’élèves baisse : figer le budget et augmenter la dépense par élève limite les marges pour d’autres priorités.',
   },
-  'villepin-education-garantir-l-acces-universel-a-la-': {
+  'villepin-education-transformer-500-mediatheques-en-': {
     pour:
-      'L\'accès à la culture reste très inégal selon le territoire et le revenu, et l\'écart se creuse dès le plus jeune âge.',
+      'Les médiathèques sont souvent le seul équipement culturel d’une commune : les renforcer réduit les écarts entre territoires.',
     contre:
-      'L\'intention est large mais la mesure ne dit ni par quels moyens ni avec quel budget elle deviendrait effective.',
+      'Ces équipements dépendent des communes, et leur transformation suppose des budgets de fonctionnement durables.',
   },
-  'villepin-education-supprimer-l-utilisation-de-l-alg': {
+  'villepin-environnement-l-etat-fixe-les-objectifs-climat': {
     pour:
-      'L\'opacité du classement nourrit un sentiment d\'arbitraire chez des familles qui ne comprennent pas les refus reçus.',
+      'Les communes connaissent leur territoire : leur donner les moyens d’agir rend la transition plus concrète et plus rapide.',
     contre:
-      'Sans outil de tri, il faut un autre moyen de départager des candidatures plus nombreuses que les places offertes.',
+      'Les petites communes manquent d’expertise, et transférer des moyens importants suppose des finances que l’État n’a pas.',
   },
-  'villepin-numerique-instaurer-une-regle-imperative-s': {
+  'villepin-environnement-planifier-l-electrification-des-': {
     pour:
-      'Une décision automatisée sans responsable identifié laisse la personne concernée sans interlocuteur ni recours.',
+      'Remplacer le pétrole et le gaz par l’électricité réduit les émissions et la dépendance aux importations.',
     contre:
-      'Exiger un contrôle humain permanent est inapplicable aux systèmes qui traitent des millions d\'opérations par jour.',
+      'Une électrification rapide exige de produire bien plus d’électricité et d’adapter le réseau, à un coût élevé.',
   },
-  'villepin-numerique-mobiliser-des-centaines-de-milli': {
+  'villepin-environnement-retablir-un-prix-du-carbone-inte': {
     pour:
-      'Sans capacité de calcul propre, l\'Europe dépend d\'infrastructures étrangères pour ses données les plus sensibles.',
+      'Taxer le carbone oriente les choix vers les solutions propres, et reverser la recette évite d’appauvrir les ménages.',
     contre:
-      'Des centaines de milliards levés par emprunt européen supposent un accord des États, loin d\'être acquis.',
+      'La hausse de la taxe carbone a déclenché le mouvement des Gilets jaunes : le reversement ne garantit pas son acceptation.',
   },
-  'villepin-logement-lancer-un-plan-historique-cible-': {
+  'villepin-agriculture-etendre-graduellement-le-mecanis': {
     pour:
-      'Cibler les ménages modestes agit là où la facture pèse le plus lourd, et où le reste à charge empêche les travaux.',
+      'Taxer le carbone des importations évite que les agriculteurs européens, soumis à des normes strictes, soient concurrencés à bas prix.',
     contre:
-      'Les rénovations complètes butent sur le manque d\'artisans qualifiés, que le financement ne crée pas.',
+      'Calculer le carbone d’un produit agricole est complexe, et la taxe renchérirait les aliments importés pour les consommateurs.',
   },
-  'villepin-logement-soumettre-toute-decision-d-infra': {
+  'villepin-agriculture-reduire-de-moitie-l-usage-total-': {
     pour:
-      'Réparer ou densifier coûte moins cher et consomme moins de sol que construire du neuf plus loin.',
+      'Ces produits contaminent l’eau et nuisent à la biodiversité comme à la santé des agriculteurs eux-mêmes.',
     contre:
-      'Un examen préalable systématique allonge des projets parfois indispensables, comme une ligne ferroviaire ou un hôpital.',
+      'Les plans précédents fixant le même objectif ont échoué, faute de solutions de remplacement pour certaines cultures.',
   },
-  'villepin-environnement-generaliser-l-ecoconception-logi': {
+  'villepin-agriculture-viser-cinq-cent-mille-exploitati': {
     pour:
-      'Le numérique consomme une part croissante de l\'électricité, sans que personne ne mesure ce que chaque service coûte.',
+      'Le nombre de fermes baisse depuis des décennies : enrayer ce déclin préserve l’emploi rural et la souveraineté alimentaire.',
     contre:
-      'Imposer des indicateurs à tous les éditeurs est une charge lourde pour un gain énergétique difficile à établir.',
+      'La concentration des fermes suit des contraintes économiques fortes, et la mesure ne dit pas comment l’inverser.',
   },
-  'villepin-environnement-mettre-en-place-un-plan-d-adapta': {
+  'villepin-agriculture-viser-un-excedent-agricole-et-ag': {
     pour:
-      'Ces territoires subissent cyclones, montée des eaux et épidémies plus tôt et plus fort que le reste du pays.',
+      'La balance agricole française se dégrade : viser un excédent renforce les producteurs et la souveraineté alimentaire.',
     contre:
-      'Un plan spécifique ne vaut que par ses moyens, dont la mesure ne dit rien.',
+      'Un objectif de commerce extérieur dépend des marchés mondiaux et des accords européens, que l’État maîtrise mal.',
   },
-  'villepin-environnement-prendre-des-mesures-de-coupes-pr': {
+  'villepin-securite-creer-un-registre-national-de-tr': {
     pour:
-      'Les grands incendies se propagent par une végétation continue : la couper est le moyen le plus direct de les arrêter.',
+      'Un fichier national évite qu’une personne condamnée dans un département travaille auprès d’enfants dans un autre.',
     contre:
-      'Le débroussaillage est déjà obligatoire et peu appliqué faute de contrôle : ajouter une mesure ne change pas cela.',
+      'Le fichier des auteurs d’infractions sexuelles joue déjà en partie ce rôle, et un accès élargi pose des questions de libertés.',
   },
-  'villepin-agriculture-etablir-un-contrat-d-objectifs-p': {
+  'villepin-immigration-pause-sur-schengen-et-coordinati': {
     pour:
-      'La filière bio décroche faute de débouchés stables, après avoir été encouragée à se développer.',
+      'Sans contrôle aux frontières intérieures, les failles d’un pays profitent aux passeurs : rétablir les contrôles renforce la sécurité.',
     contre:
-      'Soutenir une filière dont la demande recule revient à financer une production qui ne trouve pas preneur.',
+      'Suspendre la libre circulation pénalise les travailleurs frontaliers et le commerce, et suppose l’accord des partenaires.',
   },
-  'villepin-agriculture-instaurer-un-conseil-independant': {
+  'villepin-defense-creer-un-conseil-de-securite-eur': {
     pour:
-      'Le conseil agricole est souvent assuré par ceux qui vendent les produits de traitement, ce qui crée un conflit d\'intérêts.',
+      'Face aux menaces, l’Europe décide trop lentement à vingt-sept : un cercle restreint permettrait de réagir plus vite.',
     contre:
-      'Créer une structure de conseil supplémentaire ajoute un interlocuteur sans garantir un changement de pratiques.',
+      'Un conseil réservé aux grands pays marginaliserait les plus petits et risque de diviser l’Union au lieu de l’unir.',
   },
-  'villepin-defense-engager-une-negociation-verifiab': {
+  'villepin-defense-creer-une-darpa-europeenne-finan': {
     pour:
-      'Les traités de désarmement expirent les uns après les autres sans être renouvelés : relancer la discussion est urgent.',
+      'L’Europe dépend des technologies américaines : une agence dotée de moyens comparables favoriserait des innovations de rupture.',
     contre:
-      'Négocier suppose des partenaires disposés à le faire, ce que le contexte international ne laisse guère espérer.',
+      'Le budget américain se compte en milliards par an : le reproduire supposerait un accord financier difficile entre États.',
   },
-  'villepin-defense-exiger-l-ouverture-immediate-de-': {
+  'villepin-defense-obliger-les-etablissements-d-ens': {
     pour:
-      'Le droit humanitaire s\'impose à tous, et conditionner un soutien est l\'un des rares leviers dont dispose la diplomatie.',
+      'Étudier ailleurs en Europe développe les langues et le sentiment européen : l’ouvrir à tous évite d’en faire un privilège.',
     contre:
-      'Conditionner un soutien réduit l\'influence sur les décisions, sans garantir pour autant l\'ouverture des accès humanitaires.',
+      'Un séjour à l’étranger coûte cher aux étudiants modestes, et l’obligation pèserait sur des établissements sous tension.',
   },
-  'villepin-defense-soutenir-fermement-l-initiative-': {
+  'villepin-defense-pause-sur-les-elargissements-de-': {
     pour:
-      'Un cessez-le-feu est la condition préalable à toute aide humanitaire comme à la libération des otages.',
+      'L’Union doit réformer son fonctionnement avant de s’agrandir, et une intégration graduelle de l’Ukraine limite les chocs.',
     contre:
-      'Une position de principe pèse peu sans levier concret sur les parties au conflit.',
+      'Geler les adhésions risque de pousser des pays candidats vers la Russie ou la Chine, et de décevoir des alliés.',
   },
-  'villepin-institutions-etablir-une-loi-cadre-souple-ada': {
+  'villepin-institutions-creer-un-conseil-de-l-ia-aupres-': {
     pour:
-      'Les collectivités passent un temps considérable à démêler qui est compétent : un cadre unique simplifie la coopération.',
+      'Cette technologie soulève des risques nouveaux : une autorité indépendante permet de la surveiller comme le nucléaire.',
     contre:
-      'Une loi-cadre volontairement souple laisse la répartition floue, ce qui est précisément le problème qu\'elle prétend résoudre.',
+      'Des règles européennes encadrent déjà ce domaine, et une instance de plus risque d’ajouter des lourdeurs.',
   },
-  'villepin-institutions-instaurer-un-conseil-de-souverai': {
+  'villepin-institutions-encadrer-la-censure-du-gouvernem': {
     pour:
-      'Les crises récentes ont montré l\'absence d\'une instance capable d\'anticiper et de coordonner face aux menaces hybrides.',
+      'Renverser un gouvernement sans solution de rechange crée l’instabilité : exiger une alternative préserve la continuité.',
     contre:
-      'Un conseil doté d\'un pouvoir de sanction placé auprès du Président échappe largement au contrôle du Parlement.',
+      'Rendre la censure plus difficile réduit le contrôle du Parlement sur un gouvernement qui ne dispose pas d’une majorité.',
   },
-  'villepin-institutions-redefinir-les-communes-comme-bas': {
+  'villepin-institutions-nommer-un-gouvernement-resserre-': {
     pour:
-      'Les habitants s\'adressent d\'abord à leur mairie : lui donner les compétences correspondantes rapproche la décision du terrain.',
+      'Une équipe resserrée décide plus vite, et associer les régions rapproche l’État des réalités locales.',
     contre:
-      'L\'emploi et la sécurité demandent des moyens qu\'une commune moyenne n\'a pas, ce qui creuserait les écarts entre territoires.',
+      'Avec dix ministères, certains sujets risquent d’être délaissés, et un conseil de plus ne garantit pas de décisions.',
   },
-
   // --- Édouard Philippe ------------------------------------------------------
   'philippe-economie-conclure-un-pacte-fiscal-avec-le': {
     pour:
@@ -534,35 +591,41 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Les aides supprimées soutiennent aussi des activités fragiles, et rien ne garantit que les deux montants se compensent.',
   },
+  'philippe-economie-inscrire-dans-la-constitution-un': {
+    pour:
+      'Une règle inscrite au sommet du droit protège les finances publiques des promesses de court terme, comme en Allemagne.',
+    contre:
+      'Une règle rigide empêche de laisser filer le déficit en cas de crise, quand la dépense publique peut soutenir l’activité.',
+  },
+  'philippe-economie-moratoire-normatif-et-fiscal-auc': {
+    pour:
+      'L’empilement des règles et des impôts décourage les entreprises : une pause donne de la visibilité à ceux qui investissent.',
+    contre:
+      'S’interdire toute norme ou tout impôt pendant cinq ans prive l’État de réponse face à une crise ou à un besoin imprévu.',
+  },
   'philippe-economie-ramener-le-deficit-public-de-plu': {
     pour:
       'Réduire le déficit redonne des marges pour la prochaine crise et allège la charge des intérêts, devenue un des premiers postes.',
     contre:
       'Un tel effort en cinq ans suppose des coupes ou des hausses d\'impôts dont la mesure ne dit rien.',
   },
-  'philippe-economie-reorganiser-massivement-l-etat-e': {
+  'philippe-numerique-developper-une-infrastructure-d-': {
     pour:
-      'L\'empilement d\'agences produit des doublons et dilue les responsabilités : regrouper clarifie qui décide et qui rend des comptes.',
+      'La capacité de calcul est devenue un facteur de production : en manquer, c\'est dépendre de fournisseurs extérieurs.',
     contre:
-      'Privatiser un opérateur déplace le contrôle hors de l\'État, et les économies annoncées sont rarement au rendez-vous.',
+      'Ces infrastructures consomment énormément d\'électricité et d\'eau, ce que la mesure n\'aborde pas.',
   },
-  'philippe-emploi-adapter-l-enseignement-le-recrut': {
+  'philippe-emploi-creer-un-temps-partiel-parental-': {
     pour:
-      'Les métiers menacés par l\'automatisation sont identifiables à l\'avance : former avant la suppression coûte moins que d\'indemniser après.',
+      'Le retour au travail après une naissance est souvent brutal : une reprise progressive aide les parents, notamment les mères.',
     contre:
-      'Personne ne sait quels métiers seront réellement supprimés, et un droit à la reconversion sans emploi à la clé reste une promesse.',
+      'Le financement de la part non travaillée n’est pas précisé, et les petites entreprises absorbent mal ces absences.',
   },
-  'philippe-emploi-reequilibrer-le-financement-du-m': {
+  'philippe-emploi-instaurer-un-droit-a-la-reconver': {
     pour:
-      'Faire reposer la protection sociale sur les seuls salaires renchérit le travail : élargir l\'assiette augmente le net sans baisser les droits.',
+      'Les métiers touchés par cette technologie se multiplient : garantir une reconversion protège les salariés exposés.',
     contre:
-      'Déplacer le financement vers l\'impôt ou la consommation fait payer les ménages autrement, y compris les plus modestes.',
-  },
-  'philippe-retraites-confier-aux-partenaires-sociaux-': {
-    pour:
-      'Ceux qui cotisent sont les mieux placés pour arbitrer, et le sujet cesserait d\'être un enjeu de campagne tous les cinq ans.',
-    contre:
-      'C\'est leur déléguer des décisions impopulaires que l\'État devrait de toute façon reprendre en cas de blocage.',
+      'Des dispositifs de reconversion existent déjà et sont peu utilisés ; un droit de plus ne garantit ni financement ni débouchés.',
   },
   'philippe-retraites-creer-un-pilier-de-capitalisatio': {
     pour:
@@ -570,11 +633,11 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'La capitalisation expose les pensions aux marchés, et la transition fait cotiser deux fois la génération qui la met en place.',
   },
-  'philippe-retraites-travailler-plus-pour-garantir-l-': {
+  'philippe-sante-stabiliser-les-depenses-de-sante': {
     pour:
-      'Avec l\'allongement de la vie, la durée de cotisation n\'a pas suivi : travailler plus longtemps est le levier le plus direct.',
+      'Les dépenses augmentent plus vite que la richesse produite : sans réorganisation, le système devient insoutenable.',
     contre:
-      'Tous les métiers ne permettent pas de tenir jusqu\'au bout, et beaucoup sont déjà sans emploi avant l\'âge légal.',
+      'Stabiliser le budget dans un pays qui vieillit revient à réduire les moyens par patient, alors que l\'hôpital est déjà tendu.',
   },
   'philippe-solidarites-accorder-une-part-fiscale-des-le': {
     pour:
@@ -582,29 +645,11 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Le quotient familial profite surtout aux foyers les plus imposés : l\'étendre creuse cet avantage.',
   },
-  'philippe-solidarites-creer-le-temps-partiel-parental-': {
+  'philippe-solidarites-fusionner-les-dispositifs-exista': {
     pour:
-      'La reprise après un congé parental est le moment où beaucoup de mères quittent l\'emploi : un palier facilite le retour.',
+      'Une aide unique est plus simple à comprendre et à obtenir que la dizaine de prestations familiales actuelles.',
     contre:
-      'Deux mois payés au-delà du travail effectué ont un coût que la mesure ne chiffre pas, et qui pèse sur l\'employeur ou la branche famille.',
-  },
-  'philippe-solidarites-creer-une-aide-financiere-unique': {
-    pour:
-      'L\'empilement actuel est illisible : beaucoup ignorent leurs droits, et le non-recours atteint des niveaux élevés.',
-    contre:
-      'Universelle signifie versée aussi aux foyers aisés : à budget constant, cela réduit ce que touchent les plus modestes.',
-  },
-  'philippe-sante-stabiliser-les-depenses-de-sante': {
-    pour:
-      'Les dépenses augmentent plus vite que la richesse produite : sans réorganisation, le système devient insoutenable.',
-    contre:
-      'Stabiliser le budget dans un pays qui vieillit revient à réduire les moyens par patient, alors que l\'hôpital est déjà tendu.',
-  },
-  'philippe-education-concentrer-l-enseignement-primai': {
-    pour:
-      'Les évaluations montrent un recul en lecture et en calcul ; sans ces bases, aucun autre apprentissage ne tient.',
-    contre:
-      'Recentrer se fait au détriment des sciences, des arts et du sport, qui donnent aussi le goût d\'apprendre.',
+      'Une aide universelle touche aussi les familles aisées, et la fusion ferait des perdants parmi les plus modestes.',
   },
   'philippe-education-creer-un-service-public-universe': {
     pour:
@@ -618,29 +663,17 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Le recrutement local ouvre la porte à l\'arbitraire et creuserait l\'écart entre établissements attractifs et les autres.',
   },
-  'philippe-numerique-developper-une-infrastructure-d-': {
+  'philippe-education-revaloriser-le-metier-de-profess': {
     pour:
-      'La capacité de calcul est devenue un facteur de production : en manquer, c\'est dépendre de fournisseurs extérieurs.',
+      'Les résultats en lecture et en calcul reculent : recentrer le primaire sur ces bases et attirer des enseignants y répond.',
     contre:
-      'Ces infrastructures consomment énormément d\'électricité et d\'eau, ce que la mesure n\'aborde pas.',
+      'Concentrer l’école sur les fondamentaux réduit la place des arts, du sport ou des sciences dans les premières années.',
   },
-  'philippe-numerique-peser-a-l-echelle-europeenne-ave': {
+  'philippe-education-rythmes-scolaires-heures-de-cour': {
     pour:
-      'Acheter groupé donne aux États un pouvoir de négociation qu\'aucun d\'eux n\'a seul face aux grands fournisseurs.',
+      'Les élèves sont plus attentifs le matin : y placer les cours principaux et alléger l’après-midi améliore les apprentissages.',
     contre:
-      'La préférence européenne peut priver les administrations des meilleurs outils quand aucun équivalent n\'existe.',
-  },
-  'philippe-numerique-simplifier-le-cadre-juridique-eu': {
-    pour:
-      'Un cadre trop complexe pénalise surtout les jeunes entreprises, qui n\'ont pas de service juridique pour s\'y retrouver.',
-    contre:
-      'Simplifier une régulation à peine adoptée revient souvent à l\'affaiblir avant d\'avoir mesuré ses effets.',
-  },
-  'philippe-logement-faciliter-le-demenagement-des-fa': {
-    pour:
-      'Une famille qui s\'agrandit reste souvent bloquée dans un logement trop petit, faute d\'apport pour déménager.',
-    contre:
-      'Solvabiliser la demande sans augmenter l\'offre alimente surtout la hausse des prix.',
+      'Libérer les après-midi suppose des intervenants et des équipements que beaucoup de communes ne peuvent pas financer.',
   },
   'philippe-environnement-assurer-notre-souverainete-energ': {
     pour:
@@ -660,17 +693,41 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Il renchérit les importations pour le consommateur et expose à des mesures de rétorsion commerciales.',
   },
+  'philippe-environnement-lancer-un-plan-baignade-national': {
+    pour:
+      'Avec les canicules, les lieux de baignade manquent, et une eau propre à la baignade est bonne pour l’environnement.',
+    contre:
+      'Dépolluer les rivières prend des années et coûte cher, et la rénovation des piscines pèse sur les communes.',
+  },
+  'philippe-environnement-mettre-en-uvre-un-grand-plan-de-': {
+    pour:
+      'Un train de marchandises remplace des dizaines de poids lourds : il réduit les émissions, l’usure des routes et les accidents.',
+    contre:
+      'Le transport de marchandises par le rail recule depuis des décennies, faute de fiabilité et de prix compétitifs.',
+  },
+  'philippe-agriculture-appliquer-le-principe-zero-surtr': {
+    pour:
+      'Les règles plus strictes qu’ailleurs en Europe pénalisent les agriculteurs français face à leurs concurrents.',
+    contre:
+      'Certaines règles nationales protègent la santé ou l’environnement, et y renoncer pourrait réduire ces protections.',
+  },
   'philippe-agriculture-creer-100-territoires-de-souvera': {
     pour:
       'Appliquer des règles plus strictes que les voisins pénalise les producteurs sans bénéfice sanitaire démontré.',
     contre:
       'Ces règles protègent parfois la santé ou l\'environnement : les supprimer en bloc revient à y renoncer sans examen.',
   },
-  'philippe-agriculture-lancer-un-grand-plan-de-transmis': {
+  'philippe-logement-faciliter-le-demenagement-des-fa': {
     pour:
-      'La moitié des agriculteurs partira à la retraite dans dix ans, sans repreneur identifié pour beaucoup d\'exploitations.',
+      'Une famille qui s\'agrandit reste souvent bloquée dans un logement trop petit, faute d\'apport pour déménager.',
     contre:
-      'Le plan reste une annonce : ni son financement ni les leviers de transmission ne sont précisés.',
+      'Solvabiliser la demande sans augmenter l\'offre alimente surtout la hausse des prix.',
+  },
+  'philippe-securite-courtes-peines-des-la-premiere-i': {
+    pour:
+      'Une sanction rapide dès le premier délit dissuade la récidive, à l’image de certains pays d’Europe du Nord.',
+    contre:
+      'Les prisons sont surpeuplées, et l’effet des peines planchers appliquées de 2007 à 2014 sur la récidive n’a pas été démontré.',
   },
   'philippe-securite-donner-aux-maires-un-pouvoir-de-': {
     pour:
@@ -690,17 +747,17 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Une dénonciation unilatérale dégraderait des relations dont dépendent la coopération sécuritaire et les laissez-passer consulaires.',
   },
-  'philippe-immigration-mettre-en-place-une-veritable-po': {
+  'philippe-immigration-mettre-en-place-des-quotas-migra': {
     pour:
-      'Sans maîtrise de la langue ni accès à l\'emploi, l\'intégration échoue quelles que soient les intentions affichées.',
+      'Fixer des volumes permet de choisir l’immigration selon les besoins de l’économie et de mieux préparer l’intégration.',
     contre:
-      'L\'énoncé ne décrit aucun dispositif, alors que les moyens des cours de français ont baissé ces dernières années.',
+      'Le regroupement familial est protégé par le droit européen et les conventions internationales, ce qui limite les quotas.',
   },
-  'philippe-defense-massifier-notre-production-et-no': {
+  'philippe-defense-grand-plan-munitions-pour-depass': {
     pour:
-      'Les drones bon marché ont changé la nature des combats, et les armées européennes en produisent beaucoup trop peu.',
+      'La guerre en Ukraine a montré l’importance des stocks de munitions : produire davantage renforce la capacité à tenir.',
     contre:
-      'Transposer un programme conçu pour une autre échelle industrielle expose à commander sans capacité de produire.',
+      'Multiplier la production demande des usines, des matières premières et des commandes garanties sur plusieurs années.',
   },
   'philippe-defense-porter-le-nombre-de-reservistes-': {
     pour:
@@ -708,7 +765,6 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Multiplier par cinq suppose équipement, encadrement et disponibilité des employeurs : aucun des trois n\'est réglé.',
   },
-
   // --- François Ruffin -------------------------------------------------------
   'ruffin-economie-la-france-pourra-nationaliser-ce': {
     pour:
@@ -716,11 +772,11 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Racheter coûte cher, et l\'État actionnaire n\'a pas toujours fait la preuve d\'une meilleure gestion industrielle.',
   },
-  'ruffin-economie-realiser-20-millions-d-euros-d-e': {
+  'ruffin-economie-referendum-sur-une-taxe-sur-les-': {
     pour:
-      'L\'exemplarité au sommet conditionne l\'acceptation des efforts demandés au reste du pays.',
+      'Les dividendes versés ont fortement progressé : y prélever une part finance la transition sans toucher aux revenus du travail.',
     contre:
-      'Vingt millions ne pèsent rien sur un budget de l\'État qui se compte en centaines de milliards : le geste est symbolique.',
+      'Taxer les dividendes réduit l’attrait d’investir dans les entreprises françaises, et le rendement attendu reste incertain.',
   },
   'ruffin-economie-rendre-publics-les-montants-vers': {
     pour:
@@ -758,11 +814,17 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Certaines activités ont une charge concentrée matin et soir ; renchérir la coupure peut supprimer ces postes.',
   },
-  'ruffin-retraites-reconnaitre-la-penibilite-des-me': {
+  'ruffin-emploi-temps-de-transport-entre-deux-in': {
     pour:
-      'Ces métiers cumulent horaires décalés, port de charges et bas salaires, sans que rien n\'en tienne compte au moment de la retraite.',
+      'Ces salariés passent des heures sur la route sans être payés : compter ces trajets corrige une perte de revenu bien réelle.',
     contre:
-      'Élargir les trimestres accordés creuse le déficit du régime, sans que la mesure dise comment le financer.',
+      'Le surcoût pèserait sur des services d’aide déjà fragiles, financés en partie par les départements et les familles.',
+  },
+  'ruffin-retraites-un-trimestre-de-retraite-supplem': {
+    pour:
+      'L’espérance de vie en bonne santé est plus courte dans les métiers pénibles : partir plus tôt compense cette usure.',
+    contre:
+      'Définir la liste des métiers pénibles est source de conflits, et le coût pour les caisses de retraite n’est pas chiffré.',
   },
   'ruffin-solidarites-elargir-le-pass-culture-aux-adul': {
     pour:
@@ -854,12 +916,6 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Couper tout lien pose la question du contrôle démocratique d\'un corps qui ne rendrait alors de comptes à personne.',
   },
-  'ruffin-securite-limiter-l-usage-de-la-convention': {
-    pour:
-      'Cette convention permet à de grandes entreprises de payer pour éviter un procès, ce qu\'aucun particulier ne peut faire.',
-    contre:
-      'Elle a permis de recouvrer des sommes considérables que des procès longs et incertains n\'auraient pas rapportées.',
-  },
   'ruffin-securite-renforcer-l-independance-du-parq': {
     pour:
       'Tant que le gouvernement nomme les procureurs, le soupçon d\'intervention politique pèse sur chaque affaire sensible.',
@@ -890,8 +946,13 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Un avis préalable ralentit des décisions parfois urgentes, notamment face à une offre de rachat hostile.',
   },
-
   // --- Gabriel Attal ---------------------------------------------------------
+  'attal-economie-double-regle-d-or-comptes-public': {
+    pour:
+      'Emprunter pour payer le quotidien reporte la charge sur les générations futures ; réserver la dette à l’investissement la justifie.',
+    contre:
+      'La frontière entre fonctionnement et investissement est floue : payer enseignants et soignants prépare aussi l’avenir.',
+  },
   'attal-economie-lancer-le-plan-france-2050-a-hau': {
     pour:
       'Concentrer l\'effort sur dix domaines évite le saupoudrage qui a dispersé les plans d\'investissement précédents.',
@@ -910,6 +971,12 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Ils financent les collectivités, qu\'il faudra compenser. Sans compensation, ce sont les services locaux qui paient.',
   },
+  'attal-economie-viser-un-objectif-de-200-milliar': {
+    pour:
+      'Cette technologie sera décisive pour l’économie : attirer centres de calcul et chercheurs évite de dépendre de l’étranger.',
+    contre:
+      'L’essentiel du montant repose sur des investisseurs privés, souvent étrangers, sur lesquels l’État n’a qu’une prise limitée.',
+  },
   'attal-emploi-creer-un-conge-de-naissance-de-6': {
     pour:
       'Le congé actuel est trop court pour la garde et trop peu payé pour être pris par les pères : allonger et mieux rémunérer change les deux.',
@@ -922,41 +989,35 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Plafonner les heures réduit le revenu de ceux qui travaillent par nécessité, sans rien prévoir pour compenser cette perte.',
   },
+  'attal-emploi-creer-un-livret-d-epargne-sur-le': {
+    pour:
+      'Le manque de places en crèche freine le retour à l’emploi des parents : mobiliser l’épargne finance des places sans impôt.',
+    contre:
+      'Le manque de crèches tient surtout au manque de professionnels, que l’argent seul ne suffit pas à recruter rapidement.',
+  },
+  'attal-emploi-equivalent-d-un-13e-mois-pour-le': {
+    pour:
+      'Les classes moyennes ont le sentiment de payer sans recevoir : alléger leurs prélèvements améliore directement leur pouvoir d’achat.',
+    contre:
+      'Baisser les charges sur ces salaires coûte des milliards à la protection sociale, sans financement précisé en contrepartie.',
+  },
   'attal-emploi-former-10-millions-de-salaries-e': {
     pour:
       'L\'écart se creuse entre ceux qui maîtrisent ces outils et les autres : une formation de masse évite un décrochage durable.',
     contre:
       'Former dix millions de personnes en trois ans suppose des formateurs et des heures libérées dont le pays ne dispose pas.',
   },
-  'attal-solidarites-garantir-un-filet-de-securite-po': {
+  'attal-retraites-introduire-la-retraite-par-capit': {
     pour:
-      'Un entrepreneur qui échoue perd tout et reste marqué des années : réduire les sanctions encourage à retenter.',
+      'Une part d’épargne placée complète les pensions et profite du rendement des marchés sur une longue durée.',
     contre:
-      'Alléger les sanctions et protéger les cautions déplace le risque vers les créanciers, souvent d\'autres petites entreprises.',
+      'Le salarié ne disposerait plus librement de ces primes, et son épargne dépendrait des aléas des marchés financiers.',
   },
-  'attal-solidarites-mettre-en-place-un-droit-opposab': {
+  'attal-retraites-supprimer-l-age-legal-de-depart-': {
     pour:
-      'L\'absence de place de crèche est la première raison qui empêche un parent, le plus souvent la mère, de reprendre un emploi.',
+      'Fonder le départ sur les années travaillées est plus juste pour ceux qui ont commencé tôt, et laisse chacun choisir.',
     contre:
-      'Un droit opposable sans places supplémentaires ne produit que du contentieux : les communes n\'ont ni locaux ni personnel.',
-  },
-  'attal-solidarites-recentrer-l-aide-sociale-a-l-enf': {
-    pour:
-      'La protection de l\'enfance varie énormément d\'un département à l\'autre : un enfant n\'est pas protégé selon son adresse.',
-    contre:
-      'Recentraliser éloigne la décision du terrain, alors que le suivi d\'un enfant repose sur une connaissance locale.',
-  },
-  'attal-sante-creer-des-centres-de-prise-en-ch': {
-    pour:
-      'Beaucoup de victimes renoncent parce qu\'il faut aller de l\'hôpital au commissariat : tout réunir en un lieu lève cet obstacle.',
-    contre:
-      'Ces centres supposent médecins légistes et enquêteurs disponibles en permanence, dans des effectifs déjà comptés.',
-  },
-  'attal-sante-instaurer-un-bilan-psychologique': {
-    pour:
-      'La souffrance psychique des jeunes progresse et se repère tard : deux rendez-vous automatiques la détectent avant la crise.',
-    contre:
-      'Il manque déjà des professionnels pour les jeunes qui vont mal : généraliser un bilan à tous allongerait leur attente.',
+      'Ceux qui ont étudié longtemps ou connu des interruptions partiraient très tard, et le nombre d’années exigé reste à fixer.',
   },
   'attal-sante-prevoir-une-couverture-sante-obl': {
     pour:
@@ -964,17 +1025,29 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Le coût retombe sur des particuliers employeurs, ce qui peut réduire le nombre d\'heures déclarées.',
   },
-  'attal-education-former-des-generations-d-ingenie': {
+  'attal-solidarites-familles-monoparentales-ne-plus-': {
     pour:
-      'Les transitions numérique et climatique demandent des compétences d\'ingénierie que le pays ne produit pas en nombre.',
+      'Les parents seuls, souvent des mères, sont parmi les plus exposés à la pauvreté : ces mesures allègent leurs dépenses.',
     contre:
-      'L\'annonce ne dit ni combien d\'ingénieurs, ni avec quels moyens, ni comment remplir des filières qui se vident.',
+      'Défiscaliser les pensions alimentaires profite surtout aux foyers imposables, pas aux familles les plus pauvres.',
   },
-  'attal-education-introduire-des-cours-optionnels-': {
+  'attal-solidarites-mettre-en-place-un-droit-opposab': {
     pour:
-      'Découvrir comment se monte une activité ouvre une voie à des élèves que la filière générale ne retient pas.',
+      'L\'absence de place de crèche est la première raison qui empêche un parent, le plus souvent la mère, de reprendre un emploi.',
     contre:
-      'Le temps scolaire est déjà contraint : ajouter une option se fait au détriment d\'un autre enseignement.',
+      'Un droit opposable sans places supplémentaires ne produit que du contentieux : les communes n\'ont ni locaux ni personnel.',
+  },
+  'attal-education-augmenter-les-enseignants-d-au-m': {
+    pour:
+      'Les salaires des enseignants français sont inférieurs à ceux de pays comparables, ce qui pèse sur le recrutement.',
+    contre:
+      'La hausse coûterait plusieurs milliards par an, et les conditions de travail comptent autant que la paie pour attirer.',
+  },
+  'attal-education-loi-de-programmation-de-l-educat': {
+    pour:
+      'Concentrer les difficultés dans quelques collèges enferme les élèves ; les répartir favorise la mixité sociale.',
+    contre:
+      'Fermer un collège de quartier allonge les trajets et peut déplacer le problème sans réduire les inégalités.',
   },
   'attal-education-maintenir-la-trajectoire-de-rein': {
     pour:
@@ -982,29 +1055,17 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Tenir la trajectoire dépend surtout de l\'effort privé, sur lequel l\'État n\'a qu\'un levier indirect.',
   },
-  'attal-numerique-integrer-l-ia-dans-le-quotidien-': {
+  'attal-environnement-engagement-de-stabilite-tarifair': {
     pour:
-      'Automatiser les tâches répétitives libère du temps d\'agent pour les situations qui demandent vraiment un humain.',
+      'Des prix stables protègent le budget des ménages et donnent de la visibilité aux entreprises, après des années de hausses.',
     contre:
-      'L\'automatisation des tâches simples supprime aussi les postes qui servaient de porte d\'entrée dans l\'emploi.',
+      'Si les coûts de production augmentent, l’écart devra être payé par l’État ou par l’opérateur public.',
   },
-  'attal-logement-creer-jusqu-a-500-000-logements-': {
+  'attal-environnement-faire-passer-le-rythme-de-reduct': {
     pour:
-      'Construire sur l\'existant produit des logements sans consommer de terres agricoles ni étendre les réseaux.',
+      'Les engagements européens imposent une baisse rapide des émissions d’ici 2030 : le rythme actuel ne suffit pas à les tenir.',
     contre:
-      'Surélever suppose l\'accord des copropriétés et une structure porteuse : le potentiel réel est très inférieur à l\'objectif.',
-  },
-  'attal-environnement-garantir-un-prix-maximal-de-l-el': {
-    pour:
-      'Le prix de l\'électricité est devenu un facteur de délocalisation : le plafonner contre des engagements retient les usines.',
-    contre:
-      'Un prix garanti aux industriels se paie soit par les autres consommateurs, soit par le budget de l\'État.',
-  },
-  'attal-environnement-reussir-la-transition-ecologique': {
-    pour:
-      'Lier climat et prospérité répond à l\'objection principale faite à la transition : son coût social.',
-    contre:
-      'L\'énoncé reste une intention générale, sans objectif chiffré ni mécanisme identifiable.',
+      'Accélérer à ce point suppose des investissements et des contraintes lourdes, sans que la mesure précise lesquels.',
   },
   'attal-environnement-tenir-l-objectif-de-14-epr-d-ici': {
     pour:
@@ -1018,17 +1079,11 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'L\'objectif de réduction de moitié a déjà été fixé deux fois et jamais atteint, faute d\'alternatives disponibles.',
   },
-  'attal-securite-eviter-les-parcours-delinquants-': {
+  'attal-logement-creer-jusqu-a-500-000-logements-': {
     pour:
-      'Les parcours de délinquance commencent tôt : une réponse immédiate évite l\'installation dans la récidive.',
+      'Construire sur l\'existant produit des logements sans consommer de terres agricoles ni étendre les réseaux.',
     contre:
-      'Une réponse systématique dès la première faute peut enclencher un engrenage judiciaire pour des actes bénins.',
-  },
-  'attal-securite-mettre-en-place-un-suivi-en-lign': {
-    pour:
-      'Les victimes restent souvent des mois sans nouvelle de leur plainte, ce qui nourrit le sentiment d\'abandon.',
-    contre:
-      'Rendre l\'avancement visible ne l\'accélère pas, et peut exposer des informations sensibles en cours d\'enquête.',
+      'Surélever suppose l\'accord des copropriétés et une structure porteuse : le potentiel réel est très inférieur à l\'objectif.',
   },
   'attal-securite-rendre-systematique-la-police-mu': {
     pour:
@@ -1036,11 +1091,11 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'L\'obligation transfère aux communes une charge que les plus pauvres d\'entre elles ne pourront pas financer.',
   },
-  'attal-immigration-creer-3000-places-supplementaire': {
+  'attal-securite-supprimer-le-juge-de-l-applicati': {
     pour:
-      'Les mesures d\'éloignement sont peu exécutées, faute de places pour retenir les personnes concernées.',
+      'La peine réellement effectuée s’écarte souvent de celle prononcée : supprimer ces aménagements rend la sanction lisible.',
     contre:
-      'La rétention coûte cher, et l\'allongement de sa durée n\'a pas fait progresser le nombre d\'éloignements effectifs.',
+      'Les aménagements de peine préparent la sortie et limitent la récidive, et les supprimer aggraverait la surpopulation carcérale.',
   },
   'attal-immigration-instaurer-un-systeme-d-admission': {
     pour:
@@ -1048,11 +1103,17 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Un système à points sélectionne les diplômés et laisse sans réponse les métiers peu qualifiés, où le manque est réel.',
   },
-  'attal-immigration-rendre-plus-operationnelle-la-bo': {
+  'attal-immigration-systeme-d-immigration-a-points-i': {
     pour:
-      'La surveillance des frontières est répartie entre plusieurs administrations qui coordonnent mal leurs moyens.',
+      'Un système transparent fondé sur des critères clairs attire les profils dont l’économie a besoin et facilite l’intégration.',
     contre:
-      'Créer des états-majors ajoute une strate de commandement sans augmenter les effectifs présents sur le terrain.',
+      'La France reçoit surtout une immigration familiale et d’asile, que ce type de système ne permet pas de sélectionner.',
+  },
+  'attal-defense-etats-unis-d-europe-president-eu': {
+    pour:
+      'Un dirigeant élu par les citoyens donnerait à l’Europe une voix forte et plus de légitimité face aux grandes puissances.',
+    contre:
+      'Une fédération transfère des pouvoirs nationaux, et beaucoup de pays comme de citoyens n’y sont pas prêts.',
   },
   'attal-defense-instaurer-un-buy-european-tech-a': {
     pour:
@@ -1060,19 +1121,12 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Fermer les marchés publics expose à des mesures symétriques et peut renchérir des équipements sans équivalent européen.',
   },
-  'attal-institutions-mener-une-revue-des-entites-de-r': {
+  'attal-institutions-inscrire-dans-la-constitution-un': {
     pour:
-      'La multiplication des régulateurs produit des règles qui se contredisent et un coût d\'entrée pour les entreprises nouvelles.',
+      'Les délais administratifs freinent l’investissement : une obligation constitutionnelle de répondre vite donne de la visibilité.',
     contre:
-      'Juger un régulateur à sa contribution à l\'innovation ignore sa mission première, qui est le plus souvent de protéger.',
+      'Un délai trop court peut conduire à des décisions bâclées, notamment sur les sujets environnementaux ou de sécurité.',
   },
-  'attal-institutions-ouvrir-le-chatbot-albert-a-tous-': {
-    pour:
-      'Une réponse immédiate à une question courante évite un déplacement ou une attente téléphonique de plusieurs heures.',
-    contre:
-      'Un agent conversationnel se trompe, et une erreur sur un droit social a des conséquences directes pour l\'usager.',
-  },
-
   // --- Jean-Luc Mélenchon ----------------------------------------------------
   'melenchon-economie-etablir-une-taxe-permanente-sur-': {
     pour:
@@ -1085,6 +1139,18 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
       'Le patrimoine s\'est concentré depuis la suppression de cet impôt : le rétablir vise ceux dont la contribution a le plus baissé.',
     contre:
       'L\'ancien impôt rapportait peu au regard des départs qu\'il provoquait, et frappait des patrimoines difficiles à vendre.',
+  },
+  'melenchon-numerique-garantir-l-hebergement-des-donne': {
+    pour:
+      'Les données des services publics touchent à la souveraineté : sous droit français, elles échappent aux lois étrangères.',
+    contre:
+      'Peu d\'acteurs français atteignent le niveau de service attendu : la contrainte risque de dégrader les outils publics.',
+  },
+  'melenchon-numerique-garantir-l-utilisation-de-galile': {
+    pour:
+      'Dépendre d\'un seul système de positionnement expose à une interruption décidée ailleurs, y compris pour des usages critiques.',
+    contre:
+      'Imposer une double compatibilité renchérit tous les appareils, pour un risque que beaucoup jugent théorique.',
   },
   'melenchon-emploi-garantir-les-droits-des-represen': {
     pour:
@@ -1110,18 +1176,6 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Elle incite à cotiser plus longtemps : la supprimer avance les départs et alourdit la charge du régime.',
   },
-  'melenchon-solidarites-creer-un-service-public-de-la-pe': {
-    pour:
-      'Il manque des centaines de milliers de places, et le secteur privé n\'a pas comblé ce manque malgré les aides reçues.',
-    contre:
-      'Ouvrir 500 000 places en cinq ans suppose de recruter des dizaines de milliers de professionnels dans un métier déjà en pénurie.',
-  },
-  'melenchon-solidarites-organiser-l-election-des-adminis': {
-    pour:
-      'La Sécurité sociale a été conçue pour être gérée par ceux qui la financent : leur rendre ce pouvoir renoue avec son principe.',
-    contre:
-      'Laisser fixer les cotisations hors du Parlement sort de son contrôle une part majeure des prélèvements obligatoires.',
-  },
   'melenchon-sante-ajouter-le-droit-de-mourir-dans-': {
     pour:
       'Inscrire ce droit dans la Constitution le met à l\'abri des alternances, et garantit du même coup l\'accès aux soins palliatifs.',
@@ -1134,6 +1188,18 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Le privé finance une part majeure des essais cliniques : l\'écarter sans le remplacer ralentirait l\'accès aux traitements.',
   },
+  'melenchon-solidarites-creer-un-service-public-de-la-pe': {
+    pour:
+      'Il manque des centaines de milliers de places, et le secteur privé n\'a pas comblé ce manque malgré les aides reçues.',
+    contre:
+      'Ouvrir 500 000 places en cinq ans suppose de recruter des dizaines de milliers de professionnels dans un métier déjà en pénurie.',
+  },
+  'melenchon-solidarites-organiser-l-election-des-adminis': {
+    pour:
+      'La Sécurité sociale a été conçue pour être gérée par ceux qui la financent : leur rendre ce pouvoir renoue avec son principe.',
+    contre:
+      'Laisser fixer les cotisations hors du Parlement sort de son contrôle une part majeure des prélèvements obligatoires.',
+  },
   'melenchon-education-geler-les-ouvertures-de-places-d': {
     pour:
       'Le supérieur privé lucratif s\'est développé sans contrôle, avec des diplômes parfois sans valeur reconnue.',
@@ -1145,42 +1211,6 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
       'Des établissements facturent des milliers d\'euros pour des formations dont le contenu n\'est vérifié par personne.',
     contre:
       'Un contrôle systématique demande des moyens d\'inspection considérables, et peut fermer des formations sans solution de repli.',
-  },
-  'melenchon-numerique-garantir-l-hebergement-des-donne': {
-    pour:
-      'Les données des services publics touchent à la souveraineté : sous droit français, elles échappent aux lois étrangères.',
-    contre:
-      'Peu d\'acteurs français atteignent le niveau de service attendu : la contrainte risque de dégrader les outils publics.',
-  },
-  'melenchon-numerique-garantir-l-utilisation-de-galile': {
-    pour:
-      'Dépendre d\'un seul système de positionnement expose à une interruption décidée ailleurs, y compris pour des usages critiques.',
-    contre:
-      'Imposer une double compatibilité renchérit tous les appareils, pour un risque que beaucoup jugent théorique.',
-  },
-  'melenchon-logement-lancer-un-plan-d-urgence-de-prev': {
-    pour:
-      'L\'infestation s\'étend, coûte cher aux ménages et touche d\'abord les logements les plus modestes.',
-    contre:
-      'Créer un service public dédié mobilise des moyens permanents pour un problème qu\'un dispositif d\'aide suffirait à traiter.',
-  },
-  'melenchon-logement-requisitionner-les-logements-vid': {
-    pour:
-      'Des centaines de milliers de logements restent vides pendant que des personnes dorment dehors.',
-    contre:
-      'La réquisition se heurte au droit de propriété, et beaucoup de ces logements sont vides pour cause de travaux ou de succession.',
-  },
-  'melenchon-transports-lancer-des-grands-travaux-de-ren': {
-    pour:
-      'Le réseau vieillit plus vite qu\'il n\'est rénové, et des territoires entiers ont perdu tout accès au train.',
-    contre:
-      'Rouvrir une ligne coûte très cher pour une fréquentation souvent faible, au détriment du réseau principal.',
-  },
-  'melenchon-transports-repenser-la-mobilite-individuell': {
-    pour:
-      'Les voitures circulent aux trois quarts vides : le partage et le vélo réduisent le trafic sans construire d\'infrastructure.',
-    contre:
-      'Ces solutions fonctionnent en zone dense mais restent inadaptées là où la voiture est la seule option.',
   },
   'melenchon-environnement-agir-contre-les-consequences-des': {
     pour:
@@ -1205,6 +1235,30 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
       'Interdire avant l\'installation d\'une filière évite d\'avoir à la démanteler ensuite, avec des emplois en jeu.',
     contre:
       'Interdire par anticipation une activité légale ailleurs prive le pays d\'une production qu\'il importera de toute façon.',
+  },
+  'melenchon-logement-lancer-un-plan-d-urgence-de-prev': {
+    pour:
+      'L\'infestation s\'étend, coûte cher aux ménages et touche d\'abord les logements les plus modestes.',
+    contre:
+      'Créer un service public dédié mobilise des moyens permanents pour un problème qu\'un dispositif d\'aide suffirait à traiter.',
+  },
+  'melenchon-logement-requisitionner-les-logements-vid': {
+    pour:
+      'Des centaines de milliers de logements restent vides pendant que des personnes dorment dehors.',
+    contre:
+      'La réquisition se heurte au droit de propriété, et beaucoup de ces logements sont vides pour cause de travaux ou de succession.',
+  },
+  'melenchon-transports-lancer-des-grands-travaux-de-ren': {
+    pour:
+      'Le réseau vieillit plus vite qu\'il n\'est rénové, et des territoires entiers ont perdu tout accès au train.',
+    contre:
+      'Rouvrir une ligne coûte très cher pour une fréquentation souvent faible, au détriment du réseau principal.',
+  },
+  'melenchon-transports-repenser-la-mobilite-individuell': {
+    pour:
+      'Les voitures circulent aux trois quarts vides : le partage et le vélo réduisent le trafic sans construire d\'infrastructure.',
+    contre:
+      'Ces solutions fonctionnent en zone dense mais restent inadaptées là où la voiture est la seule option.',
   },
   'melenchon-securite-garantir-des-sessions-de-formati': {
     pour:
@@ -1254,7 +1308,6 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Un référendum se transforme souvent en vote sur celui qui le convoque, et rendrait toute révision quasi impossible.',
   },
-
   // --- Marine Le Pen ---------------------------------------------------------
   'lepen-economie-autoriser-l-etat-a-intervenir-da': {
     pour:
@@ -1273,6 +1326,12 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
       'L\'argent public prélevé en France peut légitimement soutenir d\'abord l\'activité et les emplois situés en France.',
     contre:
       'Une préférence nationale dans la commande publique contrevient aux règles du marché intérieur et expose à des rétorsions.',
+  },
+  'lepen-numerique-taxer-l-utilisation-des-reseaux-': {
+    pour:
+      'Quelques services concentrent l\'essentiel du trafic sans participer au coût des réseaux qu\'ils saturent.',
+    contre:
+      'La taxe se répercute sur les abonnements, et remet en cause le principe de neutralité du réseau.',
   },
   'lepen-emploi-appliquer-a-competence-egale-une': {
     pour:
@@ -1298,18 +1357,6 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Définir l\'entrée dans un emploi stable est très complexe pour des parcours faits de contrats courts et d\'alternance.',
   },
-  'lepen-solidarites-controler-l-existence-des-benefi': {
-    pour:
-      'Des pensions continuent d\'être versées après un décès non signalé à l\'étranger : le contrôle porte sur une fraude documentée.',
-    contre:
-      'Les sommes en jeu sont faibles au regard du coût des contrôles, qui peuvent suspendre des droits parfaitement légitimes.',
-  },
-  'lepen-solidarites-suspendre-les-allocations-famili': {
-    pour:
-      'La responsabilité des parents doit avoir une traduction concrète lorsqu\'un mineur récidive.',
-    contre:
-      'Retirer une allocation appauvrit une famille déjà fragile et frappe aussi les frères et sœurs, qui n\'ont rien fait.',
-  },
   'lepen-sante-le-modele-de-l-hopital-de-valenc': {
     pour:
       'La part administrative a crû plus vite que le soin : la ramener libère des moyens pour les équipes soignantes.',
@@ -1322,6 +1369,18 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'La mesure engage une dépense récurrente pour l\'État employeur, dont le financement n\'est pas précisé.',
   },
+  'lepen-solidarites-controler-l-existence-des-benefi': {
+    pour:
+      'Des pensions continuent d\'être versées après un décès non signalé à l\'étranger : le contrôle porte sur une fraude documentée.',
+    contre:
+      'Les sommes en jeu sont faibles au regard du coût des contrôles, qui peuvent suspendre des droits parfaitement légitimes.',
+  },
+  'lepen-solidarites-suspendre-les-allocations-famili': {
+    pour:
+      'La responsabilité des parents doit avoir une traduction concrète lorsqu\'un mineur récidive.',
+    contre:
+      'Retirer une allocation appauvrit une famille déjà fragile et frappe aussi les frères et sœurs, qui n\'ont rien fait.',
+  },
   'lepen-education-donner-dans-l-enseignement-prima': {
     pour:
       'Les résultats en français et en mathématiques baissent : concentrer les heures sur ces matières est la réponse la plus directe.',
@@ -1333,36 +1392,6 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
       'Beaucoup de monuments et de sites se dégradent faute de bras, et l\'engagement crée du lien entre générations.',
     contre:
       'Le volontariat suppose un encadrement coûteux, et une restauration demande des compétences de métier.',
-  },
-  'lepen-numerique-taxer-l-utilisation-des-reseaux-': {
-    pour:
-      'Quelques services concentrent l\'essentiel du trafic sans participer au coût des réseaux qu\'ils saturent.',
-    contre:
-      'La taxe se répercute sur les abonnements, et remet en cause le principe de neutralité du réseau.',
-  },
-  'lepen-logement-instaurer-dans-l-acces-au-logeme': {
-    pour:
-      'Le parc social est financé par la collectivité nationale, ce qui justifierait d\'en réserver l\'accès en priorité.',
-    contre:
-      'Un critère de nationalité dans l\'attribution contrevient au principe d\'égalité et serait censuré.',
-  },
-  'lepen-logement-remplacer-maprimerenov-par-un-di': {
-    pour:
-      'Le dispositif actuel est illisible, mal contrôlé et a nourri des fraudes : le remplacer permet de repartir sur des bases saines.',
-    contre:
-      'L\'économie annoncée suppose de rénover moins, alors que le parc mal isolé reste considérable.',
-  },
-  'lepen-transports-investir-dans-les-infrastructure': {
-    pour:
-      'Certains bassins d\'emploi restent mal reliés, ce qui décourage l\'installation d\'entreprises.',
-    contre:
-      'De nouvelles sorties autoroutières encouragent l\'étalement urbain et la circulation, à rebours des objectifs climatiques.',
-  },
-  'lepen-transports-supprimer-les-zones-a-faibles-em': {
-    pour:
-      'Ces zones excluent de fait ceux qui ne peuvent pas changer de véhicule, souvent sans transport alternatif.',
-    contre:
-      'Elles répondent à une pollution de l\'air responsable de dizaines de milliers de décès prématurés par an.',
   },
   'lepen-environnement-laisser-les-parcs-eoliens-actuel': {
     pour:
@@ -1387,6 +1416,30 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
       'Exposer l\'agriculture à des concurrents qui n\'ont pas les mêmes normes revient à lui demander l\'impossible.',
     contre:
       'Sortir l\'agriculture des accords prive aussi les exportateurs français de débouchés, notamment vins et fromages.',
+  },
+  'lepen-logement-instaurer-dans-l-acces-au-logeme': {
+    pour:
+      'Le parc social est financé par la collectivité nationale, ce qui justifierait d\'en réserver l\'accès en priorité.',
+    contre:
+      'Un critère de nationalité dans l\'attribution contrevient au principe d\'égalité et serait censuré.',
+  },
+  'lepen-logement-remplacer-maprimerenov-par-un-di': {
+    pour:
+      'Le dispositif actuel est illisible, mal contrôlé et a nourri des fraudes : le remplacer permet de repartir sur des bases saines.',
+    contre:
+      'L\'économie annoncée suppose de rénover moins, alors que le parc mal isolé reste considérable.',
+  },
+  'lepen-transports-investir-dans-les-infrastructure': {
+    pour:
+      'Certains bassins d\'emploi restent mal reliés, ce qui décourage l\'installation d\'entreprises.',
+    contre:
+      'De nouvelles sorties autoroutières encouragent l\'étalement urbain et la circulation, à rebours des objectifs climatiques.',
+  },
+  'lepen-transports-supprimer-les-zones-a-faibles-em': {
+    pour:
+      'Ces zones excluent de fait ceux qui ne peuvent pas changer de véhicule, souvent sans transport alternatif.',
+    contre:
+      'Elles répondent à une pollution de l\'air responsable de dizaines de milliers de décès prématurés par an.',
   },
   'lepen-securite-identifier-des-lieux-pouvant-etr': {
     pour:
@@ -1436,91 +1489,18 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Ces autorités existent précisément pour échapper au pouvoir politique : les réinternaliser supprime cette garantie.',
   },
-
   // --- Marine Tondelier ------------------------------------------------------
-  'tondelier-economie-augmenter-le-taux-de-la-taxe-sur': {
-    pour:
-      'Les grandes surfaces captent une fréquentation que les centres-villes perdent : la taxe fait financer par les unes ce que les autres perdent.',
-    contre:
-      'Le surcoût se répercute sur les prix en rayon, payés aussi par les clients les plus modestes.',
-  },
   'tondelier-economie-mettre-en-place-une-taxe-zucman-': {
     pour:
       'Les très grands patrimoines déclarent peu de revenus imposables : taxer l\'actif lui-même contourne cet écueil.',
     contre:
       'Évaluer chaque année un patrimoine non coté est complexe, et un taux annuel peut dépasser ce que le bien rapporte.',
   },
-  'tondelier-economie-renforcer-le-fonds-barnier-pour-': {
+  'tondelier-economie-taxation-supplementaire-de-10-de': {
     pour:
-      'Prévenir une inondation coûte moins cher que la réparer, et les collectivités n\'ont pas les moyens d\'avancer ces travaux.',
+      'Les très gros héritages concentrent la richesse d’une génération à l’autre : les taxer davantage réduit cette inégalité de départ.',
     contre:
-      'Ce fonds est alimenté par une part des primes d\'assurance : le renforcer se traduit tôt ou tard par des cotisations plus élevées.',
-  },
-  'tondelier-emploi-augmenter-les-salaires-des-ensei': {
-    pour:
-      'Le métier ne recrute plus : des académies terminent la rentrée avec des postes vacants, faute de candidats.',
-    contre:
-      'Quinze pour cent sur près d\'un million d\'agents représentent plusieurs milliards par an, sans garantie que les vocations reviennent.',
-  },
-  'tondelier-emploi-garantir-des-amenagements-d-hora': {
-    pour:
-      'Les épisodes de forte chaleur se multiplient et tuent au travail : adapter les horaires est une mesure de sécurité.',
-    contre:
-      'Aménager les horaires désorganise chantiers et production, et la contrainte pèse surtout sur les petites structures.',
-  },
-  'tondelier-emploi-passer-le-salaire-minimum-a-2-00': {
-    pour:
-      'Le salaire minimum actuel ne suit plus le coût du logement et de l\'alimentation dans les grandes agglomérations.',
-    contre:
-      'Une hausse brutale renchérit le bas de l\'échelle, peut supprimer les emplois les moins qualifiés et tasse toute la grille.',
-  },
-  'tondelier-solidarites-garantir-systematiquement-aux-fa': {
-    pour:
-      'Une famille monoparentale sans mode de garde n\'a aucune possibilité de travailler : la priorité y est la plus utile.',
-    contre:
-      'Créer une priorité sans créer de places revient à la prendre à d\'autres familles également en difficulté.',
-  },
-  'tondelier-solidarites-garantir-une-puissance-electriqu': {
-    pour:
-      'Une coupure totale prive de réfrigérateur et de ventilateur, ce qui devient dangereux pendant un épisode de chaleur.',
-    contre:
-      'Un service minimal garanti supprime le levier de recouvrement des impayés, dont le coût se reporte sur les autres abonnés.',
-  },
-  'tondelier-solidarites-renforcer-les-demarches-d-aller-': {
-    pour:
-      'Ceux qui ne demandent rien sont souvent ceux qui vont le plus mal : aller vers eux est le seul moyen de les atteindre.',
-    contre:
-      'Ces démarches reposent sur des travailleurs sociaux et des bénévoles dont le nombre est déjà insuffisant.',
-  },
-  'tondelier-sante-creer-2-000-nouveaux-centres-de-': {
-    pour:
-      'Les centres qui salarient leurs médecins attirent là où le libéral ne s\'installe plus, et pratiquent le tiers payant.',
-    contre:
-      'Ouvrir des murs ne crée pas de médecins : en situation de pénurie, ces centres se disputeraient les mêmes praticiens.',
-  },
-  'tondelier-sante-former-regulierement-les-profess': {
-    pour:
-      'Les adultes qui encadrent les enfants ne savent pas repérer les usages qui abîment leur sommeil ou leur attention.',
-    contre:
-      'C\'est une formation de plus qui s\'ajoute à des obligations déjà nombreuses, sans temps dégagé pour la suivre.',
-  },
-  'tondelier-sante-garantir-un-soutien-psychologiqu': {
-    pour:
-      'Perdre sa maison ou combattre un feu laisse des traces durables que rien n\'accompagne aujourd\'hui.',
-    contre:
-      'Le dispositif dépend de psychologues disponibles sur place, souvent absents des zones rurales concernées.',
-  },
-  'tondelier-education-integrer-une-education-critique-': {
-    pour:
-      'Les élèves passent des heures sur des contenus conçus pour capter leur attention, sans jamais apprendre à les décrypter.',
-    contre:
-      'C\'est un enseignement de plus à caser dans des programmes saturés, sans professeurs formés pour le porter.',
-  },
-  'tondelier-education-reduire-la-taille-des-classes-de': {
-    pour:
-      'L\'effet d\'un effectif réduit est mesuré et durable sur les premières années, surtout pour les élèves les plus fragiles.',
-    contre:
-      'Cela suppose des dizaines de milliers de postes et de salles, alors que le métier peine déjà à recruter.',
+      'Les grandes fortunes disposent de moyens pour transmettre autrement ou s’installer ailleurs, ce qui réduirait le rendement.',
   },
   'tondelier-numerique-faire-respecter-des-criteres-de-': {
     pour:
@@ -1528,11 +1508,95 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Définir la neutralité d\'un algorithme est très difficile, et un fil non trié devient vite inutilisable.',
   },
-  'tondelier-numerique-imposer-la-diversification-des-c': {
+  'tondelier-emploi-augmentation-du-smic-montant-non': {
     pour:
-      'Les recommandations poussent vers des contenus toujours plus extrêmes, parce que ce sont eux qui retiennent l\'attention.',
+      'Quand les prix augmentent, les bas salaires perdent du pouvoir d’achat : les indexer protège les ménages les plus modestes.',
     contre:
-      'Imposer une diversité de contenus revient à confier à la loi le soin de décider ce que chacun doit voir.',
+      'Indexer les salaires sur les prix peut entretenir l’inflation, et une hausse du salaire minimum pèse sur les petites entreprises.',
+  },
+  'tondelier-emploi-augmenter-les-salaires-des-ensei': {
+    pour:
+      'Le métier ne recrute plus : des académies terminent la rentrée avec des postes vacants, faute de candidats.',
+    contre:
+      'Quinze pour cent sur près d\'un million d\'agents représentent plusieurs milliards par an, sans garantie que les vocations reviennent.',
+  },
+  'tondelier-emploi-conge-paye-climatique-de-cinq-jo': {
+    pour:
+      'Les canicules rendent certains postes dangereux : des jours dédiés protègent la santé des travailleurs les plus exposés.',
+    contre:
+      'Ces jours désorganiseraient le travail aux mêmes dates partout, et leur coût retomberait sur les employeurs.',
+  },
+  'tondelier-emploi-passer-le-salaire-minimum-a-2-00': {
+    pour:
+      'Le salaire minimum actuel ne suit plus le coût du logement et de l\'alimentation dans les grandes agglomérations.',
+    contre:
+      'Une hausse brutale renchérit le bas de l\'échelle, peut supprimer les emplois les moins qualifiés et tasse toute la grille.',
+  },
+  'tondelier-retraites-retraite-a-60-ans-pour-les-salar': {
+    pour:
+      'Revenir sur le recul de l’âge à 64 ans soulage les carrières longues et les métiers usants, qui en ont le plus souffert.',
+    contre:
+      'Abaisser l’âge de départ coûte plusieurs milliards par an au système de retraite, sans recette nouvelle précisée.',
+  },
+  'tondelier-sante-creer-2-000-nouveaux-centres-de-': {
+    pour:
+      'Les centres qui salarient leurs médecins attirent là où le libéral ne s\'installe plus, et pratiquent le tiers payant.',
+    contre:
+      'Ouvrir des murs ne crée pas de médecins : en situation de pénurie, ces centres se disputeraient les mêmes praticiens.',
+  },
+  'tondelier-sante-interdiction-des-aliments-ultrat': {
+    pour:
+      'Ces produits sont associés à l’obésité et à des maladies chroniques : en protéger les enfants est un enjeu de santé publique.',
+    contre:
+      'La définition d’un aliment « ultratransformé » ne fait pas consensus, et l’interdiction renchérirait les repas des cantines.',
+  },
+  'tondelier-solidarites-interdiction-du-secteur-lucratif': {
+    pour:
+      'Des enfants placés sont confiés à des structures privées peu contrôlées, et beaucoup se retrouvent seuls à 18 ans.',
+    contre:
+      'Les structures privées pallient le manque de places publiques : les exclure risque d’aggraver la pénurie d’accueil.',
+  },
+  'tondelier-solidarites-securite-sociale-ecologique-dont': {
+    pour:
+      'Mal se nourrir coûte en santé publique : garantir à tous une alimentation de qualité soutient aussi les producteurs.',
+    contre:
+      'Le coût d’une telle allocation pour toute la population serait considérable, et son financement n’est pas précisé.',
+  },
+  'tondelier-education-creation-d-un-ministere-de-l-enf': {
+    pour:
+      'Les politiques de l’enfance sont dispersées entre plusieurs ministères : les regrouper améliore leur cohérence.',
+    contre:
+      'Réorganiser les ministères prend du temps et ne garantit pas, à lui seul, davantage de moyens pour les enfants.',
+  },
+  'tondelier-education-reduire-la-taille-des-classes-de': {
+    pour:
+      'L\'effet d\'un effectif réduit est mesuré et durable sur les premières années, surtout pour les élèves les plus fragiles.',
+    contre:
+      'Cela suppose des dizaines de milliers de postes et de salles, alors que le métier peine déjà à recruter.',
+  },
+  'tondelier-environnement-modifier-la-ppe3-pour-que-la-par': {
+    pour:
+      'Les renouvelables s\'installent en quelques années là où un réacteur demande plus d\'une décennie.',
+    contre:
+      'Une part élevée d\'électricité intermittente suppose du stockage et du réseau que la mesure ne finance pas.',
+  },
+  'tondelier-environnement-planifier-la-sortie-du-nucleaire': {
+    pour:
+      'Le nucléaire produit des déchets durables et coûte de plus en plus cher : investir dans les renouvelables serait plus sûr.',
+    contre:
+      'Sortir du nucléaire impose de remplacer une électricité peu émettrice, au risque de recourir davantage au gaz.',
+  },
+  'tondelier-agriculture-interdiction-aux-tres-gros-chalu': {
+    pour:
+      'Les très grands chalutiers épuisent les stocks de poissons près des côtes, au détriment des petits pêcheurs locaux.',
+    contre:
+      'Les zones de pêche relèvent largement de l’Union européenne, et la France ne peut pas les réglementer seule.',
+  },
+  'tondelier-agriculture-planifier-une-sortie-progressive': {
+    pour:
+      'Un horizon lointain et annoncé laisse à la recherche et aux filières le temps de s\'adapter sans rupture brutale.',
+    contre:
+      'Aucune alternative n\'existe pour certaines cultures : fixer une date sans solution fait porter le risque aux producteurs.',
   },
   'tondelier-logement-atteindre-500-000-renovations-pe': {
     pour:
@@ -1546,11 +1610,11 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Plafonner le loyer décourage la mise en location et l\'entretien, et pousse vers la location de courte durée.',
   },
-  'tondelier-transports-ajouter-un-milliard-d-euros-en-2': {
+  'tondelier-logement-limitation-du-nombre-d-autorisat': {
     pour:
-      'Le dispositif a été saturé en quelques jours : la demande existe, c\'est l\'enveloppe qui manquait.',
+      'Dans les villes touristiques, ces locations retirent des logements aux habitants et font monter les loyers.',
     contre:
-      'Subventionner des voitures neuves profite d\'abord aux constructeurs, et un milliard finance relativement peu de véhicules.',
+      'Ces locations apportent un revenu à de nombreux propriétaires et font vivre le tourisme dans les villes concernées.',
   },
   'tondelier-transports-creer-une-offre-de-location-soci': {
     pour:
@@ -1558,41 +1622,23 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Un million de véhicules sur cinq ans suppose une production européenne qui n\'existe pas encore à ce volume.',
   },
-  'tondelier-environnement-financer-par-le-fonds-vert-des-s': {
-    pour:
-      'Un arbre fait baisser la température ressentie de plusieurs degrés : c\'est le moyen le moins cher de rendre les villes vivables.',
-    contre:
-      'Des seuils uniformes ignorent la diversité des sols et des contraintes, et le fonds ne peut pas tout financer.',
-  },
-  'tondelier-environnement-modifier-la-ppe3-pour-que-la-par': {
-    pour:
-      'Les renouvelables s\'installent en quelques années là où un réacteur demande plus d\'une décennie.',
-    contre:
-      'Une part élevée d\'électricité intermittente suppose du stockage et du réseau que la mesure ne finance pas.',
-  },
-  'tondelier-agriculture-organiser-des-dispositifs-veteri': {
-    pour:
-      'Les incendies laissent des milliers d\'animaux blessés sans que personne ne soit chargé de les prendre en charge.',
-    contre:
-      'Mobiliser des vétérinaires en urgence suppose une organisation permanente pour un besoin très ponctuel.',
-  },
-  'tondelier-agriculture-planifier-une-sortie-progressive': {
-    pour:
-      'Un horizon lointain et annoncé laisse à la recherche et aux filières le temps de s\'adapter sans rupture brutale.',
-    contre:
-      'Aucune alternative n\'existe pour certaines cultures : fixer une date sans solution fait porter le risque aux producteurs.',
-  },
-  'tondelier-securite-consacrer-260-millions-d-euros-e': {
-    pour:
-      'La flotte actuelle est vieillissante et insuffisante lorsque plusieurs incendies se déclarent en même temps.',
-    contre:
-      'Les délais de fabrication de ces appareils se comptent en années : le budget ne garantit pas la livraison.',
-  },
   'tondelier-securite-creer-9-000-postes-de-magistrats': {
     pour:
       'Les délais de jugement atteignent plusieurs années, et le pays compte beaucoup moins de magistrats que ses voisins.',
     contre:
       'Recruter à ce rythme suppose de former pendant des années et de disposer de tribunaux pour les accueillir.',
+  },
+  'tondelier-securite-imprescriptibilite-de-tous-les-c': {
+    pour:
+      'Les victimes d’abus dans l’enfance parlent souvent très tard : supprimer le délai leur garantit de pouvoir porter plainte.',
+    contre:
+      'Des décennies après les faits, les preuves sont rares, et l’imprescriptibilité est réservée aux crimes contre l’humanité.',
+  },
+  'tondelier-immigration-regularisation-des-travailleurs-': {
+    pour:
+      'Ces travailleurs occupent des emplois dont l’économie a besoin : les régulariser les protège de l’exploitation.',
+    contre:
+      'Une régularisation large peut encourager de nouvelles arrivées irrégulières, et limite le contrôle des séjours.',
   },
   'tondelier-immigration-regulariser-les-travailleurs-les': {
     pour:
@@ -1600,17 +1646,23 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Des critères connus d\'avance constituent, pour ses opposants, une régularisation permanente et prévisible.',
   },
+  'tondelier-defense-creation-d-un-haut-conseil-milit': {
+    pour:
+      'Coordonner les armées européennes évite les doublons et permet de réagir ensemble plus vite en cas de crise.',
+    contre:
+      'La défense reste une compétence nationale, et la plupart des pays européens s’en remettent d’abord à l’OTAN.',
+  },
   'tondelier-defense-creer-un-commandement-militaire-': {
     pour:
       'Les Européens dépensent beaucoup pour des armées qui ne savent pas opérer ensemble : un commandement commun y remédie.',
     contre:
       'Un commandement dépourvu du pouvoir de mobiliser les armées reste une structure symbolique de plus.',
   },
-  'tondelier-institutions-creer-une-delegation-interminist': {
+  'tondelier-institutions-instauration-d-une-premiere-repu': {
     pour:
-      'L\'isolement touche des millions de personnes et aggrave la santé physique et mentale, sans qu\'aucun ministère ne le porte.',
+      'Le pouvoir est trop concentré entre les mains du chef de l’État : le rééquilibrer au profit du Parlement renforce la démocratie.',
     contre:
-      'Créer une délégation ajoute une structure sans moyens propres : une réponse administrative à un problème social.',
+      'Changer de République ouvre une période d’incertitude, alors que la Constitution actuelle assure la stabilité des institutions.',
   },
   'tondelier-institutions-instaurer-la-proportionnelle-int': {
     pour:
@@ -1618,7 +1670,6 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Sans prime majoritaire, aucune majorité ne se dégage et le pouvoir passe aux négociations d\'après-scrutin.',
   },
-
   // --- Raphaël Glucksmann ----------------------------------------------------
   'glucksmann-economie-donner-aux-territoires-notamment': {
     pour:
@@ -1632,71 +1683,11 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Elle finance déjà le budget de fonctionnement des communes, dont la marge se réduit d\'autant.',
   },
-  'glucksmann-economie-instaurer-une-contribution-solid': {
+  'glucksmann-economie-taxe-sur-les-superprofits-des-mu': {
     pour:
-      'Les sommes en jeu sont sans commune mesure avec les moyens des clubs amateurs qui forment les joueurs.',
+      'Ces bénéfices viennent de la hausse des prix mondiaux plus que d’un effort des entreprises : les partager est jugé légitime.',
     contre:
-      'Une contribution propre à la France pousse à conclure les opérations ailleurs, et son rendement s\'évapore.',
-  },
-  'glucksmann-emploi-creer-des-guichets-pour-booster-': {
-    pour:
-      'Un jeune qui cherche un emploi bute d\'abord sur le logement et la santé : traiter le tout au même endroit évite l\'abandon.',
-    contre:
-      'Ces guichets s\'ajoutent aux missions locales et à France Travail, et empilent une structure de plus.',
-  },
-  'glucksmann-emploi-proteger-les-salaries-en-redonna': {
-    pour:
-      'L\'accord de branche protège les salariés des petites entreprises, où il n\'y a personne pour négocier.',
-    contre:
-      'La branche impose une règle unique à des entreprises très différentes, et empêche des accords adaptés au terrain.',
-  },
-  'glucksmann-retraites-creer-un-haut-conseil-du-pilotag': {
-    pour:
-      'Un pilotage permanent permet d\'ajuster en continu plutôt que de procéder par réformes brutales tous les dix ans.',
-    contre:
-      'Créer une instance ne tranche aucune question de fond : l\'âge, la durée et le niveau des pensions restent entiers.',
-  },
-  'glucksmann-retraites-travailler-a-une-reforme-d-ample': {
-    pour:
-      'Une réforme construite avec les syndicats a plus de chances d\'être appliquée durablement qu\'une réforme imposée.',
-    contre:
-      'La concertation a déjà échoué sur ce sujet, et la mesure ne dit rien de son contenu ni de son calendrier.',
-  },
-  'glucksmann-solidarites-automatiser-l-acces-aux-droits-s': {
-    pour:
-      'Le non-recours atteint un tiers des ayants droit pour certaines aides : le versement automatique supprime la démarche.',
-    contre:
-      'Un dossier partagé entre tous les acteurs concentre des données très sensibles en un point unique.',
-  },
-  'glucksmann-solidarites-rendre-l-accessibilite-universel': {
-    pour:
-      'L\'accessibilité s\'est longtemps limitée au fauteuil roulant ; les handicaps cognitifs et sensoriels restent des angles morts.',
-    contre:
-      'Étendre l\'obligation à tous les handicaps représente un coût de mise aux normes considérable pour les communes et les commerces.',
-  },
-  'glucksmann-sante-assurer-la-contraception-gratuit': {
-    pour:
-      'Le coût des protections écarte des femmes précaires d\'un besoin qui n\'a rien d\'optionnel.',
-    contre:
-      'La gratuité pour toutes coûte sensiblement plus cher qu\'un dispositif ciblé sur celles qui en ont besoin.',
-  },
-  'glucksmann-sante-generaliser-le-pass-sport-sante-': {
-    pour:
-      'L\'activité physique est le moyen le mieux documenté de prévenir les maladies chroniques, et coûte moins cher que de les soigner.',
-    contre:
-      'Le dispositif profite surtout à ceux qui pratiquent déjà : toucher les sédentaires demande autre chose qu\'une aide financière.',
-  },
-  'glucksmann-education-freiner-les-fermetures-d-ecoles-': {
-    pour:
-      'La fermeture d\'une école accélère le départ des familles et éteint le village : la maintenir retient la population.',
-    contre:
-      'Maintenir une classe à très faible effectif coûte cher et prive les élèves d\'une vie collective plus riche ailleurs.',
-  },
-  'glucksmann-education-repenser-en-profondeur-parcoursu': {
-    pour:
-      'La plateforme est contestée par tous ceux qui l\'utilisent : la refonder avec eux vaut mieux qu\'une retouche de plus.',
-    contre:
-      'Une concertation ne règle pas le problème de fond : il y a plus de candidats que de places dans les filières demandées.',
+      'Définir un bénéfice « exceptionnel » est délicat, et ces groupes réalisent l’essentiel de leurs profits hors de France.',
   },
   'glucksmann-numerique-combattre-les-algorithmes-toxiqu': {
     pour:
@@ -1710,29 +1701,83 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Ces sanctions relèvent de la Commission européenne : une position nationale a peu de portée à elle seule.',
   },
-  'glucksmann-logement-retablir-l-obligation-d-accessib': {
+  'glucksmann-emploi-cheque-carburant-multiplie-par-t': {
     pour:
-      'Rendre accessible dès la construction coûte une fraction d\'une adaptation ultérieure, et la population vieillit.',
+      'Dans les zones sans transports en commun, la voiture est indispensable : aider à payer le carburant soutient ces ménages.',
     contre:
-      'L\'obligation renchérit chaque logement neuf et réduit les surfaces habitables, dans un marché déjà tendu.',
+      'Subventionner le carburant encourage sa consommation et coûte cher, alors que l’objectif affiché est de réduire les émissions.',
   },
-  'glucksmann-transports-relancer-les-trains-de-nuit-acce': {
+  'glucksmann-emploi-hausse-de-la-remuneration-nette-': {
     pour:
-      'Le train de nuit remplace l\'avion sur des trajets où la grande vitesse ne serait pas rentable.',
+      'Les très gros héritages se concentrent dans peu de mains : les taxer pour soutenir les revenus du travail rééquilibre l’effort.',
     contre:
-      'Le matériel de nuit a été démantelé et coûte cher à reconstituer, pour un nombre de voyageurs limité.',
+      'Le rendement des taxes sur les héritages est incertain, et une hausse durable des salaires ne peut reposer sur cette seule recette.',
   },
-  'glucksmann-transports-rendre-l-accessibilite-universel': {
+  'glucksmann-retraites-abrogation-de-la-reforme-des-ret': {
     pour:
-      'Sans transport accessible, l\'emploi et les soins restent hors d\'atteinte quels que soient les autres droits reconnus.',
+      'La réforme de 2023 a été adoptée sans vote final de l’Assemblée alors qu’une majorité de Français s’y opposait dans les sondages.',
     contre:
-      'Mettre aux normes des réseaux anciens représente des coûts que les collectivités ne peuvent pas absorber seules.',
+      'L’annuler coûte plusieurs milliards par an et aggrave le déficit des retraites, sans financement précisé.',
   },
-  'glucksmann-environnement-conforter-le-role-du-nucleaire-e': {
+  'glucksmann-retraites-depart-plus-tot-pour-les-carrier': {
     pour:
-      'Le parc existant fournit l\'essentiel de l\'électricité décarbonée : en assurer la sûreté et le renouvellement est la priorité.',
+      'Tous ne vieillissent pas de la même façon : moduler l’âge selon l’usure rend l’effort demandé plus équitable.',
     contre:
-      'La position reste générale : elle ne tranche ni entre prolongation et construction, ni sur le rythme à tenir.',
+      'Mesurer l’espérance de vie en bonne santé métier par métier est complexe, et toute frontière créera des contestations.',
+  },
+  'glucksmann-sante-assurer-la-contraception-gratuit': {
+    pour:
+      'Le coût des protections écarte des femmes précaires d\'un besoin qui n\'a rien d\'optionnel.',
+    contre:
+      'La gratuité pour toutes coûte sensiblement plus cher qu\'un dispositif ciblé sur celles qui en ont besoin.',
+  },
+  'glucksmann-sante-generaliser-le-pass-sport-sante-': {
+    pour:
+      'L\'activité physique est le moyen le mieux documenté de prévenir les maladies chroniques, et coûte moins cher que de les soigner.',
+    contre:
+      'Le dispositif profite surtout à ceux qui pratiquent déjà : toucher les sédentaires demande autre chose qu\'une aide financière.',
+  },
+  'glucksmann-solidarites-automatiser-l-acces-aux-droits-s': {
+    pour:
+      'Le non-recours atteint un tiers des ayants droit pour certaines aides : le versement automatique supprime la démarche.',
+    contre:
+      'Un dossier partagé entre tous les acteurs concentre des données très sensibles en un point unique.',
+  },
+  'glucksmann-solidarites-rendre-l-accessibilite-universel': {
+    pour:
+      'L\'accessibilité s\'est longtemps limitée au fauteuil roulant ; les handicaps cognitifs et sensoriels restent des angles morts.',
+    contre:
+      'Étendre l\'obligation à tous les handicaps représente un coût de mise aux normes considérable pour les communes et les commerces.',
+  },
+  'glucksmann-education-hausse-de-10-du-salaire-de-tous-': {
+    pour:
+      'Les enseignants du primaire sont moins payés que la moyenne européenne : une hausse rend le métier plus attractif.',
+    contre:
+      'Six milliards par an pèsent lourd dans un budget contraint, et la hausse ne règle pas seule les difficultés du métier.',
+  },
+  'glucksmann-education-plan-de-5-ans-pour-l-ecole-baiss': {
+    pour:
+      'Des classes moins chargées permettent de mieux suivre chaque élève, et beaucoup d’écoles sont mal isolées ou vétustes.',
+    contre:
+      'Réduire les effectifs exige de recruter des enseignants que l’on peine déjà à trouver, et les écoles relèvent des communes.',
+  },
+  'glucksmann-education-relance-des-colonies-de-vacances': {
+    pour:
+      'Beaucoup d’enfants ne partent jamais en vacances : un séjour collectif leur ouvre d’autres horizons et favorise la mixité.',
+    contre:
+      'Le secteur manque d’animateurs et de centres d’accueil, et garantir un séjour à chaque enfant aurait un coût élevé.',
+  },
+  'glucksmann-education-service-civique-obligatoire-de-d': {
+    pour:
+      'Une mission commune à tous les jeunes brasse les milieux sociaux et renforce l’engagement au service de la collectivité.',
+    contre:
+      'Encadrer chaque année une classe d’âge entière demande des moyens considérables, et l’obligation retarde études et emploi.',
+  },
+  'glucksmann-environnement-10-milliards-d-euros-pour-un-lea': {
+    pour:
+      'Le prix d’une voiture électrique reste hors de portée de beaucoup de ménages : la location aidée rend la transition accessible.',
+    contre:
+      'Dix milliards représentent une dépense élevée par véhicule, pour un effet sur les émissions jugé coûteux au regard d’autres aides.',
   },
   'glucksmann-environnement-deployer-des-conventions-citoyen': {
     pour:
@@ -1752,17 +1797,29 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Le dispositif finance la conversion sans garantir les débouchés, alors que la demande en bio a reculé.',
   },
+  'glucksmann-logement-retablir-l-obligation-d-accessib': {
+    pour:
+      'Rendre accessible dès la construction coûte une fraction d\'une adaptation ultérieure, et la population vieillit.',
+    contre:
+      'L\'obligation renchérit chaque logement neuf et réduit les surfaces habitables, dans un marché déjà tendu.',
+  },
+  'glucksmann-transports-relancer-les-trains-de-nuit-acce': {
+    pour:
+      'Le train de nuit remplace l\'avion sur des trajets où la grande vitesse ne serait pas rentable.',
+    contre:
+      'Le matériel de nuit a été démantelé et coûte cher à reconstituer, pour un nombre de voyageurs limité.',
+  },
+  'glucksmann-transports-rendre-l-accessibilite-universel': {
+    pour:
+      'Sans transport accessible, l\'emploi et les soins restent hors d\'atteinte quels que soient les autres droits reconnus.',
+    contre:
+      'Mettre aux normes des réseaux anciens représente des coûts que les collectivités ne peuvent pas absorber seules.',
+  },
   'glucksmann-securite-deployer-massivement-la-justice-': {
     pour:
       'La confrontation aux conséquences de l\'acte réduit la récidive plus efficacement qu\'une courte peine de prison.',
     contre:
       'Ces dispositifs demandent un encadrement important et restent mal compris des victimes comme du public.',
-  },
-  'glucksmann-securite-doubler-le-nombre-de-maisons-du-': {
-    pour:
-      'Dans beaucoup de territoires, le premier lieu où poser une question juridique est à des dizaines de kilomètres.',
-    contre:
-      'Ouvrir des lieux ne sert que s\'ils sont dotés en personnel qualifié, ce que le recrutement actuel ne permet pas.',
   },
   'glucksmann-immigration-creer-une-force-europeenne-de-sa': {
     pour:
@@ -1770,29 +1827,23 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Ses opposants estiment qu\'un dispositif permanent de secours encourage les départs et l\'activité des passeurs.',
   },
-  'glucksmann-immigration-mettre-en-place-des-guichets-uni': {
+  'glucksmann-immigration-organisation-d-une-convention-ci': {
     pour:
-      'Un parcours éclaté entre préfecture, sécurité sociale et école retarde l\'intégration de plusieurs mois.',
+      'Le sujet est très polarisé : un débat entre citoyens tirés au sort permet de dépasser les postures et d’informer.',
     contre:
-      'Regrouper ces services suppose des moyens supplémentaires, alors que les préfectures peinent déjà à traiter les dossiers.',
+      'Les conclusions de la convention pour le climat ont été en partie écartées, et ce format ne tranche pas le débat.',
   },
-  'glucksmann-defense-augmenter-drastiquement-l-aide-m': {
+  'glucksmann-defense-grand-emprunt-europeen-au-servic': {
     pour:
-      'Un conflit réglé par la force aux frontières de l\'Union fixerait un précédent pour tout le continent.',
+      'Emprunter ensemble coûte moins cher et permet des investissements qu’aucun pays ne peut financer seul, comme en 2020.',
     contre:
-      'L\'effort financier est considérable et engage le pays sur une durée que personne ne peut estimer.',
+      'Plusieurs pays du Nord s’opposent à une nouvelle dette commune, qui alourdirait les remboursements futurs.',
   },
-  'glucksmann-defense-proposer-aux-partenaires-de-l-ue': {
+  'glucksmann-defense-suppression-du-droit-de-veto-au-': {
     pour:
-      'La garantie américaine n\'est plus certaine : une dissuasion à l\'échelle européenne comblerait ce vide.',
+      'Un seul État peut aujourd’hui paralyser l’Union, notamment en politique étrangère : voter à la majorité la rend plus efficace.',
     contre:
-      'Étendre la dissuasion sans partager la décision n\'a rien de crédible, et la partager reviendrait à céder la souveraineté.',
-  },
-  'glucksmann-institutions-engager-une-refondation-democrat': {
-    pour:
-      'La concentration du pouvoir nourrit le sentiment que les décisions se prennent loin de ceux qu\'elles concernent.',
-    contre:
-      'L\'annonce reste une intention : elle ne dit ni quels pouvoirs seraient transférés, ni à quel échelon.',
+      'La France perdrait elle aussi la possibilité de bloquer une décision contraire à ses intérêts, et la réforme exige l’accord de tous.',
   },
   'glucksmann-institutions-renouer-avec-l-esprit-des-accord': {
     pour:
@@ -1800,7 +1851,6 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Rouvrir la discussion sans cadre clair prolonge une incertitude qui pèse sur l\'économie et la sécurité de l\'archipel.',
   },
-
   // --- Xavier Bertrand -------------------------------------------------------
   'bertrand-economie-mettre-fin-aux-differences-de-jo': {
     pour:
@@ -1826,11 +1876,23 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Une trajectoire pluriannuelle contraint aussi : elle enferme le système si une crise sanitaire survient.',
   },
+  'bertrand-sante-creation-d-un-chu-en-corse-adapt': {
+    pour:
+      'Faute d’hôpital universitaire, de nombreux patients doivent se faire soigner sur le continent, ce qui retarde les soins.',
+    contre:
+      'Un tel hôpital exige un bassin de population et de médecins suffisant pour former et soigner à un niveau universitaire.',
+  },
   'bertrand-sante-creer-en-corse-un-centre-hospita': {
     pour:
       'L\'île n\'a pas de centre hospitalier universitaire, ce qui oblige à évacuer des patients vers le continent.',
     contre:
       'Les partenariats public-privé hospitaliers ont laissé des loyers très lourds, parfois pendant trente ans.',
+  },
+  'bertrand-education-consacrer-1-du-budget-de-l-etat-': {
+    pour:
+      'Un objectif chiffré protège la culture des coupes budgétaires et soutient un secteur qui fait vivre de nombreux territoires.',
+    contre:
+      'Augmenter la part de la culture suppose de réduire d’autres dépenses, dans un budget déjà sous tension.',
   },
   'bertrand-education-developper-le-mecenat-culturel-e': {
     pour:
@@ -1838,17 +1900,11 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Il va vers ce qui est visible et prestigieux, rarement vers la création risquée ou les zones isolées.',
   },
-  'bertrand-education-garantir-a-chaque-eleve-de-l-eco': {
+  'bertrand-education-faire-en-sorte-que-chaque-eleve-': {
     pour:
-      'Pour beaucoup d\'élèves, l\'école est la seule occasion d\'entrer dans un théâtre, une salle de concert ou un musée.',
+      'Beaucoup d’enfants n’entrent jamais dans un théâtre ou un musée : l’école peut leur garantir au moins une rencontre.',
     contre:
-      'Une sortie unique laisse peu de trace sans un travail pédagogique autour, que la mesure ne prévoit pas.',
-  },
-  'bertrand-education-porter-a-1-la-part-du-budget-de-': {
-    pour:
-      'Un objectif chiffré protège le budget culturel des arbitrages annuels, où il sert souvent de variable d\'ajustement.',
-    contre:
-      'Fixer une part du budget sans dire ce qu\'elle finance revient à décider d\'un montant avant de décider d\'une politique.',
+      'Une seule sortie sur toute la scolarité reste modeste, et son organisation dépend des moyens de chaque établissement.',
   },
   'bertrand-education-soutenir-le-developpement-des-la': {
     pour:
@@ -1856,29 +1912,23 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Les heures qu\'elles occupent se prennent sur d\'autres enseignements, dans un temps scolaire déjà plein.',
   },
-  'bertrand-environnement-deployer-la-telesurveillance-et-': {
-    pour:
-      'Un départ de feu détecté dans les premières minutes s\'éteint avec des moyens sans commune mesure.',
-    contre:
-      'La détection ne sert que si des moyens d\'intervention sont disponibles à proximité, ce que la mesure ne prévoit pas.',
-  },
   'bertrand-agriculture-supprimer-les-surtranspositions-': {
     pour:
       'Les producteurs français appliquent des règles plus contraignantes que leurs concurrents sur le même marché.',
     contre:
       'Certaines de ces règles protègent la santé ou l\'eau : les supprimer sans distinction revient à un alignement par le bas.',
   },
-  'bertrand-securite-durcir-les-sanctions-contre-les-': {
-    pour:
-      'Une part importante des départs de feu est d\'origine humaine, et la sanction actuelle ne dissuade pas.',
-    contre:
-      'La plupart de ces départs sont accidentels : alourdir la peine n\'agit que sur une minorité de cas.',
-  },
   'bertrand-securite-instaurer-des-peines-minimales-p': {
     pour:
       'Les agressions contre élus et secours augmentent, et une peine plancher affirme une protection particulière.',
     contre:
       'Une peine minimale retire au juge la faculté d\'adapter la sanction, ce que le Conseil constitutionnel encadre strictement.',
+  },
+  'bertrand-securite-telesurveillance-et-drones-pour-': {
+    pour:
+      'Détecter un feu dans les premières minutes change tout pour l’éteindre, et la plupart des incendies sont d’origine humaine.',
+    contre:
+      'Surveiller des millions d’hectares coûte cher, et les sanctions lourdes existent déjà sans dissuader les incendiaires.',
   },
   'bertrand-defense-proposer-avec-le-danemark-un-par': {
     pour:
@@ -1892,6 +1942,12 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Un recours a peu de chances d\'aboutir contre un accord ratifié, et isolerait la France parmi ses partenaires.',
   },
+  'bertrand-institutions-republique-des-territoires-etat-': {
+    pour:
+      'Les collectivités sont plus proches des besoins : leur confier davantage rend l’action publique plus efficace et lisible.',
+    contre:
+      'Décentraliser fortement peut creuser les écarts entre territoires riches et pauvres, au détriment de l’égalité.',
+  },
   'bertrand-institutions-accorder-a-la-corse-une-autonomi': {
     pour:
       'Une île éloignée du continent a des réalités que la loi nationale traite mal : pouvoir adapter les règles y répond.',
@@ -1904,6 +1960,12 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
     contre:
       'Figer une enveloppe sur plusieurs années réduit la capacité de l\'ajuster quand les besoins changent.',
   },
+  'bertrand-institutions-favorable-a-l-autonomie-de-la-co': {
+    pour:
+      'L’île a une identité et des contraintes particulières : une autonomie validée par ses habitants respecte leur choix.',
+    contre:
+      'Une autonomie pour un territoire peut en appeler d’autres et remettre en cause l’unité de la République.',
+  },
   'bertrand-institutions-fusionner-une-partie-des-mandats': {
     pour:
       'Le nombre d\'élus locaux est parmi les plus élevés d\'Europe, et les compétences des deux échelons se recoupent largement.',
@@ -1915,6 +1977,12 @@ export const PROPOSAL_ARGUMENTS: Record<string, ProposalDebate> = {
       'Une même règle appliquée en montagne et en zone dense produit des effets opposés : l\'adaptation relève du bon sens.',
     contre:
       'L\'égalité devant la loi est un principe constitutionnel, que multiplier les régimes locaux fragilise.',
+  },
+  'bertrand-institutions-s-il-est-elu-n-exercer-qu-un-seu': {
+    pour:
+      'Sans perspective de réélection, un président peut prendre des décisions impopulaires mais nécessaires.',
+    contre:
+      'Un président qui ne peut être réélu perd de l’autorité en fin de mandat, et les électeurs ne peuvent pas le reconduire.',
   },
   'bertrand-institutions-soumettre-l-autonomie-de-la-cors': {
     pour:
