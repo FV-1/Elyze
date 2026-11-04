@@ -10,8 +10,7 @@ import { useColors, useThemeColor } from '../theme/ThemeContext';
 
 // Sujet par sujet : ce qu'on a retenu, et de qui. Chaque thème est replié au
 // départ — la liste sert d'abord de vue d'ensemble, on n'ouvre que ce qu'on
-// veut lire. Partagé par l'onglet Classement et l'écran de résultat, pour que
-// les deux disent exactement la même chose.
+// veut lire. Affiché sur l'écran de résultat, onglet « Par thème ».
 export function ThemeAgreementList({
   entries,
   showCandidates,

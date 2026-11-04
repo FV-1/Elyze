@@ -17,7 +17,7 @@ import { RESSORT, usePression } from './mouvement';
 // sur le seul paquet de la session.
 //
 // Une version précédente n'affichait que le paquet, pour que ses décomptes
-// recoupent ceux de l'onglet Classement juste à côté. Mais l'app embarque
+// recoupent ceux du classement provisoire, alors juste à côté. Mais l'app embarque
 // désormais bien plus de propositions qu'une partie n'en tire : n'en montrer
 // que la moitié revenait à cacher ce qu'on a sous la main. Le risque de
 // confusion est traité autrement, en le disant — l'en-tête annonce les deux

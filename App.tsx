@@ -169,7 +169,7 @@ function AppInner() {
   // Où revenir en quittant le duel.
   //
   // MÉMORISÉ QUAND ON VIENT DE QUELQUE PART, calculé sinon : on entre dans le
-  // duel depuis le résultat, l'accueil et l'onglet Classement, mais aussi par
+  // duel depuis le résultat et l'accueil, mais aussi par
   // un lien profond qui ouvre l'app fermée — cas où aucun « écran précédent »
   // n'a jamais existé, et où seul l'état de la partie peut décider.
   const [duelReturnTo, setDuelReturnTo] = useState<Screen | null>(null);
@@ -217,7 +217,7 @@ function AppInner() {
       }
       if (screen === 'review') {
         // Symétrique au bouton retour visible de cet écran.
-        setScreen('swipe');
+        setScreen('results');
         return true;
       }
       if (screen === 'swipe') {
@@ -367,8 +367,7 @@ function AppInner() {
 
   // Une session démarrée pendant cette exécution de l'app reste "reprenable"
   // tant qu'elle n'a pas été explicitement effacée. Sans ce calcul, revenir à
-  // l'accueil (bouton retour Android depuis le swipe, ou après un détour par
-  // l'onglet Classement) faisait disparaître le bouton "Reprendre" : la
+  // l'accueil (bouton retour Android depuis le swipe, par exemple) faisait disparaître le bouton "Reprendre" : la
   // progression semblait perdue, et "Commencer" l'écrasait pour de bon.
   const liveRestorable = useMemo<RestorableSummary | null>(() => {
     if (sessionProposals.length === 0) return null;
@@ -552,7 +551,10 @@ function AppInner() {
     markTutorialSeen();
   };
 
-  const handleSwipeFinish = () => setScreen('review');
+  // La dernière carte mène droit au résultat. La relecture y passait d'abord,
+  // obligatoire ; elle est devenue un bouton du résultat (« Revoir mes
+  // réponses »), pour qui veut corriger une réponse.
+  const handleSwipeFinish = () => openResults('swipe');
 
   const handleReviewChange = (proposalId: string, direction: SwipeDirection) => {
     const nextAnswers = { ...answers, [proposalId]: direction };
@@ -560,7 +562,7 @@ function AppInner() {
     persist(currentIndex, nextAnswers, sessionProposals, selectedThemeIds);
   };
 
-  const handleReviewContinue = () => openResults('review');
+  const handleReviewContinue = () => setScreen('results');
 
   const handleRestart = () => {
     clearSession();
@@ -684,11 +686,6 @@ function AppInner() {
                 onDismissTutorial={handleDismissTutorial}
                 tab={swipeTab}
                 onChangeTab={setSwipeTab}
-                duel={
-                  adversaire
-                    ? { resume: resumeDuel, onVoir: () => openDuel('swipe') }
-                    : null
-                }
               />
             </ScreenTransition>
             </ZoneAccent>
@@ -703,11 +700,8 @@ function AppInner() {
                 answers={answers}
                 onChangeAnswer={handleReviewChange}
                 onContinue={handleReviewContinue}
-                // Retour vers le paquet : une fois terminé, l'onglet Swiper
-                // affiche l'écran de fin (message + Recommencer) plutôt que
-                // des cartes, et donne accès aux onglets Classement et
-                // Propositions.
-                onBack={() => setScreen('swipe')}
+                // On n'arrive plus ici que depuis le résultat : on y retourne.
+                onBack={() => setScreen('results')}
               />
             </ScreenTransition>
             </ZoneAccent>
@@ -741,6 +735,7 @@ function AppInner() {
                 // ce que l'autre a répondu.
                 duel={resumeDuel}
                 onOpenDuel={() => openDuel('results')}
+                onOpenReview={() => setScreen('review')}
                 alreadyRevealed={resultsRevealed}
                 onReveal={() => setResultsRevealed(true)}
               />

@@ -211,7 +211,7 @@ describe('montage des écrans', () => {
     expect(texts(tree).join(' ')).toContain('42');
   });
 
-  it('le swipe expose ses trois onglets et le choix des thèmes', () => {
+  it('le swipe expose ses deux onglets et le choix des thèmes', () => {
     const tree = mount(
       <SwipeAvecOnglets
         proposals={DECK}
@@ -228,144 +228,16 @@ describe('montage des écrans', () => {
         onOpenSettings={noop}
         showTutorial={false}
         onDismissTutorial={noop}
-        duel={null}
       />
     );
     const found = texts(tree);
-    for (const label of ['Swiper', 'Classement', 'Propositions', 'Thèmes']) {
+    for (const label of ['Swiper', 'Propositions', 'Thèmes']) {
       expect(found).toContain(label);
     }
-    // « Candidats » a quitté la barre pour devenir une vue du panneau
-    // Classement : il ne doit plus y figurer comme onglet.
+    // Pas de classement pendant la partie : il doublait l'écran de résultat,
+    // et un classement visible en cours de jeu peut orienter les réponses.
+    expect(found).not.toContain('Classement');
     expect(found).not.toContain('Candidats');
-  });
-
-  it('paquet fini, l’onglet Classement renvoie au résultat au lieu de le doubler', async () => {
-    // Le panneau montrait le classement complet et l'accord par thème —
-    // exactement l'écran de résultat, sans le partage ni le duel. Il n'en
-    // garde que le résumé et la porte (voir RankingPanel).
-    let vuLeResultat = false;
-    const tree = mount(
-      <SwipeAvecOnglets
-        proposals={DECK}
-        currentIndex={DECK.length}
-        answers={ANSWERS}
-        onAnswer={noop}
-        onUndo={noop}
-        onFinish={noop}
-        onSeeResult={() => {
-          vuLeResultat = true;
-        }}
-        onRestart={noop}
-        onExit={noop}
-        onOpenThemeFilter={noop}
-        selectedThemeIds={THEMES.map((t) => t.id)}
-        onOpenSettings={noop}
-        showTutorial={false}
-        onDismissTutorial={noop}
-        duel={null}
-      />
-    );
-
-    // L'écran lit le réglage « montrer les candidats » au stockage, de façon
-    // asynchrone : on laisse cette promesse aboutir DANS un `act`, faute de
-    // quoi sa mise à jour d'état tombe entre deux et React s'en plaint.
-    await renderer.act(async () => {});
-
-    const onglet = touchables(tree).find(
-      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Classement'
-    );
-    expect(onglet).toBeDefined();
-    renderer.act(() => onglet!.props.onPress());
-
-    expect(texts(tree)).not.toContain('Ton classement provisoire');
-    expect(texts(tree)).toContain('Ton classement est définitif');
-
-    const versResultat = touchables(tree).find(
-      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Voir mon résultat'
-    );
-    expect(versResultat).toBeDefined();
-    renderer.act(() => versResultat!.props.onPress());
-    expect(vuLeResultat).toBe(true);
-  });
-
-  it('un défi en cours est annoncé dans l’onglet Classement', async () => {
-    // Pendant qu'on joue le paquet de quelqu'un, rien ne disait qu'une
-    // comparaison attendait à l'arrivée : on voyait monter un classement
-    // provisoire comme dans n'importe quelle partie.
-    const tree = mount(
-      <SwipeAvecOnglets
-        proposals={DECK}
-        currentIndex={20}
-        answers={ANSWERS}
-        onAnswer={noop}
-        onUndo={noop}
-        onFinish={noop}
-        onSeeResult={noop}
-        onRestart={noop}
-        onExit={noop}
-        onOpenThemeFilter={noop}
-        selectedThemeIds={THEMES.map((t) => t.id)}
-        onOpenSettings={noop}
-        showTutorial={false}
-        onDismissTutorial={noop}
-        duel={{ resume: null, onVoir: noop }}
-      />
-    );
-    await renderer.act(async () => {});
-
-    const onglet = touchables(tree).find(
-      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Classement'
-    );
-    renderer.act(() => onglet!.props.onPress());
-    expect(texts(tree).join(' ')).toContain('Tu joues le défi de quelqu’un');
-  });
-
-  it('paquet fini, la comparaison passe devant le classement', async () => {
-    let vue = false;
-    const tree = mount(
-      <SwipeAvecOnglets
-        proposals={DECK}
-        currentIndex={DECK.length}
-        answers={ANSWERS}
-        onAnswer={noop}
-        onUndo={noop}
-        onFinish={noop}
-        onSeeResult={noop}
-        onRestart={noop}
-        onExit={noop}
-        onOpenThemeFilter={noop}
-        selectedThemeIds={THEMES.map((t) => t.id)}
-        onOpenSettings={noop}
-        showTutorial={false}
-        onDismissTutorial={noop}
-        duel={{
-          resume: { accords: 32, tranchees: 48 },
-          onVoir: () => {
-            vue = true;
-          },
-        }}
-      />
-    );
-    await renderer.act(async () => {});
-
-    const onglet = touchables(tree).find(
-      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Classement'
-    );
-    renderer.act(() => onglet!.props.onPress());
-
-    // Les chiffres, pas une promesse : c'est ce qui donne envie d'ouvrir.
-    const vu = texts(tree).join('');
-    expect(vu).toContain('48 cartes');
-    expect(vu).toContain('d’accord sur 32');
-
-    const comparer = touchables(tree).find(
-      (n: ReactTestInstance) =>
-        n.props.accessibilityLabel === 'Voir ce que chacun a validé, carte par carte'
-    );
-    expect(comparer).toBeDefined();
-    renderer.act(() => comparer!.props.onPress());
-    expect(vue).toBe(true);
   });
 
   it('le swipe sort vers l’accueil par le bouton du haut', () => {
@@ -388,7 +260,6 @@ describe('montage des écrans', () => {
         onOpenSettings={noop}
         showTutorial={false}
         onDismissTutorial={noop}
-        duel={null}
       />
     );
     // Ce bouton quitte la session ; son libellé doit le dire, parce que son
@@ -419,7 +290,6 @@ describe('montage des écrans', () => {
         onOpenSettings={noop}
         showTutorial={false}
         onDismissTutorial={noop}
-        duel={null}
       />
     );
     expect(texts(tree)).toContain('3 thèmes');
@@ -442,7 +312,6 @@ describe('montage des écrans', () => {
         onOpenSettings={noop}
         showTutorial={false}
         onDismissTutorial={noop}
-        duel={null}
       />
     );
     expect(texts(tree)).toContain('Voir mon résultat');
@@ -723,7 +592,6 @@ describe('le voile sur les candidats', () => {
         onOpenSettings={noop}
         showTutorial={false}
         onDismissTutorial={noop}
-        duel={null}
       />
     );
 

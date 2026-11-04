@@ -2,7 +2,6 @@ import {
   buildDeck,
   buildSessionDeck,
   candidatesQuota,
-  formatDuQuota,
   QUOTA_COURT,
   QUOTA_PAR_CANDIDAT,
   quotaDuFormat,
@@ -173,11 +172,4 @@ describe('longueur de partie', () => {
     expect(buildSessionDeck(p, false, undefined, QUOTA_COURT)).toHaveLength(p.length);
   });
 
-  it('relit le format d’un quota, pour les sessions déjà enregistrées', () => {
-    expect(formatDuQuota(QUOTA_COURT)).toBe('court');
-    expect(formatDuQuota(QUOTA_PAR_CANDIDAT)).toBe('long');
-    // Tout autre quota est traité comme une partie longue : c'est ce qu'était
-    // une session écrite avant l'arrivée des parties courtes.
-    expect(formatDuQuota(12)).toBe('long');
-  });
 });

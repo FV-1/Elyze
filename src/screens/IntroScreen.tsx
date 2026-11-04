@@ -5,7 +5,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import Animated from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { ColorTokens, fonts, MONO_SPACING, ombre, police, radii, spacing } from '../theme';
+import { ColorTokens, fonts, MONO_SPACING, police, radii, spacing } from '../theme';
 import { useColors, useThemeSettings } from '../theme/ThemeContext';
 import { haptics } from '../utils/haptics';
 import { PROPOSALS } from '../data/proposals';
@@ -20,11 +20,6 @@ const SECRET_TAPS_REQUIRED = 7;
 // Au delà de ce délai entre deux appuis, le compteur repart de zéro : c'est
 // une suite d'appuis volontaire, pas des appuis isolés cumulés sur la durée.
 const SECRET_TAP_TIMEOUT_MS = 1200;
-
-// Quatre libelles cote a cote sur une seule ligne : au dela de ce
-// grossissement, « Pas pour moi » deborde de sa colonne. Le libelle complet des
-// quatre choix reste annonce par l'accessibilityLabel du bloc.
-const LEGEND_MAX_SCALE = 1.3;
 
 export type RestorableSummary = {
   currentIndex: number;
@@ -206,57 +201,9 @@ export function IntroScreen({
           Swipe des propositions sans savoir qui les porte. Découvre qui te ressemble.
         </Text>
 
-        {/* QUATRE choix, pas trois. Le super like est une réponse à part
-            entière : sa place est ici, avec les autres, et non dans un encart
-            séparé sous la légende. Cet encart-là coûtait une cinquantaine de
-            pixels sur un écran qui doit tenir sans défilement, pour dire une
-            chose qui se loge dans une colonne déjà présente.
-            Le « ×3 » est posé sur l'icône plutôt qu'écrit en toutes lettres :
-            c'est ce qui distingue ce geste des autres, et l'explication
-            complète est annoncée aux lecteurs d'écran par le libellé du bloc.
-            Il reste à la taille des libellés, jamais en dessous. */}
-        <View
-          style={styles.legend}
-          accessible
-          accessibilityLabel="Quatre choix possibles : pas pour moi, pas d’avis, j’adhère, ou super like qui compte trois fois plus dans ton résultat"
-        >
-          <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-            <View style={[styles.legendIcon, styles.legendIconNope]}>
-              <Ionicons name="close" size={18} color={colors.dangerText} />
-            </View>
-            <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
-              Pas pour moi
-            </Text>
-          </View>
-          <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-            <View style={[styles.legendIcon, styles.legendIconSkip]}>
-              <Ionicons name="remove-outline" size={16} color={colors.textSecondary} />
-            </View>
-            <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
-              Pas d’avis
-            </Text>
-          </View>
-          <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-            <View style={[styles.legendIcon, styles.legendIconLike]}>
-              <Ionicons name="heart" size={16} color={colors.successText} />
-            </View>
-            <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
-              J’adhère
-            </Text>
-          </View>
-          <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-            <View style={[styles.legendIcon, styles.legendIconSuper]}>
-              <Ionicons name="star" size={16} color={colors.warningText} />
-              <View style={styles.legendMultiplier}>
-                <Text style={styles.legendMultiplierText}>×3</Text>
-              </View>
-            </View>
-            <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
-              Super like
-            </Text>
-          </View>
-        </View>
-
+        {/* La légende des quatre boutons a quitté l'accueil : le tutoriel du
+            premier swipe les présente, avec leur effet, au moment où ils
+            servent. Ici, elle répétait la règle avant même qu'on joue. */}
         {/* Le compte et le lien tiennent sur UNE ligne, au lieu de trois
             blocs empilés. L'accueil doit tenir dans un écran sans défilement,
             et chaque bloc centré y coûtait une trentaine de pixels pour une
@@ -582,73 +529,6 @@ function makeStyles(colors: ColorTokens) {
       color: colors.textSecondary,
       textAlign: 'center',
       maxWidth: 320,
-    },
-    // Quatre colonnes egales plutot qu'un ecartement fixe : a trois choix un
-    // `gap` de 24 suffisait, a quatre il poussait « Pas pour moi » hors de sa
-    // colonne. Chaque choix prend maintenant le quart de la largeur.
-    legend: {
-      flexDirection: 'row',
-      alignSelf: 'stretch',
-      gap: spacing.sm,
-      marginTop: spacing.lg,
-    },
-    legendItem: {
-      flex: 1,
-      alignItems: 'center',
-      gap: spacing.xs,
-    },
-    // LES MÊMES PASTILLES QUE SOUS LES CARTES, en plus petit : aplat de
-    // couleur, signe d'encre, contour d'encre. La légende ne servirait à rien
-    // si elle ne montrait pas exactement ce qu'on va toucher.
-    legendIcon: {
-      width: 40,
-      height: 40,
-      borderRadius: radii.pill,
-      alignItems: 'center',
-      justifyContent: 'center',
-      // Les mêmes pastilles que les boutons de réponse, donc le même
-      // traitement : une ombre, pas un contour.
-      ...ombre,
-      // Le multiplicateur deborde du cercle : il doit rester visible.
-      overflow: 'visible',
-    },
-    // Les mêmes pastilles teintées que les boutons de réponse : la légende
-    // doit montrer exactement ce qu'on va toucher (voir ActionButtons).
-    legendIconSuper: {
-      backgroundColor: colors.warningSoft,
-    },
-    legendMultiplier: {
-      position: 'absolute',
-      right: -8,
-      bottom: -4,
-      paddingHorizontal: 5,
-      paddingVertical: 1,
-      borderRadius: radii.pill,
-      backgroundColor: colors.action,
-    },
-    legendMultiplierText: {
-      // Jamais sous le plus petit jeton de police de l'app.
-      fontSize: fonts.tiny,
-      lineHeight: fonts.tiny + 3,
-      fontWeight: '800',
-      color: colors.onAction,
-      fontVariant: ['tabular-nums'],
-      fontFamily: police.mono[500],
-    },
-    legendIconNope: {
-      backgroundColor: colors.dangerSoft,
-    },
-    legendIconSkip: {
-      backgroundColor: colors.surfaceAlt,
-    },
-    legendIconLike: {
-      backgroundColor: colors.successSoft,
-    },
-    legendText: {
-      fontSize: fonts.tiny,
-      fontWeight: '600',
-      color: colors.textSecondary,
-      textAlign: 'center',
     },
     meta: {
       fontSize: fonts.small,

@@ -81,7 +81,6 @@ async function monter() {
           onOpenSettings={noop}
           showTutorial={false}
           onDismissTutorial={noop}
-          duel={null}
         />
       </ThemeProvider>
     );
@@ -129,7 +128,7 @@ describe('retour matériel depuis le swipe', () => {
 
   it('ramène aux cartes depuis un autre onglet', async () => {
     const tree = await monter();
-    toucher(tree, 'Classement');
+    toucher(tree, 'Propositions');
     expect(reculer()).toBe(true);
     // Les boutons de réponse ne sont présents que sur l'onglet des cartes.
     expect(textes(tree)).toContain('J’ADHÈRE');

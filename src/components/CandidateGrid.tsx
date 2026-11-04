@@ -16,7 +16,7 @@ import { useColors } from '../theme/ThemeContext';
 // CE QUI N'EST PAS ICI, ET POURQUOI.
 //
 // Aucun score, aucun pourcentage, aucun classement : c'est le travail de
-// l'onglet Classement, et les mélanger inviterait à lire cette grille comme
+// l'onglet voisin, sur l'écran de résultat, et les mélanger inviterait à lire cette grille comme
 // un palmarès. Aucun décompte de propositions non plus — pendant une partie
 // tous les candidats en ont exactement le même nombre (le paquet est tiré à
 // quota égal, voir utils/deck.ts), donc l'afficher n'apprendrait rien tout en

@@ -222,7 +222,9 @@ type Props = {
   // Ouvre le débat autour de la mesure. Absent sur les cartes du dessous,
   // qui ne sont pas interactives.
   onOpenDebate?: () => void;
-  onBecomeTop?: (trigger: (direction: SwipeDirection) => void) => void;
+  // Le déclencheur rend `false` quand la carte a déjà validé sa réponse : il
+  // n'a alors rien lancé, et l'appelant ne doit rien attendre (voir plus bas).
+  onBecomeTop?: (trigger: (direction: SwipeDirection) => boolean) => void;
 };
 
 export function SwipeCard({
@@ -320,8 +322,16 @@ export function SwipeCard({
     finishRef.current(direction);
   }, []);
 
+  // UNE CARTE DÉJÀ VALIDÉE NE REPART PAS. Entre la validation d'une carte et
+  // le moment où la suivante se déclare carte du dessus, le paquet tient
+  // encore le déclencheur de l'ancienne. Un appui tombé dans cet intervalle la
+  // relançait : l'animation repartait, la validation était refusée par le
+  // verrou ci-dessus, et l'écran attendait une sortie qui n'arriverait jamais
+  // — boutons éteints pour de bon. Révélé par un émulateur lent ; un double
+  // appui rapide suffisait sur un vrai téléphone.
   const triggerSwipe = useCallback(
-    (direction: SwipeDirection) => {
+    (direction: SwipeDirection): boolean => {
+      if (committed.current) return false;
       // Sortie déclenchée au bouton : un peu plus courte qu'avant (240 ms),
       // car ici aucun geste ne précède l'animation — l'attente était perçue
       // comme un temps mort entre l'appui et la carte suivante.
@@ -331,7 +341,7 @@ export function SwipeCard({
         exitOpacity.value = withTiming(0, { duration: reducedMotion.value ? 0 : 170 }, (finished) => {
           if (finished) runOnJS(commitSwipe)(direction);
         });
-        return;
+        return true;
       }
       if (direction === 'like' || direction === 'superlike') setExitKind(direction);
       const target = (direction === 'nope' ? -1 : 1) * SCREEN_WIDTH * 1.5;
@@ -339,6 +349,7 @@ export function SwipeCard({
         if (finished) runOnJS(commitSwipe)(direction);
       });
       translateY.value = withTiming(translateY.value - 30, { duration: d });
+      return true;
     },
     [commitSwipe, translateX, translateY, exitOpacity, reducedMotion]
   );

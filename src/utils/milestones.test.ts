@@ -1,79 +1,8 @@
-import {
-  CARTES_PAR_JALON,
-  countedAnswers,
-  milestonesFor,
-  milestonesToShow,
-  milestoneThreshold,
-  passedMilestones,
-} from './milestones';
-import { Answers, Proposal } from '../types';
+import { CARTES_PAR_JALON, milestonesFor, milestoneThreshold } from './milestones';
 
 const TOTAL = 165;
 
-function deck(size: number): Proposal[] {
-  return Array.from({ length: size }, (_, i) => ({
-    id: `p${i}`,
-    themeId: 'sante',
-    candidateId: 'attal',
-    text: `proposition ${i}`,
-  }));
-}
-
 describe('paliers de progression', () => {
-  it('place les seuils au quart, à la moitié et aux trois quarts du paquet', () => {
-    expect(milestonesFor(TOTAL).map((s) => milestoneThreshold(TOTAL, s.ratio))).toEqual([42, 83, 124]);
-  });
-
-  it('n’annonce rien tant qu’aucun seuil n’est franchi', () => {
-    expect(milestonesToShow(41, TOTAL, new Set()).announce).toBeNull();
-  });
-
-  it('annonce le palier au moment exact où il est franchi', () => {
-    const { reached, announce } = milestonesToShow(42, TOTAL, new Set());
-    expect(reached).toEqual([0]);
-    expect(announce?.title).toBe('Premier aperçu disponible');
-  });
-
-  it('n’annonce qu’une fois le même palier', () => {
-    const shown = new Set([0]);
-    expect(milestonesToShow(60, TOTAL, shown).announce).toBeNull();
-  });
-
-  it('n’empile pas les popups quand plusieurs seuils tombent d’un coup', () => {
-    // Cas d'un grand saut d'index : on marque les deux comme vus, mais on
-    // n'affiche que le plus avancé.
-    const { reached, announce } = milestonesToShow(90, TOTAL, new Set());
-    expect(reached).toEqual([0, 1]);
-    expect(announce?.title).toBe('Ton aperçu s’affine');
-  });
-
-  // C'est le bug du deuxième audit : l'écran est démonté dès qu'on le quitte,
-  // donc l'ensemble des paliers vus repartait vide et le popup se rejouait à
-  // chaque reprise de session.
-  describe('reprise de session', () => {
-    it('ne réannonce aucun palier déjà franchi au moment du remontage', () => {
-      for (const index of [0, 20, 42, 60, 83, 100, 124, 150, 165]) {
-        const rattrapage = new Set(passedMilestones(index, TOTAL));
-        expect(milestonesToShow(index, TOTAL, rattrapage).announce).toBeNull();
-      }
-    });
-
-    it('annonce quand même les paliers franchis APRÈS la reprise', () => {
-      // Reprise à 100 : les deux premiers paliers sont derrière, le troisième
-      // doit encore pouvoir se déclencher.
-      const rattrapage = new Set(passedMilestones(100, TOTAL));
-      expect(rattrapage).toEqual(new Set([0, 1]));
-      expect(milestonesToShow(124, TOTAL, rattrapage).announce?.title).toBe(
-        'Résultat presque prêt'
-      );
-    });
-  });
-
-  it('ne divise pas par zéro sur un paquet vide', () => {
-    expect(passedMilestones(0, 0)).toEqual([]);
-    expect(milestonesToShow(0, 0, new Set())).toEqual({ reached: [], announce: null });
-  });
-
   // La barre de progression découpe ses segments sur ces mêmes ratios (voir
   // components/ProgressBar). Un palier à 0 ou à 1, ou deux paliers dans le
   // désordre, produirait un segment de largeur nulle ou négative — donc une
@@ -169,35 +98,5 @@ describe('nombre de paliers selon la longueur du paquet', () => {
 
   it('ne dépasse jamais trois paliers, même sur un paquet démesuré', () => {
     expect(milestonesFor(10 * CARTES_PAR_JALON)).toHaveLength(3);
-  });
-
-  // Un paquet court n'annonce rien : le rattrapage au montage ne doit pas
-  // pour autant se croire en retard.
-  it('n’annonce rien sur un paquet trop court', () => {
-    expect(passedMilestones(10, 11)).toEqual([]);
-    expect(milestonesToShow(10, 11, new Set()).announce).toBeNull();
-  });
-});
-
-describe('countedAnswers', () => {
-  const proposals = deck(10);
-
-  it('ne compte que les réponses qui pèsent dans le score', () => {
-    const answers: Answers = {
-      p0: 'like',
-      p1: 'superlike',
-      p2: 'nope',
-      p3: 'skip', // « pas d'avis » : exclu du score, donc pas compté
-    };
-    expect(countedAnswers(proposals, 10, answers)).toBe(3);
-  });
-
-  it('ignore les cartes pas encore vues', () => {
-    const answers: Answers = { p0: 'like', p8: 'like' };
-    expect(countedAnswers(proposals, 2, answers)).toBe(1);
-  });
-
-  it('ne déborde pas si l’index dépasse la taille du paquet', () => {
-    expect(countedAnswers(proposals, 999, { p0: 'like' })).toBe(1);
   });
 });

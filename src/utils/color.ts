@@ -52,20 +52,3 @@ export function contrastRatio(a: string, b: string): number {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-// La version de `couleur` la plus proche qui tienne `minRatio` sur `fond` : on
-// la pousse vers l'encre ou vers la crème, pas à pas, et on s'arrête dès que
-// le seuil est atteint. Sert aux accents utilisés en TEXTE, où la teinte pure
-// ne suffit pas toujours (le lime sur crème, par exemple, ne se lit pas).
-export function readableOn(
-  couleur: string,
-  fond: string,
-  vers: string,
-  minRatio = 4.5
-): string {
-  if (contrastRatio(couleur, fond) >= minRatio) return couleur;
-  for (let i = 1; i <= 20; i++) {
-    const essai = mixHex(vers, couleur, i / 20);
-    if (contrastRatio(essai, fond) >= minRatio) return essai;
-  }
-  return vers;
-}

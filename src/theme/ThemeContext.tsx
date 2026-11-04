@@ -281,12 +281,6 @@ export function useColors(): ColorTokens {
   return palettes[useContext(AccentCtx)];
 }
 
-// L'accent de l'écran courant, pour le rare composant qui doit le nommer
-// plutôt que l'utiliser (une pastille qui change de forme, par exemple).
-export function useAccentId(): AccentId {
-  return useContext(AccentCtx);
-}
-
 // Couleur de la tuile d'un thème (mosaïque des propositions, pastilles).
 export function useThemeColor(): (themeId: string) => string {
   return useThemeContext().themeColor;
