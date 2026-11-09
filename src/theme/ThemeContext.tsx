@@ -28,13 +28,9 @@ import {
 
 // Les trois marches du podium, hors mode arc-en-ciel.
 //
-// Ce ne sont plus l'or, l'argent et le bronze : la palette n'en a pas — le
-// lime pour la première place, la pêche pour la troisième, le sable pour celle
-// qui reste. Les trois portent de l'encre, vérifié au contraste (voir
-// theme/palette.test.ts). Elles sont LUES DANS LA PALETTE et non recopiées :
-// les trois valeurs y avaient été figées, et l'adoucissement des teintes
-// laissait ce podium au néon d'avant.
-const FIXED_MEDALS: [string, string, string] = [PALETTE.lime, PALETTE.sand, PALETTE.peach];
+// L'or, l'argent et le bronze, assourdis. Les trois portent de l'encre,
+// vérifié au contraste (voir theme/palette.test.ts).
+const FIXED_MEDALS: [string, string, string] = [PALETTE.gold, PALETTE.silver, PALETTE.bronze];
 
 type ThemeContextValue = {
   // La palette de l'accent par défaut, pour les rares appels hors d'un écran.

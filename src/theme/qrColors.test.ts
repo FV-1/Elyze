@@ -1,5 +1,5 @@
 import jsQR from 'jsqr';
-import { ACCENTS } from './index';
+import { PALETTE } from './index';
 import { buildRainbowColors, contrastRatio } from './rainbow';
 import { QR_BACKGROUND, QR_MIN_CONTRAST, qrModuleColor } from './qrColors';
 import { qrMatrix } from '../utils/qr';
@@ -14,8 +14,8 @@ import { qrMatrix } from '../utils/qr';
 // s'en aperçoit qu'en pointant un téléphone dessus.
 //
 // Ces tests font donc les deux choses : ils mesurent le contraste, et ils
-// RELISENT vraiment le code avec jsQR, pour chaque accent de l'app et pour
-// deux cents palettes tirées au hasard par le mode arc-en-ciel.
+// RELISENT vraiment le code avec jsQR, pour l'encre de l'app et pour deux
+// cents palettes tirées au hasard par le mode arc-en-ciel.
 
 const TEXTE = 'elyze://d?c=0773 75HW892N4CHQ6WTM4K1NWM'.replace(/ /g, '');
 
@@ -65,29 +65,14 @@ describe('couleur des modules', () => {
     expect(QR_BACKGROUND).toBe('#FFFFFF');
   });
 
-  describe.each(Object.entries(ACCENTS))('accent %s', (_id: string, teinte: string) => {
-    const couleur = qrModuleColor(teinte);
-
+  // Hors arc-en-ciel, le code s'écrit à l'encre (voir QrCode).
+  describe('à l’encre', () => {
     it('franchit le seuil de contraste', () => {
-      expect(contrastRatio(couleur, QR_BACKGROUND)).toBeGreaterThanOrEqual(QR_MIN_CONTRAST);
+      expect(contrastRatio(PALETTE.ink, QR_BACKGROUND)).toBeGreaterThanOrEqual(QR_MIN_CONTRAST);
     });
 
     it('se relit une fois dessiné', () => {
-      expect(relire(couleur)).toBe(TEXTE);
-    });
-
-    // Assombrir ne doit pas revenir à peindre en noir : ce serait respecter la
-    // consigne en perdant ce qu'on voulait.
-    it('reste une couleur, et non un noir déguisé', () => {
-      const c = couleur.replace('#', '');
-      const canaux = [
-        parseInt(c.slice(0, 2), 16),
-        parseInt(c.slice(2, 4), 16),
-        parseInt(c.slice(4, 6), 16),
-      ];
-      // Au moins un canal franchement au-dessus des autres : il reste de la
-      // teinte, pas un gris.
-      expect(Math.max(...canaux) - Math.min(...canaux)).toBeGreaterThan(25);
+      expect(relire(PALETTE.ink)).toBe(TEXTE);
     });
   });
 
@@ -112,12 +97,31 @@ describe('couleur des modules', () => {
         expect(relire(couleur)).toBe(TEXTE);
       }
     });
+
+    // Assombrir ne doit pas revenir à peindre en noir : ce serait respecter la
+    // consigne en perdant ce qu'on voulait.
+    it('reste une couleur, et non un noir déguisé', () => {
+      for (const graine of graines) {
+        const c = qrModuleColor(buildRainbowColors('light', graine).accent).replace('#', '');
+        const canaux = [
+          parseInt(c.slice(0, 2), 16),
+          parseInt(c.slice(2, 4), 16),
+          parseInt(c.slice(4, 6), 16),
+        ];
+        // Au moins un canal franchement au-dessus des autres : il reste de la
+        // teinte, pas un gris.
+        expect(Math.max(...canaux) - Math.min(...canaux)).toBeGreaterThan(25);
+      }
+    });
   });
 
-  // Le contre-exemple : sans cette précaution, l'accent brut passerait sous le
-  // seuil. C'est ce qui justifie l'existence de tout ce fichier.
+  // Le contre-exemple : sans cette précaution, l'accent arc-en-ciel brut
+  // passerait sous le seuil. C'est ce qui justifie l'existence de tout ce
+  // fichier.
   it('l’accent brut ne suffirait pas', () => {
-    const brut = Object.values(ACCENTS).map((teinte) => contrastRatio(teinte, QR_BACKGROUND));
+    const brut = Array.from({ length: 200 }, (_, i) =>
+      contrastRatio(buildRainbowColors('light', i * 7919 + 13).accent, QR_BACKGROUND)
+    );
     expect(Math.min(...brut)).toBeLessThan(QR_MIN_CONTRAST);
   });
 });

@@ -13,14 +13,12 @@ import { ColorTokens, fonts, PALETTE, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
-// Ce panneau s'affiche toujours sur un voile sombre, quel que soit le thème.
-// Les trois accents de la palette y tiennent tels quels — ils sont clairs, et
-// c'est sur du sombre qu'ils donnent le meilleur d'eux-mêmes (la pêche à
-// 8.9:1, le lime à 14.3:1). Aucune couleur calibrée à part n'est plus
-// nécessaire : ce sont les couleurs de l'app, à pleine valeur.
-const ON_SCRIM_NOPE = PALETTE.peach;
-const ON_SCRIM_LIKE = PALETTE.lime;
-const ON_SCRIM_STAR = PALETTE.cream;
+// Ce panneau s'affiche toujours sur un voile sombre, quel que soit le thème :
+// les couleurs des réponses y prennent leur variante pour fond sombre, celle
+// du bouton qu'elles annoncent.
+const ON_SCRIM_NOPE = PALETTE.redNight;
+const ON_SCRIM_LIKE = PALETTE.greenNight;
+const ON_SCRIM_STAR = PALETTE.amberNight;
 const ON_SCRIM_NEUTRAL = PALETTE.mutedOnNight;
 
 export function SwipeTutorialOverlay({ onDismiss }: { onDismiss: () => void }) {

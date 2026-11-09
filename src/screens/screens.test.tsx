@@ -796,8 +796,10 @@ describe('montage des écrans', () => {
         onReveal={noop}
       />
     );
-    const mention = 'Sur le thème Santé & solidarités uniquement';
-    expect(texts(surSante).filter((t) => t === mention)).toHaveLength(2);
+    // L'image de partage l'écrit en capitales : on compare sans la casse.
+    const enCapitales = (t: string) => t.toLocaleUpperCase('fr-FR');
+    const mention = enCapitales('Sur le thème Santé & solidarités uniquement');
+    expect(texts(surSante).filter((t) => enCapitales(t) === mention)).toHaveLength(2);
 
     // Sur tous les thèmes, c'est le classement général : rien à préciser.
     const surTout = mount(
@@ -819,7 +821,7 @@ describe('montage des écrans', () => {
     );
     // « uniquement » figure aussi dans la note de bas de page sur la portée du
     // pourcentage : on vise les tournures de la mention, pas le mot seul.
-    expect(texts(surTout).join(' ')).not.toMatch(/Sur le thème|Sur les thèmes|thèmes choisis sur/);
+    expect(texts(surTout).join(' ')).not.toMatch(/Sur le thème|Sur les thèmes|thèmes choisis sur/i);
   });
 
   it('venu de l’accueil, le résultat n’offre qu’une sortie, en haut à gauche', () => {

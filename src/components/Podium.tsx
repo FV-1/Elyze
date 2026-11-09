@@ -306,10 +306,8 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
     },
-    // Le rang, en mono, sur la marche. Blanc sur toutes les marches
-    // auparavant : les trois nouvelles couleurs sont claires, c'est donc
-    // l'encre qui s'y écrit — 15:1 sur le lime, 10:1 sur le sable, 9.5:1 sur
-    // la pêche.
+    // Le rang, sur la marche. Les trois métaux sont clairs : c'est l'encre
+    // qui s'y écrit.
     stepNumber: {
       fontFamily: police.mono[500],
       fontSize: fonts.body,
