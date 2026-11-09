@@ -10,6 +10,7 @@ import { useColors, useThemeSettings } from '../theme/ThemeContext';
 import { haptics } from '../utils/haptics';
 import { PROPOSALS } from '../data/proposals';
 import { CANDIDATES } from '../data/candidates';
+import { Blob } from '../components/Blob';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { useGlissiere, usePression } from '../components/mouvement';
 import { FormatPartie, QUOTA_COURT, QUOTA_PAR_CANDIDAT } from '../utils/deck';
@@ -148,6 +149,12 @@ export function IntroScreen({
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+      {/* DEUX CERCLES, PAS TROIS, ET COUPÉS PAR LE BORD. Ils sont la seule
+          décoration de l'app, et c'est l'accueil qui les porte : l'écran où
+          l'on arrive, le seul qui ait de la place à leur donner. */}
+      <Blob taille={320} haut={-140} droite={-110} />
+      <Blob taille={220} bas={-90} gauche={-80} />
+
       <Pressable
         onPress={onOpenSettings}
         hitSlop={10}

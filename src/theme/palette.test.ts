@@ -5,7 +5,7 @@ import { ACCENTS, AccentId, buildColors, ColorTokens, PALETTE } from './index';
 //
 // Le document se termine par une liste de vérifications avant livraison. Celles
 // qui peuvent se mesurer sont ici : elles valent pour les deux thèmes et pour
-// les trois emplacements d'accent (qui donnent aujourd'hui la même encre).
+// les trois emplacements d'accent (qui donnent aujourd'hui le même accent).
 //
 // Ce fichier n'est pas une formalité. La palette est fixe, donc tout se joue au
 // moment où l'on ajoute une couleur : un jour, quelqu'un aura besoin d'un vert
@@ -136,18 +136,11 @@ describe('les quatre réponses du swipe se distinguent', () => {
   });
 });
 
-describe('un seul accent, l’encre', () => {
+describe('un seul accent', () => {
   it('donne la même palette à tous les écrans', () => {
     for (const scheme of SCHEMES) {
       const accents = ACCENT_IDS.map((a) => buildColors(scheme, a).accent);
       expect(new Set(accents).size).toBe(1);
-    }
-  });
-
-  it('prend l’encre du thème : le texte principal', () => {
-    for (const scheme of SCHEMES) {
-      const c = buildColors(scheme, 'lime');
-      expect(c.accent).toBe(c.textPrimary);
     }
   });
 

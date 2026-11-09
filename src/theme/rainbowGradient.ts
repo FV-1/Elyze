@@ -116,7 +116,7 @@ export function cardSweep(scheme: Scheme, surface: string): string[] {
 // s'approcher de la surface, quand celles-ci doivent s'en éloigner. En thème
 // clair la piste est presque blanche, il faut donc des couleurs franchement
 // plus sombres ; en sombre, l'inverse.
-const PROGRESS_LIGHTNESS: Record<Scheme, number> = { light: 30, dark: 67 };
+const PROGRESS_LIGHTNESS: Record<Scheme, number> = { light: 30, dark: 60 };
 
 export function progressSweep(scheme: Scheme): string[] {
   return sweepAt(SATURATION, PROGRESS_LIGHTNESS[scheme]);

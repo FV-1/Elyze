@@ -5,29 +5,41 @@ import { contrastRatio, mixHex } from '../utils/color';
 // Toute couleur affichée par l'app en sort, directement ou par un mélange
 // calculé plus bas. Le test theme/palette.test.ts y veille.
 //
-// UNE IDENTITÉ SOBRE. L'app avait une crème, une nuit violacée et trois
-// accents vifs (lime, violet, pêche), un par écran. Pour un comparateur de
-// programmes, c'était beaucoup de couleur autour d'un contenu qui demande
-// d'abord du calme. Il reste des gris neutres et une encre : l'accent est
-// l'encre elle-même, noire sur fond clair, blanche sur fond sombre. La
-// couleur est réservée à ce qui porte un sens — les trois réponses du swipe,
-// les thèmes et les médailles du podium.
+// UNE PALETTE SOBRE. La crème, la nuit violacée et les trois accents vifs
+// (lime, violet, pêche) cèdent la place à des gris légèrement froids et à un
+// seul accent, un bleu-gris pâle. Les gris suivent l'échelle « slate » de
+// Radix Colors, dont chaque cran a un rôle : fonds, bordures discrètes,
+// bordures d'éléments interactifs, texte. L'accent garde le rôle exact du
+// lime qu'il remplace — une teinte claire sur laquelle s'écrit l'encre —, si
+// bien que chaque écran garde sa construction ; seules les couleurs changent.
 export const PALETTE = {
-  ink: '#18181B',
-  ink2: '#3F3F46',
-  ink3: '#5E5E66',
+  ink: '#1C2024',
+  ink2: '#40444C',
+  ink3: '#60646C',
 
-  paper: '#F5F5F6',
-  paper2: '#EBEBED',
+  paper: '#F0F0F3',
+  paper2: '#E8E8EC',
   white: '#FFFFFF',
-  line: '#DCDCE0',
+  line: '#D9D9E0',
+  // Le contour qui doit tenir seul (un champ de saisie, une carte cernée).
+  // C'était l'encre pâle, à 7:1 : un trait de feutre autour de chaque
+  // élément. Ce gris moyen tient les 3:1 que le WCAG demande à un contour
+  // d'élément d'interface, et rien de plus.
+  outline: '#80838D',
 
   night: '#111113',
-  night2: '#1C1C1F',
-  // Trois niveaux de texte sur fond sombre, comme en thème clair.
-  snow: '#F4F4F5',
-  snowDim: '#D4D4D8',
-  mutedOnNight: '#A1A1AA',
+  night2: '#212225',
+  night3: '#2E3135',
+  lineNight: '#363A3F',
+  outlineNight: '#6C717A',
+  snow: '#EDEEF0',
+  snowDim: '#CDD0D5',
+  mutedOnNight: '#B0B4BA',
+
+  // L'accent unique, un bleu-gris pâle, et sa variante pour fond sombre, un
+  // cran plus éteinte pour ne pas briller sur la nuit.
+  accent: '#C3CEE3',
+  accentNight: '#A9B8D3',
 
   // Les marches du podium : or, argent et bronze, assourdis. L'encre s'écrit
   // dessus.
@@ -68,20 +80,23 @@ export const PALETTE = {
   amber: '#E8C25A',
   amberInk: '#755A0E',
   amberNight: '#E6C169',
+  // Fonds décoratifs seulement (les cercles flous de l'accueil). Jamais du
+  // texte.
+  lavender: '#D5DCEA',
 } as const;
 
 // --- UN SEUL ACCENT ---------------------------------------------------------
 //
 // Chaque écran avait son accent (le swipe lime, le classement violet, les
-// propositions pêche). L'identité sobre n'en garde qu'un, l'encre, partout.
-// Les trois emplacements restent, pour que les écrans n'aient pas à changer
-// leur façon de demander leur palette, mais ils donnent tous la même.
+// propositions pêche). La palette sobre n'en garde qu'un, le même partout.
+// Les trois emplacements restent, pour que les écrans continuent de demander
+// leur palette de la même façon, mais ils donnent tous le même accent.
 export type AccentId = 'lime' | 'violet' | 'peach';
 
 export const ACCENTS: Record<AccentId, string> = {
-  lime: PALETTE.ink,
-  violet: PALETTE.ink,
-  peach: PALETTE.ink,
+  lime: PALETTE.accent,
+  violet: PALETTE.accent,
+  peach: PALETTE.accent,
 };
 
 export const DEFAULT_ACCENT: AccentId = 'lime';
@@ -94,9 +109,12 @@ export type ColorTokens = {
   bg: string;
   surface: string;
   surfaceAlt: string;
-  // Trait de séparation ordinaire. Discret, il range sans souligner.
+  // Trait de séparation ordinaire : le sable sur crème, un violet sourd sur la
+  // nuit. Discret, il range sans souligner.
   border: string;
-  // Le trait qui doit tenir tout seul : un cadre de carte, un avatar, une
+  // LE TRAIT D'ENCRE. L'identité est plate — pas d'ombre portée, pas de
+  // dégradé — donc ce qui détache un élément de son fond est son contour.
+  // Réservé à ce qui doit tenir tout seul : un cadre de carte, un avatar, une
   // pastille cernée.
   borderStrong: string;
 
@@ -104,18 +122,27 @@ export type ColorTokens = {
   textSecondary: string;
   textMuted: string;
 
-  // L'ACCENT, pour les petites surfaces : badge, état actif, jauge remplie.
-  // C'est l'encre du thème ; `onAccent` est ce qu'on écrit dessus.
+  // L'ACCENT LUI-MÊME, pour les PETITES surfaces : badge, état actif, marche
+  // de podium, jauge remplie. C'est là que la couleur de l'écran se voit.
+  // `onAccent` est ce qu'on écrit dessus — de l'encre sur le lime et la pêche,
+  // du blanc sur le violet, qui ne tient pas la crème (4.26:1).
   accent: string;
   onAccent: string;
   accentSoft: string;
 
   // L'ACTION FORTE — le bouton plein, celui qu'on vient toucher.
+  //
+  // Le document le montre en pastille d'encre portant l'accent : c'est le cas
+  // du lime et de la pêche. Le violet, lui, ne se lit pas sur l'encre (3.53:1)
+  // et devient donc le fond, avec du blanc dessus. Un bouton n'est pas une
+  // « grande surface » au sens du document — un fond d'écran l'est.
   action: string;
   onAction: string;
   // L'état pressé de cette action.
   actionPressed: string;
-  // L'accent en TEXTE sur un fond neutre : liens, libellés actifs.
+  // L'accent en TEXTE sur un fond neutre, quand il peut s'y lire. Le violet le
+  // peut, le lime et la pêche non : ils cèdent la place à l'encre plutôt que
+  // de s'assombrir en une couleur qui n'est plus la leur.
   accentText: string;
 
   // Les quatre réponses du swipe. Ce sont des FONDS, pas des couleurs de
@@ -145,7 +172,7 @@ const base = {
     surface: PALETTE.white,
     surfaceAlt: PALETTE.paper2,
     border: PALETTE.line,
-    borderStrong: PALETTE.ink3,
+    borderStrong: PALETTE.outline,
     textPrimary: PALETTE.ink,
     textSecondary: PALETTE.ink2,
     textMuted: PALETTE.ink3,
@@ -154,45 +181,85 @@ const base = {
   },
   dark: {
     bg: PALETTE.night,
-    // Sur fond sombre une ombre ne se voit pas : la carte se détache par son
-    // fond, un cran plus clair que la page.
+    // Sur la nuit une ombre ne se voit pas : la carte se détache par son fond,
+    // un cran plus clair que la page.
     surface: PALETTE.night2,
-    surfaceAlt: '#27272B',
-    border: '#2E2E33',
-    borderStrong: '#6E6E77',
+    surfaceAlt: PALETTE.night3,
+    border: PALETTE.lineNight,
+    borderStrong: PALETTE.outlineNight,
     textPrimary: PALETTE.snow,
     textSecondary: PALETTE.snowDim,
     textMuted: PALETTE.mutedOnNight,
     neutralFill: PALETTE.mutedOnNight,
-    neutralTrack: '#2E2E33',
+    // Plus sombre que la page, pour qu'une jauge remplie d'accent s'en
+    // détache nettement.
+    neutralTrack: PALETTE.night,
   },
 } as const;
 
-// Ce qu'on peut écrire sur un aplat de couleur : de l'encre, ou du blanc. On
-// garde celle qui se lit le mieux.
+// Ce qu'on peut écrire sur un aplat d'accent : de l'encre, ou du blanc. Deux
+// valeurs de la palette, et on garde celle qui se lit le mieux — sans jamais
+// fabriquer une troisième couleur pour s'en sortir.
 function surAccent(hue: string): string {
   return contrastRatio(PALETTE.ink, hue) >= contrastRatio(PALETTE.white, hue)
     ? PALETTE.ink
     : PALETTE.white;
 }
 
-export function buildColors(scheme: 'light' | 'dark', _accentId: string): ColorTokens {
+// Le bouton plein. Sur fond clair, c'est une pastille d'encre qui porte
+// l'accent — sauf si l'accent ne s'y lit pas, auquel cas les rôles s'inversent.
+// Sur fond sombre, l'encre disparaîtrait dans la nuit : c'est l'accent qui
+// devient le fond.
+function actionColors(scheme: 'light' | 'dark', hue: string) {
+  if (scheme === 'dark' || contrastRatio(hue, PALETTE.ink) < 4.5) {
+    return {
+      action: hue,
+      onAction: surAccent(hue),
+      actionPressed: mixHex(PALETTE.ink, hue, 0.2),
+    };
+  }
+  return {
+    action: PALETTE.ink,
+    onAction: hue,
+    actionPressed: mixHex(PALETTE.white, PALETTE.ink, 0.16),
+  };
+}
+
+export function buildColors(scheme: 'light' | 'dark', accentId: string): ColorTokens {
   const b = base[scheme];
   const sombre = scheme === 'dark';
-  // L'accent est l'encre du thème : noire sur clair, blanche sur sombre.
-  const encre = sombre ? PALETTE.snow : PALETTE.ink;
-  const surEncre = sombre ? PALETTE.ink : PALETTE.white;
+  const hue = sombre
+    ? PALETTE.accentNight
+    : ACCENTS[isKnownAccentId(accentId) ? accentId : DEFAULT_ACCENT];
+
+  // UN ACCENT EN TEXTE, OU PAS D'ACCENT DU TOUT.
+  //
+  // DESIGN.md est net là-dessus : « les accents à pleine opacité pour le
+  // texte ; jamais de opacity ou color-mix sur de la typo ». Une teinte qui ne
+  // tient pas le contraste ne s'assombrit donc pas jusqu'à passer — elle
+  // deviendrait une autre couleur, absente de la palette. Elle cède la place à
+  // l'encre, ou à la crème sur fond sombre.
+  //
+  // Concrètement : le violet s'écrit en violet, le lime et la pêche s'écrivent
+  // en encre. C'est pour cela que le violet est, dans le document, l'accent
+  // des libellés et des liens.
+  // Et il doit tenir sur LES TROIS FONDS, pas seulement sur la carte blanche :
+  // le violet passe à 5.01 sur le blanc, mais retombe à 4.26 sur la crème et à
+  // 3.79 sur un panneau. Un accent de texte qui ne vaut que sur un fond serait
+  // un piège tendu au premier écran qui l'emploie ailleurs.
+  const fonds = [b.bg, b.surface, b.surfaceAlt];
+  const versLisible = sombre ? PALETTE.snow : PALETTE.ink;
+  const enTexte = (c: string) =>
+    fonds.every((fond) => contrastRatio(c, fond) >= 4.5) ? c : versLisible;
 
   return {
     ...b,
 
-    accent: encre,
-    onAccent: surEncre,
-    accentSoft: mixHex(encre, b.surface, sombre ? 0.12 : 0.08),
-    accentText: encre,
-    action: encre,
-    onAction: surEncre,
-    actionPressed: mixHex(sombre ? PALETTE.night : PALETTE.white, encre, 0.2),
+    accent: hue,
+    onAccent: surAccent(hue),
+    accentSoft: mixHex(hue, b.surface, sombre ? 0.1 : 0.22),
+    accentText: enTexte(hue),
+    ...actionColors(scheme, hue),
 
     // LES TROIS RÉPONSES, chacune sur sa teinte (voir PALETTE).
     //
@@ -224,25 +291,35 @@ export function buildColors(scheme: 'light' | 'dark', _accentId: string): ColorT
 export const lightColors: ColorTokens = buildColors('light', DEFAULT_ACCENT);
 export const darkColors: ColorTokens = buildColors('dark', DEFAULT_ACCENT);
 
-// --- FORMES ----------------------------------------------------------------
+// --- RAYONS -----------------------------------------------------------------
 //
-// Une ombre à peine marquée, la même partout, pour poser une carte sur la
-// page. Elle ne se voit pas sur fond sombre : là, ce sont les fonds qui font
-// le relief (voir `surface` du thème sombre).
+// Généreux : DESIGN.md va de 24 px pour une ligne de liste à 56 px pour un
+// cadre de téléphone, sur un canevas de 1080. Ramenés à la largeur d'un
+// téléphone, ces rapports donnent l'échelle ci-dessous — plus ronde que
+// l'ancienne, ce qui est tout le sujet.
+// CE QUI POSE UN OBJET SUR LA PAGE, MAINTENANT QUE LES CONTOURS SONT PARTIS.
+//
+// L'identité était plate et cernée : chaque carte, chaque bouton, chaque
+// avatar portait un trait d'encre. À l'usage, ces traits dessinaient la page
+// au feutre et se lisaient avant leur contenu. Ils sont remplacés par une
+// ombre douce — la même partout, pour que deux objets posés côte à côte
+// flottent à la même hauteur.
+//
+// Elle ne se voit pas sur la nuit, et c'est normal : là-bas, ce sont les fonds
+// qui font le relief (voir `surface` du thème sombre).
 export const ombre = {
   shadowColor: PALETTE.ink,
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.06,
-  shadowRadius: 8,
-  elevation: 1,
+  shadowOffset: { width: 0, height: 6 },
+  shadowOpacity: 0.1,
+  shadowRadius: 16,
+  elevation: 3,
 } as const;
 
-// Des arrondis mesurés : assez pour adoucir, pas assez pour qu'on les remarque.
 export const radii = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 20,
+  sm: 16,
+  md: 24,
+  lg: 32,
+  xl: 44,
   pill: 999,
 } as const;
 
@@ -257,26 +334,23 @@ export const spacing = {
 
 // --- TYPOGRAPHIE ------------------------------------------------------------
 //
-// Inter pour tout, y compris les étiquettes et les chiffres, qui avaient leur
-// police à part (DM Mono). Une seule famille, embarquée (voir App.tsx) : aucune
-// police n'est téléchargée à l'exécution.
+// Space Grotesk pour tout, DM Mono pour les étiquettes, les compteurs et les
+// pourcentages. Les deux sont embarquées (voir App.tsx) : aucune police n'est
+// téléchargée à l'exécution, l'app ne fait aucun appel réseau.
 //
-// LA GRAISSE EST DANS LE NOM DE LA FAMILLE : avec une police embarquée,
-// `fontWeight` n'a aucun effet sur Android. C'est le composant `Texte` qui
-// traduit l'un en l'autre.
-//
-// `mono` reste un nom, pas une autre police : c'est le rôle « étiquette ou
-// chiffre », écrit en Inter un cran plus gras.
+// LA GRAISSE EST DANS LE NOM DE LA FAMILLE, et ce n'est pas un détail : avec
+// une police embarquée, `fontWeight` n'a aucun effet sur Android. C'est le
+// composant `Texte` qui traduit l'un en l'autre, une fois pour toutes.
 export const police = {
   sans: {
-    400: 'Inter_400Regular',
-    500: 'Inter_500Medium',
-    600: 'Inter_600SemiBold',
-    700: 'Inter_700Bold',
+    400: 'SpaceGrotesk_400Regular',
+    500: 'SpaceGrotesk_500Medium',
+    600: 'SpaceGrotesk_600SemiBold',
+    700: 'SpaceGrotesk_700Bold',
   },
   mono: {
-    400: 'Inter_500Medium',
-    500: 'Inter_600SemiBold',
+    400: 'DMMono_400Regular',
+    500: 'DMMono_500Medium',
   },
 } as const;
 
@@ -287,12 +361,12 @@ export const fonts = {
   // TOUTES LES ÉTIQUETTES À LA MÊME TAILLE. Pastilles de thème, puces d'accord
   // ou de désaccord, compteurs de fiche : elles s'écrivaient entre 11 et 15 px
   // selon l'écran, un écart qu'on ne voyait pas tant que la typographie était
-  // celle du système. Avec une police embarquée, les mêmes deux pixels d'écart
-  // se lisent comme deux styles différents. Une étiquette est une étiquette,
-  // elle a une taille.
+  // celle du système. Space Grotesk est plus large et plus présente : les
+  // mêmes deux pixels d'écart se lisent maintenant comme deux styles
+  // différents. Une étiquette est une étiquette, elle a une taille.
   etiquette: 12,
-  hero: 44,
-  title: 28,
+  hero: 52,
+  title: 30,
   // Le texte de la carte de swipe, plafond avant que la mesure ne le réduise
   // selon sa longueur. Un pixel de moins qu'avant : la typographie est plus
   // large, et la même taille ne portait plus le même nombre de mots.
@@ -302,6 +376,5 @@ export const fonts = {
   tiny: 12,
 } as const;
 
-// Interlettrage des étiquettes, toujours en capitales. Inter est plus serrée
-// qu'une police mono : un léger espacement suffit.
-export const MONO_SPACING = 0.6;
+// Interlettrage des étiquettes mono, toujours en capitales (DESIGN.md §2).
+export const MONO_SPACING = 1.2;
