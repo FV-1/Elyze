@@ -31,15 +31,34 @@ export const PALETTE = {
   night2: '#212225',
   night3: '#2E3135',
   lineNight: '#363A3F',
-  outlineNight: '#6C717A',
+  outlineNight: '#7A7F88',
   snow: '#EDEEF0',
   snowDim: '#CDD0D5',
   mutedOnNight: '#B0B4BA',
 
-  // L'accent unique, un bleu-gris pâle, et sa variante pour fond sombre, un
-  // cran plus éteinte pour ne pas briller sur la nuit.
-  accent: '#C3CEE3',
-  accentNight: '#A9B8D3',
+  // L'ACCENT, UN IRIS. Un bleu-violet doux, tiré de l'échelle « iris » de
+  // Radix Colors, la sœur des gris « slate » ci-dessus. C'est la teinte la
+  // plus éloignée du vert, du rouge et du jaune des réponses : un bouton
+  // d'accent ne se lit jamais comme un « j'adhère » ou un « pas pour moi ».
+  //
+  // Il se décline en tons, comme dans Material 3 : un ton saturé pour tout
+  // ce qui se remplit (bouton, barre de progression, onglet actif, jauge,
+  // anneau d'avatar), un ton de texte, et une teinte très pâle, calculée plus
+  // bas, pour les fonds d'état sélectionné. Chaque couple est vérifié par
+  // theme/palette.test.ts.
+  //
+  // UN SEUL TON SATURÉ, ET NON DEUX. Un iris moyen pour les petits aplats a
+  // été essayé : trop pâle pour qu'une jauge ou un anneau s'en détache
+  // (2 à 2.5:1 là où il faut 3:1), et trop clair pour que le blanc s'y lise.
+  // C'est la règle 60-30-10 : des neutres, et un accent franc, rare.
+  iris: '#5B5BD6',
+  irisPressed: '#4B4BC4',
+  irisText: '#5753C6',
+  // Sur fond sombre, un iris clair qui porte l'encre, comme le lime le
+  // faisait sur la nuit : un iris saturé ne se détacherait pas de la piste
+  // d'une jauge, et le blanc ne s'y lirait pas assez.
+  irisNight: '#B1A9FF',
+  irisNightPressed: '#9F96F5',
 
   // Les marches du podium : or, argent et bronze, assourdis. L'encre s'écrit
   // dessus.
@@ -94,9 +113,9 @@ export const PALETTE = {
 export type AccentId = 'lime' | 'violet' | 'peach';
 
 export const ACCENTS: Record<AccentId, string> = {
-  lime: PALETTE.accent,
-  violet: PALETTE.accent,
-  peach: PALETTE.accent,
+  lime: PALETTE.iris,
+  violet: PALETTE.iris,
+  peach: PALETTE.iris,
 };
 
 export const DEFAULT_ACCENT: AccentId = 'lime';
@@ -206,60 +225,40 @@ function surAccent(hue: string): string {
     : PALETTE.white;
 }
 
-// Le bouton plein. Sur fond clair, c'est une pastille d'encre qui porte
-// l'accent — sauf si l'accent ne s'y lit pas, auquel cas les rôles s'inversent.
-// Sur fond sombre, l'encre disparaîtrait dans la nuit : c'est l'accent qui
-// devient le fond.
-function actionColors(scheme: 'light' | 'dark', hue: string) {
-  if (scheme === 'dark' || contrastRatio(hue, PALETTE.ink) < 4.5) {
-    return {
-      action: hue,
-      onAction: surAccent(hue),
-      actionPressed: mixHex(PALETTE.ink, hue, 0.2),
-    };
-  }
-  return {
-    action: PALETTE.ink,
-    onAction: hue,
-    actionPressed: mixHex(PALETTE.white, PALETTE.ink, 0.16),
-  };
-}
+// LES TONS DE L'ACCENT, PAR THÈME.
+//
+// Écrits un à un plutôt que dérivés d'une seule teinte : un ton d'action, un
+// ton d'aplat et un ton de texte ne se tirent pas d'un même calcul sans que
+// l'un d'eux sorte de la palette.
+const TONS_ACCENT = {
+  light: {
+    action: PALETTE.iris,
+    onAction: PALETTE.white,
+    actionPressed: PALETTE.irisPressed,
+    accent: PALETTE.iris,
+    onAccent: PALETTE.white,
+    accentText: PALETTE.irisText,
+  },
+  dark: {
+    action: PALETTE.irisNight,
+    onAction: PALETTE.ink,
+    actionPressed: PALETTE.irisNightPressed,
+    accent: PALETTE.irisNight,
+    onAccent: PALETTE.ink,
+    accentText: PALETTE.irisNight,
+  },
+} as const;
 
-export function buildColors(scheme: 'light' | 'dark', accentId: string): ColorTokens {
+export function buildColors(scheme: 'light' | 'dark', _accentId: string): ColorTokens {
   const b = base[scheme];
   const sombre = scheme === 'dark';
-  const hue = sombre
-    ? PALETTE.accentNight
-    : ACCENTS[isKnownAccentId(accentId) ? accentId : DEFAULT_ACCENT];
-
-  // UN ACCENT EN TEXTE, OU PAS D'ACCENT DU TOUT.
-  //
-  // DESIGN.md est net là-dessus : « les accents à pleine opacité pour le
-  // texte ; jamais de opacity ou color-mix sur de la typo ». Une teinte qui ne
-  // tient pas le contraste ne s'assombrit donc pas jusqu'à passer — elle
-  // deviendrait une autre couleur, absente de la palette. Elle cède la place à
-  // l'encre, ou à la crème sur fond sombre.
-  //
-  // Concrètement : le violet s'écrit en violet, le lime et la pêche s'écrivent
-  // en encre. C'est pour cela que le violet est, dans le document, l'accent
-  // des libellés et des liens.
-  // Et il doit tenir sur LES TROIS FONDS, pas seulement sur la carte blanche :
-  // le violet passe à 5.01 sur le blanc, mais retombe à 4.26 sur la crème et à
-  // 3.79 sur un panneau. Un accent de texte qui ne vaut que sur un fond serait
-  // un piège tendu au premier écran qui l'emploie ailleurs.
-  const fonds = [b.bg, b.surface, b.surfaceAlt];
-  const versLisible = sombre ? PALETTE.snow : PALETTE.ink;
-  const enTexte = (c: string) =>
-    fonds.every((fond) => contrastRatio(c, fond) >= 4.5) ? c : versLisible;
+  const tons = TONS_ACCENT[scheme];
 
   return {
     ...b,
 
-    accent: hue,
-    onAccent: surAccent(hue),
-    accentSoft: mixHex(hue, b.surface, sombre ? 0.1 : 0.22),
-    accentText: enTexte(hue),
-    ...actionColors(scheme, hue),
+    ...tons,
+    accentSoft: mixHex(PALETTE.iris, b.surface, sombre ? 0.2 : 0.1),
 
     // LES TROIS RÉPONSES, chacune sur sa teinte (voir PALETTE).
     //

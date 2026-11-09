@@ -37,21 +37,28 @@ import { contrastRatio, mixHex } from '../utils/color';
 //     le prix d'une mosaïque qu'on peut regarder.
 //
 // Depuis le passage à huit sujets (voir scripts/generate-data.js), la
-// palette n'en garde que huit, reprises TELLES QUELLES de l'ancienne : elles
-// tiennent déjà toutes les contraintes ci-dessus. Le choix évite seulement de
-// poser deux verts ou deux violets sur des tuiles qui se touchent.
+// palette n'en garde que huit.
+//
+// PALETTE SOBRE : LES TUILES S'EFFACENT DEVANT L'ACCENT. L'app n'a plus
+// qu'un accent saturé, l'iris, réservé à ce qu'on touche. Les huit tuiles
+// sont donc ramenées à une même saturation, plus douce (0.12 en OKLCH, là où
+// elles allaient de 0.08 à 0.20), et leurs teintes réparties en laissant libre
+// la zone de l'iris : l'économie, qui était violette, aurait passé pour un
+// bouton. Le damier de la contrainte 3 est rétabli tel quel (4.7:1 et 5.9:1
+// face au blanc, en alternance), et deux tuiles qui se touchent ne partagent
+// jamais une famille de teinte. Distance minimale entre voisines : 72.
 export const THEME_COLORS: Record<string, string> = {
-  economie: '#7166D0',
-  travail: '#7F6127',
+  economie: '#167AB1',
+  travail: '#7F5F0B',
 
-  sante: '#C54C42',
-  education: '#AA4AC8',
+  sante: '#A24844',
+  education: '#955FA5',
 
-  ecologie: '#347424',
-  logement: '#286F83',
+  ecologie: '#3D8241',
+  logement: '#126F78',
 
-  securite: '#3A76BD',
-  institutions: '#A05231',
+  securite: '#9A4872',
+  institutions: '#AA6221',
 };
 
 const FALLBACK_COLOR = '#4338CA';

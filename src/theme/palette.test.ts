@@ -118,6 +118,13 @@ describe('contrastes', () => {
         // une carte (voir ProgressBar).
         ['action/neutralTrack', contrastRatio(c.action, c.neutralTrack)],
         ['neutralFill/neutralTrack', contrastRatio(c.neutralFill, c.neutralTrack)],
+        // Le contour fort se pose aussi sur un panneau secondaire.
+        ['borderStrong/surfaceAlt', contrastRatio(c.borderStrong, c.surfaceAlt)],
+        // L'accent remplit aussi les jauges des lignes de classement, cerne les
+        // avatars et les éléments choisis : il doit se détacher de la piste
+        // comme de la carte.
+        ['accent/neutralTrack', contrastRatio(c.accent, c.neutralTrack)],
+        ['accent/surface', contrastRatio(c.accent, c.surface)],
       ];
       for (const [quoi, r] of paires) {
         if (r < INTERFACE) echecs.push(`${nom} ${quoi} : ${r.toFixed(2)}`);
