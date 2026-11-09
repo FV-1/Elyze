@@ -12,4 +12,4 @@
 //
 // D'où le test qui accompagne ce fichier (appInfo.test.ts) : il lit app.json
 // et refuse tout écart. La duplication reste, la dérive est impossible.
-export const APP_VERSION = '1.1.0';
+export const APP_VERSION = '1.2.0';

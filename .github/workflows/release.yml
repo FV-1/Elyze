@@ -1,6 +1,8 @@
 # Sortir une version : pousser un tag, le reste suit.
 #
-#   1. Monter "version" dans app.json (ex. 1.2.0), commiter, pousser sur main.
+#   1. Monter la version (ex. 1.2.0) dans app.json ("version") ET dans
+#      src/data/appInfo.ts (APP_VERSION, qui en est une copie, et qu'un test
+#      compare à app.json), commiter, pousser sur main.
 #   2. git tag v1.2.0 && git push origin v1.2.0
 #
 # Ce workflow vérifie alors le code, fait construire l'APK Android par EAS,
