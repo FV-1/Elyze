@@ -64,6 +64,7 @@ export function ResultsScreen({
   onOpenReview,
   alreadyRevealed,
   onReveal,
+  cartesRestantes = 0,
 }: {
   proposals: Proposal[];
   answers: Answers;
@@ -105,6 +106,9 @@ export function ResultsScreen({
   // écran depuis "Comment ça marche" — voir App.tsx.
   alreadyRevealed: boolean;
   onReveal: () => void;
+  // Cartes encore à swiper quand on vient voir son résultat avant la fin,
+  // depuis l'onglet Classement. 0 une fois le paquet terminé.
+  cartesRestantes?: number;
 }) {
   const colors = useColors();
   const styles = useMemo(() => makeStyles(colors), [colors]);
@@ -368,6 +372,25 @@ export function ResultsScreen({
           {portee && <Text style={styles.portee}>{portee}</Text>}
         </View>
 
+        {/* UN RÉSULTAT DEMANDÉ AVANT LA FIN le dit, et rend la partie. Sans
+            ce bandeau, rien ne distinguait un aperçu d'un résultat final. */}
+        {cartesRestantes > 0 && (
+          <View style={styles.enCours}>
+            <Text style={styles.enCoursTexte}>
+              Partie en cours : encore {cartesRestantes} carte{cartesRestantes > 1 ? 's' : ''} à
+              swiper. Ce résultat s’affinera.
+            </Text>
+            <Pressable
+              onPress={onBack}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="Continuer à swiper"
+            >
+              <Text style={styles.enCoursLien}>Continuer à swiper</Text>
+            </Pressable>
+          </View>
+        )}
+
         {topMatch && (
           <Animated.View
             style={styles.heroCard}
@@ -472,8 +495,9 @@ export function ResultsScreen({
               Par thème
             </Text>
           </Pressable>
-          {/* Le trombinoscope vivait dans l'onglet Classement de la partie,
-              retiré avec lui : c'est la seule porte vers les notices. */}
+          {/* Le trombinoscope est aussi dans l'onglet Classement de la
+              partie ; ici, il reste la porte vers les notices une fois le
+              paquet fini. */}
           <Pressable
             onPress={() => selectRankingView('candidats')}
             style={[styles.subTab, rankingView === 'candidats' && styles.subTabActive]}
@@ -690,6 +714,25 @@ function makeStyles(colors: ColorTokens) {
     },
     chapeau: {
       gap: spacing.xs,
+    },
+    enCours: {
+      backgroundColor: colors.accentSoft,
+      borderRadius: radii.sm,
+      paddingVertical: spacing.sm + 2,
+      paddingHorizontal: spacing.md,
+      gap: spacing.xs,
+    },
+    enCoursTexte: {
+      fontSize: fonts.small,
+      lineHeight: fonts.small * 1.4,
+      fontWeight: '600',
+      color: colors.accentText,
+    },
+    enCoursLien: {
+      fontSize: fonts.small,
+      fontWeight: '800',
+      color: colors.accentText,
+      textDecorationLine: 'underline',
     },
     portee: {
       fontSize: fonts.small,

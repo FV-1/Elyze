@@ -167,6 +167,23 @@ export function pickTopMatch(results: CandidateResult[]): CandidateResult | null
   return results[0] ?? null;
 }
 
+// Réponses par candidat, en moyenne, avant que le podium provisoire apparaisse.
+//
+// Après une douzaine de cartes, un candidat n'a qu'une réponse ou deux : trois
+// candidats s'affichaient alors « 67 % » sur trois marches dorées, pour une
+// seule proposition chacun. Un podium a l'air définitif ; à ce stade, il ne
+// l'est en rien.
+export const MIN_REPONSES_PODIUM = 3;
+
+// Le podium provisoire a-t-il de quoi s'afficher ? Une seule règle pour le
+// panneau Classement, qui le montre, et pour la fenêtre qui annonce son
+// arrivée : l'une ne doit pas promettre ce que l'autre ne montre pas encore.
+export function podiumProvisoirePret(results: CandidateResult[]): boolean {
+  if (pickTopMatch(results) === null) return false;
+  const reponses = results.reduce((total, r) => total + r.answered, 0);
+  return reponses / results.length >= MIN_REPONSES_PODIUM;
+}
+
 // Traduit l'écart (en score ajusté) entre le 1er et le 2e du classement en
 // un message qualitatif — plus honnête qu'un chiffre brut, qui pourrait
 // entrer en contradiction avec les pourcentages bruts affichés juste à côté.

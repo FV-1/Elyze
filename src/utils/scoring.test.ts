@@ -4,6 +4,7 @@ import {
   computeThemeAgreement,
   matchConfidenceLabel,
   pickTopMatch,
+  podiumProvisoirePret,
   topMatches,
 } from './scoring';
 
@@ -198,6 +199,30 @@ describe('pickTopMatch', () => {
     const results = computeResults(answers, proposals, CANDIDATES);
 
     expect(pickTopMatch(results)?.candidate.id).toBe('a');
+  });
+});
+
+describe('podiumProvisoirePret', () => {
+  // Deux candidats, trois propositions chacun.
+  const proposals = ['a', 'b'].flatMap((c) =>
+    [1, 2, 3].map((i) => proposal(`${c}${i}`, c, 'eco'))
+  );
+
+  it('rien à classer : pas de podium', () => {
+    expect(podiumProvisoirePret(computeResults({}, proposals, CANDIDATES))).toBe(false);
+  });
+
+  it('attend trois réponses par candidat en moyenne', () => {
+    const presque: Answers = { a1: 'like', a2: 'nope', a3: 'like', b1: 'like', b2: 'nope' };
+    expect(podiumProvisoirePret(computeResults(presque, proposals, CANDIDATES))).toBe(false);
+
+    const assez: Answers = { ...presque, b3: 'like' };
+    expect(podiumProvisoirePret(computeResults(assez, proposals, CANDIDATES))).toBe(true);
+  });
+
+  it('« pas d’avis » ne rapproche pas du podium', () => {
+    const sansAvis: Answers = Object.fromEntries(proposals.map((p) => [p.id, 'skip']));
+    expect(podiumProvisoirePret(computeResults(sansAvis, proposals, CANDIDATES))).toBe(false);
   });
 });
 

@@ -12,12 +12,28 @@ import { SwipeTutorialOverlay } from '../components/SwipeTutorialOverlay';
 import { BottomTabBar, BottomTabItem } from '../components/BottomTabBar';
 import { Bascule } from '../components/Bascule';
 import { ThemeMosaic } from '../components/ThemeMosaic';
+import { RankingPanel } from '../components/RankingPanel';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import {
+  AnswerGroups,
+  CandidateAnswersDialog,
+  emptyAnswerGroups,
+} from '../components/CandidateAnswersDialog';
+import { CandidateInfoDialog } from '../components/CandidateInfoDialog';
 import { ProposalDebateDialog } from '../components/ProposalDebateDialog';
 import { SwipeDirection } from '../components/SwipeCard';
 import { PROPOSALS } from '../data/proposals';
 import { THEMES, THEMES_BY_ID } from '../data/themes';
+import { CANDIDATES, CANDIDATES_BY_ID } from '../data/candidates';
+import {
+  computeResults,
+  computeThemeAgreement,
+  matchConfidenceLabel,
+  pickTopMatch,
+  podiumProvisoirePret,
+} from '../utils/scoring';
 import { haptics } from '../utils/haptics';
+import { porteeDesThemes } from '../utils/portee';
 import { loadRevealCandidates, saveRevealCandidates } from '../utils/storage';
 import { Answers, Proposal, ThemeTag } from '../types';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
@@ -43,34 +59,52 @@ type Props = {
   onDismissTutorial: () => void;
   tab: SwipeTab;
   onChangeTab: (tab: SwipeTab) => void;
+  // Non nul quand la partie en cours est le défi de quelqu'un. `resume` reste
+  // nul tant que le paquet n'est pas fini (voir RankingPanel).
+  duel: {
+    resume: { accords: number; tranchees: number } | null;
+    onVoir: () => void;
+  } | null;
 };
 
 // L'ONGLET EST TENU PAR L'ÉCRAN PARENT, comme l'était déjà le thème ouvert.
 //
 // Cet écran est démonté dès qu'on le quitte — pour le duel, la révision, les
-// réglages — et son état local repartait alors sur « Swiper » : le retour ne
-// ramenait pas là d'où l'on venait.
-export type SwipeTab = 'swipe' | 'propositions';
+// réglages — et son état local repartait alors sur « Swiper ». Ouvrir la
+// comparaison depuis l'onglet Classement, puis revenir, déposait donc sur le
+// paquet de cartes : le retour ne ramenait pas là d'où l'on venait.
+export type SwipeTab = 'swipe' | 'ranking' | 'propositions';
 
-// Deux onglets, plus l'action « Thèmes » que la barre affiche à part (voir
+// Trois onglets, plus l'action « Thèmes » que la barre affiche à part (voir
 // BottomTabBar). Cette action a brièvement été déplacée dans l'en-tête pour
 // libérer un slot ; c'était une erreur, elle y devenait une icône muette alors
 // qu'elle commande ce qu'on swipe. L'en-tête n'a de toute façon pas la place
 // d'un libellé : la piste de la barre de progression n'y fait qu'une centaine
 // de pixels, et un troisième bouton la réduisait de moitié.
 //
-// Ils étaient quatre. « Candidats » est parti le premier, puis « Classement » :
-// un classement provisoire doublait l'écran de résultat, et le voir monter en
-// cours de partie pouvait orienter les réponses suivantes. Le classement et le
-// trombinoscope des candidats vivent désormais sur l'écran de résultat.
+// Ils étaient quatre. « Candidats » a rejoint le panneau Classement, dont il
+// est une vue : un trombinoscope qui ne change jamais ne justifie pas un
+// bouton permanent, et son départ rend à « Propositions » la largeur qui lui
+// manquait pour tenir sans rétrécir (voir CandidateGrid pour le raisonnement
+// complet).
+//
+// LE CLASSEMENT EST PARTI, PUIS REVENU. Retiré parce qu'il doublait le
+// résultat et pouvait orienter les réponses, il est revenu à la demande : on
+// aime voir où l'on en est sans finir le paquet. Le risque d'orientation est
+// faible, les cartes étant anonymes (savoir qui mène ne dit pas quelles cartes
+// sont les siennes). Ce qui l'était, ce sont les fenêtres « Voir le
+// classement » qui s'ouvraient d'elles-mêmes à chaque palier : une seule
+// revient, celle qui annonce le premier podium (voir plus bas). Ensuite, le
+// classement ne se montre que si on va le chercher.
 // Hauteur retenue au bas de chaque vue tant que la barre du bas n'a pas été
 // mesurée, c'est-à-dire le temps d'une seule passe de mise en page. Prise
-// large : trop peu cacherait une ligne de la mosaïque pendant une image, trop
+// large : trop peu cacherait une ligne du classement pendant une image, trop
 // ne laisse qu'un blanc qui se referme aussitôt.
 const DEGAGEMENT_PAR_DEFAUT = 96;
 
 const SWIPE_TABS: BottomTabItem<SwipeTab>[] = [
   { key: 'swipe', label: 'Swiper', icon: 'layers-outline' },
+  { key: 'ranking', label: 'Classement', icon: 'trophy-outline' },
   { key: 'propositions', label: 'Propositions', icon: 'grid-outline' },
 ];
 
@@ -91,6 +125,7 @@ export function SwipeScreen({
   onDismissTutorial,
   tab,
   onChangeTab,
+  duel,
 }: Props) {
   const colors = useColors();
   const styles = useMemo(() => makeStyles(colors), [colors]);
@@ -104,10 +139,16 @@ export function SwipeScreen({
   const degagement = hauteurBarre + spacing.md;
   const [confirmingThemeFilter, setConfirmingThemeFilter] = useState(false);
   const [confirmingRestart, setConfirmingRestart] = useState(false);
+  const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(null);
+  // Fiche d'un candidat, ouverte en touchant sa photo.
+  const [infoCandidateId, setInfoCandidateId] = useState<string | null>(null);
   // Débat autour d'une mesure, ouvert depuis la carte.
   const [debateProposal, setDebateProposal] = useState<Proposal | null>(null);
-  // La bascule « montrer qui propose quoi » de la mosaïque, retenue d'une
-  // session à l'autre.
+  // Une seule bascule "montrer qui propose quoi" pour tout l'écran : elle
+  // gouverne la mosaïque ET le classement par thème. Auparavant le classement
+  // par thème affichait les noms sans condition, ce qui désignait l'auteur
+  // d'une carte précise (un candidat n'a souvent qu'une proposition par thème)
+  // alors même que la mosaïque, juste à côté, les masquait par défaut.
   const [revealCandidates, setRevealCandidates] = useState(false);
   // Thème ouvert dans l'onglet Propositions, remonté de la mosaïque pour que
   // le retour matériel puisse le refermer avant de quitter l'onglet (voir le
@@ -153,12 +194,63 @@ export function SwipeScreen({
 
   const canUndo = currentIndex > 0;
 
+  const results = useMemo(
+    () => computeResults(answers, proposals, CANDIDATES),
+    [answers, proposals]
+  );
+  const topMatch = useMemo(() => pickTopMatch(results), [results]);
+  const nbCandidats = useMemo(() => new Set(proposals.map((p) => p.candidateId)).size, [proposals]);
+  const confidenceLabel = useMemo(() => matchConfidenceLabel(results), [results]);
+  const themeAgreement = useMemo(
+    () => computeThemeAgreement(answers, proposals, CANDIDATES, THEMES),
+    [answers, proposals]
+  );
+
+  // LE PREMIER PODIUM S'ANNONCE, UNE FOIS. Sans cette fenêtre, rien ne disait
+  // qu'il était prêt : il fallait aller vérifier dans l'onglet. Les annonces
+  // suivantes (« ton aperçu s'affine »…) ne reviennent pas ; elles
+  // interrompaient la partie pour un classement qui avait à peine bougé.
+  //
+  // Elle suit la règle du panneau, pas un palier de cartes : elle s'ouvre
+  // quand le podium y apparaît, ni avant ni après.
+  //
+  // Cet écran est démonté dès qu'on le quitte. Un podium déjà prêt au montage
+  // est donc tenu pour annoncé, sans quoi une reprise de partie le
+  // réannoncerait. Et une partie qui repart de zéro (aucune réponse) remet le
+  // compteur à zéro, puisque son premier podium reste à venir.
+  //
+  // Ajusté pendant le rendu plutôt que dans un effet : la fenêtre s'ouvre dans
+  // le même passage que le podium apparaît, sans un rendu intermédiaire où
+  // l'un serait là sans l'autre.
+  const podiumPret = podiumProvisoirePret(results);
+  const aucuneReponse = Object.keys(answers).length === 0;
+  const [premierPodiumAnnonce, setPremierPodiumAnnonce] = useState(podiumPret);
+  const [annoncePremierPodium, setAnnoncePremierPodium] = useState(false);
+  if (aucuneReponse && premierPodiumAnnonce) setPremierPodiumAnnonce(false);
+  if (podiumPret && !premierPodiumAnnonce) {
+    setPremierPodiumAnnonce(true);
+    // Déjà sous les yeux dans l'onglet Classement, ou dépassé par la fin du
+    // paquet qui mène au résultat : rien à annoncer.
+    if (tab !== 'ranking' && !isDeckDone) setAnnoncePremierPodium(true);
+  }
+
+  const selectedCandidateAnswers = useMemo<AnswerGroups>(() => {
+    const groups = emptyAnswerGroups();
+    if (!selectedCandidateId) return groups;
+    for (const p of proposals) {
+      if (p.candidateId !== selectedCandidateId) continue;
+      const a = answers[p.id];
+      if (a) groups[a].push(p);
+    }
+    return groups;
+  }, [selectedCandidateId, proposals, answers]);
+
 
   // Retour matériel : UN PAS EN ARRIÈRE, PAS DEUX.
   //
-  // Depuis l'onglet Propositions, il ramène au swipe plutôt que de quitter
-  // l'écran : parcourir le catalogue ne doit pas donner l'impression d'avoir
-  // perdu sa progression.
+  // Depuis un autre onglet (Classement, Propositions), il ramène au swipe
+  // plutôt que de quitter l'écran : consulter son classement provisoire ne
+  // doit pas donner l'impression d'avoir perdu sa progression.
   //
   // Mais l'onglet Propositions a lui-même deux niveaux : la mosaïque des
   // thèmes, puis la liste des propositions d'un thème. Depuis cette liste, le
@@ -182,6 +274,8 @@ export function SwipeScreen({
     return () => subscription.remove();
   }, [tab, openTheme, onChangeTab]);
 
+  // Sur quoi porte le classement provisoire, quand il ne porte pas sur tout.
+  const portee = useMemo(() => porteeDesThemes(selectedThemeIds, THEMES), [selectedThemeIds]);
 
   // Un thème sans proposition ne peut pas être sélectionné (l'écran de choix
   // ne l'affiche pas), donc le total de référence est le nombre de thèmes
@@ -354,6 +448,26 @@ export function SwipeScreen({
         </Bascule>
       )}
 
+      {tab === 'ranking' && (
+        <Bascule style={styles.zoneOnglet}>
+          <RankingPanel
+            results={results}
+            nbCandidats={nbCandidats}
+            topMatch={topMatch}
+            confidenceLabel={confidenceLabel}
+            themeAgreement={themeAgreement}
+            deckDone={isDeckDone}
+            showCandidates={showCandidates}
+            portee={portee}
+            duel={duel}
+            onSeeResult={onSeeResult}
+            onSelectCandidate={setSelectedCandidateId}
+            onOpenCandidateInfo={setInfoCandidateId}
+            paddingBas={degagement}
+          />
+        </Bascule>
+      )}
+
       {showTutorial && currentIndex === 0 && tab === 'swipe' && !isDeckDone && (
         <SwipeTutorialOverlay onDismiss={onDismissTutorial} />
       )}
@@ -393,6 +507,19 @@ export function SwipeScreen({
       </View>
 
       <ConfirmDialog
+        visible={annoncePremierPodium}
+        title="Ton premier classement est prêt"
+        message="Tu as répondu à assez de propositions pour voir une première tendance. Elle bougera encore : continue à swiper pour l’affiner."
+        confirmLabel="Voir le classement"
+        cancelLabel="Continuer à swiper"
+        onConfirm={() => {
+          setAnnoncePremierPodium(false);
+          onChangeTab('ranking');
+        }}
+        onCancel={() => setAnnoncePremierPodium(false)}
+      />
+
+      <ConfirmDialog
         visible={confirmingRestart}
         title="Recommencer ?"
         message="Ta session actuelle (réponses et résultat) sera effacée définitivement."
@@ -416,11 +543,42 @@ export function SwipeScreen({
         onCancel={() => setConfirmingThemeFilter(false)}
       />
 
+      <CandidateAnswersDialog
+        visible={selectedCandidateId !== null}
+        candidate={selectedCandidateId ? CANDIDATES_BY_ID[selectedCandidateId] : null}
+        groups={selectedCandidateAnswers}
+        // Même verrou que la vue par thème. Le classement provisoire peut
+        // montrer des noms et des pourcentages — c'est un agrégat, il ne dit
+        // pas qui a écrit telle carte. Le détail, lui, cite le texte des
+        // propositions sous un nom : tant qu'on swipe, il reste fermé.
+        revealProposals={showCandidates}
+        onClose={() => setSelectedCandidateId(null)}
+        // On referme le détail avant d'ouvrir la fiche : deux modales
+        // empilées ne s'affichent pas de façon fiable sur iOS.
+        onOpenInfo={() => {
+          const id = selectedCandidateId;
+          setSelectedCandidateId(null);
+          setInfoCandidateId(id);
+        }}
+      />
+
       <ProposalDebateDialog
         visible={debateProposal !== null}
         proposal={debateProposal}
         theme={debateProposal ? THEMES_BY_ID[debateProposal.themeId] ?? null : null}
         onClose={() => setDebateProposal(null)}
+      />
+
+      <CandidateInfoDialog
+        visible={infoCandidateId !== null}
+        candidate={infoCandidateId ? CANDIDATES_BY_ID[infoCandidateId] : null}
+        proposals={proposals}
+        answers={answers}
+        // La notice biographique n'a rien à cacher ; la liste des sujets sur
+        // lesquels ce candidat se prononce, si — croisée avec la mosaïque des
+        // thèmes, elle réduit le champ des cartes qu'on est en train de voir.
+        revealThemes={showCandidates}
+        onClose={() => setInfoCandidateId(null)}
       />
     </SafeAreaView>
   );

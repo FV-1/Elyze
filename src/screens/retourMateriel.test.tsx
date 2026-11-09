@@ -81,6 +81,7 @@ async function monter() {
           onOpenSettings={noop}
           showTutorial={false}
           onDismissTutorial={noop}
+          duel={null}
         />
       </ThemeProvider>
     );

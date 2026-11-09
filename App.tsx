@@ -169,7 +169,7 @@ function AppInner() {
   // Où revenir en quittant le duel.
   //
   // MÉMORISÉ QUAND ON VIENT DE QUELQUE PART, calculé sinon : on entre dans le
-  // duel depuis le résultat et l'accueil, mais aussi par
+  // duel depuis le résultat, l'accueil et l'onglet Classement, mais aussi par
   // un lien profond qui ouvre l'app fermée — cas où aucun « écran précédent »
   // n'a jamais existé, et où seul l'état de la partie peut décider.
   const [duelReturnTo, setDuelReturnTo] = useState<Screen | null>(null);
@@ -399,6 +399,10 @@ function AppInner() {
   //
   // Nul tant que le paquet n'est pas fini : une comparaison partielle changerait
   // à chaque carte, et le défi ne se lit qu'une fois joué en entier.
+  // Cartes encore à swiper : non nul quand on regarde son résultat avant la
+  // fin, depuis l'onglet Classement.
+  const cartesRestantes = Math.max(0, sessionProposals.length - currentIndex);
+
   const resumeDuel = useMemo(() => {
     if (!adversaire || sessionProposals.length === 0) return null;
     if (currentIndex < sessionProposals.length) return null;
@@ -686,6 +690,11 @@ function AppInner() {
                 onDismissTutorial={handleDismissTutorial}
                 tab={swipeTab}
                 onChangeTab={setSwipeTab}
+                duel={
+                  adversaire
+                    ? { resume: resumeDuel, onVoir: () => openDuel('swipe') }
+                    : null
+                }
               />
             </ScreenTransition>
             </ZoneAccent>
@@ -736,8 +745,11 @@ function AppInner() {
                 duel={resumeDuel}
                 onOpenDuel={() => openDuel('results')}
                 onOpenReview={() => setScreen('review')}
-                alreadyRevealed={resultsRevealed}
+                // Un aperçu demandé en cours de partie ne consomme pas le
+                // rideau : il reste réservé au vrai résultat, à la fin.
+                alreadyRevealed={resultsRevealed || cartesRestantes > 0}
                 onReveal={() => setResultsRevealed(true)}
+                cartesRestantes={cartesRestantes}
               />
             </ScreenTransition>
             </ZoneAccent>
