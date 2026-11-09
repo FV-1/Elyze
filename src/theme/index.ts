@@ -191,9 +191,9 @@ const base = {
     textSecondary: PALETTE.snowDim,
     textMuted: PALETTE.mutedOnNight,
     neutralFill: PALETTE.mutedOnNight,
-    // Plus sombre que la page, pour qu'une jauge remplie d'accent s'en
-    // détache nettement.
-    neutralTrack: PALETTE.night,
+    // Un cran au-dessus de la page : à la couleur du fond, la partie vide de
+    // la barre de progression disparaissait.
+    neutralTrack: PALETTE.night3,
   },
 } as const;
 
