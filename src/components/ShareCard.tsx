@@ -1,9 +1,10 @@
 import { forwardRef, useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Podium } from './Podium';
 import { topMatches } from '../utils/scoring';
 import { CandidateResult } from '../types';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, MONO_SPACING, police, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
 export const SHARE_CARD_WIDTH = 360;
@@ -99,10 +100,19 @@ export const ShareCard = forwardRef<View, Props>(function ShareCard(
 
 function makeStyles(colors: ColorTokens) {
   return StyleSheet.create({
+    // LA CARTE QUI CIRCULE PORTE L'IDENTITÉ EN ENTIER : fond crème, cadre
+    // d'encre, étiquettes en mono capitales. C'est le seul visuel de l'app qui
+    // sorte de l'app, et le document est écrit d'abord pour ces images-là.
     card: {
       width: SHARE_CARD_WIDTH,
-      backgroundColor: colors.surface,
-      borderRadius: radii.lg,
+      backgroundColor: colors.bg,
+      borderRadius: radii.xl,
+      // L'image est posée sur le fond de n'importe quelle messagerie : elle
+      // garde un filet pour ne pas s'y dissoudre, mais un filet discret, et
+      // non le cadre d'encre d'avant. Pas d'ombre ici : la capture d'écran ne
+      // la rend pas de la même façon selon les plateformes.
+      borderWidth: 1,
+      borderColor: colors.border,
       alignItems: 'center',
       justifyContent: 'center',
       // Marges latérales resserrées par rapport au reste de l'app : les trois
@@ -111,27 +121,31 @@ function makeStyles(colors: ColorTokens) {
       paddingVertical: spacing.xxl,
       gap: spacing.sm,
     },
+    // Le logo, en minuscules et en encre : jamais en accent, jamais en
+    // capitales (DESIGN.md §5).
     brand: {
       position: 'absolute',
       top: spacing.lg,
-      fontSize: fonts.tiny,
-      fontWeight: '800',
-      letterSpacing: 2,
-      color: colors.accentText,
+      fontSize: fonts.body + 2,
+      fontWeight: '700',
+      letterSpacing: -0.8,
+      color: colors.textPrimary,
     },
     // Teintée d'accent et non grise : c'est une précision qui change la
     // lecture du chiffre, pas une note de bas de page.
     porteePill: {
-      backgroundColor: colors.accentSoft,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: 5,
       paddingHorizontal: spacing.md,
       maxWidth: SHARE_CARD_WIDTH - spacing.lg * 2,
     },
     porteeText: {
+      fontFamily: police.mono[500],
       fontSize: fonts.tiny,
-      fontWeight: '700',
-      color: colors.accentText,
+      letterSpacing: MONO_SPACING,
+      textTransform: 'uppercase',
+      color: colors.onAction,
       textAlign: 'center',
     },
     podiumWrap: {
@@ -144,20 +158,22 @@ function makeStyles(colors: ColorTokens) {
       gap: 4,
     },
     summaryLabel: {
-      fontSize: fonts.tiny - 1,
-      fontWeight: '800',
-      letterSpacing: 1.2,
+      fontFamily: police.mono[500],
+      fontSize: fonts.tiny,
+      letterSpacing: MONO_SPACING,
       color: colors.textMuted,
     },
     summaryValue: {
-      fontSize: fonts.body + 4,
-      fontWeight: '800',
+      fontSize: fonts.title - 4,
+      fontWeight: '700',
       color: colors.textPrimary,
       textAlign: 'center',
-      letterSpacing: -0.3,
+      letterSpacing: -1,
     },
     partyPill: {
-      backgroundColor: colors.surfaceAlt,
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      borderColor: colors.border,
       borderRadius: radii.pill,
       paddingVertical: 4,
       paddingHorizontal: spacing.md,
@@ -165,11 +181,13 @@ function makeStyles(colors: ColorTokens) {
       maxWidth: SHARE_CARD_WIDTH - spacing.xl * 2,
     },
     partyPillText: {
+      fontFamily: police.mono[400],
       fontSize: fonts.tiny,
-      fontWeight: '700',
+      letterSpacing: MONO_SPACING,
       color: colors.textSecondary,
     },
     confidence: {
+      fontFamily: police.mono[400],
       marginTop: spacing.xs,
       fontSize: fonts.tiny + 1,
       fontWeight: '600',

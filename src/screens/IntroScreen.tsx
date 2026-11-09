@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { LayoutChangeEvent, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { LayoutChangeEvent, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Texte as Text } from '../components/Texte';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, MONO_SPACING, police, radii, spacing } from '../theme';
 import { useColors, useThemeSettings } from '../theme/ThemeContext';
 import { haptics } from '../utils/haptics';
 import { PROPOSALS } from '../data/proposals';
 import { CANDIDATES } from '../data/candidates';
+import { Blob } from '../components/Blob';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { useGlissiere, usePression } from '../components/mouvement';
 import { FormatPartie, QUOTA_COURT, QUOTA_PAR_CANDIDAT } from '../utils/deck';
@@ -18,11 +20,6 @@ const SECRET_TAPS_REQUIRED = 7;
 // Au delà de ce délai entre deux appuis, le compteur repart de zéro : c'est
 // une suite d'appuis volontaire, pas des appuis isolés cumulés sur la durée.
 const SECRET_TAP_TIMEOUT_MS = 1200;
-
-// Quatre libelles cote a cote sur une seule ligne : au dela de ce
-// grossissement, « Pas pour moi » deborde de sa colonne. Le libelle complet des
-// quatre choix reste annonce par l'accessibilityLabel du bloc.
-const LEGEND_MAX_SCALE = 1.3;
 
 export type RestorableSummary = {
   currentIndex: number;
@@ -152,6 +149,12 @@ export function IntroScreen({
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+      {/* DEUX CERCLES, PAS TROIS, ET COUPÉS PAR LE BORD. Ils sont la seule
+          décoration de l'app, et c'est l'accueil qui les porte : l'écran où
+          l'on arrive, le seul qui ait de la place à leur donner. */}
+      <Blob taille={320} haut={-140} droite={-110} />
+      <Blob taille={220} bas={-90} gauche={-80} />
+
       <Pressable
         onPress={onOpenSettings}
         hitSlop={10}
@@ -198,57 +201,9 @@ export function IntroScreen({
           Swipe des propositions sans savoir qui les porte. Découvre qui te ressemble.
         </Text>
 
-        {/* QUATRE choix, pas trois. Le super like est une réponse à part
-            entière : sa place est ici, avec les autres, et non dans un encart
-            séparé sous la légende. Cet encart-là coûtait une cinquantaine de
-            pixels sur un écran qui doit tenir sans défilement, pour dire une
-            chose qui se loge dans une colonne déjà présente.
-            Le « ×3 » est posé sur l'icône plutôt qu'écrit en toutes lettres :
-            c'est ce qui distingue ce geste des autres, et l'explication
-            complète est annoncée aux lecteurs d'écran par le libellé du bloc.
-            Il reste à la taille des libellés, jamais en dessous. */}
-        <View
-          style={styles.legend}
-          accessible
-          accessibilityLabel="Quatre choix possibles : pas pour moi, pas d’avis, j’adhère, ou super like qui compte trois fois plus dans ton résultat"
-        >
-          <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-            <View style={[styles.legendIcon, styles.legendIconNope]}>
-              <Ionicons name="close" size={18} color={colors.danger} />
-            </View>
-            <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
-              Pas pour moi
-            </Text>
-          </View>
-          <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-            <View style={[styles.legendIcon, styles.legendIconSkip]}>
-              <Ionicons name="remove-outline" size={16} color={colors.textSecondary} />
-            </View>
-            <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
-              Pas d’avis
-            </Text>
-          </View>
-          <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-            <View style={[styles.legendIcon, styles.legendIconLike]}>
-              <Ionicons name="heart" size={16} color={colors.success} />
-            </View>
-            <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
-              J’adhère
-            </Text>
-          </View>
-          <View style={styles.legendItem} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-            <View style={[styles.legendIcon, styles.legendIconSuper]}>
-              <Ionicons name="star" size={16} color={colors.warningText} />
-              <View style={styles.legendMultiplier}>
-                <Text style={styles.legendMultiplierText}>×3</Text>
-              </View>
-            </View>
-            <Text style={styles.legendText} numberOfLines={1} maxFontSizeMultiplier={LEGEND_MAX_SCALE}>
-              Super like
-            </Text>
-          </View>
-        </View>
-
+        {/* La légende des quatre boutons a quitté l'accueil : le tutoriel du
+            premier swipe les présente, avec leur effet, au moment où ils
+            servent. Ici, elle répétait la règle avant même qu'on joue. */}
         {/* Le compte et le lien tiennent sur UNE ligne, au lieu de trois
             blocs empilés. L'accueil doit tenir dans un écran sans défilement,
             et chaque bloc centré y coûtait une trentaine de pixels pour une
@@ -256,11 +211,14 @@ export function IntroScreen({
             La mention du « super like » a quitté cet écran : c'est un détail
             de règle, et il est déjà dit à l'endroit où il sert, le tutoriel du
             premier swipe, puis dans « comment ça marche ». */}
+        {/* Plus de point séparateur entre les deux : quand la ligne passe à
+            la ligne, et c'est le cas sur la plupart des téléphones, il
+            restait seul au bout de la première, accroché à rien. L'écart
+            suffit à les séparer quand ils tiennent côte à côte. */}
         <View style={styles.metaRow}>
           <Text style={styles.meta}>
             {PROPOSALS.length} propositions · {CANDIDATES.length} candidats
           </Text>
-          <Text style={styles.metaSep}>·</Text>
           <Pressable
             onPress={onOpenHowItWorks}
             hitSlop={10}
@@ -320,7 +278,7 @@ export function IntroScreen({
               <Text style={styles.ctaText}>
                 Reprendre ({restorable.currentIndex}/{restorable.total})
               </Text>
-              <Ionicons name="arrow-forward" size={20} color={colors.onAccent} />
+              <Ionicons name="arrow-forward" size={20} color={colors.onAction} />
             </Pressable>
             <Pressable
               onPress={handleStartFreshPress}
@@ -378,7 +336,7 @@ export function IntroScreen({
               <Text style={styles.ctaText}>
                 {restorable?.isComplete ? 'Refaire le test' : 'Commencer'}
               </Text>
-              <Ionicons name="arrow-forward" size={20} color={colors.onAccent} />
+              <Ionicons name="arrow-forward" size={20} color={colors.onAction} />
             </Pressable>
           </>
         )}
@@ -426,7 +384,7 @@ export function IntroScreen({
             rejoint « comment ça marche », où elle est expliquée plutôt
             qu'affirmée en une ligne. */}
         <Text style={styles.disclaimer}>
-          Propositions publiques recensées par Poligraph.
+          Propositions publiques recensées par Poligraph et 2027 et moi.
         </Text>
         </View>
       </ScrollView>
@@ -504,6 +462,8 @@ function makeStyles(colors: ColorTokens) {
     container: {
       flex: 1,
       backgroundColor: colors.bg,
+      // Sans quoi les cercles de fond débordent au lieu d'être coupés.
+      overflow: 'hidden',
     },
     // `space-between` a déménagé du conteneur vers le contenu défilant : c'est
     // lui qui, avec `flexGrow`, tient le pied de page en bas quand l'écran est
@@ -539,24 +499,29 @@ function makeStyles(colors: ColorTokens) {
       paddingTop: spacing.xl,
       gap: spacing.md,
     },
+    // La pastille « sombre sur fond clair » du document : un aplat d'encre qui
+    // porte l'accent, en mono capitales.
     badge: {
-      backgroundColor: colors.accentSoft,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
-      paddingVertical: 6,
+      paddingVertical: 7,
       paddingHorizontal: spacing.md,
       marginBottom: spacing.sm,
     },
     badgeText: {
+      fontFamily: police.mono[500],
       fontSize: fonts.tiny,
-      fontWeight: '800',
-      letterSpacing: 1,
-      color: colors.accentText,
+      letterSpacing: MONO_SPACING,
+      color: colors.onAction,
     },
+    // Le titre suit l'échelle du document : géométrique, gras, très resserré
+    // (-0.045em, soit environ -2.3 à cette taille).
     title: {
-      fontSize: 56,
-      fontWeight: '800',
+      fontSize: fonts.hero,
+      fontWeight: '700',
       color: colors.textPrimary,
-      letterSpacing: -1,
+      letterSpacing: -2.3,
+      lineHeight: fonts.hero * 1.02,
     },
     pitch: {
       fontSize: fonts.body + 2,
@@ -564,69 +529,6 @@ function makeStyles(colors: ColorTokens) {
       color: colors.textSecondary,
       textAlign: 'center',
       maxWidth: 320,
-    },
-    // Quatre colonnes egales plutot qu'un ecartement fixe : a trois choix un
-    // `gap` de 24 suffisait, a quatre il poussait « Pas pour moi » hors de sa
-    // colonne. Chaque choix prend maintenant le quart de la largeur.
-    legend: {
-      flexDirection: 'row',
-      alignSelf: 'stretch',
-      gap: spacing.sm,
-      marginTop: spacing.lg,
-    },
-    legendItem: {
-      flex: 1,
-      alignItems: 'center',
-      gap: spacing.xs,
-    },
-    legendIcon: {
-      width: 40,
-      height: 40,
-      borderRadius: radii.pill,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1.5,
-      // Le multiplicateur deborde du cercle : il doit rester visible.
-      overflow: 'visible',
-    },
-    legendIconSuper: {
-      borderColor: colors.warningSoft,
-      backgroundColor: colors.warningSoft,
-    },
-    legendMultiplier: {
-      position: 'absolute',
-      right: -8,
-      bottom: -4,
-      paddingHorizontal: 5,
-      paddingVertical: 1,
-      borderRadius: radii.pill,
-      backgroundColor: colors.warningText,
-    },
-    legendMultiplierText: {
-      // Jamais sous le plus petit jeton de police de l'app.
-      fontSize: fonts.tiny,
-      lineHeight: fonts.tiny + 3,
-      fontWeight: '800',
-      color: colors.bg,
-      fontVariant: ['tabular-nums'],
-    },
-    legendIconNope: {
-      borderColor: colors.dangerSoft,
-      backgroundColor: colors.dangerSoft,
-    },
-    legendIconSkip: {
-      borderColor: colors.border,
-      backgroundColor: colors.surfaceAlt,
-    },
-    legendIconLike: {
-      borderColor: colors.successSoft,
-      backgroundColor: colors.successSoft,
-    },
-    legendText: {
-      fontSize: fonts.tiny,
-      fontWeight: '600',
-      color: colors.textSecondary,
-      textAlign: 'center',
     },
     meta: {
       fontSize: fonts.small,
@@ -639,11 +541,8 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       flexWrap: 'wrap',
       justifyContent: 'center',
-      gap: 6,
-    },
-    metaSep: {
-      fontSize: fonts.tiny + 1,
-      color: colors.textMuted,
+      columnGap: spacing.md,
+      rowGap: 6,
     },
     exploreLinkWrap: {
       paddingVertical: spacing.xs,
@@ -698,17 +597,17 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       gap: spacing.sm,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md + 2,
     },
     ctaPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     ctaText: {
       fontSize: fonts.body + 1,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     // Second bouton de l'accueil : même gabarit que le principal, mais posé
     // sur l'accent atténué au lieu de l'accent plein. Il se voit sans
@@ -776,6 +675,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '600',
       color: colors.textMuted,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     longueurCartesActif: {
       color: colors.textSecondary,

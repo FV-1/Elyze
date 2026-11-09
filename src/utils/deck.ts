@@ -67,10 +67,6 @@ export function quotaDuFormat(format: FormatPartie): number {
   return format === 'court' ? QUOTA_COURT : QUOTA_PAR_CANDIDAT;
 }
 
-export function formatDuQuota(quota: number): FormatPartie {
-  return quota === QUOTA_COURT ? 'court' : 'long';
-}
-
 type ShuffleFn = <T>(items: T[]) => T[];
 
 export function candidatesQuota(pool: Proposal[], quota: number): number {

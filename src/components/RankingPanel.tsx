@@ -1,12 +1,14 @@
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
+import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { Podium } from './Podium';
 import { ResultRow } from './ResultRow';
 import { ThemeAgreementList } from './ThemeAgreementList';
 import { CandidateGrid } from './CandidateGrid';
 import { CandidateResult, ThemeAgreement } from '../types';
+import { MIN_REPONSES_PODIUM, podiumProvisoirePret } from '../utils/scoring';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 import { Bascule } from './Bascule';
@@ -32,6 +34,7 @@ type RankingView = 'overview' | 'byTheme' | 'candidats';
 
 export function RankingPanel({
   results,
+  nbCandidats,
   topMatch,
   confidenceLabel,
   themeAgreement,
@@ -45,6 +48,10 @@ export function RankingPanel({
   paddingBas = 0,
 }: {
   results: CandidateResult[];
+  // Candidats présents dans le paquet. `results` ne compte que ceux qui ont
+  // déjà une réponse : tôt dans la partie, il en manque, et le décompte avant
+  // le premier podium aurait été sous-estimé (voire nul).
+  nbCandidats: number;
   // `null` tant qu'aucune réponse comptabilisée n'a été donnée : le panneau
   // affiche alors son état vide plutôt qu'un podium de zéros.
   topMatch: CandidateResult | null;
@@ -73,8 +80,8 @@ export function RankingPanel({
     resume: { accords: number; tranchees: number } | null;
     onVoir: () => void;
   } | null;
-  // Ouvrir l'écran de résultat. Une fois le paquet terminé, c'est la seule
-  // chose que ce panneau propose de plus que le podium (voir plus bas).
+  // Ouvrir l'écran de résultat : une fois le paquet terminé, ou avant, pour
+  // qui ne veut pas swiper toutes les cartes (voir plus bas).
   onSeeResult: () => void;
   onSelectCandidate: (candidateId: string) => void;
   onOpenCandidateInfo: (candidateId: string) => void;
@@ -91,17 +98,32 @@ export function RankingPanel({
   // Le podium ne coiffe que les deux vues qui parlent de TES réponses. Au
   // dessus du trombinoscope il donnerait à lire une grille alphabétique comme
   // la suite d’un classement, ce qu’elle n’est pas.
-  const montrerPodium = topMatch !== null && view !== 'candidats';
+  //
+  // Et pas avant d'avoir de quoi le remplir (voir podiumProvisoirePret).
+  const tropTot = topMatch !== null && !podiumProvisoirePret(results);
+  const montrerPodium = topMatch !== null && view !== 'candidats' && !tropTot;
 
-  // L’absence de résultat ne vide plus tout le panneau. Elle ne concerne que
-  // le classement et l’accord par thème ; les candidats, eux, sont
-  // consultables dès la première seconde et n’attendent aucune réponse.
-  const vide = (
-    <View style={styles.emptyWrap}>
-      <Text style={styles.emptyEmoji}>🤔</Text>
-      <Text style={styles.emptyText}>
-        Pas encore assez de réponses pour un aperçu. Reviens sur l’onglet Swiper.
+  // EN ATTENDANT LE PREMIER PODIUM, ON DIT COMBIEN IL RESTE. « Pas encore
+  // assez de réponses » ne disait pas si c'était l'affaire de trois cartes ou
+  // de trente ; un décompte et une jauge donnent une raison de continuer.
+  const totalReponses = results.reduce((total, r) => total + r.answered, 0);
+  const besoin = MIN_REPONSES_PODIUM * Math.max(nbCandidats, results.length, 1);
+  const restantes = Math.max(1, Math.ceil(besoin - totalReponses));
+  const enAttente = (topMatch === null || tropTot) && view !== 'candidats';
+  const attente = (
+    <View style={styles.attente}>
+      <Text style={styles.finTitre}>Ton premier classement arrive</Text>
+      <Text style={styles.finTexte}>
+        Encore environ {restantes} réponse{restantes > 1 ? 's' : ''}. Le podium apparaît vers{' '}
+        {MIN_REPONSES_PODIUM} réponses par candidat, pour ne couronner personne sur une seule carte.
       </Text>
+      <View
+        style={styles.jauge}
+        accessibilityRole="progressbar"
+        accessibilityValue={{ min: 0, max: besoin, now: Math.min(besoin, totalReponses) }}
+      >
+        <View style={[styles.jaugeRemplie, { width: `${Math.min(100, (totalReponses / besoin) * 100)}%` }]} />
+      </View>
     </View>
   );
 
@@ -150,7 +172,7 @@ export function RankingPanel({
               accessibilityRole="button"
               accessibilityLabel="Voir ce que chacun a validé, carte par carte"
             >
-              <Ionicons name="git-compare-outline" size={18} color={colors.onAccent} />
+              <Ionicons name="git-compare-outline" size={18} color={colors.onAction} />
               <Text style={styles.finBoutonTexte}>Voir qui a validé quoi</Text>
             </Pressable>
             <Pressable
@@ -180,7 +202,7 @@ export function RankingPanel({
               accessibilityLabel="Voir mon résultat"
             >
               <Text style={styles.finBoutonTexte}>Voir mon résultat</Text>
-              <Ionicons name="arrow-forward" size={18} color={colors.onAccent} />
+              <Ionicons name="arrow-forward" size={18} color={colors.onAction} />
             </Pressable>
           </View>
         )}
@@ -225,6 +247,8 @@ export function RankingPanel({
         </Text>
       )}
 
+      {enAttente && attente}
+
       {montrerPodium && (
         <>
           <Podium results={results} instant onCandidatePress={onOpenCandidateInfo} />
@@ -266,7 +290,7 @@ export function RankingPanel({
         {view === 'overview' &&
         (topMatch ? (
         <View style={styles.listSection}>
-          <Text style={styles.sectionTitle}>Qui a le plus de votes</Text>
+          <Text style={styles.sectionTitle}>Ton classement provisoire</Text>
           {results.map((result) => (
             <ResultRow
               key={result.candidate.id}
@@ -279,9 +303,7 @@ export function RankingPanel({
             />
           ))}
         </View>
-        ) : (
-          vide
-        ))}
+        ) : null)}
 
         {view === 'byTheme' &&
         (topMatch ? (
@@ -298,10 +320,30 @@ export function RankingPanel({
             hiddenNote="Les noms restent masqués tant que tu swipes. Tu peux les afficher depuis l’onglet Propositions."
           />
         </View>
-        ) : (
-          vide
-        ))}
+        ) : null)}
       </Bascule>
+
+      {/* PAS ENVIE DE TOUT SWIPER ? Le résultat se calcule sur les réponses du
+          moment, et la partie reste ouverte : le retour depuis le résultat
+          ramène ici. Proposé seulement quand il y a de quoi classer. */}
+      {topMatch && (
+        <View style={styles.finBloc}>
+          <Text style={styles.finTitre}>Pas envie de tout swiper ?</Text>
+          <Text style={styles.finTexte}>
+            Ton résultat se calcule sur tes réponses actuelles. Tu pourras revenir swiper ensuite,
+            il s’affinera.
+          </Text>
+          <Pressable
+            onPress={onSeeResult}
+            style={({ pressed }) => [styles.finBouton, pressed && styles.finBoutonPresse]}
+            accessibilityRole="button"
+            accessibilityLabel="Voir mon résultat maintenant"
+          >
+            <Text style={styles.finBoutonTexte}>Voir mon résultat maintenant</Text>
+            <Ionicons name="arrow-forward" size={18} color={colors.onAction} />
+          </Pressable>
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -422,13 +464,34 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '600',
       color: colors.accentText,
     },
+    // Avant le premier podium : combien il reste, et une jauge.
+    attente: {
+      backgroundColor: colors.surface,
+      borderRadius: radii.lg,
+      padding: spacing.lg,
+      gap: spacing.sm,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    jauge: {
+      height: 8,
+      borderRadius: radii.pill,
+      backgroundColor: colors.surfaceAlt,
+      overflow: 'hidden',
+      marginTop: spacing.xs,
+    },
+    jaugeRemplie: {
+      height: '100%',
+      borderRadius: radii.pill,
+      backgroundColor: colors.accent,
+    },
     // Le bloc qui remplace le classement dupliqué une fois le paquet fini.
     finBloc: {
       backgroundColor: colors.surface,
       borderRadius: radii.lg,
       padding: spacing.lg,
       gap: spacing.sm,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     finTitre: {
@@ -447,17 +510,17 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
       gap: spacing.sm,
       marginTop: spacing.xs,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md - 2,
     },
     finBoutonPresse: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     finBoutonTexte: {
       fontSize: fonts.small + 2,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     // Le classement devient le second choix quand une comparaison l'attend :
     // un lien, pas un bouton, pour que le premier reste le premier.
@@ -475,7 +538,7 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.lg,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.lg,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     sectionTitle: {
@@ -489,22 +552,6 @@ function makeStyles(colors: ColorTokens) {
       lineHeight: fonts.tiny * 1.45,
       color: colors.textSecondary,
       marginBottom: spacing.sm,
-    },
-    emptyWrap: {
-      flexGrow: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: spacing.sm,
-      paddingVertical: spacing.xxl,
-    },
-    emptyEmoji: {
-      fontSize: 32,
-    },
-    emptyText: {
-      fontSize: fonts.body,
-      color: colors.textSecondary,
-      textAlign: 'center',
-      maxWidth: 280,
     },
   });
 }

@@ -1,14 +1,6 @@
 import { useMemo, useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { openUrl } from '../data/source';
@@ -233,11 +225,6 @@ function makeStyles(colors: ColorTokens) {
     },
     segmentActif: {
       backgroundColor: colors.surface,
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.12,
-      shadowRadius: 3,
-      elevation: 2,
     },
     segmentTexte: {
       fontSize: fonts.small + 1,
@@ -260,6 +247,11 @@ function makeStyles(colors: ColorTokens) {
       maxHeight: 200,
       backgroundColor: colors.surfaceAlt,
       borderRadius: radii.md,
+      // Un trait qui dit où l'on écrit. Sans lui, seul le fond distinguait le
+      // champ de la feuille qui le porte, à 1.32:1, sous les 3:1 qu'un élément
+      // non textuel doit tenir pour être identifiable.
+      borderWidth: 1,
+      borderColor: colors.borderStrong,
       padding: spacing.md,
       fontSize: fonts.small + 2,
       lineHeight: (fonts.small + 2) * 1.45,
@@ -269,7 +261,7 @@ function makeStyles(colors: ColorTokens) {
     action: {
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
     },
@@ -279,7 +271,7 @@ function makeStyles(colors: ColorTokens) {
     actionTexte: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     note: {
       textAlign: 'center',

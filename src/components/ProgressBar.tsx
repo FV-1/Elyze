@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { milestonesFor } from '../utils/milestones';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors, useThemeSettings } from '../theme/ThemeContext';
 import { RainbowGradient } from './RainbowGradient';
 import { progressSweep } from '../theme/rainbowGradient';
@@ -128,10 +129,13 @@ function makeStyles(colors: ColorTokens) {
       backgroundColor: colors.neutralTrack,
       overflow: 'hidden',
     },
+    // L'ENCRE, ET NON L'ACCENT. Un lime posé sur le sable de la piste ne se
+    // détache pas (1.2:1) : c'est le fond plein de l'action qui remplit la
+    // jauge, et il tient 13:1 en clair comme en sombre.
     fill: {
       height: '100%',
       borderRadius: radii.pill,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
     },
     // Le degrade remplace l'aplat d'accent ; `overflow` garde ses coins
     // arrondis, sans quoi la bande peinte deborderait du segment.
@@ -146,6 +150,7 @@ function makeStyles(colors: ColorTokens) {
       minWidth: 44,
       textAlign: 'right',
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
   });
 }

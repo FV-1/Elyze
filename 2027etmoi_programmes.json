@@ -1,0 +1,3966 @@
+{
+ "source": "https://2027etmoi.fr",
+ "depot": "https://github.com/2027etmoi/2027etmoi",
+ "commit": "e49752949dd0ff858db38e8c3753723b4e2c0f8a",
+ "mise_a_jour": "2026-10-28",
+ "licence": "Licence Ouverte 2.0 (Etalab), mention de la source et de la date de mise à jour",
+ "candidats": [
+  {
+   "id": "attal",
+   "mise_a_jour": "2026-10-11",
+   "etat_programme": "partiel",
+   "mesures": [
+    {
+     "theme": "economie",
+     "texte": "Revenir sous 3 % de déficit en 2032 et atteindre l'équilibre en 2037, soit 120 milliards d'euros d'économies.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — LCI : Gabriel Attal défend un projet de rupture",
+      "url": "https://attalpresident.fr/actualites/lci-gabriel-attal-defend-un-projet-de-rupture-pour-repondre-aux-grands-defis-du-pays",
+      "date": "2026-08-25"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Supprimer 100 000 postes dans la fonction publique.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — LCI : Gabriel Attal défend un projet de rupture",
+      "url": "https://attalpresident.fr/actualites/lci-gabriel-attal-defend-un-projet-de-rupture-pour-repondre-aux-grands-defis-du-pays",
+      "date": "2026-08-25"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Instaurer un « frein d'urgence » sur l'ensemble des dépenses sociales, avec une année blanche.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Gabriel Attal sur France 2",
+      "url": "https://attalpresident.fr/actualites/gabriel-attal-sur-france-2-gerer-l-urgence-et-preparer-l-avenir",
+      "date": "2026-09-20"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Créer un crédit d'impôt productivité pour financer l'adoption de l'intelligence artificielle par les entreprises.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Gabriel Attal veut faire de la France la 1re puissance d'IA d'Europe (Les Échos)",
+      "url": "https://attalpresident.fr/actualites/gabriel-attal-appelle-a-une-rupture-economique-dans-les-echos",
+      "date": "2026-06-17"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Viser un objectif de 200 milliards d'euros d'investissement pour faire de la France la première puissance d'IA en Europe.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Gabriel Attal veut faire de la France la 1re puissance d'IA d'Europe (Les Échos)",
+      "url": "https://attalpresident.fr/actualites/gabriel-attal-appelle-a-une-rupture-economique-dans-les-echos",
+      "date": "2026-06-17"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Réduire les charges salariales pour faire monter le salaire net et rapprocher le net du brut.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Travail & salaires",
+      "url": "https://attalpresident.fr/programme/travail-salaires",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Supprimer le plafond annuel de 220 heures supplémentaires par salarié.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Travail & salaires",
+      "url": "https://attalpresident.fr/programme/travail-salaires",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Équivalent d'un 13e mois pour les classes moyennes : hausse ciblée de 250 euros nets par mois au salaire médian (2 200 euros), financée par des baisses de charges.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Dans Le Télégramme, Gabriel Attal veut un « choc de salaires »",
+      "url": "https://attalpresident.fr/actualites/dans-le-telegramme-gabriel-attal-veut-un-choc-de-salaires-et-instaurer-le-droit-au-brut",
+      "date": "2026-07-22"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Créer un livret d'épargne sur le modèle du Livret A pour financer des places en crèche et former 200 000 professionnels de la petite enfance d'ici 2030.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Travail & salaires",
+      "url": "https://attalpresident.fr/programme/travail-salaires",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Promouvoir la semaine en quatre jours là où c'est possible et réécrire le Code du travail.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Travail & salaires",
+      "url": "https://attalpresident.fr/programme/travail-salaires",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Former 20 millions de salariés français à l'IA d'ici à 2030.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Gabriel Attal veut faire de la France la 1re puissance d'IA d'Europe (Les Échos)",
+      "url": "https://attalpresident.fr/actualites/gabriel-attal-appelle-a-une-rupture-economique-dans-les-echos",
+      "date": "2026-06-17"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Supprimer l'âge légal de départ et fonder le système de retraite sur la durée de cotisation.",
+     "nature": "declaration",
+     "source": {
+      "titre": "LCP — Présidentielle : que proposent les candidats sur les retraites ?",
+      "url": "https://lcp.fr/actualites/presidentielle-que-proposent-les-candidats-a-l-elysee-sur-les-retraites-441751",
+      "date": "2026-09-16"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Introduire la retraite par capitalisation, avec un fléchage obligatoire de 50 % de l'intéressement et de la participation vers des plans d'épargne retraite.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Gabriel Attal veut faire de la France la 1re puissance d'IA d'Europe (Les Échos)",
+      "url": "https://attalpresident.fr/actualites/gabriel-attal-appelle-a-une-rupture-economique-dans-les-echos",
+      "date": "2026-06-17"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Familles monoparentales : ne plus imposer les pensions alimentaires perçues et créer une « carte famille monoparentale » (transports, loisirs, culture, vacances).",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Premières mesures pour les familles monoparentales",
+      "url": "https://attalpresident.fr/actualites/gabriel-attal-annonce-ses-premieres-mesures-pour-les-familles-monoparentales-a-la-premiere-universite-d-ete",
+      "date": "2026-08-28"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Rétablir les mesures du « Choc des savoirs », présenté comme l'une de ses premières décisions.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — École",
+      "url": "https://attalpresident.fr/programme/education",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Moins de 20 élèves par classe en moyenne à l'école primaire.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — LCI : Gabriel Attal défend un projet de rupture",
+      "url": "https://attalpresident.fr/actualites/lci-gabriel-attal-defend-un-projet-de-rupture-pour-repondre-aux-grands-defis-du-pays",
+      "date": "2026-08-25"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Augmenter les enseignants d'au moins 200 euros nets par mois, la revalorisation pouvant atteindre 500 euros.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — LCI : Gabriel Attal défend un projet de rupture",
+      "url": "https://attalpresident.fr/actualites/lci-gabriel-attal-defend-un-projet-de-rupture-pour-repondre-aux-grands-defis-du-pays",
+      "date": "2026-08-25"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Certificat d'études à l'entrée en sixième, brevet obligatoire pour le lycée, groupes de niveau en français et mathématiques, plus de redoublements en CP.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — LCI : Gabriel Attal défend un projet de rupture",
+      "url": "https://attalpresident.fr/actualites/lci-gabriel-attal-defend-un-projet-de-rupture-pour-repondre-aux-grands-defis-du-pays",
+      "date": "2026-08-25"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Loi de programmation de l'éducation sur cinq ans et fermeture de 100 collèges qu'il qualifie de « ghettos scolaires ».",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — LCI : Gabriel Attal défend un projet de rupture",
+      "url": "https://attalpresident.fr/actualites/lci-gabriel-attal-defend-un-projet-de-rupture-pour-repondre-aux-grands-defis-du-pays",
+      "date": "2026-08-25"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Interdire l'accès aux réseaux sociaux aux moins de 15 ans.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — École",
+      "url": "https://attalpresident.fr/programme/education",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Quotas limitatifs par secteur et par origine votés tous les deux ans par le Parlement, sur la base de besoins identifiés par les partenaires sociaux.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — BFM TV : Gabriel Attal veut changer de modèle",
+      "url": "https://attalpresident.fr/actualites/bfm-tv-gabriel-attal-veut-changer-de-modele-pour-redonner-de-la-puissance-a-la-france",
+      "date": "2026-09-06"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Système d'immigration à points inspiré du Canada (offre d'emploi stable, logement, maîtrise du français, respect des valeurs).",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Frontières",
+      "url": "https://attalpresident.fr/programme/frontieres",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Modifier la Constitution pour instaurer une « préférence travail » dans l'immigration.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — LCI : Gabriel Attal défend un projet de rupture",
+      "url": "https://attalpresident.fr/actualites/lci-gabriel-attal-defend-un-projet-de-rupture-pour-repondre-aux-grands-defis-du-pays",
+      "date": "2026-08-25"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Mieux encadrer le regroupement familial, qui doit diminuer.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Frontières",
+      "url": "https://attalpresident.fr/programme/frontieres",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Barrières commerciales ciblées et taxes sur certains produits chinois (acier, voitures électriques, panneaux solaires).",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Frontières",
+      "url": "https://attalpresident.fr/programme/frontieres",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Contrôle strict des investissements chinois dans les infrastructures sensibles.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Frontières",
+      "url": "https://attalpresident.fr/programme/frontieres",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "« États-Unis d'Europe » : président européen élu au suffrage universel lors d'un scrutin paneuropéen, avec un noyau de pays volontaires.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Gabriel Attal à Reims",
+      "url": "https://attalpresident.fr/actualites/gabriel-attal-a-reims-batir-les-etats-unis-d-europe-pour-retrouver-notre-puissance",
+      "date": "2026-09-17"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Lancer 12 grands projets technologiques européens (IA, espace, santé, décarbonation, technologies stratégiques).",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Gabriel Attal à Reims",
+      "url": "https://attalpresident.fr/actualites/gabriel-attal-a-reims-batir-les-etats-unis-d-europe-pour-retrouver-notre-puissance",
+      "date": "2026-09-17"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Utiliser les avoirs russes gelés en Europe pour financer le soutien supplémentaire à l'Ukraine.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — BFM TV : Gabriel Attal veut changer de modèle",
+      "url": "https://attalpresident.fr/actualites/bfm-tv-gabriel-attal-veut-changer-de-modele-pour-redonner-de-la-puissance-a-la-france",
+      "date": "2026-09-06"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Réduire le nombre de députés de 577 à 350 et celui des sénateurs de 348 à 200.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Journal du Net — Gabriel Attal promet « la plus grande réforme institutionnelle depuis 1958 »",
+      "url": "https://www.journaldunet.com/business/action-publique/1553335-gabriel-attal-promet-la-plus-grande-reforme-institutionnelle-depuis-1958-s-il-est-elu-president/",
+      "date": "2026-08-03"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Organiser chaque année, à date fixe, un référendum comportant plusieurs questions à choix multiples.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Journal du Net — Gabriel Attal promet « la plus grande réforme institutionnelle depuis 1958 »",
+      "url": "https://www.journaldunet.com/business/action-publique/1553335-gabriel-attal-promet-la-plus-grande-reforme-institutionnelle-depuis-1958-s-il-est-elu-president/",
+      "date": "2026-08-03"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Supprimer un échelon de collectivité territoriale.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — LCI : Gabriel Attal défend un projet de rupture",
+      "url": "https://attalpresident.fr/actualites/lci-gabriel-attal-defend-un-projet-de-rupture-pour-repondre-aux-grands-defis-du-pays",
+      "date": "2026-08-25"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Limiter à 18 mois les procédures administratives bloquant certains projets.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — BFM TV : Gabriel Attal veut changer de modèle",
+      "url": "https://attalpresident.fr/actualites/bfm-tv-gabriel-attal-veut-changer-de-modele-pour-redonner-de-la-puissance-a-la-france",
+      "date": "2026-09-06"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Inscrire dans la Constitution un « principe de rapidité » : délai maximal de deux mois pour répondre aux porteurs de projets.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Dans le JDD, la plus grande réforme institutionnelle depuis 1958",
+      "url": "https://attalpresident.fr/actualites/dans-le-jdd-gabriel-attal-veut-proposer-la-plus-grande-reforme-institutionnelle-depuis-1958",
+      "date": "2026-08-02"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Réformer les nominations aux hautes fonctions de l'État, avec un système inspiré du « spoils system » américain.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Dans le JDD, la plus grande réforme institutionnelle depuis 1958",
+      "url": "https://attalpresident.fr/actualites/dans-le-jdd-gabriel-attal-veut-proposer-la-plus-grande-reforme-institutionnelle-depuis-1958",
+      "date": "2026-08-02"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Supprimer le juge de l'application des peines et les remises automatiques de peine ; réécrire entièrement le Code de procédure pénale.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Dans le JDD, la plus grande réforme institutionnelle depuis 1958",
+      "url": "https://attalpresident.fr/actualites/dans-le-jdd-gabriel-attal-veut-proposer-la-plus-grande-reforme-institutionnelle-depuis-1958",
+      "date": "2026-08-02"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Construire de nouvelles prisons classées opérations d'intérêt national.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Dans le JDD, la plus grande réforme institutionnelle depuis 1958",
+      "url": "https://attalpresident.fr/actualites/dans-le-jdd-gabriel-attal-veut-proposer-la-plus-grande-reforme-institutionnelle-depuis-1958",
+      "date": "2026-08-02"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Faire passer le rythme de réduction des émissions de 1,8 % à 5 % par an sur 2025-2030.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Dette écologique",
+      "url": "https://attalpresident.fr/programme/dette-ecologique",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Engagement de stabilité tarifaire sur le prix de l'électricité pendant cinq ans.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Gabriel Attal veut faire de la France la 1re puissance d'IA d'Europe (Les Échos)",
+      "url": "https://attalpresident.fr/actualites/gabriel-attal-appelle-a-une-rupture-economique-dans-les-echos",
+      "date": "2026-06-17"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Dette commune européenne pour financer l'adaptation au dérèglement climatique.",
+     "nature": "programme",
+     "source": {
+      "titre": "attalpresident.fr — Gabriel Attal à Reims",
+      "url": "https://attalpresident.fr/actualites/gabriel-attal-a-reims-batir-les-etats-unis-d-europe-pour-retrouver-notre-puissance",
+      "date": "2026-09-17"
+     }
+    },
+    {
+     "theme": "societe",
+     "texte": "Un mois d'engagement civique obligatoire pour chaque jeune avant 25 ans.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo — « Je veux être le président qui parlera à la jeunesse parce qu'il la comprend » : en meeting à Lyon, Gabriel Attal tente de relancer sa campagne",
+      "url": "https://www.franceinfo.fr/politique/gabriel-attal/je-veux-etre-le-president-qui-parlera-a-la-jeunesse-parce-qu-il-la-comprend-en-meeting-a-lyon-gabriel-attal-tente-de-relancer-sa-campagne-en-pleine-mobilisation-lyceenne_8231377.html",
+      "date": "2026-10-10"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "« Révolution du temps scolaire » : matières fondamentales le matin, culture et sport à partir de 15 h.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo — « Je veux être le président qui parlera à la jeunesse parce qu'il la comprend » : en meeting à Lyon, Gabriel Attal tente de relancer sa campagne",
+      "url": "https://www.franceinfo.fr/politique/gabriel-attal/je-veux-etre-le-president-qui-parlera-a-la-jeunesse-parce-qu-il-la-comprend-en-meeting-a-lyon-gabriel-attal-tente-de-relancer-sa-campagne-en-pleine-mobilisation-lyceenne_8231377.html",
+      "date": "2026-10-10"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Refonte de Parcoursup, sans suppression, avec mentorat, tutorat et stages pour l'orientation.",
+     "nature": "declaration",
+     "source": {
+      "titre": "CNews — Présidentielle 2027 : pacte pour la jeunesse, IA, nucléaire... Ce qu'il faut retenir du discours de Gabriel Attal à Lyon",
+      "url": "https://www.cnews.fr/france/2026-10-10/presidentielle-2027-pacte-pour-la-jeunesse-ia-nucleaire-ce-quil-faut-retenir-du",
+      "date": "2026-10-10"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Adapter l'ensemble des établissements scolaires au changement climatique en cinq ans au plus.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo — « Je veux être le président qui parlera à la jeunesse parce qu'il la comprend » : en meeting à Lyon, Gabriel Attal tente de relancer sa campagne",
+      "url": "https://www.franceinfo.fr/politique/gabriel-attal/je-veux-etre-le-president-qui-parlera-a-la-jeunesse-parce-qu-il-la-comprend-en-meeting-a-lyon-gabriel-attal-tente-de-relancer-sa-campagne-en-pleine-mobilisation-lyceenne_8231377.html",
+      "date": "2026-10-10"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "« Double règle d'or » : comptes publics à l'équilibre et interdiction de dépenser davantage pour gérer le présent plutôt que préparer l'avenir.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo — « Je veux être le président qui parlera à la jeunesse parce qu'il la comprend » : en meeting à Lyon, Gabriel Attal tente de relancer sa campagne",
+      "url": "https://www.franceinfo.fr/politique/gabriel-attal/je-veux-etre-le-president-qui-parlera-a-la-jeunesse-parce-qu-il-la-comprend-en-meeting-a-lyon-gabriel-attal-tente-de-relancer-sa-campagne-en-pleine-mobilisation-lyceenne_8231377.html",
+      "date": "2026-10-10"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Construire un réacteur nucléaire par an pour atteindre rapidement 14 réacteurs.",
+     "nature": "declaration",
+     "source": {
+      "titre": "CNews — Présidentielle 2027 : pacte pour la jeunesse, IA, nucléaire... Ce qu'il faut retenir du discours de Gabriel Attal à Lyon",
+      "url": "https://www.cnews.fr/france/2026-10-10/presidentielle-2027-pacte-pour-la-jeunesse-ia-nucleaire-ce-quil-faut-retenir-du",
+      "date": "2026-10-10"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Convention de 150 jeunes de 16 à 25 ans tirés au sort parmi des volontaires pour élaborer des propositions.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo — « Je veux être le président qui parlera à la jeunesse parce qu'il la comprend » : en meeting à Lyon, Gabriel Attal tente de relancer sa campagne",
+      "url": "https://www.franceinfo.fr/politique/gabriel-attal/je-veux-etre-le-president-qui-parlera-a-la-jeunesse-parce-qu-il-la-comprend-en-meeting-a-lyon-gabriel-attal-tente-de-relancer-sa-campagne-en-pleine-mobilisation-lyceenne_8231377.html",
+      "date": "2026-10-10"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bertrand",
+   "mise_a_jour": "2026-09-22",
+   "etat_programme": "aucun",
+   "mesures": [
+    {
+     "theme": "institutions",
+     "texte": "« République des territoires » : État central recentré sur la justice, la sécurité, le contrôle de l'immigration, la défense et la diplomatie ; le reste géré localement.",
+     "nature": "declaration",
+     "source": {
+      "titre": "La Provence (repris par Nous France) — « Il faut une République des territoires et un mandat unique »",
+      "url": "https://www.nousfrance.fr/2026/07/rencontres-economiques-daix-il-faut-une-republique-des-territoires-et-un-mandat-unique-pour-xavier-bertrand-la-provence/",
+      "date": "2026-07-04"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "S'il est élu, n'exercer qu'un seul mandat de cinq ans.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Ouest-France (repris par Nous France) — Xavier Bertrand presque candidat à la présidentielle",
+      "url": "https://www.nousfrance.fr/2026/08/xavier-bertrand-presque-candidat-a-la-presidentielle-ouest-france/",
+      "date": "2026-08-03"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Favorable à l'autonomie de la Corse, à la condition d'un référendum local pour valider ce choix.",
+     "nature": "declaration",
+     "source": {
+      "titre": "ICI RCFM — En Corse, Xavier Bertrand plaide pour une République des territoires",
+      "url": "https://www.ici.fr/emissions/l-invite-de-la-redaction-ici-rcfm/en-corse-xavier-bertrand-plaide-pour-une-republique-des-territoires-et-la-fin-du-centralisme-parisien-8159774",
+      "date": "2026-08-21"
+     }
+    },
+    {
+     "theme": "sante",
+     "texte": "Création d'un CHU en Corse adapté aux contraintes insulaires.",
+     "nature": "presse",
+     "source": {
+      "titre": "ICI RCFM — En Corse, Xavier Bertrand plaide pour une République des territoires",
+      "url": "https://www.ici.fr/emissions/l-invite-de-la-redaction-ici-rcfm/en-corse-xavier-bertrand-plaide-pour-une-republique-des-territoires-et-la-fin-du-centralisme-parisien-8159774",
+      "date": "2026-08-21"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Aide financière aux actifs pour les transports et la garde d'enfants, et allocation de rentrée scolaire versée sans condition de ressources, sur le modèle des Hauts-de-France.",
+     "nature": "presse",
+     "source": {
+      "titre": "ICI RCFM — En Corse, Xavier Bertrand plaide pour une République des territoires",
+      "url": "https://www.ici.fr/emissions/l-invite-de-la-redaction-ici-rcfm/en-corse-xavier-bertrand-plaide-pour-une-republique-des-territoires-et-la-fin-du-centralisme-parisien-8159774",
+      "date": "2026-08-21"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Consacrer 1 % du budget de l'État à la culture en 2032.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Var-Matin (repris par Nous France) — « Je m'y prépare » : Xavier Bertrand pose les bases de son projet",
+      "url": "https://www.nousfrance.fr/2026/08/je-my-prepare-pas-encore-officiellement-candidat-xavier-bertrand-pose-les-bases-de-son-projet-pour-la-presidentielle-avec-la-culture-en-toile-de-fond-var-matin/",
+      "date": "2026-08-03"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Faire en sorte que chaque élève, de l'école au lycée, rencontre au moins une œuvre ou un spectacle durant sa scolarité.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Var-Matin (repris par Nous France) — « Je m'y prépare » : Xavier Bertrand pose les bases de son projet",
+      "url": "https://www.nousfrance.fr/2026/08/je-my-prepare-pas-encore-officiellement-candidat-xavier-bertrand-pose-les-bases-de-son-projet-pour-la-presidentielle-avec-la-culture-en-toile-de-fond-var-matin/",
+      "date": "2026-08-03"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Télésurveillance et drones pour détecter au plus tôt les départs de feu ; sanctions « très dures » contre les incendiaires.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Var-Matin (repris par Nous France) — « Je m'y prépare » : Xavier Bertrand pose les bases de son projet",
+      "url": "https://www.nousfrance.fr/2026/08/je-my-prepare-pas-encore-officiellement-candidat-xavier-bertrand-pose-les-bases-de-son-projet-pour-la-presidentielle-avec-la-culture-en-toile-de-fond-var-matin/",
+      "date": "2026-08-03"
+     }
+    }
+   ]
+  },
+  {
+   "id": "cazeneuve",
+   "mise_a_jour": "2026-09-22",
+   "etat_programme": "partiel",
+   "mesures": [
+    {
+     "theme": "economie",
+     "texte": "Baisse des impôts de production, financée par une réduction des aides fiscales, au bénéfice des ETI, PME et TPE.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 18",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Fiscalité atteignant les très grandes fortunes, les plus hauts revenus du capital et les rentes ; rééquilibrage de la taxation entre travail et capital.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 18",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Plan de réindustrialisation sur dix ans : filières stratégiques sécurisées par l'État, incitations fiscales ciblées sur la recherche et l'investissement productif.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 19",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Transformation de l'INESIA en autorité dotée d'un pouvoir contraignant, évaluant les systèmes d'IA les plus puissants avant et après leur déploiement.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 29",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Données des Français stockées en Europe, sous la loi française.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 29",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Protection des transitions professionnelles « à la manière scandinave » et formation tout au long de la vie.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 24",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Apprentissage généralisé dès le premier cycle universitaire.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 24",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Encadrement du recours abusif aux stages et CDI redevenu la norme pour les jeunes.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 24",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Résorption des écarts de salaire entre femmes et hommes et correction des retraites pénalisées par les carrières interrompues.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 3",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Allongement de la durée de cotisation plutôt que recul de l'âge légal, en reprenant de façon négociée la trajectoire engagée en 2014.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 10",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Critères de pénibilité rétablis (postures contraignantes, port de charges, vibrations, risques chimiques), ouvrant droit au départ anticipé.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 10",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Emploi des seniors : aménagement des postes, retraites progressives, sanctions contre les discriminations à l'embauche.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 10",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "« Règle d'or sociale » : toute exonération de cotisations compensée à l'euro près à la Sécurité sociale, indexée sur les salaires, rétroactivement depuis 2019.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 11",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Équilibre des comptes sociaux apprécié sur un cycle de cinq ans, avec retour à l'équilibre sous dix ans au plus en cas de crise majeure.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 11",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Simplification, unification et automatisation des aides sociales fondamentales.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 9",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "sante",
+     "texte": "Santé mentale érigée en grande cause nationale, avec formation des personnels de santé et de l'éducation.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 4",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "sante",
+     "texte": "Prise en charge du grand âge, de la dépendance et du soutien aux aidants familiaux, avec soutenabilité financière garantie aux familles les plus modestes.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 5",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Au moins 2 000 € d'aide supplémentaire pour chaque étudiant boursier au cours de ses deux premières années.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 23",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "« Avance jeunesse » de 3 000 € pour les 18-24 ans sans diplôme ni emploi, sous conditions de ressources, complétable par les collectivités.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 23",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Éthique des données et esprit critique enseignés dès le collège, philosophie dès la classe de Seconde.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 22",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Service public de l'intelligence artificielle éducative et formation massive des enseignants au numérique.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 22",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Plan École-Climat-Solidarité : engagement sur dix ans pour rénover les établissements scolaires, avec cours désimperméabilisées et plantées en îlots de fraîcheur.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 21",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Filière électronucléaire assumée, renouvellement du parc planifié, rationalisation des renouvelables et électrification des usages.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 19",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Création d'une « DATAR du climat » rattachée au Premier ministre, chargée de cartographier les vulnérabilités de chaque région.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 21",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Commande publique « réellement durable ».",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 21",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Politique migratoire pensée à l'échelle du continent européen.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 27",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Intégration fondée sur l'apprentissage du français, le respect des lois communes et de l'égalité entre les femmes et les hommes.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 28",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Lutte contre l'immigration irrégulière et démantèlement des filières criminelles, avec maintien du droit d'asile.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 28",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Cadre national unifié pour la petite enfance : compétences vérifiées pour tout personnel au contact d'enfants, inspections régulières selon des critères publics.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 1",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Dispositif national de signalement pour l'enfance, avec réponse obligatoire sous délai fixe et traçabilité des suites.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 1",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Rappel de magistrats retraités volontaires pour reprendre les dossiers en souffrance de violences faites aux enfants.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 2",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Police de proximité dotée d'effectifs dédiés et formés.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 6",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Contre le trafic de drogues : unités spécialisées, Parquet européen aux compétences élargies, gel des avoirs et traque des financements.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 6",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Sortie du « tout-comparution immédiate » et de la prison par défaut.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 13",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Réarmement à proportion de la menace et préférence aux productions nationales et européennes dans l'industrie de défense.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 25",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Réflexion sur l'apport de la dissuasion française à la sécurité européenne, y compris avec le Royaume-Uni, et protection antimissile coordonnée du continent.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 25",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Réserve citoyenne élargie, ouverte à davantage de Français.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 25",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Réforme du Conseil de sécurité des Nations unies.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 26",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Fin de la règle de l'unanimité dans l'Union européenne au profit des décisions à la majorité.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 27",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Rétablissement du septennat présidentiel.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 12",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Premier ministre engageant sa responsabilité devant le Parlement dès son entrée en fonction ; discipline sur le 49.3, les ordonnances et les procédures accélérées.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 12",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Introduction d'une dose de proportionnelle aux élections législatives.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 12",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Limites fixées par la loi à la concentration capitalistique des médias.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 14",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Revue systématique des normes avec obligation de compensation : deux normes supprimées pour une norme créée.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 17",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Droit de recours à un agent humain : aucun refus d'aide, de place ou de titre sans examen et explication par un agent, dans un délai opposable.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 29",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Grand plan de constructions et de rénovations, social et écologique, soutenu par des mécanismes d'accession à la propriété.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 8",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Rénovation massive des logements, présentée comme un geste à la fois social et climatique.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 21",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Agriculture : prix dignes pour les producteurs, préservation du foncier nourricier et accès garanti à ceux qui veulent en vivre.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 20",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Développement des transports collectifs dans les territoires qui en manquent.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 21",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Refondation de la décentralisation : clarifier la répartition des compétences entre l'État et les collectivités.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 16",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Territoires productifs : écoles de métiers, centres de recherche appliquée, zones d'activité décarbonées, financements associant les collectivités.",
+     "nature": "programme",
+     "source": {
+      "titre": "Synthèse de la Lettre aux Français, proposition 19",
+      "url": "https://assets.nationbuilder.com/laconvention/pages/2513/attachments/original/1784135398/Synthese_mesuresVfinale.pdf?1784135398",
+      "date": "2026-07-15"
+     }
+    }
+   ]
+  },
+  {
+   "id": "glucksmann",
+   "mise_a_jour": "2026-09-22",
+   "etat_programme": "partiel",
+   "mesures": [
+    {
+     "theme": "economie",
+     "texte": "Taxe sur les superprofits des multinationales pétrolières.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo",
+      "url": "https://www.franceinfo.fr/economie/automobile/essence/prix-des-carburants-le-gouvernement-ne-veut-pas-heurter-totalenergies-selon-raphael-glucksmann-qui-reclame-une-taxe-sur-les-superprofits_8202563.html",
+      "date": "2026-09-21"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Hausse de la rémunération nette des travailleurs, financée par une taxation accrue des « méga-héritages » (1 % les plus gros) : 15 milliards d'euros.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/le-cofondateur-de-place-publique-raphael-glucksmann-officialise-sa-candidature-a-l-election-presidentielle-pour-relever-la-france_8158841.html",
+      "date": "2026-08-23"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Chèque carburant multiplié par trois, porté à 500 euros, étendu aux classes moyennes et versé automatiquement aux bénéficiaires du chèque énergie.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo",
+      "url": "https://www.franceinfo.fr/economie/automobile/essence/prix-des-carburants-le-gouvernement-ne-veut-pas-heurter-totalenergies-selon-raphael-glucksmann-qui-reclame-une-taxe-sur-les-superprofits_8202563.html",
+      "date": "2026-09-21"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Départ plus tôt pour les carrières les plus hachées et les métiers difficiles, plus tard pour ceux ayant une espérance de vie en bonne santé plus longue.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Public Sénat",
+      "url": "https://www.publicsenat.fr/actualites/politique/fiscalite-ecole-immigration-ce-que-propose-raphael-glucksmann",
+      "date": "2026-08-24"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Abrogation de la réforme des retraites de 2023, avec une meilleure prise en compte de la pénibilité.",
+     "nature": "presse",
+     "source": {
+      "titre": "LCP – Que proposent les candidats sur les retraites ?",
+      "url": "https://lcp.fr/actualites/presidentielle-que-proposent-les-candidats-a-l-elysee-sur-les-retraites-441751",
+      "date": "2026-09-16"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Plan de 5 ans pour l'école : baisse des effectifs par classe en primaire, rénovation du bâti scolaire.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Public Sénat",
+      "url": "https://www.publicsenat.fr/actualites/politique/fiscalite-ecole-immigration-ce-que-propose-raphael-glucksmann",
+      "date": "2026-08-24"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Service civique obligatoire de dix mois pour tous les jeunes.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Public Sénat",
+      "url": "https://www.publicsenat.fr/actualites/politique/fiscalite-ecole-immigration-ce-que-propose-raphael-glucksmann",
+      "date": "2026-08-24"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Relance des colonies de vacances : un séjour collectif garanti à chaque enfant.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Public Sénat",
+      "url": "https://www.publicsenat.fr/actualites/politique/fiscalite-ecole-immigration-ce-que-propose-raphael-glucksmann",
+      "date": "2026-08-24"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Hausse de 10 % du salaire de tous les enseignants, puis hausse graduelle selon la carrière (jusqu'à 25 % en milieu de carrière dans le primaire) ; coût estimé à 6 Md€.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/le-candidat-a-l-election-presidentielle-raphael-glucksmann-veut-augmenter-de-10-les-salaires-de-tous-les-enseignants_8169542.html",
+      "date": "2026-08-30"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "10 milliards d'euros pour un leasing social permettant aux Français qui en ont besoin d'accéder à une voiture électrique.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo",
+      "url": "https://www.franceinfo.fr/politique/presidentielle-2027-la-malediction-de-la-gauche-c-est-de-ne-parler-qu-a-la-gauche-estime-raphael-glucksmann_7986686.html",
+      "date": "2026-05-06"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Organisation d'une convention citoyenne sur l'immigration.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Public Sénat",
+      "url": "https://www.publicsenat.fr/actualites/politique/fiscalite-ecole-immigration-ce-que-propose-raphael-glucksmann",
+      "date": "2026-08-24"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Suppression du droit de veto au sein de l'Union européenne.",
+     "nature": "presse",
+     "source": {
+      "titre": "LCP",
+      "url": "https://lcp.fr/actualites/presidentielle-raphael-glucksmann-devoile-les-premieres-lignes-de-son-possible-programme",
+      "date": "2026-05-26"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Grand emprunt européen au service d'un plan de souveraineté européenne.",
+     "nature": "presse",
+     "source": {
+      "titre": "LCP",
+      "url": "https://lcp.fr/actualites/presidentielle-raphael-glucksmann-devoile-les-premieres-lignes-de-son-possible-programme",
+      "date": "2026-05-26"
+     }
+    }
+   ]
+  },
+  {
+   "id": "lepen",
+   "mise_a_jour": "2026-10-28",
+   "etat_programme": "partiel",
+   "mesures": [
+    {
+     "theme": "logement",
+     "texte": "Priorité d'accès au logement social pour les Français, APL réservées aux Français et priorité d'accès au logement étudiant pour les jeunes Français.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo – discours d'Hénin-Beaumont",
+      "url": "https://www.franceinfo.fr/politique/marine-le-pen/video-marine-le-pen-candidate-du-rn-a-la-presidentielle-2027-detaille-une-serie-de-propositions-sur-le-logement-qui-sera-un-des-grands-chantiers-de-son-quinquennat-si-elle-est-elue_8190839.html",
+      "date": "2026-09-13"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Abrogation de la loi SRU, qui impose aux communes un quota minimal de logements sociaux.",
+     "nature": "programme",
+     "source": {
+      "titre": "Lettre ouverte de Marine Le Pen aux professionnels de l'immobilier (rassemblementnational.fr)",
+      "url": "https://rassemblementnational.fr/lettre-ouverte/lettre-ouverte-de-marine-le-pen-aux-professionnels-de-limmobilier",
+      "date": "2026-09-21"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "« 100 % Rénov », prêt à taux zéro pour rénovation, électrification du chauffage ou climatisation, remplaçant MaPrimeRénov'.",
+     "nature": "declaration",
+     "source": {
+      "titre": "France 3 Hauts-de-France",
+      "url": "https://france3-regions.franceinfo.fr/hauts-de-france/pas-calais/lens/marine-le-pen-fait-sa-rentree-politique-a-henin-beaumont-et-met-la-priorite-nationale-au-c-ur-de-son-programme-pour-la-presidentielle-de-2027-3416348.html",
+      "date": "2026-09-13"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Les familles expulsées d'un logement social pour dégradations ne pourraient plus accéder au parc social pendant trois ans.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo – discours d'Hénin-Beaumont",
+      "url": "https://www.franceinfo.fr/politique/marine-le-pen/video-marine-le-pen-candidate-du-rn-a-la-presidentielle-2027-detaille-une-serie-de-propositions-sur-le-logement-qui-sera-un-des-grands-chantiers-de-son-quinquennat-si-elle-est-elue_8190839.html",
+      "date": "2026-09-13"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Le diagnostic de performance énergétique (DPE) deviendrait un simple élément indicatif.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo – discours d'Hénin-Beaumont",
+      "url": "https://www.franceinfo.fr/politique/marine-le-pen/video-marine-le-pen-candidate-du-rn-a-la-presidentielle-2027-detaille-une-serie-de-propositions-sur-le-logement-qui-sera-un-des-grands-chantiers-de-son-quinquennat-si-elle-est-elue_8190839.html",
+      "date": "2026-09-13"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Portabilité obligatoire des prêts immobiliers et exonérations de plus-value immobilière ramenées à quinze ans de détention.",
+     "nature": "programme",
+     "source": {
+      "titre": "Lettre ouverte de Marine Le Pen aux professionnels de l'immobilier (rassemblementnational.fr)",
+      "url": "https://rassemblementnational.fr/lettre-ouverte/lettre-ouverte-de-marine-le-pen-aux-professionnels-de-limmobilier",
+      "date": "2026-09-21"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Suppression de l'objectif « zéro artificialisation nette » (ZAN).",
+     "nature": "programme",
+     "source": {
+      "titre": "Lettre ouverte de Marine Le Pen aux professionnels de l'immobilier (rassemblementnational.fr)",
+      "url": "https://rassemblementnational.fr/lettre-ouverte/lettre-ouverte-de-marine-le-pen-aux-professionnels-de-limmobilier",
+      "date": "2026-09-21"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Baisse de la TVA de 20 % à 5,5 % sur l'énergie : carburants, électricité, gaz, bois de chauffage et fioul.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Public Sénat",
+      "url": "https://www.publicsenat.fr/actualites/economie/tva-a-55-taxe-flottante-gel-des-prix-ce-quil-est-possible-de-faire-ou-non-pour-baisser-les-prix-des-carburants",
+      "date": "2026-03-26"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Âge légal ramené à 62 ans, voire 60 ans pour qui a commencé avant 20 ans, avec 40 à 42 années de cotisation.",
+     "nature": "presse",
+     "source": {
+      "titre": "LCP",
+      "url": "https://lcp.fr/actualites/presidentielle-que-proposent-les-candidats-a-l-elysee-sur-les-retraites-441751",
+      "date": "2026-09-16"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Référendum par l'article 11 sur un projet de loi « citoyenneté-identité-immigration » : fin du droit du sol, restriction du droit d'asile, priorité nationale.",
+     "nature": "presse",
+     "source": {
+      "titre": "Public Sénat",
+      "url": "https://www.publicsenat.fr/actualites/politique/immigration-comment-une-proposition-de-loi-des-senateurs-ps-tente-de-dejouer-les-plans-de-marine-le-pen",
+      "date": "2025-05-16"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Arrêt du financement des aides non contributives pour les étrangers, présenté comme une source d'économies.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Europe 1",
+      "url": "https://www.europe1.fr/politique/des-choix-a-faire-entre-baisse-de-la-tva-sur-lenergie-et-reduction-des-depenses-marine-le-pen-detaille-son-projet-economique-1083380",
+      "date": "2026-09-17"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Inscrire dans la Constitution le principe de « communauté nationale », « fondateur, inclusif et fraternel ».",
+     "nature": "declaration",
+     "source": {
+      "titre": "Europe 1 (avec AFP) — Congrès du RN à Orléans : ce qu'il faut retenir du premier discours de campagne de Marine Le Pen",
+      "url": "https://www.europe1.fr/politique/congres-du-rn-a-orleans-ce-quil-faut-retenir-du-premier-discours-de-campagne-de-marine-le-pen-1181118",
+      "date": "2026-10-25"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Scrutin proportionnel avec prime majoritaire pour les élections législatives.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Europe 1 (avec AFP) — Congrès du RN à Orléans : ce qu'il faut retenir du premier discours de campagne de Marine Le Pen",
+      "url": "https://www.europe1.fr/politique/congres-du-rn-a-orleans-ce-quil-faut-retenir-du-premier-discours-de-campagne-de-marine-le-pen-1181118",
+      "date": "2026-10-25"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Gouvernement « d'union nationale » et « pluraliste » dirigé par Jordan Bardella.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Europe 1 (avec AFP) — Congrès du RN à Orléans : ce qu'il faut retenir du premier discours de campagne de Marine Le Pen",
+      "url": "https://www.europe1.fr/politique/congres-du-rn-a-orleans-ce-quil-faut-retenir-du-premier-discours-de-campagne-de-marine-le-pen-1181118",
+      "date": "2026-10-25"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Abolition de la loi Hulot de 2017 qui interdit la recherche d'hydrocarbures sur le sol français.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Europe 1 (avec AFP) — Congrès du RN à Orléans : ce qu'il faut retenir du premier discours de campagne de Marine Le Pen",
+      "url": "https://www.europe1.fr/politique/congres-du-rn-a-orleans-ce-quil-faut-retenir-du-premier-discours-de-campagne-de-marine-le-pen-1181118",
+      "date": "2026-10-25"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Part fiscale pleine dès le deuxième enfant pour l'impôt sur le revenu.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Europe 1 (avec AFP) — Congrès du RN à Orléans : ce qu'il faut retenir du premier discours de campagne de Marine Le Pen",
+      "url": "https://www.europe1.fr/politique/congres-du-rn-a-orleans-ce-quil-faut-retenir-du-premier-discours-de-campagne-de-marine-le-pen-1181118",
+      "date": "2026-10-25"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Dispense d'impôt sur le revenu pour les entrepreneurs et création d'un fonds souverain.",
+     "nature": "declaration",
+     "source": {
+      "titre": "Europe 1 (avec AFP) — Congrès du RN à Orléans : ce qu'il faut retenir du premier discours de campagne de Marine Le Pen",
+      "url": "https://www.europe1.fr/politique/congres-du-rn-a-orleans-ce-quil-faut-retenir-du-premier-discours-de-campagne-de-marine-le-pen-1181118",
+      "date": "2026-10-25"
+     }
+    }
+   ]
+  },
+  {
+   "id": "melenchon",
+   "mise_a_jour": "2026-09-22",
+   "etat_programme": "complet",
+   "mesures": [
+    {
+     "theme": "economie",
+     "texte": "Rétablissement et renforcement de l'impôt de solidarité sur la fortune (ISF), avec un volet climatique visant les gros pollueurs.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 6, p. 52-53 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Garantie d'impôt de 2 % sur le patrimoine des milliardaires, dite « taxe Zucman ».",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 6, p. 52-53 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Impôt sur le revenu à 14 tranches au lieu de 5 ; CSG rendue progressive avec 14 tranches.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 6, p. 52-53 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Suppression de la flat tax : les revenus du capital imposés comme ceux du travail.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 6, p. 52-53 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Hausse des droits de succession sur les plus hauts patrimoines et création d'un héritage maximal de 12 millions d'euros.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 6, p. 52-55 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Demande à la BCE de transformer la dette des États qu'elle détient en dettes perpétuelles à taux nul.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 6, p. 52-53 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "SMIC porté immédiatement à 1 600 euros net par mois ; salaires indexés sur l'inflation dans le privé et la fonction publique.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 8, p. 68-69 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Retour effectif aux 35 heures, heures supplémentaires majorées de 25 % puis 50 % ; 32 heures dans les métiers pénibles ou de nuit.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 8, p. 66-67 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Quota maximal de contrats précaires : 10 % dans les PME, 5 % dans les grandes entreprises.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 8, p. 66-67 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Écart maximal de 1 à 20 entre le salaire le plus bas et le plus haut dans une entreprise.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 8, p. 68-69 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Garantie d'emploi : tout chômeur de longue durée pourra être embauché, au moins au SMIC revalorisé, dans un secteur d'urgence.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 8, p. 66-67 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Blocage des prix des produits de première nécessité (alimentation, énergie, carburant) et interdiction de la « réduflation ».",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 9, p. 74-75 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Abrogation de la réforme portant l'âge de départ à 64 ans ; retraite à 60 ans à taux plein avec 40 annuités de cotisation.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 8, p. 74-75 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Pensions d'une carrière complète portées au minimum au niveau du SMIC revalorisé ; minimum vieillesse au niveau du seuil de pauvreté.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 8, p. 74-75 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Indexation des retraites sur les salaires et suppression de la décote.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 8, p. 74-75 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Allocation aux adultes handicapés (AAH) revalorisée au niveau du SMIC.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 10, p. 84-85 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "sante",
+     "texte": "« 100 % Sécu » : remboursement à 100 % des soins prescrits et intégration des mutuelles dans la Sécurité sociale.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 15, p. 110-111 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "sante",
+     "texte": "Réouverture progressive d'urgences, de maternités et d'EHPAD publics, pour un service de santé à moins de trente minutes de chaque Français.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 15, p. 110-111 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "sante",
+     "texte": "Contre les déserts médicaux : recrutement de médecins publics et réseau public de centres de santé pluridisciplinaires.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 15, p. 112-113 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "sante",
+     "texte": "Légalisation du cannabis récréatif, encadrée par un monopole d'État sur la production et la vente.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 15, p. 112-113 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Service public de la petite enfance avec 500 000 places en crèche et modes de garde sur cinq ans.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 5, p. 40-41 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Gratuité de l'éducation publique, y compris cantines, transport, activités périscolaires et manuels scolaires.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 5, p. 40-41 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Effectifs par classe ramenés sous la moyenne européenne (19 élèves), en priorité en maternelle et en REP.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 5, p. 42-43 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Suppression de Parcoursup et accès sans sélection de tous les bacheliers à la formation de leur choix.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 5, p. 46-47 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Garantie d'autonomie pour les jeunes détachés du foyer fiscal parental, au-dessus du seuil de pauvreté (1 216 euros pour une personne seule).",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 10, p. 82-83 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Passage planifié à 100 % d'énergies renouvelables, fondé sur la sobriété et l'efficacité énergétique.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 13, p. 98-99 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Sortie du nucléaire : abandon des projets d'EPR, démantèlement et reconversion planifiés des sites.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 13, p. 98-99 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Fin des subventions aux énergies fossiles, y compris à l'étranger.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 13, p. 98-99 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Interdiction de l'obsolescence programmée et allongement des durées de garantie légale des produits.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 13, p. 100-101 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Régularisation des travailleurs, étudiants et parents d'enfants scolarisés ; carte de séjour de dix ans comme titre de référence.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 16, p. 124-125 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Suspension du règlement de Dublin et renégociation des accords du Touquet.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 16, p. 124-125 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Droit du sol intégral pour tous les enfants nés en France, rétabli sur l'ensemble du territoire national.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 10, p. 80-81 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Droit de vote des étrangers aux élections locales.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 10, p. 80-81 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Rétablissement de la police de proximité et démantèlement des BAC et des BRAV-M.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 7, p. 62-63 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Récépissé remis lors des contrôles d'identité, avec formation, contrôle et sanctions.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 10, p. 80-81 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Abrogation de la loi Cazeneuve sur le refus d'obtempérer.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 4, p. 36-37 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Recrutement de magistrats, greffiers et agents de la PJJ ; hausse de l'aide juridictionnelle et retour des tribunaux de proximité.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 7, p. 60-61 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Retrait immédiat du commandement intégré de l'OTAN, puis, par étapes, de l'organisation elle-même.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 16, p. 118-119 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Refus de toute intervention militaire sans mandat clair de l'ONU.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 16, p. 120-121 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Création d'un pôle public de l'armement et arrêt des privatisations des industries d'armement.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 16, p. 118-119 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Usage du veto français contre tout nouvel accord de libre-échange, dont le Mercosur, même révisé.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 17, p. 130-131 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Renégociation des traités européens soumise à référendum et, en parallèle, désobéissance aux règles européennes jugées bloquantes.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 17, p. 130-131 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Référendum (article 11) pour convoquer une Assemblée constituante ; projet de Constitution soumis à référendum après deux ans de travaux.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 1, p. 22-23 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Élection de l'Assemblée nationale au scrutin proportionnel.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 1, p. 22-23 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Référendum d'initiative citoyenne (RIC) permettant de révoquer des élus, proposer ou abroger une loi et modifier la Constitution.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 1, p. 24-25 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Suppression des procédures de « votes forcés » du Parlement, comme l'article 49.3.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 1, p. 22-23 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Interdiction des expulsions locatives sans relogement public.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 7, p. 60-61 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Construction de 200 000 logements publics par an pendant cinq ans.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 7, p. 60-61 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Encadrement des loyers sur tout le territoire, à la baisse dans les grandes villes.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 7, p. 60-61 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Quota de logements sociaux (loi SRU) relevé à 30 %, dont 5 % de résidences universitaires et foyers de jeunes travailleurs.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 7, p. 60-61 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Locations de courte durée (type Airbnb) limitées à 60 jours par an ; réquisition des logements vides.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 7, p. 60-61 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Agriculture relocalisée, diversifiée et écologique, avec la création de 300 000 emplois agricoles.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 13, p. 100-101 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Prix planchers pour les agriculteurs et interdiction des ventes à perte.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 13, p. 100-101 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Renationalisation de la SNCF, refus de la mise en concurrence des lignes et réouverture de lignes ferroviaires du quotidien.",
+     "nature": "programme",
+     "source": {
+      "titre": "L'Avenir en commun 2025, chap. 13, p. 96-97 (PDF, copie archivée)",
+      "url": "https://web.archive.org/web/20260309030430/https://programme.lafranceinsoumise.fr/wp-content/uploads/2025/avenir_en_commun_2025.pdf",
+      "date": "2025-01"
+     }
+    }
+   ]
+  },
+  {
+   "id": "philippe",
+   "mise_a_jour": "2026-10-17",
+   "etat_programme": "partiel",
+   "mesures": [
+    {
+     "theme": "economie",
+     "texte": "50 milliards d'euros de baisses d'impôts de production compensées par 50 milliards d'aides publiques jugées improductives en moins.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus prospère",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-prospere",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Moratoire normatif et fiscal : aucune nouvelle norme ni nouvel impôt pendant le quinquennat.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus prospère",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-prospere",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Ramener le déficit public de plus de 5 % à 2 % du PIB en fin de quinquennat.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus prospère",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-prospere",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Inscrire dans la Constitution une règle d'or de maîtrise des déficits.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus prospère",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-prospere",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Créer un « livret capital France » pour mobiliser l'épargne dormante.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus conquérante",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-conquerante",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Créer un temps partiel parental : travailler à 80 % payé 100 % pendant 2 mois après les congés parentaux.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus attentive à ses enfants",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-attentive-a-ses-enfants",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Instaurer un droit à la reconversion face à l'intelligence artificielle.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus conquérante",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-conquerante",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Créer un pilier de capitalisation représentant 10 à 15 % des pensions d'ici quinze ans.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus prospère",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-prospere",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Accorder une part fiscale dès le deuxième enfant, et non plus seulement à partir du troisième.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus attentive à ses enfants",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-attentive-a-ses-enfants",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Fusionner les dispositifs existants en une aide financière unique et universelle pour les familles.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus attentive à ses enfants",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-attentive-a-ses-enfants",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Donner aux chefs d'établissement la liberté d'adapter méthodes et horaires, d'imposer l'uniforme, de fixer la discipline et de choisir les enseignants.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus attentive à ses enfants",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-attentive-a-ses-enfants",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Rythmes scolaires : journées moins longues, plus de sport et de culture, vacances d'été raccourcies.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus attentive à ses enfants",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-attentive-a-ses-enfants",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Service public universel du soutien scolaire combinant un assistant IA et des brigades d'anciens professeurs et d'étudiants volontaires.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus attentive à ses enfants",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-attentive-a-ses-enfants",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Revaloriser le métier de professeur (salaires, recrutement, formation) et concentrer le primaire sur « lire, écrire, compter ».",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus attentive à ses enfants",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-attentive-a-ses-enfants",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Porter le nombre d'ingénieurs formés de 40 000 à 100 000 par an en cinq ans.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus conquérante",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-conquerante",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Courtes peines dès la première infraction, sur le modèle des pays du Nord, et peines planchers pour les infractions les plus graves.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Supprimer le juge d'application des peines.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Donner aux maires un pouvoir de sanction pénale pour réprimer les petites infractions.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Créer un « état d'urgence narco », avec des moyens juridiques d'exception limités dans le temps et l'espace.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Lever l'excuse de minorité pour les faits liés au narcotrafic et créer la comparution immédiate des mineurs.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Rendre imprescriptibles les crimes commis sur mineur.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus attentive à ses enfants",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-attentive-a-ses-enfants",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Renforcer l'autorité du garde des Sceaux sur le parquet, notamment par la possibilité d'adresser des instructions individuelles aux procureurs.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Créer une « fiche S financière » : profil bancaire spécifique pour les personnes condamnées pour narcotrafic.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Dénoncer l'accord franco-algérien de 1968.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Mettre en place des quotas migratoires pour choisir l'immigration économique et restreindre l'immigration familiale.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Faire voter chaque année par le Parlement une liste de pays sûrs pour accélérer les procédures d'asile.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Grand meeting à l'Adidas Arena",
+      "url": "https://www.edouardphilippe.fr/actualites/grand-meeting-edouard-philippe-adidas-arena",
+      "date": "2026-07-05"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Expulser les étrangers délinquants et leur retirer le droit aux aides sociales.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Grand meeting à l'Adidas Arena",
+      "url": "https://www.edouardphilippe.fr/actualites/grand-meeting-edouard-philippe-adidas-arena",
+      "date": "2026-07-05"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Porter le nombre de réservistes de 45 000 à 250 000.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Porter le service militaire volontaire de 3 000 à 50 000 places par an.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Grand plan munitions pour dépasser l'objectif actuel de 100 000 obus par an et atteindre l'échelle des 700 000 produits par l'Allemagne.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Renforcer la flotte navale, notamment en doublant le nombre de navires aux Antilles pour lutter contre le narcotrafic.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus sûre",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-sure",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Créer une union européenne des marchés de capitaux.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus prospère",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-prospere",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Porter un « Buy European Tech Act » et doubler en cinq ans la capacité de calcul d'une infrastructure d'IA européenne souveraine.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus conquérante",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-conquerante",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Relancer le nucléaire pour assurer la souveraineté énergétique.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus conquérante",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-conquerante",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Instaurer un prix du carbone aux frontières européennes.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus conquérante",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-conquerante",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Doubler le montant du Fonds vert en le recentrant sur l'adaptation au changement climatique.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus conquérante",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-conquerante",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Lancer un plan baignade national pour rendre les rivières baignables et rénover les piscines.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus conquérante",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-conquerante",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Mettre en œuvre un grand plan de fret ferroviaire pour retirer des camions des routes.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Grand meeting à l'Adidas Arena",
+      "url": "https://www.edouardphilippe.fr/actualites/grand-meeting-edouard-philippe-adidas-arena",
+      "date": "2026-07-05"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Prêt à taux zéro pour chaque naissance afin de faciliter le déménagement des familles qui s'agrandissent.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus attentive à ses enfants",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-attentive-a-ses-enfants",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Appliquer le principe « zéro surtransposition » des normes européennes en agriculture.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus prospère",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-prospere",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Créer 100 territoires de souveraineté alimentaire.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus prospère",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-prospere",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Créer une « DATAR 2.0 », opérateur unique de l'adaptation climatique des territoires.",
+     "nature": "programme",
+     "source": {
+      "titre": "edouardphilippe.fr — Pour une France plus conquérante",
+      "url": "https://www.edouardphilippe.fr/priorites/pour-une-france-plus-conquerante",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Rythmes scolaires : heures de cours concentrées le matin ; sport, enseignement culturel ou langue l'après-midi.",
+     "nature": "declaration",
+     "source": {
+      "titre": "CNews — Présidentielle 2027 : ces idées d'Édouard Philippe pourraient bouleverser les rythmes scolaires",
+      "url": "https://www.cnews.fr/france/2026-10-16/presidentielle-2027-ces-idees-dedouard-philippe-pourraient-bouleverser-les",
+      "date": "2026-10-16"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Envisage de réduire les vacances de la Toussaint et de Pâques en contrepartie d'une semaine de cours allégée.",
+     "nature": "declaration",
+     "source": {
+      "titre": "CNews — Présidentielle 2027 : ces idées d'Édouard Philippe pourraient bouleverser les rythmes scolaires",
+      "url": "https://www.cnews.fr/france/2026-10-16/presidentielle-2027-ces-idees-dedouard-philippe-pourraient-bouleverser-les",
+      "date": "2026-10-16"
+     }
+    }
+   ]
+  },
+  {
+   "id": "retailleau",
+   "mise_a_jour": "2026-09-22",
+   "etat_programme": "partiel",
+   "mesures": [
+    {
+     "theme": "economie",
+     "texte": "Plus de 25 milliards d'euros d'allègements sur le coût du travail et près de 15 milliards sur la fiscalité de production, dont suppression de la C3S et de la CVAE.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Réduire de 60 % le handicap fiscal de nos entreprises",
+      "url": "https://www.avecretailleau.fr/projet/mesure/reduire-de-60-le-handicap-fiscal-de-nos-entreprises-par",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Suppression ou recentrage par ordonnances de cent règles pénalisant la production, dont le relèvement du seuil de 50 à 100 salariés pour toutes les obligations.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Supprimer 100 règles qui pénalisent le plus les entreprises",
+      "url": "https://www.avecretailleau.fr/projet/mesure/supprimer-100-regles-qui-penalisent-le-plus-les-entreprises",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Création d'un Fonds France Production de 600 millions d'euros par an pour moderniser l'outil industriel, piloté par les régions.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Créer un Fonds France Production",
+      "url": "https://www.avecretailleau.fr/projet/mesure/creer-un-fonds-france-production-pour-moderniser-nos-usines",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Report automatique de l'exigibilité des droits de mutation sur la transmission d'entreprise jusqu'à la cession, tant que l'activité se poursuit.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Libérer et faciliter la transmission des entreprises",
+      "url": "https://www.avecretailleau.fr/projet/mesure/liberer-et-faciliter-la-transmission-des-entreprises",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Libérer par l'IA l'équivalent de 250 000 emplois à temps plein dans les services publics d'ici 2032 : 125 000 agents redéployés, 125 000 départs non remplacés.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Simplifier les démarches et réduire les tâches",
+      "url": "https://www.avecretailleau.fr/projet/mesure/simplifier-les-demarches-et-reduire-les-taches",
+      "date": "2026-09-12"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Baisse des cotisations de 30 milliards d'euros par an, dont la moitié pour les salariés, soit environ 500 euros nets par an au salaire médian.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Rendre 500 euros par an à tous les salariés",
+      "url": "https://www.avecretailleau.fr/projet/mesure/rendre-30-milliards-d-euros-aux-salaries-et-aux-entreprises",
+      "date": "2026-09-12"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Seuil « zéro cotisation » à partir de 1 623 heures travaillées par an : au-delà, plus de cotisations sociales salariales ni patronales, hors CSG et CRDS.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Exonérer totalement les heures supplémentaires de cotisations sociales",
+      "url": "https://www.avecretailleau.fr/projet/mesure/rapprocher-le-brut-du-net-avec-le-seuil-zero-cotisation",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Revenu d'incitation à l'activité remplaçant RSA, prime d'activité et ASS : 300 euros par mois, plus 250 euros dès quinze heures de formation ou recherche d'emploi.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Permettre à ceux qui reprennent un emploi de gagner plus",
+      "url": "https://www.avecretailleau.fr/projet/mesure/faire-gagner-plus-a-ceux-qui-reprennent-un-emploi",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Assurance chômage : fin de l'indemnisation au refus d'une troisième offre raisonnable ; indemnisation des ruptures conventionnelles limitée à six mois et plafonnée.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Réduire les durées et plafonner les allocations chômage",
+      "url": "https://www.avecretailleau.fr/projet/mesure/reduire-les-durees-et-plafonner-les-allocations-chomage",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Code du travail refondé sur un socle de 50 principes fondamentaux, le reste relevant en priorité de l'accord d'entreprise ou de branche.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Refonder le code du travail sur 50 principes",
+      "url": "https://www.avecretailleau.fr/projet/mesure/refonder-le-code-du-travail-sur-50-principes-rendre-le",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Après l'âge légal, plus aucune cotisation hors CSG et CRDS pour les retraités qui travaillent, avec cumul partiel de la pension et du revenu d'activité.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Ne plus pénaliser les retraités qui veulent continuer à travailler",
+      "url": "https://www.avecretailleau.fr/projet/mesure/augmenter-le-salaire-net-des-seniors-ayant-tous-leurs",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Compte social unique : total des aides non contributives plafonné à 70 % du SMIC net par adulte, hors handicap, dépendance et vieillesse.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Plafonner les aides sociales à 70 % du SMIC",
+      "url": "https://www.avecretailleau.fr/projet/mesure/plafonner-les-aides-sociales-a-70-du-smic",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Revenu familial de 240 euros par mois par enfant dès le premier, fusionnant douze dispositifs, conditionné à cinq ans de résidence régulière et d'activité.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Verser 240 euros par mois par enfant mineur",
+      "url": "https://www.avecretailleau.fr/projet/mesure/verser-240-euros-par-mois-par-enfant-mineur",
+      "date": "2026-09-12"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Revenu familial doublé pour le troisième enfant mineur : 960 euros par mois pour trois enfants.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Doubler le Revenu familial pour le troisième enfant",
+      "url": "https://www.avecretailleau.fr/projet/mesure/doubler-le-revenu-familial-pour-le-troisieme-enfant",
+      "date": "2026-09-12"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Reculer l'âge légal de départ « après 64 ans » et le lier à l'espérance de vie en bonne santé.",
+     "nature": "declaration",
+     "source": {
+      "titre": "LCP — Présidentielle : que proposent les candidats sur les retraites ?",
+      "url": "https://lcp.fr/actualites/presidentielle-que-proposent-les-candidats-a-l-elysee-sur-les-retraites-441751",
+      "date": "2026-09-16"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Congé de naissance facultatif étendu jusqu'aux six mois de l'enfant, pour l'un ou l'autre parent, indemnisé à 70 % de la rémunération antérieure.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Prolonger le congé jusqu'aux six mois de l'enfant",
+      "url": "https://www.avecretailleau.fr/projet/mesure/prolonger-le-conge-jusqu-aux-six-mois-de-l-enfant",
+      "date": "2026-09-12"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Création d'un étage de retraite par épargne, individuel, complémentaire et volontaire, avec un compte d'épargne retraite pour chaque actif.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Financer nos entreprises avec l'épargne",
+      "url": "https://www.avecretailleau.fr/projet/mesure/financer-les-entreprises-avec-l-epargne-et-preparer-la",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Hausse du traitement des professeurs : 135 euros nets de plus par mois en début de carrière, environ 300 euros en milieu de carrière.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Mieux payer les professeurs, sur la fiche de paie",
+      "url": "https://www.avecretailleau.fr/projet/mesure/concentrer-le-primaire-et-le-college-sur-les-savoirs",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Création de 1 000 établissements publics autonomes d'ici 2032, libres de recruter leurs professeurs et de déroger aux programmes, évalués tous les trois ans.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Créer mille écoles autonomes dans l'école publique",
+      "url": "https://www.avecretailleau.fr/projet/mesure/reconstruire-la-formation-et-le-recrutement-des-maitres",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Suppression de la carte scolaire et de la règle du 80-20 entre public et privé sous contrat ; instruction en famille libre jusqu'à six ans.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Rendre aux familles la liberté de choisir l'école de leurs enfants",
+      "url": "https://www.avecretailleau.fr/projet/mesure/instaurer-une-veritable-gestion-des-ressources-humaines-et",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Examen d'entrée en sixième déterminant l'affectation dans des groupes de niveau au collège, avec passerelles jusqu'à la troisième.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Tourner la page du collège unique",
+      "url": "https://www.avecretailleau.fr/projet/mesure/mettre-l-intelligence-artificielle-au-service-des",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Rétablissement de la note chiffrée ; brevet conditionnant l'entrée au lycée ; redoublement relevant du seul conseil de classe.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Rétablir les notes chiffrées",
+      "url": "https://www.avecretailleau.fr/projet/mesure/evaluer-et-certifier-chaque-etablissement-decentraliser-et",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Au moins un internat disciplinaire par académie, affectation décidée par l'autorité académique après des exclusions répétées.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Créer des internats disciplinaires",
+      "url": "https://www.avecretailleau.fr/projet/mesure/retablir-l-evaluation-qui-dit-la-verite-et-la-selection-au",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Abrogation du volet électricité de la PPE 3 et arrêt des nouveaux appels d'offres photovoltaïques et éoliens en mer tant que la demande n'augmente pas nettement.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Cesser de subventionner les éoliennes…",
+      "url": "https://www.avecretailleau.fr/projet/mesure/cesser-de-subventionner-ce-qui-fait-monter-la-facture-les",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Fixer d'emblée à 80 ans l'horizon d'exploitation des centrales nucléaires, les contrôles décennaux de sûreté étant maintenus.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Prolonger les centrales nucléaires jusqu'à 80 ans",
+      "url": "https://www.avecretailleau.fr/projet/mesure/prolonger-les-centrales-nucleaires-jusqu-a-80-ans",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Confirmer la commande de huit EPR2 supplémentaires dans les deux premières années du mandat si l'avancement des six premiers est satisfaisant.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Construire les EPR2 dans les coûts et délais prévus",
+      "url": "https://www.avecretailleau.fr/projet/mesure/construire-les-epr2-dans-les-couts-et-delais-prevus",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Relance de la recherche sur les réacteurs de quatrième génération, avec un premier réacteur de puissance visé en 2045.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Préparer les réacteurs nucléaires de quatrième génération",
+      "url": "https://www.avecretailleau.fr/projet/mesure/preparer-les-reacteurs-nucleaires-de-quatrieme-generation",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Contrat pour différence bidirectionnel entre EDF et les fournisseurs, reversant aux consommateurs les excédents quand les prix de marché dépassent un prix de référence fixé par la CRE.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Stabiliser le prix de l'électricité",
+      "url": "https://www.avecretailleau.fr/projet/mesure/stabiliser-le-prix-de-l-electricite",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Quotas de visas et de titres de séjour fixés par la loi ; contrôles aux frontières intérieures sans limitation de temps.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Faire fixer par la loi des quotas migratoires",
+      "url": "https://www.avecretailleau.fr/projet/mesure/faire-fixer-par-la-loi-des-quotas-migratoires",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Suppression du droit du sol simple, inscrite dans la Constitution par référendum : nationalité acquise par filiation ou par assimilation vérifiée.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Supprimer le droit du sol et revenir à l'assimilation",
+      "url": "https://www.avecretailleau.fr/projet/mesure/charte-republicaine",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Accès des étrangers aux prestations sociales conditionné à cinq ans de séjour régulier et de travail, principe inscrit dans la Constitution.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Conditionner les prestations sociales à cinq ans de séjour et de travail",
+      "url": "https://www.avecretailleau.fr/projet/mesure/conditionner-les-prestations-sociales-a-cinq-ans-de-sejour",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Expulsion obligatoire de tout étranger condamné pénalement ou menaçant l'ordre public, inscrite dans la Constitution ; mariage subordonné à la régularité du séjour.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Rendre à la France la maîtrise de son immigration",
+      "url": "https://www.avecretailleau.fr/projet/mesure/rendre-a-la-france-la-maitrise-de-son-immigration",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Inscription dans la Constitution d'un droit à la sécurité, à égalité avec les libertés fondamentales.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Inscrire le droit à la sécurité dans la Constitution",
+      "url": "https://www.avecretailleau.fr/projet/mesure/inscrire-le-droit-a-la-securite-dans-la-constitution",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Professeurs reconnus dépositaires de l'autorité publique, avec peines aggravées pour leurs agresseurs et poursuites systématiques par les parquets.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Protéger les professeurs et faire respecter la laïcité",
+      "url": "https://www.avecretailleau.fr/projet/mesure/refonder-l-education-prioritaire-et-passer-de-l-inclusion",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Vérification des antécédents de tout adulte au contact d'enfants avant la prise de poste, puis surveillance permanente, sur le modèle britannique.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Protéger nos enfants : aucun adulte sans contrôle",
+      "url": "https://www.avecretailleau.fr/projet/mesure/refaire-de-l-ecole-un-sanctuaire-restaurer-l-autorite-et",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Usage encadré de la vision par ordinateur pour la sécurité intérieure, avec interdiction de la reconnaissance faciale en temps réel à des fins de surveillance de masse.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Répondre à la guerre informationnelle",
+      "url": "https://www.avecretailleau.fr/projet/mesure/repondre-a-la-guerre-informationnelle",
+      "date": "2026-09-12"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Interdire aux autorités françaises d'appliquer le droit européen et la jurisprudence de la CJUE lorsqu'ils sont contraires à la Constitution ou excèdent les compétences de l'Union.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Écarter le droit européen lorsqu'il excède ses compétences",
+      "url": "https://www.avecretailleau.fr/projet/mesure/investir-toutes-les-autorites-publiques-francaises-du",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Moyens consacrés à l'IA de défense multipliés par cinq sur le quinquennat, de 130 à 650 millions d'euros par an.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Multiplier par cinq les moyens de l'IA de défense",
+      "url": "https://www.avecretailleau.fr/projet/mesure/multiplier-par-cinq-les-moyens-de-l-ia-de-defense",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Opposition à l'European Grid Package et constitution d'une coalition d'États favorables au nucléaire pour imposer la neutralité technologique au niveau européen.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Décider en France de notre production d'électricité",
+      "url": "https://www.avecretailleau.fr/projet/mesure/decider-en-france-de-notre-production-d-electricite",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Référendum législatif ouvert à tout sujet, la loi adoptée par référendum ne pouvant être remise en cause par aucun juge.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Ouvrir le référendum à toute la matière législative",
+      "url": "https://www.avecretailleau.fr/projet/mesure/elargir-le-referendum-a-toute-la-matiere-legislative-et",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Seuil du référendum d'initiative partagée abaissé d'un dixième à un vingtième du corps électoral, soit environ 2,5 millions de citoyens.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Abaisser le seuil du référendum d'initiative partagée",
+      "url": "https://www.avecretailleau.fr/projet/mesure/abaisser-le-seuil-du-referendum-d-initiative-partagee",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "« Dernier mot démocratique » : après une censure du Conseil constitutionnel, le Président pourrait saisir le peuple ou le Congrès (majorité des trois cinquièmes) pour promulguer la loi.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Donner le dernier mot au peuple quand une loi est censurée",
+      "url": "https://www.avecretailleau.fr/projet/mesure/lorsque-le-conseil-constitutionnel-censure-une-loi",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Clause de sauvegarde nationale dans la Constitution, permettant de faire primer la loi française sur une interprétation jurisprudentielle d'un traité.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Protéger nos lois des interprétations que la France n'a jamais acceptées",
+      "url": "https://www.avecretailleau.fr/projet/mesure/introduire-dans-la-constitution-une-clause-de-sauvegarde",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Préciser la laïcité dans la Constitution : nul ne pourrait invoquer ses convictions religieuses pour s'exonérer de la règle commune ; neutralité étendue aux usagers du service public.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Inscrire la laïcité et nos racines judéo-chrétiennes dans la Constitution",
+      "url": "https://www.avecretailleau.fr/projet/mesure/inscrire-la-laicite-et-nos-racines-dans-la-constitution",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Suppression par référendum du principe de précaution de la Charte de l'environnement, remplacé par un principe de responsabilité et d'innovation.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Supprimer le principe de précaution par référendum",
+      "url": "https://www.avecretailleau.fr/projet/mesure/suppression-du-principe-de-precaution-inscrit-dans-la",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Abrogation du ZAN ; objectifs de sobriété foncière fixés par contrats territoriaux entre le préfet et chaque intercommunalité.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Abroger le ZAN",
+      "url": "https://www.avecretailleau.fr/projet/mesure/abroger-le-zan",
+      "date": "2026-09-22"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Expulsion des squatteurs sous dix jours maximum après constat ; contravention de cinquième classe pour les impayés avérés.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Faire exécuter les expulsions pour squat ou impayés",
+      "url": "https://www.avecretailleau.fr/projet/mesure/accelerer-les-expulsions-pour-squat-ou-impayes",
+      "date": "2026-09-12"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Suppression de l'encadrement des loyers issu de la loi ELAN : loyer librement fixé entre bailleur et locataire à la signature du bail.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Supprimer l'encadrement des loyers",
+      "url": "https://www.avecretailleau.fr/projet/mesure/supprimer-l-encadrement-des-loyers",
+      "date": "2026-09-12"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Versement automatique aux communes de 9 000 euros de TVA par logement neuf construit.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Inciter financièrement les communes",
+      "url": "https://www.avecretailleau.fr/projet/mesure/verser-9-000-euros-aux-communes-par-logement-neuf-construit",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Le DPE reste informatif mais ne peut plus fonder une interdiction administrative de louer.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Lever les interdictions de louer liées au DPE",
+      "url": "https://www.avecretailleau.fr/projet/mesure/lever-les-interdictions-de-louer-liees-au-dpe",
+      "date": "2026-09-12"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Programme d'accession pour les locataires HLM avec un objectif de vente de 10 % des pavillons HLM, soit près de 86 000 logements.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Vendre leur logement aux locataires HLM qui le souhaitent",
+      "url": "https://www.avecretailleau.fr/projet/mesure/vendre-leur-logement-aux-locataires-hlm-qui-le-souhaitent",
+      "date": "2026-09-12"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "PAC : seuil de dégressivité relevé de 52 à 100 hectares et forfait petit agriculteur porté de 1 250 à 3 000 euros.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Garantir le budget agricole européen sur sept ans",
+      "url": "https://www.avecretailleau.fr/projet/mesure/garantir-le-budget-agricole-europeen-sur-sept-ans",
+      "date": "2026-09-12"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Réautorisation de certains néonicotinoïdes, dont l'acétamipride, dès lors qu'ils sont autorisés dans le marché unique européen.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Cesser d'évaluer deux fois par l'ANSES",
+      "url": "https://www.avecretailleau.fr/projet/mesure/ne-plus-jamais-evaluer-deux-fois-ce-qui-l-a-deja-ete",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Suppression de l'Office français de la biodiversité ; la police de l'environnement hors chasse reviendrait à la gendarmerie.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Supprimer l'OFB",
+      "url": "https://www.avecretailleau.fr/projet/mesure/supprimer-l-ofb-et-accelerer-les-autorisations-sanitaires",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Projets de stockage d'eau à usage agricole reconnus d'intérêt général majeur, avec délais d'instruction opposables et silence valant acceptation.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Permettre aux agriculteurs de stocker l'eau",
+      "url": "https://www.avecretailleau.fr/projet/mesure/permettre-aux-agriculteurs-de-stocker-l-eau",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Négociations commerciales closes au 31 décembre ; opposition à l'intégration de l'Ukraine au marché agricole européen.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Rééquilibrer les négociations commerciales",
+      "url": "https://www.avecretailleau.fr/projet/mesure/encadrer-les-negociations-et-controler-les-importations",
+      "date": "2026-09-11"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Abandon de l'objectif uniforme de réduction de 50 % des produits phytosanitaires fixé par Ecophyto 2030, au profit d'autorisations au cas par cas.",
+     "nature": "programme",
+     "source": {
+      "titre": "Retailleau 2027 — Supprimer le principe de précaution (agriculture)",
+      "url": "https://www.avecretailleau.fr/projet/mesure/supprimer-le-principe-de-precaution-par-referendum",
+      "date": "2026-09-11"
+     }
+    }
+   ]
+  },
+  {
+   "id": "ruffin",
+   "mise_a_jour": "2026-09-22",
+   "etat_programme": "partiel",
+   "mesures": [
+    {
+     "theme": "economie",
+     "texte": "Référendum sur une taxe sur les dividendes pour financer la transition écologique : 4 % au-delà de 10 millions d'euros versés, 2 % en dessous.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un travaillisme écologique »",
+      "url": "https://nouspresident.fr/travaillisme-ecologique/",
+      "date": "2026-09-09"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Étude stratégique publiée pour chaque projet de rachat d'une entreprise stratégique par des investisseurs étrangers ; nationalisations possibles.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour séparer l'argent de l'État »",
+      "url": "https://nouspresident.fr/separation-argent-etat/",
+      "date": "2026-07-02"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "« Statut des travailleurs essentiels » (agents d'entretien, AVS, caristes, agriculteurs…) portant sur salaires, carrières, horaires et retraite avancée.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un statut des travailleuses et travailleurs essentiels »",
+      "url": "https://nouspresident.fr/statut-travailleurs-essentiels/",
+      "date": "2026-04-13"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Indexation des salaires sur l'inflation, comme jusqu'en 1982.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un statut des travailleuses et travailleurs essentiels »",
+      "url": "https://nouspresident.fr/statut-travailleurs-essentiels/",
+      "date": "2026-04-13"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Heures travaillées avant 8 h et après 18 h rémunérées double, via une nouvelle catégorie d'« horaires atypiques » dans le code du travail.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un statut des travailleuses et travailleurs essentiels »",
+      "url": "https://nouspresident.fr/statut-travailleurs-essentiels/",
+      "date": "2026-04-13"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Temps de transport entre deux interventions compté comme temps de travail ; coupures de plus de 2 h imposées rémunérées forfaitairement.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un statut des travailleuses et travailleurs essentiels »",
+      "url": "https://nouspresident.fr/statut-travailleurs-essentiels/",
+      "date": "2026-04-13"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Limitation des dérogations à la durée minimale de 24 heures pour le temps partiel, avec sanctions pour les entreprises.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un statut des travailleuses et travailleurs essentiels »",
+      "url": "https://nouspresident.fr/statut-travailleurs-essentiels/",
+      "date": "2026-04-13"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "SMIC à 1 600 euros, présenté comme mesure reprise des acquis du Nouveau Front populaire.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un statut des travailleuses et travailleurs essentiels », mot de la fin",
+      "url": "https://nouspresident.fr/statut-travailleurs-essentiels/",
+      "date": "2026-04-13"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Un trimestre de retraite supplémentaire accordé pour quatre trimestres cotisés dans un métier exposé à la pénibilité.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un statut des travailleuses et travailleurs essentiels »",
+      "url": "https://nouspresident.fr/statut-travailleurs-essentiels/",
+      "date": "2026-04-13"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Retraite à 60 ans, présentée comme mesure reprise des acquis du Nouveau Front populaire.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un statut des travailleuses et travailleurs essentiels », mot de la fin",
+      "url": "https://nouspresident.fr/statut-travailleurs-essentiels/",
+      "date": "2026-04-13"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "BAFA gratuit et droit pour chaque enfant à au moins un séjour collectif financé pendant la scolarité obligatoire.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour renouer avec le temps des loisirs »",
+      "url": "https://nouspresident.fr/temps-loisirs/",
+      "date": "2026-07-17"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Rétablissement et augmentation de la part collective du Pass Culture.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour renouer avec le temps des loisirs »",
+      "url": "https://nouspresident.fr/temps-loisirs/",
+      "date": "2026-07-17"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Sortie progressive du marché de l'électricité : fin de la concurrence sur la vente aux consommateurs, prix fondés sur les coûts de production.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un travaillisme écologique »",
+      "url": "https://nouspresident.fr/travaillisme-ecologique/",
+      "date": "2026-09-09"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Prolongation des centrales nucléaires validées par l'autorité de sûreté et poursuite de la construction de six réacteurs EPR2.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un travaillisme écologique »",
+      "url": "https://nouspresident.fr/travaillisme-ecologique/",
+      "date": "2026-09-09"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Leasing social de petites voitures électriques produites en France pour 3 millions d'automobilistes sur le quinquennat.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un travaillisme écologique »",
+      "url": "https://nouspresident.fr/travaillisme-ecologique/",
+      "date": "2026-09-09"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Triplement de la part du fret ferroviaire et réduction de moitié du trafic aérien grâce aux trains de nuit et liaisons européennes.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un travaillisme écologique »",
+      "url": "https://nouspresident.fr/travaillisme-ecologique/",
+      "date": "2026-09-09"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Une Maison de la Réparation et du Réemploi dans chaque quartier et chaque canton ; retour de la consigne du verre.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un travaillisme écologique »",
+      "url": "https://nouspresident.fr/travaillisme-ecologique/",
+      "date": "2026-09-09"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Indépendance du parquet : fin du pouvoir de nomination des magistrats du parquet par le Gouvernement.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour séparer l'argent de l'État »",
+      "url": "https://nouspresident.fr/separation-argent-etat/",
+      "date": "2026-07-02"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Suppression de la convention judiciaire d'intérêt public (CJIP), cantonnée aux atteintes à la probité commises à l'étranger.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour séparer l'argent de l'État »",
+      "url": "https://nouspresident.fr/separation-argent-etat/",
+      "date": "2026-07-02"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Président de la République payé au niveau du SMIC.",
+     "nature": "presse",
+     "source": {
+      "titre": "Orange / AFP",
+      "url": "https://actu.orange.fr/politique/presidentielle-francois-ruffin-l-ex-insoumis-qui-a-du-mal-a-socialiser-CNT000002rVfmk.html",
+      "date": "2026-09-16"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Suppression de la rente à vie des anciens présidents et Premiers ministres ; 20 millions d'euros d'économies sur le budget de l'Élysée.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour séparer l'argent de l'État »",
+      "url": "https://nouspresident.fr/separation-argent-etat/",
+      "date": "2026-07-02"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Création d'une Haute Autorité à la probité fusionnant HATVP, Agence française anticorruption et commission des comptes de campagne.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour séparer l'argent de l'État »",
+      "url": "https://nouspresident.fr/separation-argent-etat/",
+      "date": "2026-07-02"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Période de dix ans sans lobbying ni conseil lié à leurs anciennes fonctions pour les ministres sortants ; interdiction du rétro-pantouflage.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour séparer l'argent de l'État »",
+      "url": "https://nouspresident.fr/separation-argent-etat/",
+      "date": "2026-07-02"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Recours aux cabinets de conseil privés par l'État autorisé seulement en l'absence de compétence interne disponible.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour séparer l'argent de l'État »",
+      "url": "https://nouspresident.fr/separation-argent-etat/",
+      "date": "2026-07-02"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Référendum d'initiative citoyenne (RIC).",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un travaillisme écologique »",
+      "url": "https://nouspresident.fr/travaillisme-ecologique/",
+      "date": "2026-09-09"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Budget de l'État pour la rénovation multiplié par 4, avec un objectif de 800 000 rénovations d'ampleur par an.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un travaillisme écologique »",
+      "url": "https://nouspresident.fr/travaillisme-ecologique/",
+      "date": "2026-09-09"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Sur-cotisation au 1 % patronal pour les employeurs de travailleurs essentiels, et priorité à ces derniers dans ses aides au logement.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un statut des travailleuses et travailleurs essentiels »",
+      "url": "https://nouspresident.fr/statut-travailleurs-essentiels/",
+      "date": "2026-04-13"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Prix minimums garantis pour les agriculteurs, fixés par filière à partir des indicateurs de coûts de production.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour un travaillisme écologique »",
+      "url": "https://nouspresident.fr/travaillisme-ecologique/",
+      "date": "2026-09-09"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Plan « Salles des fêtes et maisons du peuple » doté d'un milliard d'euros par an pendant cinq ans.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour renouer avec le temps des loisirs »",
+      "url": "https://nouspresident.fr/temps-loisirs/",
+      "date": "2026-07-17"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Plafonnement du prix des billets d'avion entre l'Hexagone et les Outre-mer.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour renouer avec le temps des loisirs »",
+      "url": "https://nouspresident.fr/temps-loisirs/",
+      "date": "2026-07-17"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "60 000 contrats aidés pris en charge par l'État pour épauler les associations.",
+     "nature": "programme",
+     "source": {
+      "titre": "Cahier de campagne « Pour renouer avec le temps des loisirs »",
+      "url": "https://nouspresident.fr/temps-loisirs/",
+      "date": "2026-07-17"
+     }
+    }
+   ]
+  },
+  {
+   "id": "tondelier",
+   "mise_a_jour": "2026-09-22",
+   "etat_programme": "partiel",
+   "mesures": [
+    {
+     "theme": "economie",
+     "texte": "Création d'un « ISF climatique ».",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – programme des Écologistes",
+      "url": "https://www.france24.com/fr/info-en-continu/20260713-2027-les-ecologistes-veulent-instaurer-la-premi%C3%A8re-r%C3%A9publique-%C3%A9cologique-et-citoyenne",
+      "date": "2026-07-13"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Instauration d'une « TVA verte ».",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – mesures de santé environnementale",
+      "url": "https://www.france24.com/fr/info-en-continu/20260530-pr%C3%A9sidentielle-tondelier-d%C3%A9voile-ses-mesures-pour-la-sant%C3%A9-environnementale",
+      "date": "2026-05-30"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Taxation supplémentaire de 10 % des héritages de plus de 4 millions d'euros (le 1 % des héritages les plus élevés).",
+     "nature": "declaration",
+     "source": {
+      "titre": "ICI Nord – L'invité d'ICI Matin",
+      "url": "https://www.ici.fr/emissions/l-invite-d-ici-matin-ici-nord/presidentielle-marine-tondelier-presente-les-mesures-des-ecologistes-pour-la-protection-de-la-mer-et-des-littoraux-4088500",
+      "date": "2026-09-15"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Augmentation du SMIC (montant non précisé) et indexation des bas salaires sur l'inflation.",
+     "nature": "programme",
+     "source": {
+      "titre": "« 21 priorités communes qui devraient pouvoir nous rassembler » (site de Marine Tondelier)",
+      "url": "https://marinetondelier.fr/blog/21-priorites-gouverner-ensemble-demain",
+      "date": "2026-04-17"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Congé payé climatique de cinq jours par an pour faire face aux vagues de chaleur.",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – mesures de santé environnementale",
+      "url": "https://www.france24.com/fr/info-en-continu/20260530-pr%C3%A9sidentielle-tondelier-d%C3%A9voile-ses-mesures-pour-la-sant%C3%A9-environnementale",
+      "date": "2026-05-30"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Retraite à 60 ans pour les salariés ayant commencé avant 20 ans ou exercé des métiers pénibles, à 62 ans pour les autres.",
+     "nature": "presse",
+     "source": {
+      "titre": "LCP – Que proposent les candidats sur les retraites ?",
+      "url": "https://lcp.fr/actualites/presidentielle-que-proposent-les-candidats-a-l-elysee-sur-les-retraites-441751",
+      "date": "2026-09-16"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Statut dédié pour les familles monoparentales.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo – « un pays à hauteur d'enfant »",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/pour-son-dernier-deplacement-avant-son-accouchement-marine-tondelier-veut-un-pays-a-hauteur-d-enfant_8197694.html",
+      "date": "2026-09-17"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Interdiction du secteur lucratif dans la protection de l'enfance et accompagnement financier des jeunes de l'ASE jusqu'à 25 ans.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo – « un pays à hauteur d'enfant »",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/pour-son-dernier-deplacement-avant-son-accouchement-marine-tondelier-veut-un-pays-a-hauteur-d-enfant_8197694.html",
+      "date": "2026-09-17"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Sécurité sociale écologique, dont une sécurité sociale de l'alimentation.",
+     "nature": "programme",
+     "source": {
+      "titre": "« 21 priorités communes qui devraient pouvoir nous rassembler » (site de Marine Tondelier)",
+      "url": "https://marinetondelier.fr/blog/21-priorites-gouverner-ensemble-demain",
+      "date": "2026-04-17"
+     }
+    },
+    {
+     "theme": "sante",
+     "texte": "Interdiction des aliments ultratransformés dans les cantines et de la publicité télévisée pour les produits trop sucrés ou salés avant 21 h.",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – mesures de santé environnementale",
+      "url": "https://www.france24.com/fr/info-en-continu/20260530-pr%C3%A9sidentielle-tondelier-d%C3%A9voile-ses-mesures-pour-la-sant%C3%A9-environnementale",
+      "date": "2026-05-30"
+     }
+    },
+    {
+     "theme": "sante",
+     "texte": "Interdiction des perturbateurs endocriniens, des substances cancérogènes, mutagènes, reprotoxiques et des PFAS dans les produits du quotidien.",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – mesures de santé environnementale",
+      "url": "https://www.france24.com/fr/info-en-continu/20260530-pr%C3%A9sidentielle-tondelier-d%C3%A9voile-ses-mesures-pour-la-sant%C3%A9-environnementale",
+      "date": "2026-05-30"
+     }
+    },
+    {
+     "theme": "sante",
+     "texte": "Fonds national d'indemnisation et de dépollution financé par les industries les plus polluantes.",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – mesures de santé environnementale",
+      "url": "https://www.france24.com/fr/info-en-continu/20260530-pr%C3%A9sidentielle-tondelier-d%C3%A9voile-ses-mesures-pour-la-sant%C3%A9-environnementale",
+      "date": "2026-05-30"
+     }
+    },
+    {
+     "theme": "sante",
+     "texte": "Stratégie « 300/30/3 » : espace vert à 300 m maximum du domicile, 30 % du territoire couvert de feuillage l'été, trois arbres visibles depuis chaque logement.",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – mesures de santé environnementale",
+      "url": "https://www.france24.com/fr/info-en-continu/20260530-pr%C3%A9sidentielle-tondelier-d%C3%A9voile-ses-mesures-pour-la-sant%C3%A9-environnementale",
+      "date": "2026-05-30"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Hausse du salaire des enseignants de 15 % sur le quinquennat.",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – socle programmatique de 21 priorités",
+      "url": "https://www.france24.com/fr/info-en-continu/20260417-pr%C3%A9sidentielle-tondelier-propose-un-socle-programmatique-aux-autres-partis-de-gauche",
+      "date": "2026-04-17"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Création d'un ministère de l'Enfance chargé de l'Éducation et de la Jeunesse, doté d'un budget spécifique.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo – « un pays à hauteur d'enfant »",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/pour-son-dernier-deplacement-avant-son-accouchement-marine-tondelier-veut-un-pays-a-hauteur-d-enfant_8197694.html",
+      "date": "2026-09-17"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Relance des classes de mer.",
+     "nature": "presse",
+     "source": {
+      "titre": "franceinfo – propositions des Écologistes pour les littoraux",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/presidentielle-2027-les-ecologistes-devoilent-leurs-propositions-pour-proteger-les-littoraux_8192429.html",
+      "date": "2026-09-14"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Réforme de la fiscalité des transports : hausse du prix des billets d'avion et baisse du coût du ferroviaire.",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – programme des Écologistes",
+      "url": "https://www.france24.com/fr/info-en-continu/20260713-2027-les-ecologistes-veulent-instaurer-la-premi%C3%A8re-r%C3%A9publique-%C3%A9cologique-et-citoyenne",
+      "date": "2026-07-13"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Création d'un fonds national d'adaptation du littoral pour aider les collectivités à préempter les terrains et habitations menacés par la montée des eaux.",
+     "nature": "presse",
+     "source": {
+      "titre": "franceinfo – propositions des Écologistes pour les littoraux",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/presidentielle-2027-les-ecologistes-devoilent-leurs-propositions-pour-proteger-les-littoraux_8192429.html",
+      "date": "2026-09-14"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Développement des énergies marines renouvelables.",
+     "nature": "declaration",
+     "source": {
+      "titre": "ICI Nord – L'invité d'ICI Matin",
+      "url": "https://www.ici.fr/emissions/l-invite-d-ici-matin-ici-nord/presidentielle-marine-tondelier-presente-les-mesures-des-ecologistes-pour-la-protection-de-la-mer-et-des-littoraux-4088500",
+      "date": "2026-09-15"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Création d'un « ticket climat » pour rendre les transports en commun accessibles financièrement.",
+     "nature": "programme",
+     "source": {
+      "titre": "« 21 priorités communes qui devraient pouvoir nous rassembler » (site de Marine Tondelier)",
+      "url": "https://marinetondelier.fr/blog/21-priorites-gouverner-ensemble-demain",
+      "date": "2026-04-17"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Sortie du nucléaire.",
+     "nature": "presse",
+     "source": {
+      "titre": "6Médias / L'Express (via Orange Actualités) – propositions des partis face au défi climatique",
+      "url": "https://actu.orange.fr/politique/canicules-et-incendies-que-proposent-les-partis-face-au-defi-climatique-magic-CNT000002rrQux.html",
+      "date": "2026-08-21"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Plan national d'adaptation au changement climatique doté de 7 milliards d'euros par an jusqu'en 2032.",
+     "nature": "presse",
+     "source": {
+      "titre": "6Médias / L'Express (via Orange Actualités) – propositions des partis face au défi climatique",
+      "url": "https://actu.orange.fr/politique/canicules-et-incendies-que-proposent-les-partis-face-au-defi-climatique-magic-CNT000002rrQux.html",
+      "date": "2026-08-21"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "Régularisation des travailleurs sans papiers et titres de séjour pluriannuels automatiquement renouvelables.",
+     "nature": "programme",
+     "source": {
+      "titre": "« 21 priorités communes qui devraient pouvoir nous rassembler » (site de Marine Tondelier)",
+      "url": "https://marinetondelier.fr/blog/21-priorites-gouverner-ensemble-demain",
+      "date": "2026-04-17"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Restauration de la police de proximité.",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – socle programmatique de 21 priorités",
+      "url": "https://www.france24.com/fr/info-en-continu/20260417-pr%C3%A9sidentielle-tondelier-propose-un-socle-programmatique-aux-autres-partis-de-gauche",
+      "date": "2026-04-17"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Imprescriptibilité de tous les crimes commis contre des mineurs et création d'un « fichier de prévention pédocriminale des mineurs ».",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo – « un pays à hauteur d'enfant »",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/pour-son-dernier-deplacement-avant-son-accouchement-marine-tondelier-veut-un-pays-a-hauteur-d-enfant_8197694.html",
+      "date": "2026-09-17"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Déploiement de centres de prise en charge des victimes de violences sexuelles sur le modèle belge (approche médicale, psychologique et judiciaire).",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo – « un pays à hauteur d'enfant »",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/pour-son-dernier-deplacement-avant-son-accouchement-marine-tondelier-veut-un-pays-a-hauteur-d-enfant_8197694.html",
+      "date": "2026-09-17"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "3 milliards d'euros consacrés à la lutte contre les violences faites aux femmes et aux enfants.",
+     "nature": "programme",
+     "source": {
+      "titre": "« 21 priorités communes qui devraient pouvoir nous rassembler » (site de Marine Tondelier)",
+      "url": "https://marinetondelier.fr/blog/21-priorites-gouverner-ensemble-demain",
+      "date": "2026-04-17"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Création d'un haut conseil militaire intégré, rattaché au Conseil européen.",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – programme des Écologistes",
+      "url": "https://www.france24.com/fr/info-en-continu/20260713-2027-les-ecologistes-veulent-instaurer-la-premi%C3%A8re-r%C3%A9publique-%C3%A9cologique-et-citoyenne",
+      "date": "2026-07-13"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Instauration d'une « Première République écologique et citoyenne » mettant fin au « présidentialisme ».",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – programme des Écologistes",
+      "url": "https://www.france24.com/fr/info-en-continu/20260713-2027-les-ecologistes-veulent-instaurer-la-premi%C3%A8re-r%C3%A9publique-%C3%A9cologique-et-citoyenne",
+      "date": "2026-07-13"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Création d'une « Assemblée nationale des enfants » tirée au sort pour recueillir leurs propositions.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo – « un pays à hauteur d'enfant »",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/pour-son-dernier-deplacement-avant-son-accouchement-marine-tondelier-veut-un-pays-a-hauteur-d-enfant_8197694.html",
+      "date": "2026-09-17"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Fin des expulsions locatives de familles avec enfants.",
+     "nature": "declaration",
+     "source": {
+      "titre": "franceinfo – « un pays à hauteur d'enfant »",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/pour-son-dernier-deplacement-avant-son-accouchement-marine-tondelier-veut-un-pays-a-hauteur-d-enfant_8197694.html",
+      "date": "2026-09-17"
+     }
+    },
+    {
+     "theme": "logement",
+     "texte": "Limitation du nombre d'autorisations administratives de location de courte durée à des touristes.",
+     "nature": "presse",
+     "source": {
+      "titre": "franceinfo – propositions des Écologistes pour les littoraux",
+      "url": "https://www.franceinfo.fr/elections/presidentielle/presidentielle-2027-les-ecologistes-devoilent-leurs-propositions-pour-proteger-les-littoraux_8192429.html",
+      "date": "2026-09-14"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Sortie progressive des pesticides de synthèse et des engrais azotés à l'horizon 2050, avec un fonds de transition agricole.",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – mesures de santé environnementale",
+      "url": "https://www.france24.com/fr/info-en-continu/20260530-pr%C3%A9sidentielle-tondelier-d%C3%A9voile-ses-mesures-pour-la-sant%C3%A9-environnementale",
+      "date": "2026-05-30"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Généralisation des régies publiques de l'eau.",
+     "nature": "presse",
+     "source": {
+      "titre": "France 24 (AFP) – mesures de santé environnementale",
+      "url": "https://www.france24.com/fr/info-en-continu/20260530-pr%C3%A9sidentielle-tondelier-d%C3%A9voile-ses-mesures-pour-la-sant%C3%A9-environnementale",
+      "date": "2026-05-30"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Interdiction aux très gros chalutiers de pêcher le long des côtes françaises et soutien à la pêche artisanale.",
+     "nature": "declaration",
+     "source": {
+      "titre": "ICI Nord – L'invité d'ICI Matin",
+      "url": "https://www.ici.fr/emissions/l-invite-d-ici-matin-ici-nord/presidentielle-marine-tondelier-presente-les-mesures-des-ecologistes-pour-la-protection-de-la-mer-et-des-littoraux-4088500",
+      "date": "2026-09-15"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Moratoire sur les projets de mégabassines.",
+     "nature": "presse",
+     "source": {
+      "titre": "6Médias / L'Express (via Orange Actualités) – propositions des partis face au défi climatique",
+      "url": "https://actu.orange.fr/politique/canicules-et-incendies-que-proposent-les-partis-face-au-defi-climatique-magic-CNT000002rrQux.html",
+      "date": "2026-08-21"
+     }
+    }
+   ]
+  },
+  {
+   "id": "villepin",
+   "mise_a_jour": "2026-09-22",
+   "etat_programme": "partiel",
+   "mesures": [
+    {
+     "theme": "economie",
+     "texte": "Ramener toute la fiscalité à neuf grands impôts et réduire le code des impôts à quarante pages.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Big Bang : la règle républicaine",
+      "url": "https://www.lafrancehumaniste.fr/articles/big-bang-la-regle-republicaine.html",
+      "date": "2026-08-28"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Supprimer les niches fiscales et sociales, estimées à environ 175 milliards d'euros par an.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Big Bang : la règle républicaine",
+      "url": "https://www.lafrancehumaniste.fr/articles/big-bang-la-regle-republicaine.html",
+      "date": "2026-08-28"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Ramener le déficit public sous 3 % en 2031 et l'y maintenir ensuite.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Big Bang : la règle républicaine",
+      "url": "https://www.lafrancehumaniste.fr/articles/big-bang-la-regle-republicaine.html",
+      "date": "2026-08-28"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Créer un impôt unique sur le patrimoine, censé rapporter 8 milliards d'euros de plus, et renforcer l'imposition des successions.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Big Bang : la règle républicaine",
+      "url": "https://www.lafrancehumaniste.fr/articles/big-bang-la-regle-republicaine.html",
+      "date": "2026-08-28"
+     }
+    },
+    {
+     "theme": "economie",
+     "texte": "Constituer un fonds national de souveraineté et de solidarité investissant notamment dans la décarbonation et le numérique.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Big Bang : la règle républicaine",
+      "url": "https://www.lafrancehumaniste.fr/articles/big-bang-la-regle-republicaine.html",
+      "date": "2026-08-28"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Basculer plus de 200 milliards d'euros de cotisations non contributives vers la CSG, pour une hausse de 6 % du salaire réel (environ 90 € par mois au Smic).",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Big Bang : la règle républicaine",
+      "url": "https://www.lafrancehumaniste.fr/articles/big-bang-la-regle-republicaine.html",
+      "date": "2026-08-28"
+     }
+    },
+    {
+     "theme": "travail",
+     "texte": "Adopter une grande loi d'accompagnement de l'IA instaurant un pilotage des compétences.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — IA : notre pouvoir de dire NON au monopole américain",
+      "url": "https://www.lafrancehumaniste.fr/articles/ia-pouvoir-de-dire-non-monopole-americain.html",
+      "date": "2026-06-13"
+     }
+    },
+    {
+     "theme": "retraites",
+     "texte": "Réforme des retraites préparée par une conférence sociale et une convention citoyenne, puis soumise à référendum.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Le chemin gaulliste",
+      "url": "https://www.lafrancehumaniste.fr/articles/chemin-gaulliste.html",
+      "date": "2026-05-24"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Sanctuariser le budget de l'Éducation nationale hors pensions et augmenter d'au moins 20 % les dépenses réelles par élève.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Refonder l'école pour refaire société",
+      "url": "https://www.lafrancehumaniste.fr/articles/refonder-lecole-pour-refaire-societe.html",
+      "date": "2026-09-01"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Revalorisation salariale d'au moins 10 % pour l'ensemble des personnels scolaires.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Refonder l'école pour refaire société",
+      "url": "https://www.lafrancehumaniste.fr/articles/refonder-lecole-pour-refaire-societe.html",
+      "date": "2026-09-01"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Interdiction effective des téléphones portables dans l'enceinte des établissements scolaires.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Refonder l'école pour refaire société",
+      "url": "https://www.lafrancehumaniste.fr/articles/refonder-lecole-pour-refaire-societe.html",
+      "date": "2026-09-01"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Créer « Signal Éduc », plateforme nationale de signalement unique indépendante de la hiérarchie.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Refonder l'école pour refaire société",
+      "url": "https://www.lafrancehumaniste.fr/articles/refonder-lecole-pour-refaire-societe.html",
+      "date": "2026-09-01"
+     }
+    },
+    {
+     "theme": "education",
+     "texte": "Au moins cent heures annuelles d'enseignement des pratiques artistiques à l'école.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — La République culturelle",
+      "url": "https://www.lafrancehumaniste.fr/articles/la-republique-culturelle.html",
+      "date": "2026-07-23"
+     }
+    },
+    {
+     "theme": "securite",
+     "texte": "Créer un registre national de traçabilité des auteurs de violences sur mineurs accessible à l'administration.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Refonder l'école pour refaire société",
+      "url": "https://www.lafrancehumaniste.fr/articles/refonder-lecole-pour-refaire-societe.html",
+      "date": "2026-09-01"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Rétablir un prix du carbone intégralement rendu aux ménages.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Pourquoi je suis écogaulliste ?",
+      "url": "https://www.lafrancehumaniste.fr/articles/pourquoi-je-suis-ecogaulliste.html",
+      "date": "2026-06-28"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "Planifier l'électrification des usages avec des moyens pluriannuels.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Pourquoi je suis écogaulliste ?",
+      "url": "https://www.lafrancehumaniste.fr/articles/pourquoi-je-suis-ecogaulliste.html",
+      "date": "2026-06-28"
+     }
+    },
+    {
+     "theme": "ecologie",
+     "texte": "L'État fixe les objectifs climatiques et délègue aux maires les moyens financiers et humains.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Pourquoi je suis écogaulliste ?",
+      "url": "https://www.lafrancehumaniste.fr/articles/pourquoi-je-suis-ecogaulliste.html",
+      "date": "2026-06-28"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Réduire de moitié l'usage total des produits phytosanitaires d'ici 2030.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Souveraineté agricole et alimentaire",
+      "url": "https://www.lafrancehumaniste.fr/articles/souverainete-agricole-et-alimentaire.html",
+      "date": "2026-02"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Viser cinq cent mille exploitations agricoles en 2035.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Souveraineté agricole et alimentaire",
+      "url": "https://www.lafrancehumaniste.fr/articles/souverainete-agricole-et-alimentaire.html",
+      "date": "2026-02"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Viser un excédent agricole et agroalimentaire de dix milliards d'euros.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Souveraineté agricole et alimentaire",
+      "url": "https://www.lafrancehumaniste.fr/articles/souverainete-agricole-et-alimentaire.html",
+      "date": "2026-02"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Étendre graduellement le mécanisme d'ajustement carbone aux frontières aux produits agricoles.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Souveraineté agricole et alimentaire",
+      "url": "https://www.lafrancehumaniste.fr/articles/souverainete-agricole-et-alimentaire.html",
+      "date": "2026-02"
+     }
+    },
+    {
+     "theme": "territoires",
+     "texte": "Transformer 500 médiathèques en pôles culturels de proximité sur cinq ans.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — La République culturelle",
+      "url": "https://www.lafrancehumaniste.fr/articles/la-republique-culturelle.html",
+      "date": "2026-07-23"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Encadrer la censure du gouvernement par une motion de défiance constructive, conditionnée à un gouvernement alternatif.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Le chemin gaulliste",
+      "url": "https://www.lafrancehumaniste.fr/articles/chemin-gaulliste.html",
+      "date": "2026-05-24"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Nommer un gouvernement resserré d'une dizaine de ministères et réunir un conseil des territoires avec les présidents de régions.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Le chemin gaulliste",
+      "url": "https://www.lafrancehumaniste.fr/articles/chemin-gaulliste.html",
+      "date": "2026-05-24"
+     }
+    },
+    {
+     "theme": "institutions",
+     "texte": "Créer un Conseil de l'IA auprès du président et une Autorité de sûreté de l'IA, sur le modèle de l'Autorité de sûreté nucléaire.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — IA : notre pouvoir de dire NON au monopole américain",
+      "url": "https://www.lafrancehumaniste.fr/articles/ia-pouvoir-de-dire-non-monopole-americain.html",
+      "date": "2026-06-13"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Créer un conseil de sécurité européen réunissant les principales puissances de l'Union.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Le moment européen",
+      "url": "https://www.lafrancehumaniste.fr/articles/moment-europeen-europe-souveraine.html",
+      "date": "2026-03-06"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Créer une DARPA européenne, financée à un niveau annuel comparable à celui de la DARPA américaine.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Le moment européen",
+      "url": "https://www.lafrancehumaniste.fr/articles/moment-europeen-europe-souveraine.html",
+      "date": "2026-03-06"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Pause sur les élargissements de l'UE au-delà des procédures en cours ; intégration de l'Ukraine par seuils successifs.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Le moment européen",
+      "url": "https://www.lafrancehumaniste.fr/articles/moment-europeen-europe-souveraine.html",
+      "date": "2026-03-06"
+     }
+    },
+    {
+     "theme": "international",
+     "texte": "Obliger les établissements d'enseignement à proposer à tous leurs étudiants un semestre dans un autre État de l'UE.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Le moment européen",
+      "url": "https://www.lafrancehumaniste.fr/articles/moment-europeen-europe-souveraine.html",
+      "date": "2026-03-06"
+     }
+    },
+    {
+     "theme": "immigration",
+     "texte": "« Pause sur Schengen » et coordination des politiques migratoires entre États européens volontaires.",
+     "nature": "programme",
+     "source": {
+      "titre": "La France humaniste — Le moment européen",
+      "url": "https://www.lafrancehumaniste.fr/articles/moment-europeen-europe-souveraine.html",
+      "date": "2026-03-06"
+     }
+    }
+   ]
+  }
+ ]
+}

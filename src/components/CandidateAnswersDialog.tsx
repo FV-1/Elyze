@@ -1,13 +1,15 @@
 import { useMemo, useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from './Avatar';
 import { THEMES_BY_ID } from '../data/themes';
 import { Bascule } from './Bascule';
 import { themeChipColors } from '../data/themeColors';
+import { openUrl, proposalProvenance } from '../data/source';
 import { AnswerValue, Candidate, Proposal } from '../types';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors, useThemeColor, useThemeSettings } from '../theme/ThemeContext';
 
 // Les propositions d'un candidat, rangées par la réponse qu'on leur a donnée.
@@ -190,6 +192,26 @@ export function CandidateAnswersDialog({
                       />
                     )}
                     <Text style={styles.itemText}>{p.text}</Text>
+                    {/* La provenance n'apparaît qu'ici, auteur dévoilé. Sur
+                        la carte de swipe, elle trahirait l'auteur : chaque
+                        document daté appartient à un seul candidat, et deux
+                        cartes de même date se reconnaîtraient vite. */}
+                    {p.sourceUrl ? (
+                      <Pressable
+                        onPress={() => openUrl(p.sourceUrl!)}
+                        hitSlop={6}
+                        accessibilityRole="link"
+                        accessibilityLabel={`Source : ${proposalProvenance(p)}. Ouvrir le document d’origine`}
+                      >
+                        <Text style={styles.itemSourceLink}>
+                          {proposalProvenance(p)} · Voir la source
+                        </Text>
+                      </Pressable>
+                    ) : (
+                      <Text style={styles.itemSource}>
+                        Recensée par Poligraph, sans document d’origine identifié
+                      </Text>
+                    )}
                   </View>
                 );
               })
@@ -281,7 +303,7 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: spacing.sm,
       paddingBottom: spacing.sm,
       backgroundColor: colors.surface,
-      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomWidth: 1,
       borderBottomColor: colors.border,
     },
     tab: {
@@ -306,6 +328,7 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       color: colors.textMuted,
       fontVariant: ['tabular-nums'],
+      fontFamily: police.mono[500],
     },
     list: {
       padding: spacing.md,
@@ -322,11 +345,6 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'flex-start',
       // Ombre douce plutôt qu'un cadre : la fiche se détache du fond sans
       // ajouter un trait de plus à l'écran.
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.06,
-      shadowRadius: 12,
-      elevation: 2,
     },
     themeChip: {
       flexDirection: 'row',
@@ -338,7 +356,7 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.pill,
     },
     themeChipIcon: {
-      fontSize: 12,
+      fontSize: fonts.etiquette,
     },
     // La couleur du texte vient de `themeChipColors`, appariée au fond de la
     // pastille : elle est posée à l'usage, pas ici.
@@ -353,6 +371,15 @@ function makeStyles(colors: ColorTokens) {
       lineHeight: (fonts.small + 2) * 1.45,
       fontWeight: '500',
       color: colors.textPrimary,
+    },
+    itemSource: {
+      fontSize: fonts.tiny,
+      color: colors.textMuted,
+    },
+    itemSourceLink: {
+      fontSize: fonts.tiny,
+      fontWeight: '700',
+      color: colors.accentText,
     },
     emptyWrap: {
       alignItems: 'center',

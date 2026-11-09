@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { StyleProp, Text, TextStyle } from 'react-native';
+import { StyleProp, TextStyle } from 'react-native';
+import { Texte as Text } from './Texte';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
 const DURATION_MS = 900;

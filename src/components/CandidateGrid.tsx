@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from './Avatar';
 import { CANDIDATES } from '../data/candidates';
@@ -15,7 +16,7 @@ import { useColors } from '../theme/ThemeContext';
 // CE QUI N'EST PAS ICI, ET POURQUOI.
 //
 // Aucun score, aucun pourcentage, aucun classement : c'est le travail de
-// l'onglet Classement, et les mélanger inviterait à lire cette grille comme
+// l'onglet voisin, sur l'écran de résultat, et les mélanger inviterait à lire cette grille comme
 // un palmarès. Aucun décompte de propositions non plus — pendant une partie
 // tous les candidats en ont exactement le même nombre (le paquet est tiré à
 // quota égal, voir utils/deck.ts), donc l'afficher n'apprendrait rien tout en
@@ -175,11 +176,6 @@ function makeStyles(colors: ColorTokens) {
       paddingVertical: spacing.lg,
       paddingHorizontal: spacing.sm,
       gap: 3,
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 6 },
-      shadowOpacity: 0.07,
-      shadowRadius: 18,
-      elevation: 2,
     },
     tilePressed: {
       opacity: 0.65,

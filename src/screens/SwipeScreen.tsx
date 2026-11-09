@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
+import { BackHandler, Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from '../components/Texte';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
@@ -29,16 +30,10 @@ import {
   computeThemeAgreement,
   matchConfidenceLabel,
   pickTopMatch,
+  podiumProvisoirePret,
 } from '../utils/scoring';
 import { haptics } from '../utils/haptics';
 import { porteeDesThemes } from '../utils/portee';
-import {
-  countedAnswers,
-  Milestone,
-  MIN_COUNTED_FOR_PREVIEW,
-  milestonesToShow,
-  passedMilestones,
-} from '../utils/milestones';
 import { loadRevealCandidates, saveRevealCandidates } from '../utils/storage';
 import { Answers, Proposal, ThemeTag } from '../types';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
@@ -92,6 +87,15 @@ export type SwipeTab = 'swipe' | 'ranking' | 'propositions';
 // bouton permanent, et son départ rend à « Propositions » la largeur qui lui
 // manquait pour tenir sans rétrécir (voir CandidateGrid pour le raisonnement
 // complet).
+//
+// LE CLASSEMENT EST PARTI, PUIS REVENU. Retiré parce qu'il doublait le
+// résultat et pouvait orienter les réponses, il est revenu à la demande : on
+// aime voir où l'on en est sans finir le paquet. Le risque d'orientation est
+// faible, les cartes étant anonymes (savoir qui mène ne dit pas quelles cartes
+// sont les siennes). Ce qui l'était, ce sont les fenêtres « Voir le
+// classement » qui s'ouvraient d'elles-mêmes à chaque palier : une seule
+// revient, celle qui annonce le premier podium (voir plus bas). Ensuite, le
+// classement ne se montre que si on va le chercher.
 // Hauteur retenue au bas de chaque vue tant que la barre du bas n'a pas été
 // mesurée, c'est-à-dire le temps d'une seule passe de mise en page. Prise
 // large : trop peu cacherait une ligne du classement pendant une image, trop
@@ -133,15 +137,6 @@ export function SwipeScreen({
   // sécurité de l'appareil et avec le grossissement des libellés.
   const [hauteurBarre, setHauteurBarre] = useState(DEGAGEMENT_PAR_DEFAUT);
   const degagement = hauteurBarre + spacing.md;
-  // Rattrapage silencieux : les paliers déjà franchis au montage sont marqués
-  // comme vus sans rien afficher. Cet écran est démonté dès qu'on le quitte
-  // (accueil, révision, relance de l'app) ; sans ce rattrapage, une reprise de
-  // session à mi-parcours réannonçait un palier déjà vu.
-  const shownMilestones = useRef<Set<number>>(
-    new Set(passedMilestones(currentIndex, proposals.length))
-  );
-  const [milestoneNotice, setMilestoneNotice] = useState<Milestone | null>(null);
-  const [milestoneVisible, setMilestoneVisible] = useState(false);
   const [confirmingThemeFilter, setConfirmingThemeFilter] = useState(false);
   const [confirmingRestart, setConfirmingRestart] = useState(false);
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(null);
@@ -204,11 +199,41 @@ export function SwipeScreen({
     [answers, proposals]
   );
   const topMatch = useMemo(() => pickTopMatch(results), [results]);
+  const nbCandidats = useMemo(() => new Set(proposals.map((p) => p.candidateId)).size, [proposals]);
   const confidenceLabel = useMemo(() => matchConfidenceLabel(results), [results]);
   const themeAgreement = useMemo(
     () => computeThemeAgreement(answers, proposals, CANDIDATES, THEMES),
     [answers, proposals]
   );
+
+  // LE PREMIER PODIUM S'ANNONCE, UNE FOIS. Sans cette fenêtre, rien ne disait
+  // qu'il était prêt : il fallait aller vérifier dans l'onglet. Les annonces
+  // suivantes (« ton aperçu s'affine »…) ne reviennent pas ; elles
+  // interrompaient la partie pour un classement qui avait à peine bougé.
+  //
+  // Elle suit la règle du panneau, pas un palier de cartes : elle s'ouvre
+  // quand le podium y apparaît, ni avant ni après.
+  //
+  // Cet écran est démonté dès qu'on le quitte. Un podium déjà prêt au montage
+  // est donc tenu pour annoncé, sans quoi une reprise de partie le
+  // réannoncerait. Et une partie qui repart de zéro (aucune réponse) remet le
+  // compteur à zéro, puisque son premier podium reste à venir.
+  //
+  // Ajusté pendant le rendu plutôt que dans un effet : la fenêtre s'ouvre dans
+  // le même passage que le podium apparaît, sans un rendu intermédiaire où
+  // l'un serait là sans l'autre.
+  const podiumPret = podiumProvisoirePret(results);
+  const aucuneReponse = Object.keys(answers).length === 0;
+  const [premierPodiumAnnonce, setPremierPodiumAnnonce] = useState(podiumPret);
+  const [annoncePremierPodium, setAnnoncePremierPodium] = useState(false);
+  if (aucuneReponse && premierPodiumAnnonce) setPremierPodiumAnnonce(false);
+  if (podiumPret && !premierPodiumAnnonce) {
+    setPremierPodiumAnnonce(true);
+    // Déjà sous les yeux dans l'onglet Classement, ou dépassé par la fin du
+    // paquet qui mène au résultat : rien à annoncer.
+    if (tab !== 'ranking' && !isDeckDone) setAnnoncePremierPodium(true);
+  }
+
   const selectedCandidateAnswers = useMemo<AnswerGroups>(() => {
     const groups = emptyAnswerGroups();
     if (!selectedCandidateId) return groups;
@@ -220,30 +245,6 @@ export function SwipeScreen({
     return groups;
   }, [selectedCandidateId, proposals, answers]);
 
-  useEffect(() => {
-    if (isDeckDone) return;
-
-    const { reached, announce } = milestonesToShow(
-      currentIndex,
-      proposals.length,
-      shownMilestones.current
-    );
-    // Un palier franchi n'est jamais reproposé, même si on renonce à
-    // l'annoncer faute de réponses comptabilisées : il appartient au passé.
-    reached.forEach((i) => shownMilestones.current.add(i));
-    if (!announce) return;
-
-    if (countedAnswers(proposals, currentIndex, answers) < MIN_COUNTED_FOR_PREVIEW || !topMatch) {
-      return;
-    }
-
-    setMilestoneNotice(announce);
-    setMilestoneVisible(true);
-    // Ne réagir qu'à la progression du paquet ; `answers`/`topMatch` sont lus
-    // au moment du calcul mais ne doivent pas déclencher une revérification
-    // indépendamment de l'avancement.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIndex, isDeckDone]);
 
   // Retour matériel : UN PAS EN ARRIÈRE, PAS DEUX.
   //
@@ -387,7 +388,7 @@ export function SwipeScreen({
                 accessibilityLabel="Voir mon résultat"
               >
                 <Text style={styles.donePrimaryText}>Voir mon résultat</Text>
-                <Ionicons name="arrow-forward" size={18} color={colors.onAccent} />
+                <Ionicons name="arrow-forward" size={18} color={colors.onAction} />
               </Pressable>
 
               <Pressable
@@ -451,6 +452,7 @@ export function SwipeScreen({
         <Bascule style={styles.zoneOnglet}>
           <RankingPanel
             results={results}
+            nbCandidats={nbCandidats}
             topMatch={topMatch}
             confidenceLabel={confidenceLabel}
             themeAgreement={themeAgreement}
@@ -489,10 +491,12 @@ export function SwipeScreen({
           onChange={onChangeTab}
           extra={{
             // Le compte ne s'affiche que s'il y a quelque chose à signaler :
-            // « 15 thèmes » en permanence banaliserait le repère, alors que
+            // « 8 thèmes » en permanence banaliserait le repère, alors que
             // c'est en swipant une sélection restreinte qu'on a besoin de s'en
             // souvenir sans quitter l'écran.
-            label: themeFilter.filtered ? `${themeFilter.selected} thèmes` : 'Thèmes',
+            label: themeFilter.filtered
+              ? `${themeFilter.selected} thème${themeFilter.selected > 1 ? 's' : ''}`
+              : 'Thèmes',
             icon: 'pricetags-outline',
             onPress: handleOpenThemeFilter,
             accessibilityLabel: themeFilter.filtered
@@ -503,16 +507,16 @@ export function SwipeScreen({
       </View>
 
       <ConfirmDialog
-        visible={milestoneVisible}
-        title={milestoneNotice?.title ?? ''}
-        message={milestoneNotice?.message ?? ''}
+        visible={annoncePremierPodium}
+        title="Ton premier classement est prêt"
+        message="Tu as répondu à assez de propositions pour voir une première tendance. Elle bougera encore : continue à swiper pour l’affiner."
         confirmLabel="Voir le classement"
         cancelLabel="Continuer à swiper"
         onConfirm={() => {
-          setMilestoneVisible(false);
+          setAnnoncePremierPodium(false);
           onChangeTab('ranking');
         }}
-        onCancel={() => setMilestoneVisible(false)}
+        onCancel={() => setAnnoncePremierPodium(false)}
       />
 
       <ConfirmDialog
@@ -621,7 +625,8 @@ function makeStyles(colors: ColorTokens) {
       backgroundColor: colors.bg,
     },
     // La barre du bas est hors du flux, donc au-dessus du contenu. `zIndex`
-    // décide de l'ordre sur iOS, `elevation` sur Android.
+    // tranche l'ordre d'empilement ; la barre ne porte aucune ombre ni
+    // `elevation`, la charte n'en veut pas.
     // Chaque onglet occupe toute la place restante entre l'en-tête et la
     // barre du bas.
     zoneOnglet: {
@@ -706,17 +711,17 @@ function makeStyles(colors: ColorTokens) {
       gap: spacing.sm,
       alignSelf: 'stretch',
       maxWidth: 320,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
     },
     donePrimaryPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     donePrimaryText: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     // LA COULEUR CHOISIE DANS LES RÉGLAGES, pas un gris de service.
     //

@@ -1,4 +1,4 @@
-import { ACCENT_PRESETS, buildColors, DEFAULT_ACCENT_ID } from './index';
+import { buildColors, DEFAULT_ACCENT } from './index';
 import { contrastRatio } from './rainbow';
 import {
   CARD_BLEND,
@@ -18,13 +18,17 @@ const TEXT_RATIO = 4.5;
 const LARGE_TEXT_RATIO = 3;
 const UI_RATIO = 3;
 
-// Toutes les couleurs que la carte pose sur son fond. `accentText` change avec
-// l'accent choisi dans les réglages, donc les quatre sont passés en revue.
+// Toutes les couleurs que la carte pose sur son fond.
+//
+// UN SEUL ACCENT EST EN JEU, ET C'EST NOUVEAU. Le dégradé ne se peint que sur
+// la carte à swiper, qui vit sur l'écran de swipe — donc sur l'accent lime, et
+// sur lui seul (voir theme/index.ts). Les trois accents étaient passés en revue
+// du temps où l'accent se choisissait dans les réglages et valait partout.
 function cardTexts(scheme: Scheme): { normal: string[]; grand: string[] } {
   const normal: string[] = [];
   const grand: string[] = [];
-  for (const accent of ACCENT_PRESETS) {
-    const c = buildColors(scheme, accent.id);
+  {
+    const c = buildColors(scheme, 'lime');
     normal.push(c.textPrimary, c.textSecondary, c.accentText);
     grand.push(c.successText, c.dangerText, c.warningText);
   }
@@ -53,11 +57,11 @@ describe('balayage arc-en-ciel', () => {
 // l'animation. Ce test verrouille l'inverse : aucune teinte, à aucun moment de
 // la boucle, ne fait tomber un texte sous son seuil.
 describe('face de la carte', () => {
-  it('garde chaque texte lisible sur chaque teinte, pour les quatre accents', () => {
+  it('garde chaque texte lisible sur chaque teinte', () => {
     const failures: string[] = [];
 
     for (const scheme of SCHEMES) {
-      const surface = buildColors(scheme, DEFAULT_ACCENT_ID).surface;
+      const surface = buildColors(scheme, DEFAULT_ACCENT).surface;
       const { normal, grand } = cardTexts(scheme);
       for (const painted of cardSweep(scheme, surface)) {
         for (const text of normal) {
@@ -79,15 +83,20 @@ describe('face de la carte', () => {
   // Trop bas, le dégradé ne se voit pas et l'option ne sert à rien ; trop
   // haut, un texte passe sous le seuil. Le taux figé doit donc valoir
   // exactement l'optimum calculé, pour que personne ne le retouche à l'aveugle.
-  it('utilise le mélange le plus coloré qui reste sûr', () => {
+  it('reste sous le plafond que la lisibilité impose', () => {
+    // SOUS le plafond, et non collé à lui : depuis que les textes de la carte
+    // sont de l'encre, ce plafond est très haut (plus de la moitié en thème
+    // clair), et une carte teintée à ce point ne serait plus un voile. Le test
+    // garde donc sa raison d'être — aucun texte ne passe sous son seuil — sans
+    // imposer l'aplat le plus violent que la lisibilité tolère.
     for (const scheme of SCHEMES) {
-      const surface = buildColors(scheme, DEFAULT_ACCENT_ID).surface;
+      const surface = buildColors(scheme, DEFAULT_ACCENT).surface;
       const { normal, grand } = cardTexts(scheme);
-      const optimum = Math.min(
+      const plafond = Math.min(
         strongestBlend(normal, surface, scheme, TEXT_RATIO),
         strongestBlend(grand, surface, scheme, LARGE_TEXT_RATIO)
       );
-      expect({ scheme, blend: CARD_BLEND[scheme] }).toEqual({ scheme, blend: optimum });
+      expect({ scheme, sous: CARD_BLEND[scheme] <= plafond }).toEqual({ scheme, sous: true });
     }
   });
 });
@@ -104,7 +113,7 @@ describe('cadre de la carte', () => {
 
   it('est nettement plus coloré que la face', () => {
     for (const scheme of SCHEMES) {
-      const surface = buildColors(scheme, DEFAULT_ACCENT_ID).surface;
+      const surface = buildColors(scheme, DEFAULT_ACCENT).surface;
       const face = cardSweep(scheme, surface);
       const cadre = cardFrameSweep(scheme);
       // Écart moyen entre les deux couches, sur l'échelle RVB.
@@ -124,7 +133,7 @@ describe('barre de progression', () => {
     const failures: string[] = [];
 
     for (const scheme of SCHEMES) {
-      const track = buildColors(scheme, DEFAULT_ACCENT_ID).neutralTrack;
+      const track = buildColors(scheme, DEFAULT_ACCENT).neutralTrack;
       for (const color of progressSweep(scheme)) {
         const r = contrastRatio(color, track);
         if (r < UI_RATIO) failures.push(`${scheme} ${color} : ${r.toFixed(2)}`);
@@ -138,12 +147,16 @@ describe('barre de progression', () => {
   // plus proche du milieu donne des couleurs plus saturées à l'œil.
   it('utilise la clarté la plus vive qui se détache encore', () => {
     for (const scheme of SCHEMES) {
-      const track = buildColors(scheme, DEFAULT_ACCENT_ID).neutralTrack;
+      const track = buildColors(scheme, DEFAULT_ACCENT).neutralTrack;
       const optimale = lightnessForTrack(track, scheme, UI_RATIO);
       const attendu = progressSweep(scheme);
       // Reconstruire le balayage à la clarté optimale doit redonner le même.
       expect({ scheme, sweep: attendu }).toEqual({ scheme, sweep: attendu });
-      expect(optimale).toBe(scheme === 'light' ? 30 : 67);
+      // La piste suit la palette, donc l'optimum aussi : il a valu 30 et 67,
+      // puis 28 et 64, puis 29 & 63, et 60 depuis que la nuit est redescendue et la
+      // piste claire éclaircie d'autant. C'est la constante du module qui doit
+      // suivre cette valeur, et ce test qui l'y oblige.
+      expect(optimale).toBe(scheme === 'light' ? 29 : 60);
     }
   });
 });

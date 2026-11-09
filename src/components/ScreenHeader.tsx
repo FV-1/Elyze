@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
+import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { ColorTokens, fonts, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
@@ -85,8 +86,9 @@ function makeStyles(colors: ColorTokens) {
     title: {
       flex: 1,
       textAlign: 'center',
-      fontSize: fonts.body + 2,
-      fontWeight: '800',
+      fontSize: fonts.title - 6,
+      fontWeight: '700',
+      letterSpacing: -0.6,
       color: colors.textPrimary,
     },
   });

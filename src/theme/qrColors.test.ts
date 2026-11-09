@@ -1,5 +1,5 @@
 import jsQR from 'jsqr';
-import { ACCENT_PRESETS } from './index';
+import { ACCENTS } from './index';
 import { buildRainbowColors, contrastRatio } from './rainbow';
 import { QR_BACKGROUND, QR_MIN_CONTRAST, qrModuleColor } from './qrColors';
 import { qrMatrix } from '../utils/qr';
@@ -65,8 +65,8 @@ describe('couleur des modules', () => {
     expect(QR_BACKGROUND).toBe('#FFFFFF');
   });
 
-  describe.each(ACCENT_PRESETS)('accent $label', (preset) => {
-    const couleur = qrModuleColor(preset.accent);
+  describe.each(Object.entries(ACCENTS))('accent %s', (_id: string, teinte: string) => {
+    const couleur = qrModuleColor(teinte);
 
     it('franchit le seuil de contraste', () => {
       expect(contrastRatio(couleur, QR_BACKGROUND)).toBeGreaterThanOrEqual(QR_MIN_CONTRAST);
@@ -117,7 +117,7 @@ describe('couleur des modules', () => {
   // Le contre-exemple : sans cette précaution, l'accent brut passerait sous le
   // seuil. C'est ce qui justifie l'existence de tout ce fichier.
   it('l’accent brut ne suffirait pas', () => {
-    const brut = ACCENT_PRESETS.map((p) => contrastRatio(p.accent, QR_BACKGROUND));
+    const brut = Object.values(ACCENTS).map((teinte) => contrastRatio(teinte, QR_BACKGROUND));
     expect(Math.min(...brut)).toBeLessThan(QR_MIN_CONTRAST);
   });
 });

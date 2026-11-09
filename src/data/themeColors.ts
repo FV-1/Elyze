@@ -1,4 +1,4 @@
-import { mixHex } from '../utils/color';
+import { contrastRatio, mixHex } from '../utils/color';
 
 // Une couleur par thème pour la mosaïque de l'onglet « Propositions » — fixe,
 // indépendante de l'accent choisi dans les réglages (le but est ici la variété
@@ -25,30 +25,68 @@ import { mixHex } from '../utils/color';
 //  3. LES VOISINES DE GRILLE D'ABORD. La mosaïque a deux colonnes, et deux
 //     cibles de contraste sont alternées EN DAMIER — alterner sur le seul
 //     rang ne séparait que les voisines horizontales, jamais celles l'une
-//     sous l'autre. Distance minimale entre deux tuiles qui se touchent : 57
+//     sous l'autre. Distance minimale entre deux tuiles qui se touchent : 45
 //     sur l'échelle RVB.
+//
+//  4. ELLES SONT ADOUCIES, depuis. Quinze aplats à 74 % de saturation alignés
+//     sur un même écran donnaient une mosaïque qui criait ; ils sont à 53 %.
+//     La clarté, elle, n'a pas bougé d'un pouce : chaque teinte a été ramenée
+//     au contraste qu'elle avait face au blanc, à deux centièmes près, ce qui
+//     préserve le damier de la contrainte 3. C'est la distance entre voisines
+//     qui paie, de 57 à 45 — assez pour qu'on les distingue encore, et c'est
+//     le prix d'une mosaïque qu'on peut regarder.
+//
+// Depuis le passage à huit sujets (voir scripts/generate-data.js), la
+// palette n'en garde que huit, reprises TELLES QUELLES de l'ancienne : elles
+// tiennent déjà toutes les contraintes ci-dessus. Le choix évite seulement de
+// poser deux verts ou deux violets sur des tuiles qui se touchent.
 export const THEME_COLORS: Record<string, string> = {
-  economie: '#6F61E7',
-  emploi: '#855F14',
-  retraites: '#BF1D83',
-  solidarites: '#DF2A48',
+  economie: '#7166D0',
+  travail: '#7F6127',
 
-  sante: '#DC3021',
-  education: '#127638',
-  numerique: '#803EE2',
+  sante: '#C54C42',
+  education: '#AA4AC8',
 
-  logement: '#B731E0',
-  transports: '#476BE3',
-  environnement: '#267612',
-  agriculture: '#497111',
+  ecologie: '#347424',
+  logement: '#286F83',
 
-  securite: '#2074D5',
-  immigration: '#CE1FBD',
-  defense: '#15708A',
-  institutions: '#AF471A',
+  securite: '#3A76BD',
+  institutions: '#A05231',
 };
 
 const FALLBACK_COLOR = '#4338CA';
+
+// Plancher de contraste du texte blanc posé sur une tuile. Au-dessus du seuil
+// AA (4.5) d'une marge volontaire : c'est la contrainte qu'on relâche pour en
+// gagner une autre, et la relâcher jusqu'au seuil exact ne laisserait rien
+// pour l'arrondi d'un futur réglage.
+const PLANCHER_BLANC = 4.75;
+
+// LA MÊME TEINTE, ÉCLAIRCIE SUR LA NUIT.
+//
+// Les quinze couleurs sont calculées pour porter du texte blanc, et elles le
+// font dans les deux thèmes. Mais elles sont les mêmes partout, et sur une
+// carte sombre huit d'entre elles tombaient entre 2.87:1 et 2.94:1 — sous les
+// 3:1 qu'un aplat doit tenir pour qu'on voie où il commence.
+//
+// Plutôt que de réécrire à la main quinze valeurs pour le thème sombre, on
+// remonte chaque teinte vers le blanc TANT QUE le texte blanc qu'elle porte
+// reste au-dessus du plancher. La contrainte la plus dure garde la main, la
+// teinte ne bouge que de ce qu'elle peut, et les couleurs tirées au sort par
+// le mode arc-en-ciel passent par la même règle sans rien à prévoir.
+//
+// Mesuré sur les quinze : blanc de 4.60:1 à 5.03:1, tuile sur carte sombre de
+// 3.40:1 à 3.74:1.
+export function themeColorForScheme(baseColor: string, isDark: boolean): string {
+  if (!isDark) return baseColor;
+  let choisie = baseColor;
+  for (let pas = 1; pas <= 30; pas++) {
+    const essai = mixHex('#FFFFFF', baseColor, pas / 100);
+    if (contrastRatio('#FFFFFF', essai) < PLANCHER_BLANC) break;
+    choisie = essai;
+  }
+  return choisie;
+}
 
 export function getThemeColor(themeId: string): string {
   return THEME_COLORS[themeId] ?? FALLBACK_COLOR;

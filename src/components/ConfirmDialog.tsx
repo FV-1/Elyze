@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
@@ -85,13 +86,8 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.lg,
       padding: spacing.lg,
       gap: spacing.xs,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 12 },
-      shadowOpacity: 0.18,
-      shadowRadius: 28,
-      elevation: 8,
     },
     title: {
       fontSize: fonts.body + 2,
@@ -127,20 +123,22 @@ function makeStyles(colors: ColorTokens) {
       color: colors.textSecondary,
     },
     confirmButton: {
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
     },
     confirmText: {
       fontSize: fonts.small + 1,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     destructiveButton: {
       backgroundColor: colors.danger,
     },
+    // La pêche est claire : c'est de l'encre qui s'y écrit (9.6:1), et non du
+    // blanc, qui n'y tiendrait que 1.6:1.
     destructiveText: {
       fontSize: fonts.small + 1,
       fontWeight: '700',
-      color: '#FFFFFF',
+      color: colors.onAccentDanger,
     },
   });
 }

@@ -35,8 +35,12 @@ function fnv1a(input: string): string {
 // propositions, pas l'ordre dans lequel le fichier généré les a écrites.
 // Réordonner le fichier sans rien changer au contenu n'invalide donc pas les
 // sessions en cours.
+//
+// Le thème de chaque carte en fait partie : le passage de quinze thèmes à huit
+// sujets a gardé les mêmes identifiants, et une session ou un défi enregistrés
+// avant ne doivent pas être relus avec des thèmes qui n'existent plus.
 export const CATALOG_FINGERPRINT = `${PROPOSALS.length}-${fnv1a(
-  PROPOSALS.map((p) => p.id)
+  PROPOSALS.map((p) => `${p.id}:${p.themeId}`)
     .sort()
     .join('\n')
 )}`;

@@ -1,7 +1,13 @@
 import { mixHex } from '../utils/color';
 import { contrastRatio } from './rainbow';
 
-// Couleur des modules d'un QR code, dérivée de l'accent choisi.
+// Couleur des modules d'un QR code, dérivée d'un accent.
+//
+// NE SERT PLUS QU'AU MODE ARC-EN-CIEL. Hors de lui, le code est dessiné à
+// l'encre de l'app (voir components/QrCode.tsx) : un accent clair assombri
+// jusqu'au seuil perd sa teinte et garde sa boue — la pêche donnait un marron,
+// le lime un kaki. Dans le mode arc-en-ciel, où tout est repeint au hasard, la
+// dérivation reste ce qui garde le code lisible, et c'est tout son objet.
 //
 // UN QR CODE N'EST PAS UNE IMAGE POUR L'ŒIL, et c'est tout le problème de le
 // mettre aux couleurs de l'app. Un décodeur ne voit ni teinte ni saturation :

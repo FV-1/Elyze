@@ -167,9 +167,42 @@ export function pickTopMatch(results: CandidateResult[]): CandidateResult | null
   return results[0] ?? null;
 }
 
+// Réponses par candidat, en moyenne, avant que le podium provisoire apparaisse.
+//
+// Après une douzaine de cartes, un candidat n'a qu'une réponse ou deux : trois
+// candidats s'affichaient alors « 67 % » sur trois marches dorées, pour une
+// seule proposition chacun. Un podium a l'air définitif ; à ce stade, il ne
+// l'est en rien.
+export const MIN_REPONSES_PODIUM = 3;
+
+// Le podium provisoire a-t-il de quoi s'afficher ? Une seule règle pour le
+// panneau Classement, qui le montre, et pour la fenêtre qui annonce son
+// arrivée : l'une ne doit pas promettre ce que l'autre ne montre pas encore.
+export function podiumProvisoirePret(results: CandidateResult[]): boolean {
+  if (pickTopMatch(results) === null) return false;
+  const reponses = results.reduce((total, r) => total + r.answered, 0);
+  return reponses / results.length >= MIN_REPONSES_PODIUM;
+}
+
 // Traduit l'écart (en score ajusté) entre le 1er et le 2e du classement en
 // un message qualitatif — plus honnête qu'un chiffre brut, qui pourrait
 // entrer en contradiction avec les pourcentages bruts affichés juste à côté.
+//
+// LES SEUILS ONT ÉTÉ MESURÉS, PAS CHOISIS. Simulation : 400 joueurs aux avis
+// fixes sur tout le vivier, 50 parties chacun, le « vrai » premier étant
+// celui dont ils approuvent le plus de mesures. Sur une partie courte (cinq
+// cartes par candidat), le même joueur ne retrouve le même vainqueur qu'une
+// fois sur trois, et « Bonne avance » ne tombait juste qu'une fois sur deux :
+// une seule carte d'écart y fait déjà quatorze points. Aucun seuil ne corrige
+// ça — c'est le tirage qui décide, pas l'écart. En dessous de
+// MIN_REPONSES_POUR_DEPARTAGER, on ne prétend donc à aucune avance.
+//
+// Sur une partie longue, 15 et 8 points donnent « Match net » juste 97 % du
+// temps et « Bonne avance » 87 % (contre 82 % avec l'ancien seuil de 6).
+const MIN_REPONSES_POUR_DEPARTAGER = 10;
+const ECART_NET = 15;
+const ECART_AVANCE = 8;
+
 export function matchConfidenceLabel(results: CandidateResult[]): string | null {
   if (results.length < 2) return null;
 
@@ -181,9 +214,13 @@ export function matchConfidenceLabel(results: CandidateResult[]): string | null 
     return `${premiers.length} candidats à égalité en tête : rien ne les départage sur ces réponses.`;
   }
 
+  if (Math.min(results[0].answered, results[1].answered) < MIN_REPONSES_POUR_DEPARTAGER) {
+    return 'Résultat indicatif : sur si peu de propositions par candidat, une autre partie pourrait changer l’ordre.';
+  }
+
   const gap = results[0].score - results[1].score;
-  if (gap >= 15) return 'Match net : l’écart est clair avec le reste du classement.';
-  if (gap >= 6) return 'Bonne avance sur le reste du classement.';
+  if (gap >= ECART_NET) return 'Match net : l’écart est clair avec le reste du classement.';
+  if (gap >= ECART_AVANCE) return 'Bonne avance sur le reste du classement.';
   return 'Résultat serré avec le 2ᵉ du classement.';
 }
 

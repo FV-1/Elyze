@@ -86,13 +86,13 @@ export function strongestBlend(
   return 0;
 }
 
-// Valeur figée, vérifiée par le test face à `strongestBlend`.
-// 11 % dans les deux thèmes. C'est peu, et ce n'est pas un choix esthétique :
-// c'est le plafond. Au-delà, `textSecondary` puis `accentText` passent sous
-// 4.5:1 sur les teintes claires du balayage. Le dégradé est donc discret sur
-// la FACE de la carte — c'est son cadre, qui ne porte aucun texte, qui montre
-// les couleurs à pleine force (voir `cardFrameSweep`).
-export const CARD_BLEND: Record<Scheme, number> = { light: 0.11, dark: 0.11 };
+// Ce que la face de la carte prend de couleur. Vérifié par le test comme
+// restant SOUS le plafond que calcule `strongestBlend`, et non collé à lui :
+// le plafond a beaucoup monté depuis que les textes de la carte sont de
+// l'encre et non plus un accent clair, et s'y coller donnerait une carte
+// franchement teintée là où l'on ne veut qu'un voile. C'est le cadre, qui ne
+// porte aucun texte, qui montre les couleurs à pleine force.
+export const CARD_BLEND: Record<Scheme, number> = { light: 0.18, dark: 0.22 };
 
 // Le cadre de la carte ne porte aucun texte : le dégradé y est pur, à la
 // clarté du balayage de base. C'est lui qui rend le mode visible.
@@ -116,7 +116,7 @@ export function cardSweep(scheme: Scheme, surface: string): string[] {
 // s'approcher de la surface, quand celles-ci doivent s'en éloigner. En thème
 // clair la piste est presque blanche, il faut donc des couleurs franchement
 // plus sombres ; en sombre, l'inverse.
-const PROGRESS_LIGHTNESS: Record<Scheme, number> = { light: 30, dark: 67 };
+const PROGRESS_LIGHTNESS: Record<Scheme, number> = { light: 29, dark: 60 };
 
 export function progressSweep(scheme: Scheme): string[] {
   return sweepAt(SATURATION, PROGRESS_LIGHTNESS[scheme]);

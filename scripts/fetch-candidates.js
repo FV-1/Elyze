@@ -55,15 +55,26 @@ const THEME_SLUGS = {
   Institutions: 'institutions',
 };
 
+// Poligraph a placé son site derrière la protection anti-robots de Vercel
+// (« Vercel Security Checkpoint ») : un script reçoit un 429 et une page de
+// défi, quel que soit son rythme. On ne cherche PAS à la contourner — c'est
+// une demande explicite du site. On s'arrête net, en le disant.
+class SiteBloque extends Error {}
+
 function get(url) {
   return new Promise((resolve, reject) => {
     https
       .get(url, { headers: { 'User-Agent': UA } }, (res) => {
-        if (res.statusCode !== 200) return reject(new Error(`HTTP ${res.statusCode} ${url}`));
         let body = '';
         res.setEncoding('utf8');
         res.on('data', (c) => (body += c));
-        res.on('end', () => resolve(body));
+        res.on('end', () => {
+          if (res.statusCode === 429 || body.includes('Vercel Security Checkpoint')) {
+            return reject(new SiteBloque(`Poligraph refuse les requêtes automatiques (HTTP ${res.statusCode}) : ${url}`));
+          }
+          if (res.statusCode !== 200) return reject(new Error(`HTTP ${res.statusCode} ${url}`));
+          resolve(body);
+        });
       })
       .on('error', reject);
   });
@@ -197,6 +208,17 @@ function parseFiche(payload) {
 }
 
 (async () => {
+  try {
+    await principal();
+  } catch (e) {
+    if (!(e instanceof SiteBloque)) throw e;
+    console.error(`\n\n✖ ${e.message}`);
+    console.error('  Rien n\'a été écrit. Ne pas insister : demander un export à Poligraph.');
+    process.exit(2);
+  }
+})();
+
+async function principal() {
   const args = process.argv.slice(2);
   const pagesArg = args.find((a) => a.startsWith('--pages='));
   const sansFiches = args.includes('--sans-fiches');
@@ -225,21 +247,35 @@ function parseFiche(payload) {
       }
     } else {
       console.log(`  ${mesures.length} mesures listées, lecture des fiches...`);
+      // Une fiche illisible n'est plus remplacée par une source vide en
+      // silence. C'est ce qui s'était passé : la protection anti-robots
+      // renvoyait un 429 à chaque fiche, l'erreur était avalée, et les 1 215
+      // mesures ajoutées sont arrivées dans l'app SANS AUCUNE SOURCE — alors
+      // que l'app affirme citer la provenance de chaque carte.
       let i = 0;
+      const echecs = [];
       for (const m of mesures) {
         i++;
         try {
           const detail = parseFiche(payloadOf(await get(`${BASE}/mesures/${m.fiche}`)));
           m.precision = detail.precision;
           m.source = detail.source;
-        } catch {
+          if (!m.source.url) echecs.push(`${m.fiche} : aucune source trouvée sur la fiche`);
+        } catch (e) {
+          if (e instanceof SiteBloque) throw e;
           m.precision = null;
           m.source = { type: null, date: null, url: null };
+          echecs.push(`${m.fiche} : ${e.message}`);
         }
         process.stdout.write(`\r  fiches ${i}/${mesures.length}`);
         await pause();
       }
       process.stdout.write('\n');
+      if (echecs.length) {
+        console.warn(`  ⚠ ${echecs.length} mesure(s) sans source — generate-data.js les écartera :`);
+        for (const e of echecs.slice(0, 10)) console.warn(`    ${e}`);
+        if (echecs.length > 10) console.warn(`    … et ${echecs.length - 10} autres`);
+      }
     }
 
     resultat.candidats.push({ slug, mesures });
@@ -252,4 +288,4 @@ function parseFiche(payload) {
     for (const m of c.mesures) parTheme[m.themeSlug] = (parTheme[m.themeSlug] || 0) + 1;
     console.log(`  ${c.slug.padEnd(24)} ${String(c.mesures.length).padStart(4)} mesures sur ${Object.keys(parTheme).length} thèmes`);
   });
-})();
+}

@@ -26,7 +26,7 @@ export const SwipeDeck = forwardRef<SwipeDeckHandle, Props>(function SwipeDeck(
   { proposals, currentIndex, themesById, onSwipe, onOpenDebate }: Props,
   ref
 ) {
-  const topTriggerRef = useRef<((direction: SwipeDirection) => void) | null>(null);
+  const topTriggerRef = useRef<((direction: SwipeDirection) => boolean) | null>(null);
 
   // Hauteur réellement disponible pour une carte.
   //
@@ -45,9 +45,10 @@ export const SwipeDeck = forwardRef<SwipeDeckHandle, Props>(function SwipeDeck(
   useImperativeHandle(ref, () => ({
     swipeTop: (direction) => {
       const trigger = topTriggerRef.current;
+      // Vrai seulement si une sortie a réellement démarré : une carte déjà
+      // validée refuse de repartir (voir SwipeCard).
       if (!trigger) return false;
-      trigger(direction);
-      return true;
+      return trigger(direction);
     },
   }));
 

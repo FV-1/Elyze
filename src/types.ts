@@ -1,11 +1,6 @@
+// Un des huit sujets affichés. Les quinze thèmes des sources ne survivent que
+// dans l'identifiant des cartes (voir scripts/generate-data.js).
 export type ThemeTag = {
-  id: string;
-  label: string;
-  icon: string;
-  categoryId: string;
-};
-
-export type Category = {
   id: string;
   label: string;
   icon: string;

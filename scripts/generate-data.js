@@ -4,7 +4,7 @@
  *
  *   node scripts/generate-data.js
  *
- * Produit : src/data/candidates.ts, themes.ts, categories.ts, proposals.ts
+ * Produit : src/data/candidates.ts, themes.ts, proposals.ts
  *
  * Deux arbitrages structurent la génération, parce que l'export brut ne peut
  * pas être utilisé tel quel :
@@ -23,9 +23,18 @@
  *    et non plus un seuil automatique : le changement est assumé et l'écran
  *    « Comment ça marche » le dit aux utilisateurs.
  *
- * La source est double : l'export machine de Poligraph, et un fichier
- * complémentaire produit par scripts/fetch-candidates.js pour les candidats
- * apparus depuis (voir ce script pour le pourquoi).
+ * Trois fichiers, fusionnés dans cet ordre — le dédoublonnage garde la
+ * première occurrence, donc l'ordre dit qui l'emporte :
+ *
+ *  1. l'export machine de Poligraph (29 août 2026), sourcé ;
+ *  2. le dépôt de « 2027 et moi » (scripts/fetch-2027etmoi.js), sourcé, plus
+ *     récent, et qui dit la NATURE de chaque mesure ;
+ *  3. les pages de Poligraph lues par scripts/fetch-candidates.js, dont les
+ *     sources n'ont jamais pu être récupérées. Elles ne servent plus qu'aux
+ *     candidats de SANS_SOURCE_TOLERE.
+ *
+ * 4. PROVENANCE — une mesure sans lien vers son document d'origine n'entre
+ *    pas dans l'app, sauf exception nommée (SANS_SOURCE_TOLERE).
  */
 
 const fs = require('fs');
@@ -34,6 +43,7 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const SOURCE = path.join(ROOT, 'poligraph_presidentielle_2027_export.json');
 const AJOUTS = path.join(ROOT, 'poligraph_candidats_ajoutes.json');
+const ETMOI = path.join(ROOT, '2027etmoi_programmes.json');
 const OUT = path.join(ROOT, 'src', 'data');
 
 // Taille du VIVIER par candidat : ce que l'app embarque.
@@ -112,6 +122,22 @@ const CANDIDATS_AJOUTES = {
   'raphael-glucksmann': { nom: 'Raphaël Glucksmann', parti: 'Place publique' },
 };
 
+// --- La provenance, et son unique exception ---------------------------------
+//
+// L'app affiche sous chaque carte d'où vient la mesure. Une carte sans source
+// affirmerait implicitement quelque chose qu'elle ne peut pas montrer : elle
+// n'entre donc pas dans le vivier.
+//
+// Deux candidats font exception, par décision assumée : ni Poligraph (sources
+// illisibles) ni « 2027 et moi » (13 et 8 mesures) n'offrent assez de mesures
+// sourcées pour tenir le quota. Les en retirer aurait sorti deux candidats de
+// l'app ; on complète donc leur vivier avec les mesures Poligraph non
+// sourcées, APRÈS toutes leurs mesures sourcées. scripts/check-data.js refuse
+// une carte sans source pour tout autre candidat.
+//
+// Cette liste doit rester alignée sur celle de check-data.js.
+const SANS_SOURCE_TOLERE = new Set(['Raphaël Glucksmann', 'Xavier Bertrand']);
+
 // Les textes très longs débordent de la carte de swipe, les très courts sont
 // souvent trop vagues pour qu'on puisse se prononcer.
 //
@@ -125,35 +151,126 @@ const LONGUEUR_MIN = 40;
 const LONGUEUR_MAX = 240;
 const LONGUEUR_IDEALE = 130;
 
-// --- Métadonnées éditoriales des 15 thèmes de l'export ---------------------
-// (slug Poligraph -> identifiant court, libellé affiché, icône, catégorie)
+// --- Les huit sujets affichés --------------------------------------------
+//
+// L'app présentait quinze thèmes, rangés en quatre catégories. C'était trop :
+// l'écran de choix empilait cases de catégorie et cases de thème, et les plus
+// petits thèmes (numérique, transports) ne donnaient qu'une poignée de cartes
+// par candidat, d'où un avertissement de paquet trop maigre dès qu'on les
+// choisissait seuls. Huit sujets de 28 à 53 cartes, sans catégorie, suffisent.
+//
+// L'ordre de cette liste est celui de l'écran.
+const SUJETS = [
+  { id: 'economie', label: 'Économie & numérique', icon: '💶' },
+  { id: 'travail', label: 'Travail & retraites', icon: '🤝' },
+  { id: 'sante', label: 'Santé & solidarités', icon: '🏥' },
+  { id: 'education', label: 'École & culture', icon: '🎓' },
+  { id: 'ecologie', label: 'Écologie & agriculture', icon: '🌱' },
+  { id: 'logement', label: 'Logement & transports', icon: '🏠' },
+  { id: 'securite', label: 'Sécurité & immigration', icon: '⚖️' },
+  { id: 'institutions', label: 'Institutions & défense', icon: '🏛️' },
+];
+
+// --- Les quinze thèmes des sources, et le sujet de chacun ------------------
+//
+// L'identifiant FIN (`id`) reste celui des quinze anciens thèmes, et il entre
+// dans l'identifiant de chaque carte. C'est voulu : l'explication et les
+// arguments de chaque carte sont rangés sous cet identifiant, et les
+// regrouper sous huit sujets ne doit pas les détacher de leur carte. Seul le
+// `themeId` publié dans proposals.ts devient celui du sujet.
 const THEME_META = {
-  'economie-budget': { id: 'economie', label: 'Économie & budget', icon: '💶', categoryId: 'economie' },
-  'emploi-travail': { id: 'emploi', label: 'Emploi & travail', icon: '🤝', categoryId: 'economie' },
-  retraites: { id: 'retraites', label: 'Retraites', icon: '🧓', categoryId: 'economie' },
-  'solidarites-protection-sociale': { id: 'solidarites', label: 'Solidarités & protection sociale', icon: '🫱', categoryId: 'economie' },
+  'economie-budget': { id: 'economie', sujet: 'economie' },
+  'numerique-tech': { id: 'numerique', sujet: 'economie' },
 
-  sante: { id: 'sante', label: 'Santé', icon: '🏥', categoryId: 'education_sante' },
-  'education-culture': { id: 'education', label: 'Éducation & culture', icon: '🎓', categoryId: 'education_sante' },
-  'numerique-tech': { id: 'numerique', label: 'Numérique & tech', icon: '💻', categoryId: 'education_sante' },
+  'emploi-travail': { id: 'emploi', sujet: 'travail' },
+  retraites: { id: 'retraites', sujet: 'travail' },
 
-  'logement-urbanisme': { id: 'logement', label: 'Logement & urbanisme', icon: '🏠', categoryId: 'cadre_vie' },
-  transports: { id: 'transports', label: 'Transports', icon: '🚆', categoryId: 'cadre_vie' },
-  'environnement-energie': { id: 'environnement', label: 'Environnement & énergie', icon: '🌱', categoryId: 'cadre_vie' },
-  'agriculture-alimentation': { id: 'agriculture', label: 'Agriculture & alimentation', icon: '🌾', categoryId: 'cadre_vie' },
+  sante: { id: 'sante', sujet: 'sante' },
+  'solidarites-protection-sociale': { id: 'solidarites', sujet: 'sante' },
 
-  'securite-justice': { id: 'securite', label: 'Sécurité & justice', icon: '⚖️', categoryId: 'regalien' },
-  immigration: { id: 'immigration', label: 'Immigration', icon: '🌍', categoryId: 'regalien' },
-  'affaires-etrangeres-defense': { id: 'defense', label: 'Affaires étrangères & défense', icon: '🛡️', categoryId: 'regalien' },
-  institutions: { id: 'institutions', label: 'Institutions', icon: '🏛️', categoryId: 'regalien' },
+  'education-culture': { id: 'education', sujet: 'education' },
+
+  'environnement-energie': { id: 'environnement', sujet: 'ecologie' },
+  'agriculture-alimentation': { id: 'agriculture', sujet: 'ecologie' },
+
+  'logement-urbanisme': { id: 'logement', sujet: 'logement' },
+  transports: { id: 'transports', sujet: 'logement' },
+
+  'securite-justice': { id: 'securite', sujet: 'securite' },
+  immigration: { id: 'immigration', sujet: 'securite' },
+
+  'affaires-etrangeres-defense': { id: 'defense', sujet: 'institutions' },
+  institutions: { id: 'institutions', sujet: 'institutions' },
+};
+const SUJET_DU_THEME = Object.fromEntries(Object.values(THEME_META).map((t) => [t.id, t.sujet]));
+
+// --- Thèmes de « 2027 et moi » -> slug de thème de l'app -------------------
+//
+// Onze thèmes ont un équivalent direct. « territoires » mélange agriculture,
+// transports et décentralisation : chaque mesure y est classée par mots-clés,
+// dans l'ordre de la liste, et une mesure qu'aucun motif ne reconnaît est
+// écartée (et signalée au rapport) plutôt que rangée au hasard.
+const THEMES_ETMOI = {
+  economie: 'economie-budget',
+  travail: 'emploi-travail',
+  retraites: 'retraites',
+  education: 'education-culture',
+  sante: 'sante',
+  logement: 'logement-urbanisme',
+  ecologie: 'environnement-energie',
+  securite: 'securite-justice',
+  immigration: 'immigration',
+  international: 'affaires-etrangeres-defense',
+  institutions: 'institutions',
+};
+const TERRITOIRES_ETMOI = [
+  [/agricult|agricole|\bPAC\b|pesticide|phytosanitaire|néonicotino|pêche|chalutier|mégabassine|alimentaire/i, 'agriculture-alimentation'],
+  [/SNCF|ferroviaire|transports?\b|avion/i, 'transports'],
+  [/artificialisation|\bZAN\b/i, 'logement-urbanisme'],
+  [/décentralisation|Corse|collectivités/i, 'institutions'],
+  [/médiathèque|salles des fêtes|culturel/i, 'education-culture'],
+  [/biodiversité|régies publiques de l'eau|climatique/i, 'environnement-energie'],
+  [/contrats aidés/i, 'emploi-travail'],
+];
+
+// « retraites » couvre aussi, chez « 2027 et moi », la famille et l'enfance
+// (« part fiscale dès le deuxième enfant », « protection de l'enfance ») :
+// sans mot propre aux retraites, la mesure va aux solidarités.
+const RETRAITES_VRAIES = /retraite|pension de|cotisation|âge légal|trimestre|départ/i;
+
+// Mesures qui désignent leur auteur à coup sûr : le paquet est aveugle, et la
+// mesure étant citée telle quelle, on ne peut que l'écarter. Une région
+// qu'il préside, une ville qu'il dirige.
+const REVELE_L_AUTEUR = [/sur le modèle des Hauts-de-France/i];
+
+function themeEtmoi(mesure) {
+  if (REVELE_L_AUTEUR.some((re) => re.test(mesure.texte))) return null;
+  if (mesure.theme === 'retraites' && !RETRAITES_VRAIES.test(mesure.texte)) return 'solidarites-protection-sociale';
+  if (THEMES_ETMOI[mesure.theme]) return THEMES_ETMOI[mesure.theme];
+  if (mesure.theme !== 'territoires') return null;
+  const trouve = TERRITOIRES_ETMOI.find(([re]) => re.test(mesure.texte));
+  return trouve ? trouve[1] : null;
+}
+
+// Nature de la mesure, affichée en tête de la ligne de provenance. C'est
+// l'information que Poligraph ne donnait pas : une promesse écrite dans un
+// programme n'engage pas comme une phrase lâchée en interview.
+const NATURE_ETMOI = {
+  programme: 'Programme',
+  declaration: 'Déclaration publique',
+  presse: 'Rapporté par la presse',
 };
 
-const CATEGORIES = [
-  { id: 'economie', label: 'Économie & social', icon: '💶' },
-  { id: 'education_sante', label: 'Santé, éducation & numérique', icon: '🎓' },
-  { id: 'cadre_vie', label: 'Cadre de vie & environnement', icon: '🏠' },
-  { id: 'regalien', label: 'Régalien & institutions', icon: '⚖️' },
-];
+const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+
+// « 2026-09-13 » -> « 13 septembre 2026 », « 2025-01 » -> « janvier 2025 » :
+// la forme qu'emploie déjà Poligraph, pour que les cartes se lisent pareil.
+function dateFr(iso) {
+  const m = /^(\d{4})-(\d{2})(?:-(\d{2}))?$/.exec(iso || '');
+  if (!m) return null;
+  const mois = MOIS[parseInt(m[2], 10) - 1];
+  return m[3] ? `${parseInt(m[3], 10)} ${mois} ${m[1]}` : `${mois} ${m[1]}`;
+}
 
 // Identifiants stables et initiales, par nom tel qu'il apparaît dans l'export.
 // Les identifiants reprennent ceux déjà utilisés par l'app quand le candidat
@@ -261,7 +378,45 @@ function main() {
     }
   }
 
-  // 1 bis. Fusionner les candidats récupérés séparément, ramenés à la même
+  // 1 bis. « 2027 et moi », AVANT les pages Poligraph non sourcées : à texte
+  //        équivalent, c'est la version sourcée qui survit au dédoublonnage.
+  const nonClassees = [];
+  let etmoi = null;
+  if (fs.existsSync(ETMOI)) {
+    etmoi = JSON.parse(fs.readFileSync(ETMOI, 'utf8'));
+    const nomParId = Object.fromEntries(Object.entries(CANDIDAT_META).map(([nom, m]) => [m.id, nom]));
+    const partiParId = Object.fromEntries(
+      Object.values(CANDIDATS_AJOUTES).map((c) => [CANDIDAT_META[c.nom].id, c.parti])
+    );
+    for (const cand of etmoi.candidats) {
+      const nom = nomParId[cand.id];
+      if (!nom) throw new Error(`Candidat de « 2027 et moi » sans identité : ${cand.id}`);
+      for (const mesure of cand.mesures) {
+        const themeSlug = themeEtmoi(mesure);
+        if (!themeSlug) {
+          nonClassees.push(`${cand.id} [${mesure.theme}] ${mesure.texte.slice(0, 70)}`);
+          continue;
+        }
+        toutes.push({
+          slugSource: null,
+          themeId: THEME_META[themeSlug].id,
+          themeSlug,
+          nom,
+          parti: partiParId[cand.id],
+          texte: mesure.texte.trim(),
+          precision: null,
+          detailUrl: null,
+          source: {
+            type: NATURE_ETMOI[mesure.nature] || null,
+            date: dateFr(mesure.source.date),
+            url: mesure.source.url,
+          },
+        });
+      }
+    }
+  }
+
+  // 1 ter. Fusionner les candidats récupérés séparément, ramenés à la même
   //        forme. Le fichier est facultatif : sans lui, la génération se
   //        poursuit avec le seul export, et le contrôle du ROSTER plus bas
   //        signalera les candidats manquants.
@@ -294,14 +449,27 @@ function main() {
     }
   }
 
-  // 2. Dédoublonner (l'export contient quelques textes identiques), et écarter
-  //    ce que la carte ne peut pas afficher.
-  const vus = new Set();
+  // 2. Écarter ce que la carte ne peut pas afficher, ce qui n'a pas de source
+  //    (hors exception), et les doublons.
+  //
+  //    Deux sources décrivent souvent la même mesure en des termes voisins
+  //    (« Prix planchers pour les agriculteurs » / « Instaurer des prix
+  //    planchers agricoles ») : la comparaison exacte des textes ne suffit
+  //    plus. On compare les mots pleins, et au-delà de SEUIL_DOUBLON de mots
+  //    communs, la seconde occurrence est écartée.
+  const sansSource = {};
+  const parNom = new Map();
   const uniques = toutes.filter((m) => {
     if (m.texte.length < LONGUEUR_MIN || m.texte.length > LONGUEUR_MAX) return false;
-    const cle = `${m.nom}::${m.texte.toLowerCase()}`;
-    if (vus.has(cle)) return false;
-    vus.add(cle);
+    if (!m.source?.url && !SANS_SOURCE_TOLERE.has(m.nom)) {
+      sansSource[m.nom] = (sansSource[m.nom] || 0) + 1;
+      return false;
+    }
+    const mots = motsPleins(m.texte);
+    const deja = parNom.get(m.nom) || [];
+    if (deja.some((autres) => ressemblance(mots, autres) >= SEUIL_DOUBLON)) return false;
+    deja.push(mots);
+    parNom.set(m.nom, deja);
     return true;
   });
 
@@ -349,8 +517,14 @@ function main() {
     // à la main, et régénérer les données ne doit pas jeter ce travail sans
     // raison. À défaut, on préfère les longueurs proches de l'idéal, puis
     // l'ordre alphabétique pour lever les ex aequo.
+    //
+    // Avant tout cela, les mesures SOURCÉES : pour les candidats de
+    // SANS_SOURCE_TOLERE, les mesures sans source ne viennent qu'en complément.
     for (const liste of parTheme.values()) {
       liste.sort((a, b) => {
+        const srcA = a.source?.url ? 0 : 1;
+        const srcB = b.source?.url ? 0 : 1;
+        if (srcA !== srcB) return srcA - srcB;
         const dejaA = dejaExplique(a) ? 0 : 1;
         const dejaB = dejaExplique(b) ? 0 : 1;
         if (dejaA !== dejaB) return dejaA - dejaB;
@@ -361,25 +535,47 @@ function main() {
       });
     }
 
+    // Plusieurs passes de tourniquet. La première ne prend que les mesures
+    // sourcées ET déjà rédigées ; les suivantes complètent. En une seule
+    // passe, le tourniquet préférait une mesure neuve d'un thème encore vide
+    // à une mesure rédigée d'un thème déjà servi : l'arrivée de « 2027 et
+    // moi » jetait ainsi des explications écrites et relues, pour en exiger
+    // d'autres à leur place. La répartition par thème reste assurée au
+    // tirage de chaque partie (voir utils/deck.ts).
     const choisies = [];
-    let tour = 0;
-    while (choisies.length < POOL_PAR_CANDIDAT) {
-      let ajoutTour = 0;
-      for (const themeId of ordreThemes) {
-        const liste = parTheme.get(themeId);
-        if (!liste || liste.length <= tour) continue;
-        choisies.push(liste[tour]);
-        ajoutTour++;
-        if (choisies.length >= POOL_PAR_CANDIDAT) break;
+    const prises = new Set();
+    const tourniquet = (admise) => {
+      while (choisies.length < POOL_PAR_CANDIDAT) {
+        let ajoutTour = 0;
+        for (const themeId of ordreThemes) {
+          const candidates = (parTheme.get(themeId) || []).filter((m) => !prises.has(m) && admise(m));
+          if (candidates.length === 0) continue;
+          choisies.push(candidates[0]);
+          prises.add(candidates[0]);
+          ajoutTour++;
+          if (choisies.length >= POOL_PAR_CANDIDAT) break;
+        }
+        if (ajoutTour === 0) break; // plus rien à prendre
       }
-      if (ajoutTour === 0) break; // plus rien à prendre
-      tour++;
-    }
+    };
+    // Ordre de préférence : sourcée et rédigée, sourcée, rédigée, le reste.
+    // Les deux dernières passes ne servent qu'aux candidats de
+    // SANS_SOURCE_TOLERE. Sans la troisième, une régénération changeait leurs
+    // cartes non sourcées à chaque fois, et jetait leurs textes.
+    const sourcee = (m) => Boolean(m.source?.url);
+    tourniquet((m) => sourcee(m) && dejaExplique(m));
+    tourniquet(sourcee);
+    tourniquet(dejaExplique);
+    tourniquet(() => true);
     selection.push(...choisies);
   }
 
-  // 5. Ordre final stable : par thème (ordre éditorial), puis par candidat.
+  // 5. Ordre final stable : par sujet, par thème, puis par candidat.
+  const ordreSujets = SUJETS.map((t) => t.id);
   selection.sort((a, b) => {
+    const sa = ordreSujets.indexOf(SUJET_DU_THEME[a.themeId]);
+    const sb = ordreSujets.indexOf(SUJET_DU_THEME[b.themeId]);
+    if (sa !== sb) return sa - sb;
     const ta = ordreThemes.indexOf(a.themeId);
     const tb = ordreThemes.indexOf(b.themeId);
     if (ta !== tb) return ta - tb;
@@ -401,8 +597,33 @@ function main() {
     m.candidateId = meta.id;
   }
 
-  ecrireFichiers({ raw, selection, retenus, ecartes });
-  rapport({ raw, uniques, selection, retenus, ecartes });
+  ecrireFichiers({ raw, etmoi, selection, retenus, ecartes });
+  rapport({ raw, uniques, selection, retenus, ecartes, sansSource, nonClassees });
+}
+
+const SEUIL_DOUBLON = 0.6;
+const MOTS_VIDES = new Set(
+  'les des une pour par aux avec dans sur est sont qui que leur leurs plus son ses cette ces tout tous être faire mettre'.split(' ')
+);
+
+function motsPleins(texte) {
+  return new Set(
+    texte
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter((w) => w.length > 2 && !MOTS_VIDES.has(w))
+  );
+}
+
+// Part des mots du plus court des deux textes qu'on retrouve dans l'autre.
+function ressemblance(a, b) {
+  const [petit, grand] = a.size <= b.size ? [a, b] : [b, a];
+  if (petit.size === 0) return 0;
+  let communs = 0;
+  for (const w of petit) if (grand.has(w)) communs++;
+  return communs / petit.size;
 }
 
 // Plus la note est basse, meilleure est la longueur.
@@ -412,36 +633,29 @@ function noteLongueur(texte) {
   return Math.abs(n - LONGUEUR_IDEALE);
 }
 
-function ecrireFichiers({ raw, selection, retenus }) {
+function ecrireFichiers({ raw, etmoi, selection, retenus }) {
   const entete = (quoi) =>
     `// FICHIER GÉNÉRÉ — ne pas modifier à la main.\n` +
     `// Source : ${raw.source}\n` +
     `// Export du ${raw.extrait_le} · ${raw.licence}\n` +
+    (etmoi
+      ? `// Source : ${etmoi.source} (${etmoi.depot}, commit ${etmoi.commit.slice(0, 7)})\n` +
+        `// Données du ${etmoi.mise_a_jour} · ${etmoi.licence}\n`
+      : '') +
     `// Régénérer avec : node scripts/generate-data.js\n` +
     `// (${quoi})\n\n`;
 
-  // --- categories.ts ---
-  const categories =
-    entete('regroupement éditorial des thèmes, pour l’écran de sélection') +
-    `import { Category } from '../types';\n\n` +
-    `export const CATEGORIES: Category[] = [\n` +
-    CATEGORIES.map((c) => `  { id: ${q(c.id)}, label: ${q(c.label)}, icon: ${q(c.icon)} },`).join('\n') +
-    `\n];\n\n` +
-    `export const CATEGORIES_BY_ID: Record<string, Category> = Object.fromEntries(\n` +
-    `  CATEGORIES.map((c) => [c.id, c])\n);\n`;
-  fs.writeFileSync(path.join(OUT, 'categories.ts'), categories, 'utf8');
-
-  // --- themes.ts (uniquement les thèmes réellement représentés) ---
-  const themesPresents = new Set(selection.map((m) => m.themeId));
-  const themes = Object.values(THEME_META).filter((t) => themesPresents.has(t.id));
+  // --- themes.ts (uniquement les sujets réellement représentés) ---
+  const sujetsPresents = new Set(selection.map((m) => SUJET_DU_THEME[m.themeId]));
+  const themes = SUJETS.filter((t) => sujetsPresents.has(t.id));
   const themesTs =
-    entete('les 15 thèmes de l’export Poligraph') +
+    entete('les huit sujets affichés, qui regroupent les quinze thèmes des sources') +
     `import { ThemeTag } from '../types';\n\n` +
     `export const THEMES: ThemeTag[] = [\n` +
     themes
       .map(
         (t) =>
-          `  { id: ${q(t.id)}, label: ${q(t.label)}, icon: ${q(t.icon)}, categoryId: ${q(t.categoryId)} },`
+          `  { id: ${q(t.id)}, label: ${q(t.label)}, icon: ${q(t.icon)} },`
       )
       .join('\n') +
     `\n];\n\n` +
@@ -476,7 +690,10 @@ function ecrireFichiers({ raw, selection, retenus }) {
         const meta = CANDIDAT_META[nom];
         const parti = partiParNom.get(nom);
         const label = PARTI_LABEL[parti] || parti || 'Sans étiquette';
-        const slug = (slugParNom.get(nom) || '').replace(/-+$/, '');
+        // Un candidat dont aucune carte ne vient de Poligraph (toutes tirées de
+        // « 2027 et moi ») garde sa fiche : la table des candidats la connaît.
+        const slugConnu = Object.keys(CANDIDATS_AJOUTES).find((k) => CANDIDATS_AJOUTES[k].nom === nom);
+        const slug = (slugParNom.get(nom) || slugConnu || '').replace(/-+$/, '');
         const slugField = slug ? `, poligraphSlug: ${q(slug)}` : '';
         return `  { id: ${q(meta.id)}, name: ${q(nom)}, initials: ${q(meta.initials)}, party: ${q(label)}${slugField} },`;
       })
@@ -490,7 +707,7 @@ function ecrireFichiers({ raw, selection, retenus }) {
   const lignes = selection.map((m) => {
     const champs = [
       `    id: ${q(m.id)},`,
-      `    themeId: ${q(m.themeId)},`,
+      `    themeId: ${q(SUJET_DU_THEME[m.themeId])},`,
       `    candidateId: ${q(m.candidateId)},`,
       `    text: ${q(m.texte)},`,
     ];
@@ -511,14 +728,18 @@ function ecrireFichiers({ raw, selection, retenus }) {
     `// Date de l'export Poligraph qui a produit ce catalogue. Affichée dans\n` +
     `// l'app : un comparateur de programmes qui ne dit pas de quand datent ses\n` +
     `// données demande une confiance qu'il ne justifie pas.\n` +
-    `export const DATASET_DATE = ${q(raw.extrait_le)};\n\n` +
+    `export const DATASET_DATE = ${q(etmoi && etmoi.mise_a_jour > raw.extrait_le ? etmoi.mise_a_jour : raw.extrait_le)};\n\n` +
+    `// Date de chacune des deux sources. La Licence Ouverte de « 2027 et moi »\n` +
+    `// impose de citer la date de mise à jour des données avec leur source.\n` +
+    `export const POLIGRAPH_DATE = ${q(raw.extrait_le)};\n` +
+    `export const ETMOI_DATE = ${q(etmoi ? etmoi.mise_a_jour : null) || 'null'};\n\n` +
     `export const PROPOSALS: Proposal[] = [\n${lignes.join('\n')}\n];\n\n` +
     `export const PROPOSALS_BY_ID: Record<string, Proposal> = Object.fromEntries(\n` +
     `  PROPOSALS.map((p) => [p.id, p])\n);\n`;
   fs.writeFileSync(path.join(OUT, 'proposals.ts'), proposalsTs, 'utf8');
 }
 
-function rapport({ uniques, selection, retenus, ecartes }) {
+function rapport({ uniques, selection, retenus, ecartes, sansSource, nonClassees }) {
   console.log(`Mesures uniques dans l'export : ${uniques.length}`);
   console.log(`Candidats retenus (>= ${MIN_MESURES} mesures) : ${retenus.length}`);
   console.log(`Propositions générées : ${selection.length}\n`);
@@ -527,7 +748,7 @@ function rapport({ uniques, selection, retenus, ecartes }) {
   const parTheme = {};
   for (const m of selection) {
     parCand[m.nom] = (parCand[m.nom] || 0) + 1;
-    parTheme[m.themeId] = (parTheme[m.themeId] || 0) + 1;
+    parTheme[SUJET_DU_THEME[m.themeId]] = (parTheme[SUJET_DU_THEME[m.themeId]] || 0) + 1;
   }
   console.log('Par candidat :');
   for (const [n, v] of Object.entries(parCand).sort((a, b) => b[1] - a[1])) {
@@ -542,6 +763,15 @@ function rapport({ uniques, selection, retenus, ecartes }) {
   // dans la liste éditoriale.
   console.log('\nCandidats écartés (hors liste, ou trop peu de mesures) :');
   for (const { nom, mesures } of ecartes) console.log(`  ${nom.padEnd(24)} ${mesures.length}`);
+
+  console.log('\nÉcartées faute de source :');
+  for (const [n, v] of Object.entries(sansSource)) console.log(`  ${n.padEnd(24)} ${v}`);
+  const nonSourcees = selection.filter((m) => !m.source?.url);
+  console.log(`\nCartes retenues sans source (exception assumée) : ${nonSourcees.length}`);
+  if (nonClassees.length) {
+    console.log(`\nMesures « 2027 et moi » écartées — sans thème correspondant, ou révélant leur auteur (${nonClassees.length}) :`);
+    for (const l of nonClassees) console.log(`  ${l}`);
+  }
 
   const longueurs = selection.map((m) => m.texte.length).sort((a, b) => a - b);
   console.log(

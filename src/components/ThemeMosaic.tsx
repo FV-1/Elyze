@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from './Avatar';
 import { CANDIDATES_BY_ID } from '../data/candidates';
@@ -16,7 +17,7 @@ import { RESSORT, usePression } from './mouvement';
 // sur le seul paquet de la session.
 //
 // Une version précédente n'affichait que le paquet, pour que ses décomptes
-// recoupent ceux de l'onglet Classement juste à côté. Mais l'app embarque
+// recoupent ceux du classement provisoire, alors juste à côté. Mais l'app embarque
 // désormais bien plus de propositions qu'une partie n'en tire : n'en montrer
 // que la moitié revenait à cacher ce qu'on a sous la main. Le risque de
 // confusion est traité autrement, en le disant — l'en-tête annonce les deux
@@ -320,7 +321,8 @@ function AnswerBadge({
 //
 // Les couleurs des deux états ne changent pas : ce sont celles qu'un test de
 // contraste vérifie (data/themeColors.test.ts), curseur éteint sur piste
-// éteinte et curseur allumé sur accent.
+// éteinte et curseur allumé sur accent. Allumé, il prend `onAccent` et non un
+// blanc figé : sur un accent lime, le blanc ne donnerait que 1.2:1.
 const TRAJET_CURSEUR = 46 - 3 * 2 - 22;
 
 function Interrupteur({
@@ -337,7 +339,7 @@ function Interrupteur({
   }));
 
   const styleCurseur = useAnimatedStyle(() => ({
-    backgroundColor: withTiming(actif ? '#FFFFFF' : colors.textMuted, { duration: 160 }),
+    backgroundColor: withTiming(actif ? colors.onAccent : colors.textMuted, { duration: 160 }),
     transform: [{ translateX: withSpring(actif ? TRAJET_CURSEUR : 0, RESSORT) }],
   }));
 
@@ -363,7 +365,7 @@ function makeStyles(colors: ColorTokens) {
       marginTop: 2,
     },
     badgeText: {
-      fontSize: fonts.tiny - 1,
+      fontSize: fonts.etiquette,
       fontWeight: '700',
     },
     grid: {
@@ -391,7 +393,7 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: spacing.md,
       borderRadius: radii.md,
       backgroundColor: colors.surfaceAlt,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     revealIcon: {
@@ -525,7 +527,7 @@ function makeStyles(colors: ColorTokens) {
       gap: spacing.sm,
       backgroundColor: colors.surface,
       borderRadius: radii.md,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
       padding: spacing.sm + 2,
     },

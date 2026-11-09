@@ -2,6 +2,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BackHandler, Linking } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from 'expo-font';
+import {
+  SpaceGrotesk_400Regular,
+  SpaceGrotesk_500Medium,
+  SpaceGrotesk_600SemiBold,
+  SpaceGrotesk_700Bold,
+} from '@expo-google-fonts/space-grotesk';
+import { DMMono_400Regular, DMMono_500Medium } from '@expo-google-fonts/dm-mono';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { IntroScreen, RestorableSummary } from './src/screens/IntroScreen';
@@ -39,8 +47,7 @@ import {
   saveSession,
   StoredSession,
 } from './src/utils/storage';
-import { ThemeProvider, useColors, useThemeSettings } from './src/theme/ThemeContext';
-import { DEFAULT_ACCENT_ID } from './src/theme';
+import { ThemeProvider, useColors, useThemeSettings, ZoneAccent } from './src/theme/ThemeContext';
 
 type Screen =
   // Écran d'attente du tout premier rendu, le temps de savoir s'il y a une
@@ -79,7 +86,6 @@ function AppInner() {
   const {
     effectiveScheme,
     setSchemePreference,
-    setAccentId,
     setHapticsEnabled,
     setRainbowUnlocked,
   } = useThemeSettings();
@@ -118,6 +124,23 @@ function AppInner() {
   // démonté dès qu'on le quitte : sans cela, revenir du duel ou des réglages
   // déposait sur les cartes, jamais sur l'onglet d'où l'on était parti.
   const [swipeTab, setSwipeTab] = useState<SwipeTab>('swipe');
+
+  // LES DEUX POLICES SONT EMBARQUÉES, PAS TÉLÉCHARGÉES. L'app ne fait aucun
+  // appel réseau, et ce n'est pas une police qui va commencer : les fichiers
+  // partent dans le paquet et se chargent depuis le disque.
+  //
+  // Le second membre du couple est ignoré : une police qui ne se charge pas
+  // laisse le système prendre le relais, ce qui est moche mais lisible. Faire
+  // dépendre le démarrage de leur succès serait échanger un défaut d'aspect
+  // contre un écran vide.
+  const [policesPretes] = useFonts({
+    SpaceGrotesk_400Regular,
+    SpaceGrotesk_500Medium,
+    SpaceGrotesk_600SemiBold,
+    SpaceGrotesk_700Bold,
+    DMMono_400Regular,
+    DMMono_500Medium,
+  });
 
   const [showTutorial, setShowTutorial] = useState(false);
   // Le "moment de révélation" (haptique + animations) de l'écran de résultat
@@ -194,7 +217,7 @@ function AppInner() {
       }
       if (screen === 'review') {
         // Symétrique au bouton retour visible de cet écran.
-        setScreen('swipe');
+        setScreen('results');
         return true;
       }
       if (screen === 'swipe') {
@@ -330,19 +353,21 @@ function AppInner() {
   // sans rien pour en sortir ni le moindre message pour l'expliquer : c'est la
   // panne la plus déroutante pour qui la subit, et la moins chère à rendre
   // impossible.
+  // Les polices entrent dans la même condition : découvrir l'app avec la
+  // police du système, puis la voir sauter une fraction de seconde plus tard,
+  // est exactement ce que le logo est là pour éviter.
   useEffect(() => {
-    if (screen !== 'booting') {
+    if (screen !== 'booting' && policesPretes) {
       SplashScreen.hideAsync().catch(() => {});
       return;
     }
     const filet = setTimeout(() => SplashScreen.hideAsync().catch(() => {}), 3000);
     return () => clearTimeout(filet);
-  }, [screen]);
+  }, [screen, policesPretes]);
 
   // Une session démarrée pendant cette exécution de l'app reste "reprenable"
   // tant qu'elle n'a pas été explicitement effacée. Sans ce calcul, revenir à
-  // l'accueil (bouton retour Android depuis le swipe, ou après un détour par
-  // l'onglet Classement) faisait disparaître le bouton "Reprendre" : la
+  // l'accueil (bouton retour Android depuis le swipe, par exemple) faisait disparaître le bouton "Reprendre" : la
   // progression semblait perdue, et "Commencer" l'écrasait pour de bon.
   const liveRestorable = useMemo<RestorableSummary | null>(() => {
     if (sessionProposals.length === 0) return null;
@@ -374,6 +399,10 @@ function AppInner() {
   //
   // Nul tant que le paquet n'est pas fini : une comparaison partielle changerait
   // à chaque carte, et le défi ne se lit qu'une fois joué en entier.
+  // Cartes encore à swiper : non nul quand on regarde son résultat avant la
+  // fin, depuis l'onglet Classement.
+  const cartesRestantes = Math.max(0, sessionProposals.length - currentIndex);
+
   const resumeDuel = useMemo(() => {
     if (!adversaire || sessionProposals.length === 0) return null;
     if (currentIndex < sessionProposals.length) return null;
@@ -526,7 +555,10 @@ function AppInner() {
     markTutorialSeen();
   };
 
-  const handleSwipeFinish = () => setScreen('review');
+  // La dernière carte mène droit au résultat. La relecture y passait d'abord,
+  // obligatoire ; elle est devenue un bouton du résultat (« Revoir mes
+  // réponses »), pour qui veut corriger une réponse.
+  const handleSwipeFinish = () => openResults('swipe');
 
   const handleReviewChange = (proposalId: string, direction: SwipeDirection) => {
     const nextAnswers = { ...answers, [proposalId]: direction };
@@ -534,7 +566,7 @@ function AppInner() {
     persist(currentIndex, nextAnswers, sessionProposals, selectedThemeIds);
   };
 
-  const handleReviewContinue = () => openResults('review');
+  const handleReviewContinue = () => setScreen('results');
 
   const handleRestart = () => {
     clearSession();
@@ -556,7 +588,6 @@ function AppInner() {
   const handleResetAllData = () => {
     resetAllData();
     setSchemePreference('system');
-    setAccentId(DEFAULT_ACCENT_ID);
     setHapticsEnabled(true);
     // Reverrouiller éteint déjà le mode arc-en-ciel (voir ThemeContext).
     setRainbowUnlocked(false);
@@ -589,6 +620,7 @@ function AppInner() {
 
         <ErrorBoundary>
           {screen === 'intro' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <IntroScreen
                 onStartFresh={handleStartFresh}
@@ -603,34 +635,43 @@ function AppInner() {
                 sessionPerimee={sessionPerimee}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'settings' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <SettingsScreen
                 onBack={() => setScreen(settingsReturnTo)}
                 onResetAllData={handleResetAllData}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'howItWorks' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <HowItWorksScreen onBack={() => setScreen(howItWorksReturnTo)} />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'themes' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <ThemeSelectScreen
                 initialSelection={selectedThemeIds}
+                quota={quotaDuFormat(format)}
                 onConfirm={handleThemesConfirmed}
                 onBack={() => setScreen(themesReturnTo)}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'swipe' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <SwipeScreen
                 proposals={sessionProposals}
@@ -656,9 +697,11 @@ function AppInner() {
                 }
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'review' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <ReviewScreen
                 proposals={sessionProposals}
@@ -666,16 +709,20 @@ function AppInner() {
                 answers={answers}
                 onChangeAnswer={handleReviewChange}
                 onContinue={handleReviewContinue}
-                // Retour vers le paquet : une fois terminé, l'onglet Swiper
-                // affiche l'écran de fin (message + Recommencer) plutôt que
-                // des cartes, et donne accès aux onglets Classement et
-                // Propositions.
-                onBack={() => setScreen('swipe')}
+                // On n'arrive plus ici que depuis le résultat : on y retourne.
+                onBack={() => setScreen('results')}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
+          {/* LE RÉSULTAT REPREND L'ACCENT DE L'APP, et non un accent à lui.
+              Il a porté le violet, au nom d'un accent par écran : l'écran le
+              plus regardé de l'app se retrouvait alors seul de sa couleur,
+              podium, boutons et sous-onglets compris, sans rien qui le relie à
+              la partie qu'on venait de jouer. */}
           {screen === 'results' && (
+            <ZoneAccent accent="lime">
             <ScreenTransition>
               <ResultsScreen
                 proposals={sessionProposals}
@@ -697,13 +744,19 @@ function AppInner() {
                 // ce que l'autre a répondu.
                 duel={resumeDuel}
                 onOpenDuel={() => openDuel('results')}
-                alreadyRevealed={resultsRevealed}
+                onOpenReview={() => setScreen('review')}
+                // Un aperçu demandé en cours de partie ne consomme pas le
+                // rideau : il reste réservé au vrai résultat, à la fin.
+                alreadyRevealed={resultsRevealed || cartesRestantes > 0}
                 onReveal={() => setResultsRevealed(true)}
+                cartesRestantes={cartesRestantes}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
 
           {screen === 'duel' && (
+            <ZoneAccent accent="peach">
             <ScreenTransition>
               <DuelScreen
                 proposals={sessionProposals}
@@ -720,6 +773,7 @@ function AppInner() {
                 onBack={quitterDuel}
               />
             </ScreenTransition>
+            </ZoneAccent>
           )}
         </ErrorBoundary>
       </SafeAreaProvider>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
+import { Texte as Text } from '../components/Texte';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -8,6 +9,7 @@ import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { ResultRow } from '../components/ResultRow';
+import { CandidateGrid } from '../components/CandidateGrid';
 import { Bascule } from '../components/Bascule';
 import { Podium, podiumRevealDelay } from '../components/Podium';
 import { Confetti } from '../components/Confetti';
@@ -45,7 +47,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion';
 // l'accessibilityLabel du bouton, que les lecteurs d'écran annoncent en entier.
 const FOOTER_MAX_SCALE = 1.4;
 
-type RankingView = 'overview' | 'byTheme';
+type RankingView = 'overview' | 'byTheme' | 'candidats';
 
 export function ResultsScreen({
   proposals,
@@ -59,8 +61,10 @@ export function ResultsScreen({
   onOpenSettings,
   duel,
   onOpenDuel,
+  onOpenReview,
   alreadyRevealed,
   onReveal,
+  cartesRestantes = 0,
 }: {
   proposals: Proposal[];
   answers: Answers;
@@ -94,11 +98,17 @@ export function ResultsScreen({
   duel: { accords: number; tranchees: number } | null;
   // Comparer son classement à celui de quelqu'un d'autre (écran Duel).
   onOpenDuel: () => void;
+  // Relire et corriger ses réponses. C'était une étape obligatoire entre la
+  // dernière carte et le résultat ; c'est devenu un choix, depuis le résultat.
+  onOpenReview?: () => void;
   // Le "moment de révélation" (haptique + animations d'entrée) ne doit avoir
   // lieu qu'une fois par résultat, pas à chaque fois qu'on revient sur cet
   // écran depuis "Comment ça marche" — voir App.tsx.
   alreadyRevealed: boolean;
   onReveal: () => void;
+  // Cartes encore à swiper quand on vient voir son résultat avant la fin,
+  // depuis l'onglet Classement. 0 une fois le paquet terminé.
+  cartesRestantes?: number;
 }) {
   const colors = useColors();
   const styles = useMemo(() => makeStyles(colors), [colors]);
@@ -109,9 +119,9 @@ export function ResultsScreen({
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(null);
   // Fiche d'un candidat, ouverte en touchant sa photo.
   const [infoCandidateId, setInfoCandidateId] = useState<string | null>(null);
-  // Mêmes sous-onglets que l'onglet Classement pendant le swipe : le podium
-  // reste au-dessus, et on choisit ensuite entre le classement complet et le
-  // détail sujet par sujet, au lieu de dérouler les deux à la suite.
+  // Le podium reste au-dessus, et on choisit ensuite entre le classement
+  // complet, le détail sujet par sujet et les candidats, au lieu de dérouler
+  // le tout à la suite.
   const [rankingView, setRankingView] = useState<RankingView>('overview');
 
   const selectRankingView = (next: RankingView) => {
@@ -144,7 +154,7 @@ export function ResultsScreen({
   // thèmes, l'égalité en tête est la règle plutôt que l'exception.
   const premiers = useMemo(() => topMatches(results), [results]);
   const confidenceLabel = useMemo(() => matchConfidenceLabel(results), [results]);
-  // Même vue que l'onglet Classement : sujet par sujet, avec qui l'on est
+  // Sujet par sujet, avec qui l'on est
   // d'accord et sur combien de propositions. L'ancienne version ne montrait
   // que les pourcentages du seul vainqueur, ce qui faisait de l'écran final le
   // moins informatif des deux.
@@ -267,7 +277,7 @@ export function ResultsScreen({
             accessibilityRole="button"
             accessibilityLabel="Recommencer"
           >
-            <Ionicons name="refresh" size={18} color={colors.onAccent} />
+            <Ionicons name="refresh" size={18} color={colors.onAction} />
             <Text style={styles.restartText}>Recommencer</Text>
           </Pressable>
           {/* Cet écran-ci est celui où l'on risque le plus de se sentir
@@ -361,6 +371,25 @@ export function ResultsScreen({
               qu'il faut savoir pour lire celle qui vient. */}
           {portee && <Text style={styles.portee}>{portee}</Text>}
         </View>
+
+        {/* UN RÉSULTAT DEMANDÉ AVANT LA FIN le dit, et rend la partie. Sans
+            ce bandeau, rien ne distinguait un aperçu d'un résultat final. */}
+        {cartesRestantes > 0 && (
+          <View style={styles.enCours}>
+            <Text style={styles.enCoursTexte}>
+              Partie en cours : encore {cartesRestantes} carte{cartesRestantes > 1 ? 's' : ''} à
+              swiper. Ce résultat s’affinera.
+            </Text>
+            <Pressable
+              onPress={onBack}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="Continuer à swiper"
+            >
+              <Text style={styles.enCoursLien}>Continuer à swiper</Text>
+            </Pressable>
+          </View>
+        )}
 
         {topMatch && (
           <Animated.View
@@ -466,6 +495,20 @@ export function ResultsScreen({
               Par thème
             </Text>
           </Pressable>
+          {/* Le trombinoscope est aussi dans l'onglet Classement de la
+              partie ; ici, il reste la porte vers les notices une fois le
+              paquet fini. */}
+          <Pressable
+            onPress={() => selectRankingView('candidats')}
+            style={[styles.subTab, rankingView === 'candidats' && styles.subTabActive]}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: rankingView === 'candidats' }}
+            accessibilityLabel="Les candidats"
+          >
+            <Text style={[styles.subTabText, rankingView === 'candidats' && styles.subTabTextActive]}>
+              Candidats
+            </Text>
+          </Pressable>
         </View>
 
         {/* Les deux vues occupent la même place et se ressemblent assez
@@ -494,6 +537,8 @@ export function ResultsScreen({
                 />
               ))}
             </View>
+          ) : rankingView === 'candidats' ? (
+            <CandidateGrid onSelect={setInfoCandidateId} />
           ) : (
             <View style={styles.listSection}>
               <Text style={styles.sectionTitle}>Avec qui tu es d’accord, sujet par sujet</Text>
@@ -507,11 +552,23 @@ export function ResultsScreen({
           )}
         </Bascule>
 
+        {onOpenReview && (
+          <Pressable
+            onPress={onOpenReview}
+            style={styles.reviewLink}
+            accessibilityRole="button"
+            accessibilityLabel="Revoir et corriger mes réponses"
+          >
+            <Ionicons name="list-outline" size={17} color={colors.accentText} />
+            <Text style={styles.reviewLinkText}>Revoir mes réponses</Text>
+          </Pressable>
+        )}
+
         {/* La date est ici et pas ailleurs : c'est sous le classement qu'on
             se demande sur quoi il repose, et un programme continue de s'écrire
             après l'arrêt des données. */}
         <Text style={styles.footnote}>
-          Propositions recensées par Poligraph (poligraph.fr), à raison du même nombre par
+          Propositions recensées par Poligraph (poligraph.fr) et 2027 et moi (2027etmoi.fr), à raison du même nombre par
           candidat
           {dateEnFrancais(DATASET_DATE) ? `, arrêtées au ${dateEnFrancais(DATASET_DATE)}` : ''}. Le
           pourcentage reflète uniquement les propositions présentées dans cette app, pas
@@ -553,7 +610,7 @@ export function ResultsScreen({
             accessibilityRole="button"
             accessibilityLabel="Partager mon résultat en image"
           >
-            <Ionicons name="share-outline" size={20} color={colors.onAccent} />
+            <Ionicons name="share-outline" size={20} color={colors.onAction} />
             <Text style={styles.shareText} maxFontSizeMultiplier={FOOTER_MAX_SCALE} numberOfLines={1}>
               Partager
             </Text>
@@ -658,6 +715,25 @@ function makeStyles(colors: ColorTokens) {
     chapeau: {
       gap: spacing.xs,
     },
+    enCours: {
+      backgroundColor: colors.accentSoft,
+      borderRadius: radii.sm,
+      paddingVertical: spacing.sm + 2,
+      paddingHorizontal: spacing.md,
+      gap: spacing.xs,
+    },
+    enCoursTexte: {
+      fontSize: fonts.small,
+      lineHeight: fonts.small * 1.4,
+      fontWeight: '600',
+      color: colors.accentText,
+    },
+    enCoursLien: {
+      fontSize: fonts.small,
+      fontWeight: '800',
+      color: colors.accentText,
+      textDecorationLine: 'underline',
+    },
     portee: {
       fontSize: fonts.small,
       fontWeight: '600',
@@ -684,13 +760,8 @@ function makeStyles(colors: ColorTokens) {
       paddingVertical: spacing.xl,
       paddingHorizontal: spacing.lg,
       gap: spacing.xs,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 10 },
-      shadowOpacity: 0.08,
-      shadowRadius: 20,
-      elevation: 3,
     },
     confidencePill: {
       marginTop: spacing.sm,
@@ -732,7 +803,7 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.lg,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.lg,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
     },
     sectionTitle: {
@@ -746,6 +817,18 @@ function makeStyles(colors: ColorTokens) {
       color: colors.textMuted,
       marginBottom: spacing.xs,
       lineHeight: fonts.tiny * 1.5,
+    },
+    reviewLink: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: spacing.xs,
+      paddingVertical: spacing.md,
+    },
+    reviewLinkText: {
+      fontSize: fonts.small,
+      fontWeight: '700',
+      color: colors.accentText,
     },
     sectionCaptionLink: {
       color: colors.accentText,
@@ -816,17 +899,17 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       gap: spacing.sm,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
     },
     restartPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     restartText: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
     // Accent atténué contre accent plein : sortir et partager sont deux
     // actions ordinaires, mais une seule est celle qu'on vient chercher sur
@@ -856,17 +939,17 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       gap: spacing.sm,
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md,
     },
     sharePressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     shareText: {
       fontSize: fonts.body,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
   });
 }

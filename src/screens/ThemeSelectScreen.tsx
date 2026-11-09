@@ -1,14 +1,13 @@
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Texte as Text } from '../components/Texte';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { THEMES } from '../data/themes';
-import { CATEGORIES } from '../data/categories';
 import { PROPOSALS } from '../data/proposals';
 import { CANDIDATES } from '../data/candidates';
 import { candidatesQuota, QUOTA_PAR_CANDIDAT } from '../utils/deck';
-import { ThemeTag } from '../types';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
@@ -25,17 +24,17 @@ for (const p of PROPOSALS) {
 // un podium d'apparence définitive.
 const MIN_PAR_CANDIDAT = 3;
 
-const GROUPS = CATEGORIES.map((category) => ({
-  category,
-  themes: THEMES.filter((t) => t.categoryId === category.id),
-})).filter((g) => g.themes.length > 0);
-
 export function ThemeSelectScreen({
   initialSelection,
+  quota = QUOTA_PAR_CANDIDAT,
   onConfirm,
   onBack,
 }: {
   initialSelection: string[];
+  // Cartes par candidat de la partie choisie sur l'accueil (courte ou
+  // longue). Sans lui, l'écran annonçait toujours le paquet long — « Jouer :
+  // 165 cartes » pour une partie courte qui en tire 55.
+  quota?: number;
   onConfirm: (themeIds: string[]) => void;
   onBack: () => void;
 }) {
@@ -48,15 +47,6 @@ export function ThemeSelectScreen({
       const next = new Set(prev);
       if (next.has(themeId)) next.delete(themeId);
       else next.add(themeId);
-      return next;
-    });
-  };
-
-  const toggleCategory = (themes: ThemeTag[]) => {
-    const allIn = themes.every((t) => selected.has(t.id));
-    setSelected((prev) => {
-      const next = new Set(prev);
-      themes.forEach((t) => (allIn ? next.delete(t.id) : next.add(t.id)));
       return next;
     });
   };
@@ -86,9 +76,9 @@ export function ThemeSelectScreen({
       // du tout comparés, ce que rien n'indiquait auparavant.
       absents: CANDIDATES.length - presents.size,
       minimum,
-      cartes: complet ? candidatesQuota(pool, QUOTA_PAR_CANDIDAT) * presents.size : pool.length,
+      cartes: complet ? candidatesQuota(pool, quota) * presents.size : pool.length,
     };
-  }, [selected]);
+  }, [selected, quota]);
 
   const totalCount = tirage.cartes;
 
@@ -103,9 +93,7 @@ export function ThemeSelectScreen({
       <ScreenHeader title="Choisis tes thèmes" onBack={onBack} />
       <View style={styles.header}>
         <Text style={styles.subtitle}>
-          Swipe tout, ou concentre-toi sur ce qui t’intéresse : une sélection de thèmes te
-          donne TOUTES leurs propositions, pas un échantillon. Pendant le swipe, le bouton
-          « super like » te permet de dire ce qui compte vraiment pour toi.
+          Touche ceux qui t’intéressent : tu auras toutes leurs propositions.
         </Text>
         <Pressable
           onPress={toggleAll}
@@ -119,69 +107,36 @@ export function ThemeSelectScreen({
         </Pressable>
       </View>
 
+      {/* Huit thèmes, une seule liste. Il y avait quinze thèmes rangés en
+          quatre catégories, chacune avec sa propre case : deux niveaux de
+          cases pour un seul choix. Le nombre de cartes n'est plus répété sur
+          chaque ligne ; le bouton du bas donne le total, qui est ce qu'on
+          veut savoir avant de lancer. */}
       <ScrollView contentContainerStyle={styles.list} showsVerticalScrollIndicator={false}>
-        {GROUPS.map(({ category, themes }) => {
-          const selectedCount = themes.filter((t) => selected.has(t.id)).length;
-          const allIn = selectedCount === themes.length;
-          const someIn = selectedCount > 0 && !allIn;
-
+        {THEMES.map((theme) => {
+          const isSelected = selected.has(theme.id);
+          const count = COUNT_BY_THEME[theme.id] ?? 0;
           return (
-            <View key={category.id} style={styles.group}>
-              <Pressable
-                onPress={() => toggleCategory(themes)}
-                style={styles.groupHeader}
-                accessibilityRole="checkbox"
-                accessibilityState={{ checked: allIn ? true : someIn ? 'mixed' : false }}
-                accessibilityLabel={`Catégorie ${category.label}, ${selectedCount} sur ${themes.length} thèmes sélectionnés`}
-              >
-                <Text style={styles.groupIcon}>{category.icon}</Text>
-                <Text style={styles.groupLabel}>{category.label}</Text>
-                <View
-                  style={[
-                    styles.checkbox,
-                    allIn && styles.checkboxSelected,
-                    someIn && styles.checkboxPartial,
-                  ]}
-                >
-                  {allIn && <Ionicons name="checkmark" size={14} color={colors.onAccent} />}
-                  {someIn && <View style={styles.checkboxDash} />}
-                </View>
-              </Pressable>
-
-              {themes.map((theme) => {
-                const isSelected = selected.has(theme.id);
-                const count = COUNT_BY_THEME[theme.id] ?? 0;
-                return (
-                  <Pressable
-                    key={theme.id}
-                    onPress={() => toggle(theme.id)}
-                    style={({ pressed }) => [
-                      styles.row,
-                      isSelected && styles.rowSelected,
-                      pressed && styles.rowPressed,
-                    ]}
-                    accessibilityRole="checkbox"
-                    accessibilityState={{ checked: isSelected }}
-                    accessibilityLabel={`${theme.label}, ${count} proposition${count > 1 ? 's' : ''}`}
-                  >
-                    <Text style={styles.rowIcon}>{theme.icon}</Text>
-                    <View style={styles.rowMiddle}>
-                      <Text style={styles.rowLabel} numberOfLines={1}>
-                        {theme.label}
-                      </Text>
-                      <Text style={styles.rowCount}>
-                        {count} proposition{count > 1 ? 's' : ''}
-                      </Text>
-                    </View>
-                    <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
-                      {isSelected && (
-                        <Ionicons name="checkmark" size={14} color={colors.onAccent} />
-                      )}
-                    </View>
-                  </Pressable>
-                );
-              })}
-            </View>
+            <Pressable
+              key={theme.id}
+              onPress={() => toggle(theme.id)}
+              style={({ pressed }) => [
+                styles.row,
+                isSelected && styles.rowSelected,
+                pressed && styles.rowPressed,
+              ]}
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: isSelected }}
+              accessibilityLabel={`${theme.label}, ${count} proposition${count > 1 ? 's' : ''}`}
+            >
+              <Text style={styles.rowIcon}>{theme.icon}</Text>
+              <Text style={styles.rowLabel} numberOfLines={2}>
+                {theme.label}
+              </Text>
+              <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
+                {isSelected && <Ionicons name="checkmark" size={14} color={colors.onAccent} />}
+              </View>
+            </Pressable>
           );
         })}
       </ScrollView>
@@ -221,11 +176,11 @@ export function ThemeSelectScreen({
           accessibilityRole="button"
           accessibilityState={{ disabled: selected.size === 0 }}
           accessibilityLabel={
-            selected.size === 0 ? 'Choisis au moins un thème' : `Commencer, ${totalCount} propositions`
+            selected.size === 0 ? 'Choisis au moins un thème' : `Jouer, ${totalCount} cartes`
           }
         >
           <Text style={styles.ctaText}>
-            {selected.size === 0 ? 'Choisis au moins un thème' : `Commencer (${totalCount})`}
+            {selected.size === 0 ? 'Choisis au moins un thème' : `Jouer : ${totalCount} cartes`}
           </Text>
         </Pressable>
       </View>
@@ -258,28 +213,7 @@ function makeStyles(colors: ColorTokens) {
     list: {
       paddingHorizontal: spacing.lg,
       paddingBottom: spacing.lg,
-      gap: spacing.lg,
-    },
-    group: {
-      gap: spacing.xs,
-    },
-    groupHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
       gap: spacing.sm,
-      paddingHorizontal: spacing.xs,
-      paddingBottom: spacing.xs,
-    },
-    groupIcon: {
-      fontSize: 15,
-    },
-    groupLabel: {
-      flex: 1,
-      fontSize: fonts.tiny + 1,
-      fontWeight: '800',
-      letterSpacing: 0.3,
-      textTransform: 'uppercase',
-      color: colors.textMuted,
     },
     row: {
       flexDirection: 'row',
@@ -287,11 +221,12 @@ function makeStyles(colors: ColorTokens) {
       gap: spacing.md,
       backgroundColor: colors.surface,
       borderRadius: radii.md,
-      paddingVertical: spacing.md,
+      // Assez bas pour que les huit thèmes tiennent sans défiler au-dessus du
+      // bouton, sur un écran de téléphone courant.
+      paddingVertical: spacing.sm + 2,
       paddingHorizontal: spacing.md,
-      borderWidth: StyleSheet.hairlineWidth,
+      borderWidth: 1,
       borderColor: colors.border,
-      marginBottom: spacing.sm,
     },
     rowSelected: {
       borderColor: colors.accent,
@@ -303,19 +238,12 @@ function makeStyles(colors: ColorTokens) {
     rowIcon: {
       fontSize: 20,
     },
-    rowMiddle: {
-      flex: 1,
-      gap: 2,
-    },
     rowLabel: {
+      flex: 1,
       fontSize: fonts.body + 1,
       fontWeight: '800',
       color: colors.textPrimary,
       letterSpacing: 0.1,
-    },
-    rowCount: {
-      fontSize: fonts.tiny,
-      color: colors.textMuted,
     },
     checkbox: {
       width: 22,
@@ -329,15 +257,6 @@ function makeStyles(colors: ColorTokens) {
     checkboxSelected: {
       backgroundColor: colors.accent,
       borderColor: colors.accent,
-    },
-    checkboxPartial: {
-      borderColor: colors.accent,
-    },
-    checkboxDash: {
-      width: 8,
-      height: 2,
-      borderRadius: 1,
-      backgroundColor: colors.accent,
     },
     footer: {
       paddingHorizontal: spacing.xl,
@@ -362,7 +281,7 @@ function makeStyles(colors: ColorTokens) {
       color: colors.textPrimary,
     },
     cta: {
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       borderRadius: radii.pill,
       paddingVertical: spacing.md + 2,
       alignItems: 'center',
@@ -371,12 +290,12 @@ function makeStyles(colors: ColorTokens) {
       opacity: 0.4,
     },
     ctaPressed: {
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
     },
     ctaText: {
       fontSize: fonts.body + 1,
       fontWeight: '700',
-      color: colors.onAccent,
+      color: colors.onAction,
     },
   });
 }

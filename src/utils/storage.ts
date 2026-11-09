@@ -11,7 +11,11 @@ const SESSION_KEY = 'elyze:session:v2';
 const LEGACY_SESSION_KEYS = ['elyze:session:v1'];
 const TUTORIAL_KEY = 'elyze:hasSeenTutorial:v1';
 const SCHEME_PREF_KEY = 'elyze:schemePreference:v1';
-const ACCENT_KEY = 'elyze:accentId:v1';
+// L'ACCENT N'EST PLUS UN RÉGLAGE : il dépend de l'écran où l'on se trouve
+// (voir theme/index.ts). Plus rien ne l'écrit, mais la clé reste listée pour
+// que « réinitialiser les données » balaie ce qu'une ancienne installation a
+// pu laisser derrière elle.
+const ACCENT_KEY_OBSOLETE = 'elyze:accentId:v1';
 const HAPTICS_KEY = 'elyze:hapticsEnabled:v1';
 const REVEAL_CANDIDATES_KEY = 'elyze:revealCandidates:v1';
 const RAINBOW_UNLOCKED_KEY = 'elyze:rainbowUnlocked:v1';
@@ -23,7 +27,7 @@ const ALL_STORAGE_KEYS = [
   ...LEGACY_SESSION_KEYS,
   TUTORIAL_KEY,
   SCHEME_PREF_KEY,
-  ACCENT_KEY,
+  ACCENT_KEY_OBSOLETE,
   HAPTICS_KEY,
   REVEAL_CANDIDATES_KEY,
   RAINBOW_UNLOCKED_KEY,
@@ -206,22 +210,6 @@ export async function loadSchemePreference(): Promise<SchemePreference> {
 export async function saveSchemePreference(pref: SchemePreference): Promise<void> {
   try {
     await AsyncStorage.setItem(SCHEME_PREF_KEY, pref);
-  } catch {
-    // ignoré
-  }
-}
-
-export async function loadAccentId(): Promise<string | null> {
-  try {
-    return await AsyncStorage.getItem(ACCENT_KEY);
-  } catch {
-    return null;
-  }
-}
-
-export async function saveAccentId(accentId: string): Promise<void> {
-  try {
-    await AsyncStorage.setItem(ACCENT_KEY, accentId);
   } catch {
     // ignoré
   }

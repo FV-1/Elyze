@@ -1,3 +1,4 @@
+import { contrastRatio } from '../utils/color';
 import { ColorTokens } from './index';
 
 // --- Mode arc-en-ciel -------------------------------------------------------
@@ -41,25 +42,10 @@ function hslToHex(h: number, s: number, l: number): string {
   return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`.toUpperCase();
 }
 
-function channelLuminance(c: number): number {
-  const v = c / 255;
-  return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-}
-
-function luminance(hex: string): number {
-  const clean = hex.replace('#', '');
-  const r = parseInt(clean.slice(0, 2), 16);
-  const g = parseInt(clean.slice(2, 4), 16);
-  const b = parseInt(clean.slice(4, 6), 16);
-  return 0.2126 * channelLuminance(r) + 0.7152 * channelLuminance(g) + 0.0722 * channelLuminance(b);
-}
-
-export function contrastRatio(a: string, b: string): number {
-  const la = luminance(a);
-  const lb = luminance(b);
-  const [hi, lo] = la > lb ? [la, lb] : [lb, la];
-  return (hi + 0.05) / (lo + 0.05);
-}
+// Réexporté depuis utils/color, où il a déménagé : la palette fixe s'en sert
+// autant que le mode arc-en-ciel, et les tests l'importent d'ici depuis
+// toujours.
+export { contrastRatio };
 
 // Cherche la clarté la MOINS extrême qui atteigne `minRatio` face à tous les
 // fonds donnés : on garde ainsi la couleur aussi vive que possible, sans
@@ -81,9 +67,62 @@ function pickReadable(
   return direction === 'darker' ? '#000000' : '#FFFFFF';
 }
 
+// Le même choix, mais sans imposer le sens. `pickReadable` part de 50 % de
+// clarté et s'enfonce dans une seule direction : quand la couleur doit se
+// détacher à la fois du fond ET d'une piste tirée au sort ailleurs, la bonne
+// réponse est parfois de l'autre côté.
+function pickReadableEitherWay(
+  hue: number,
+  saturation: number,
+  backgrounds: string[],
+  minRatio: number,
+  direction: 'darker' | 'lighter'
+): string {
+  const premier = pickReadable(hue, saturation, backgrounds, minRatio, direction);
+  if (backgrounds.every((bg) => contrastRatio(premier, bg) >= minRatio)) return premier;
+  return pickReadable(
+    hue,
+    saturation,
+    backgrounds,
+    minRatio,
+    direction === 'darker' ? 'lighter' : 'darker'
+  );
+}
+
 // Seuils WCAG : 4.5:1 pour du texte courant, 3:1 pour un élément graphique.
 const TEXT_RATIO = 4.5;
 const GRAPHIC_RATIO = 3;
+
+// LA PISTE D'UNE JAUGE DOIT LAISSER VOIR CE QUI LA REMPLIT.
+//
+// Elle était tirée comme un fond : une clarté au hasard dans une plage, sans
+// rien vérifier. Sur trois cents tirages simulés, la jauge de progression
+// remplie se retrouvait à 1.01:1 de sa piste dans le pire cas, c'est-à-dire
+// invisible — et la barre d'un candidat dans le classement avec elle.
+//
+// On balaie donc les cent clartés possibles, on garde celles qui détachent la
+// piste de TOUT ce qui vient se poser dessus, et parmi elles la plus proche de
+// la clarté voulue pour le thème. La teinte, elle, reste celle du tirage :
+// c'est la clarté qui est calculée, jamais la couleur.
+function pisteLisible(
+  hue: number,
+  saturation: number,
+  contre: string[],
+  clartePreferee: number
+): string {
+  let meilleure = hslToHex(hue, saturation, clartePreferee);
+  let distance = Infinity;
+  for (let l = 0; l <= 100; l++) {
+    const candidate = hslToHex(hue, saturation, l);
+    if (!contre.every((c) => contrastRatio(candidate, c) >= GRAPHIC_RATIO)) continue;
+    const d = Math.abs(l - clartePreferee);
+    if (d < distance) {
+      distance = d;
+      meilleure = candidate;
+    }
+  }
+  return meilleure;
+}
 
 export function buildRainbowColors(scheme: 'light' | 'dark', seed: number): ColorTokens {
   const rand = mulberry32(seed);
@@ -122,10 +161,18 @@ export function buildRainbowColors(scheme: 'light' | 'dark', seed: number): Colo
   // qu'elles doivent tenir le contraste, pas face au fond.
   const onAccent = '#FFFFFF';
   const accent = pickReadable(hue(), between(55, 95), [onAccent], TEXT_RATIO, 'darker');
-  const accentStrong = pickReadable(hue(), between(55, 95), [onAccent], 7, 'darker');
-  const success = pickReadable(hue(), between(55, 95), [onAccent], GRAPHIC_RATIO, 'darker');
-  const warning = pickReadable(hue(), between(55, 95), [onAccent], GRAPHIC_RATIO, 'darker');
-  const danger = pickReadable(hue(), between(55, 95), [onAccent], GRAPHIC_RATIO, 'darker');
+  // L'action forte du mode arc-en-ciel : même teinte que l'accent, en plus
+  // contrastée, et son état pressé encore un cran au-dessus.
+  const action = accent;
+  const onAction = onAccent;
+  const actionPressed = pickReadable(hue(), between(55, 95), [onAccent], 7, 'darker');
+  // LES TROIS RÉPONSES PORTENT UN MOT, et pas seulement un pictogramme : le
+  // tampon qui traverse la carte affiche « J'ADHÈRE », « JE PASSE », « NON ».
+  // Elles étaient tirées au seuil des éléments graphiques (3:1), où ce mot
+  // tombait exactement à 3.00:1 contre les 4.5:1 qu'un texte demande.
+  const success = pickReadable(hue(), between(55, 95), [onAccent], TEXT_RATIO, 'darker');
+  const warning = pickReadable(hue(), between(55, 95), [onAccent], TEXT_RATIO, 'darker');
+  const danger = pickReadable(hue(), between(55, 95), [onAccent], TEXT_RATIO, 'darker');
 
   // Déclinaisons "texte" des couleurs sémantiques, posées sur les fonds.
   const accentText = pickReadable(hue(), between(45, 90), allBackgrounds, TEXT_RATIO, textDirection);
@@ -133,33 +180,56 @@ export function buildRainbowColors(scheme: 'light' | 'dark', seed: number): Colo
   const warningText = pickReadable(hue(), between(45, 90), allBackgrounds, TEXT_RATIO, textDirection);
   const dangerText = pickReadable(hue(), between(45, 90), allBackgrounds, TEXT_RATIO, textDirection);
 
-  // Éléments graphiques : seuil 3:1, il ne s'agit pas de texte.
-  const neutralFill = pickReadable(hue(), between(35, 75), [bg, surface], GRAPHIC_RATIO, textDirection);
-  const neutralTrack = hslToHex(hue(), between(20, 55), isDark ? between(22, 30) : between(85, 92));
+  // ÉLÉMENTS GRAPHIQUES : seuil 3:1, il ne s'agit pas de texte. L'ordre de ces
+  // trois lignes est la correction elle-même, et il se lit comme une chaîne :
+  // `action` est déjà fixé par le texte blanc qu'il porte ; la piste se range
+  // par rapport à lui ; le remplissage neutre se range par rapport à la piste.
+  // Chacun ne contraint que le suivant, si bien qu'aucun tirage ne peut tomber
+  // sur un couple invisible.
+  const neutralTrack = pisteLisible(hue(), between(20, 55), [action], isDark ? 26 : 88);
+  const neutralFill = pickReadableEitherWay(
+    hue(),
+    between(35, 75),
+    [bg, surface, neutralTrack],
+    GRAPHIC_RATIO,
+    textDirection
+  );
   const border = hslToHex(hue(), between(20, 60), isDark ? between(26, 34) : between(78, 86));
+  // Le trait d'encre du mode arc-en-ciel. Il a été la couleur du texte
+  // principal, la seule dont on sache qu'elle tient sur tous les fonds tirés
+  // au sort — mais à 7:1 sur un fond sombre, un contour se lit avant ce qu'il
+  // entoure. `neutralFill` tient le 3:1 des éléments graphiques sur le fond
+  // comme sur la carte : franc, et pas éclatant.
+  const borderStrong = neutralFill;
 
   return {
     bg,
     surface,
     surfaceAlt,
     border,
+    borderStrong,
     textPrimary,
     textSecondary,
     textMuted,
     accent,
-    accentStrong,
+    onAccent,
     accentSoft,
     accentText,
-    onAccent,
+    action,
+    onAction,
+    actionPressed,
     success,
     successSoft,
     successText,
+    onAccentSuccess: onAccent,
     warning,
     warningSoft,
     warningText,
+    onAccentWarning: onAccent,
     danger,
     dangerSoft,
     dangerText,
+    onAccentDanger: onAccent,
     neutralFill,
     neutralTrack,
   };

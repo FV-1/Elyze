@@ -1,14 +1,15 @@
-import { THEME_COLORS, themeChipColors } from './themeColors';
+import { THEME_COLORS, themeChipColors, themeColorForScheme } from './themeColors';
 import { buildRainbowThemeColors, contrastRatio } from '../theme/rainbow';
 import { THEMES } from './themes';
-import { ACCENT_PRESETS, buildColors } from '../theme';
+import { ACCENTS, AccentId, buildColors } from '../theme';
 
 // Les pastilles de thème posent un texte teinté sur un fond très pâle de la
 // même teinte. Le dosage doit tenir quelle que soit la couleur de départ, y
 // compris celles tirées au sort par le mode arc-en-ciel.
 const TEXT_RATIO = 4.5;
 const LIGHT_SURFACE = '#ffffff';
-const DARK_SURFACE = '#1C1A22';
+const DARK_SURFACE = '#241A33';
+const DARK_BG = '#1E1233';
 
 // Les graines de test sont TIRÉES D'UNE SUITE DÉTERMINISTE, pas de
 // `Math.random()`.
@@ -37,7 +38,7 @@ function check(base: string, surface: string, isDark: boolean): number {
 }
 
 describe('themeChipColors', () => {
-  it('reste lisible pour les quinze couleurs de thème, en clair comme en sombre', () => {
+  it('reste lisible pour chaque couleur de thème, en clair comme en sombre', () => {
     const failures: string[] = [];
 
     for (const [id, base] of Object.entries(THEME_COLORS)) {
@@ -80,7 +81,7 @@ describe('themeChipColors', () => {
 // désormais en blanc plein — ce test verrouille l'invariant qui rend ce choix
 // sûr : toute couleur de tuile doit tenir 4.5:1 face au blanc.
 describe('couleurs des tuiles de la mosaïque', () => {
-  it('tiennent le contraste avec du texte blanc, pour les quinze thèmes', () => {
+  it('tiennent le contraste avec du texte blanc, pour chaque thème', () => {
     const failures: string[] = [];
 
     for (const [id, color] of Object.entries(THEME_COLORS)) {
@@ -111,19 +112,18 @@ describe('couleurs des tuiles de la mosaïque', () => {
 
 // Le multiplicateur « ×3 » de la légende d'accueil est une pastille pleine :
 // du texte pris dans `bg` posé sur un fond `warningText`. C'est un usage
-// inversé de ce jeton, prévu à l'origine comme couleur de TEXTE, donc le
-// contraste ne va pas de soi — d'autant qu'il doit tenir pour les deux thèmes
-// ET les quatre accents proposés dans les réglages.
+// inversé de ce jeton, donc le contraste ne va pas de soi — d'autant qu'il doit
+// tenir pour les deux thèmes ET les trois accents d'écran.
 describe('pastille du multiplicateur', () => {
-  it('reste lisible dans les deux thèmes et pour les quatre accents', () => {
+  it('reste lisible dans les deux thèmes et pour les trois accents', () => {
     const failures: string[] = [];
 
     for (const scheme of ['light', 'dark'] as const) {
-      for (const accent of ACCENT_PRESETS) {
-        const c = buildColors(scheme, accent.id);
+      for (const accent of Object.keys(ACCENTS) as AccentId[]) {
+        const c = buildColors(scheme, accent);
         const ratio = contrastRatio(c.bg, c.warningText);
         if (ratio < TEXT_RATIO) {
-          failures.push(`${scheme}/${accent.id} : ${ratio.toFixed(2)}`);
+          failures.push(`${scheme}/${accent} : ${ratio.toFixed(2)}`);
         }
       }
     }
@@ -145,17 +145,68 @@ describe('interrupteur de révélation', () => {
     const failures: string[] = [];
 
     for (const scheme of ['light', 'dark'] as const) {
-      for (const accent of ACCENT_PRESETS) {
-        const c = buildColors(scheme, accent.id);
+      for (const accent of Object.keys(ACCENTS) as AccentId[]) {
+        const c = buildColors(scheme, accent);
 
         const eteint = contrastRatio(c.textMuted, c.neutralTrack);
-        if (eteint < UI_RATIO) failures.push(`${scheme}/${accent.id} éteint : ${eteint.toFixed(2)}`);
+        if (eteint < UI_RATIO) failures.push(`${scheme}/${accent} éteint : ${eteint.toFixed(2)}`);
 
-        const allume = contrastRatio('#FFFFFF', c.accent);
-        if (allume < UI_RATIO) failures.push(`${scheme}/${accent.id} allumé : ${allume.toFixed(2)}`);
+        // Le curseur allumé porte la couleur du texte posé sur l'accent, et
+        // non du blanc : sur cette palette, ce qui se pose sur un aplat est de
+        // l'encre ou de la crème selon l'accent (voir theme/index.ts).
+        const allume = contrastRatio(c.onAccent, c.accent);
+        if (allume < UI_RATIO) failures.push(`${scheme}/${accent} allumé : ${allume.toFixed(2)}`);
       }
     }
 
     expect(failures).toEqual([]);
+  });
+});
+
+
+// LA TUILE EST UN APLAT, ET UN APLAT DOIT SE DÉTACHER DE CE QU'IL Y A DESSOUS.
+//
+// Les quinze couleurs ne changeaient pas avec le thème : sur une carte sombre,
+// huit d'entre elles tombaient entre 2.87:1 et 2.94:1, sous le seuil des
+// éléments non textuels. Elles sont maintenant remontées vers le blanc juste
+// ce que le texte blanc qu'elles portent permet (voir themeColorForScheme).
+//
+// Le test tient les DEUX bouts : la couleur remontée doit encore porter son
+// texte blanc à 4.5:1, et se détacher de la carte comme du fond à 3:1. C'est
+// ce qui interdit de régler le plancher d'un côté sans regarder l'autre.
+describe('couleurs de tuile adaptées au thème sombre', () => {
+  const UI_RATIO = 3;
+
+  function verifie(base: string, nom: string, failures: string[]) {
+    const sombre = themeColorForScheme(base, true);
+    const blanc = contrastRatio('#FFFFFF', sombre);
+    const carte = contrastRatio(sombre, DARK_SURFACE);
+    const fond = contrastRatio(sombre, DARK_BG);
+    if (blanc < TEXT_RATIO) failures.push(`${nom} blanc ${blanc.toFixed(2)}`);
+    if (carte < UI_RATIO) failures.push(`${nom} carte ${carte.toFixed(2)}`);
+    if (fond < UI_RATIO) failures.push(`${nom} fond ${fond.toFixed(2)}`);
+    // En thème clair, rien ne bouge : la teinte est déjà celle qui a été
+    // choisie pour le fond crème.
+    if (themeColorForScheme(base, false) !== base) failures.push(`${nom} clair modifié`);
+  }
+
+  it('tient les deux seuils pour chaque thème', () => {
+    const failures: string[] = [];
+    for (const [id, base] of Object.entries(THEME_COLORS)) verifie(base, id, failures);
+    expect(failures).toEqual([]);
+  });
+
+  it('les tient aussi pour les couleurs tirées au sort', () => {
+    const failures: string[] = [];
+    const themeIds = THEMES.map((t) => t.id);
+    for (const seed of seeds(200, 0x7a11e)) {
+      for (const base of Object.values(buildRainbowThemeColors(themeIds, seed))) {
+        verifie(base, base, failures);
+      }
+    }
+    expect({ total: failures.length, premiers: failures.slice(0, 5) }).toEqual({
+      total: 0,
+      premiers: [],
+    });
   });
 });

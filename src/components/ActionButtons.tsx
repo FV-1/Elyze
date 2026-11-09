@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { haptics } from '../utils/haptics';
-import { ColorTokens, radii, spacing } from '../theme';
+import { ColorTokens, ombre, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
 type Props = {
@@ -90,7 +90,7 @@ export function ActionButtons({
         accessibilityLabel="Pas pour moi"
         accessibilityState={{ disabled: !!disabled }}
       >
-        <Ionicons name="close" size={30} color={colors.danger} />
+        <Ionicons name="close" size={30} color={colors.dangerText} />
       </Pressable>
 
       <Pressable
@@ -125,7 +125,7 @@ export function ActionButtons({
         accessibilityLabel="J’adhère"
         accessibilityState={{ disabled: !!disabled }}
       >
-        <Ionicons name="heart" size={26} color={colors.success} />
+        <Ionicons name="heart" size={26} color={colors.successText} />
       </Pressable>
 
       <Pressable
@@ -143,7 +143,7 @@ export function ActionButtons({
         accessibilityLabel="Super like, compte plus dans le résultat"
         accessibilityState={{ disabled: !!disabled }}
       >
-        <Ionicons name="star" size={20} color={colors.warning} />
+        <Ionicons name="star" size={20} color={colors.warningText} />
       </Pressable>
     </View>
   );
@@ -160,6 +160,14 @@ function makeStyles(colors: ColorTokens) {
       // 320 px de large. À 12, l'ensemble tient en 308.
       gap: spacing.sm + 4,
     },
+    // LA COULEUR EST DANS L'APLAT, PAS DANS LE GLYPHE.
+    //
+    // Ces boutons portaient un signe coloré sur un fond blanc cerné de la même
+    // couleur en plus pâle. Sur cette palette, cela ne pouvait plus tenir : un
+    // cœur lime sur du blanc ne se lit pas, et le document demande justement
+    // l'inverse — des aplats francs, cernés d'encre, avec un signe d'encre
+    // dessus. Chaque réponse devient donc une pastille pleine, et les quatre se
+    // distinguent par leur couleur autant que par leur signe.
     button: {
       width: 64,
       height: 64,
@@ -167,31 +175,46 @@ function makeStyles(colors: ColorTokens) {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.surface,
-      borderWidth: 1.5,
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 6 },
-      shadowOpacity: 0.08,
-      shadowRadius: 12,
-      elevation: 3,
+      // Sans contour : l'ombre suffit à poser les quatre pastilles sur la
+      // page, et un aplat de couleur cerné d'encre pesait deux fois.
+      ...ombre,
     },
     smallButton: {
       width: 44,
       height: 44,
     },
+    // TEINTE SUR TEINTE : un signe rouge sur un rond rouge pâle, un vert sur
+    // du vert pâle, un jaune sur du jaune pâle.
+    //
+    // Les quatre pastilles étaient des aplats pleins portant un signe d'encre,
+    // et le super like un rond noir — quatre taches franches sous une carte
+    // qu'on regarde pendant onze minutes. Le fond très pâle rend la rangée
+    // beaucoup plus calme, et la couleur dit toujours la même chose, puisque
+    // c'est maintenant elle qu'on lit dans le signe.
+    //
+    // Les deux valeurs de chaque couple viennent du thème (`…Soft` et
+    // `…Text`), et leur contraste est vérifié par le test de palette : ce
+    // n'est pas un dosage fait à l'œil.
     nopeButton: {
-      borderColor: colors.dangerSoft,
+      backgroundColor: colors.dangerSoft,
     },
     likeButton: {
-      borderColor: colors.successSoft,
+      backgroundColor: colors.successSoft,
     },
     superlikeButton: {
-      borderColor: colors.warningSoft,
+      backgroundColor: colors.warningSoft,
     },
     skipButton: {
-      borderColor: colors.border,
+      backgroundColor: colors.surfaceAlt,
     },
+    // ANNULER N'EST PAS UNE RÉPONSE, et cela se disait par un contour vide :
+    // pas d'aplat, juste le trait. Les contours ayant quitté l'app, ce bouton
+    // s'est retrouvé sans rien — un fond transparent, plus de trait, et une
+    // ombre qui n'avait plus de forme à porter. Il reprend l'aplat de la
+    // carte, le plus neutre de la rangée : c'est sa taille, la moitié des
+    // autres, qui dit qu'il n'est pas une réponse.
     undoButton: {
-      borderColor: colors.border,
+      backgroundColor: colors.surface,
     },
     buttonDisabled: {
       opacity: 0.4,

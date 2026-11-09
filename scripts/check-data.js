@@ -20,7 +20,6 @@ function pluck(src, field) {
 const proposals = read('proposals.ts');
 const candidates = read('candidates.ts');
 const themes = read('themes.ts');
-const categories = read('categories.ts');
 const colors = read('themeColors.ts');
 
 const problemes = [];
@@ -29,7 +28,6 @@ const ok = [];
 // --- Identifiants connus ---
 const candidateIds = new Set(pluck(candidates, 'id'));
 const themeIds = new Set(pluck(themes, 'id'));
-const categoryIds = new Set(pluck(categories, 'id'));
 
 // --- Propositions ---
 const blocs = proposals.split(/\n  \{\n/).slice(1);
@@ -48,6 +46,36 @@ else ok.push('tous les themeId référencés existent');
 const candsInconnus = [...new Set(propCands.filter((c) => !candidateIds.has(c)))];
 if (candsInconnus.length) problemes.push(`candidateId inconnus : ${candsInconnus.join(', ')}`);
 else ok.push('tous les candidateId référencés existent');
+
+// --- Provenance ----------------------------------------------------------------
+//
+// L'app affiche sous chaque carte d'où vient la mesure. 142 cartes sur 311 sont
+// pourtant arrivées un jour SANS AUCUNE SOURCE : la protection anti-robots de
+// Poligraph renvoyait une erreur à chaque fiche, et le script de récupération
+// l'avalait. Ce contrôle empêche que cela se reproduise en silence.
+//
+// Seule exception, nommée et assumée : les candidats pour qui aucune source
+// n'offre assez de mesures sourcées (voir SANS_SOURCE_TOLERE dans
+// scripts/generate-data.js, à tenir alignée sur celle-ci).
+{
+  const SANS_SOURCE_TOLERE = new Set(['glucksmann', 'bertrand']);
+  const sansSource = blocs
+    .filter((b) => !/\n {4}sourceUrl: '/.test(b))
+    .map((b) => b.match(/candidateId: '([^']+)'/)[1]);
+  const fautives = sansSource.filter((c) => !SANS_SOURCE_TOLERE.has(c));
+  if (fautives.length) {
+    const parCand = {};
+    for (const c of fautives) parCand[c] = (parCand[c] || 0) + 1;
+    problemes.push(
+      `${fautives.length} carte(s) sans source hors exception : ` +
+        Object.entries(parCand).map(([c, n]) => `${c} (${n})`).join(', ')
+    );
+  } else {
+    ok.push(
+      `toute carte a sa source, hors exception assumée (${sansSource.length} cartes : ${[...SANS_SOURCE_TOLERE].join(', ')})`
+    );
+  }
+}
 
 // --- Vivier par candidat -----------------------------------------------------
 //
@@ -87,9 +115,6 @@ const themesVides = [...themeIds].filter((t) => !propThemes.includes(t));
 if (themesVides.length) problemes.push(`thèmes sans aucune proposition : ${themesVides.join(', ')}`);
 else ok.push(`les ${themeIds.size} thèmes ont au moins une proposition`);
 
-const catsInconnues = [...new Set(pluck(themes, 'categoryId').filter((c) => !categoryIds.has(c)))];
-if (catsInconnues.length) problemes.push(`categoryId inconnus : ${catsInconnues.join(', ')}`);
-else ok.push('toutes les catégories référencées existent');
 
 // --- Couleurs de thème : une par thème, sinon la mosaïque retombe sur le repli ---
 const couleursDefinies = new Set([...colors.matchAll(/^ {2}([a-z_]+):/gm)].map((m) => m[1]));

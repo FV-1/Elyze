@@ -14,6 +14,8 @@ import { ThemeProvider } from '../theme/ThemeContext';
 import { PROPOSALS } from '../data/proposals';
 import { THEMES, THEMES_BY_ID } from '../data/themes';
 import { buildDeck, QUOTA_PAR_CANDIDAT } from '../utils/deck';
+import { computeResults, podiumProvisoirePret } from '../utils/scoring';
+import { CANDIDATES } from '../data/candidates';
 import { Answers } from '../types';
 
 // Tests de MONTAGE des sept écrans.
@@ -278,7 +280,7 @@ describe('montage des écrans', () => {
     expect(onglet).toBeDefined();
     renderer.act(() => onglet!.props.onPress());
 
-    expect(texts(tree)).not.toContain('Qui a le plus de votes');
+    expect(texts(tree)).not.toContain('Ton classement provisoire');
     expect(texts(tree)).toContain('Ton classement est définitif');
 
     const versResultat = touchables(tree).find(
@@ -366,6 +368,165 @@ describe('montage des écrans', () => {
     expect(comparer).toBeDefined();
     renderer.act(() => comparer!.props.onPress());
     expect(vue).toBe(true);
+  });
+
+  it('en cours de partie, le Classement propose de voir son résultat sans tout swiper', async () => {
+    let vuLeResultat = false;
+    const tree = mount(
+      <SwipeAvecOnglets
+        proposals={DECK}
+        currentIndex={DECK.length - 5}
+        answers={ANSWERS}
+        onAnswer={noop}
+        onUndo={noop}
+        onFinish={noop}
+        onSeeResult={() => {
+          vuLeResultat = true;
+        }}
+        onRestart={noop}
+        onExit={noop}
+        onOpenThemeFilter={noop}
+        selectedThemeIds={THEMES.map((t) => t.id)}
+        onOpenSettings={noop}
+        showTutorial={false}
+        onDismissTutorial={noop}
+        duel={null}
+      />
+    );
+    await renderer.act(async () => {});
+
+    const onglet = touchables(tree).find(
+      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Classement'
+    );
+    renderer.act(() => onglet!.props.onPress());
+    expect(texts(tree)).toContain('Ton classement provisoire');
+
+    const maintenant = touchables(tree).find(
+      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Voir mon résultat maintenant'
+    );
+    expect(maintenant).toBeDefined();
+    renderer.act(() => maintenant!.props.onPress());
+    expect(vuLeResultat).toBe(true);
+  });
+
+  it('avant le premier podium, le Classement dit combien de réponses il manque', async () => {
+    const tree = mount(
+      <SwipeAvecOnglets
+        proposals={DECK}
+        currentIndex={0}
+        answers={{}}
+        onAnswer={noop}
+        onUndo={noop}
+        onFinish={noop}
+        onSeeResult={noop}
+        onRestart={noop}
+        onExit={noop}
+        onOpenThemeFilter={noop}
+        selectedThemeIds={THEMES.map((t) => t.id)}
+        onOpenSettings={noop}
+        showTutorial={false}
+        onDismissTutorial={noop}
+        duel={null}
+      />
+    );
+    await renderer.act(async () => {});
+
+    const onglet = touchables(tree).find(
+      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Classement'
+    );
+    renderer.act(() => onglet!.props.onPress());
+    const vu = texts(tree).join('');
+    expect(vu).toContain('Ton premier classement arrive');
+    expect(vu).toMatch(/Encore environ \d+ réponses/);
+    // Rien à classer : pas de raccourci vers un résultat vide.
+    expect(
+      touchables(tree).some(
+        (n: ReactTestInstance) => n.props.accessibilityLabel === 'Voir mon résultat maintenant'
+      )
+    ).toBe(false);
+  });
+
+  describe('l’annonce du premier podium', () => {
+    // « J'adhère » sur les n premières cartes du paquet.
+    const reponduesJusqua = (n: number): Answers =>
+      Object.fromEntries(DECK.slice(0, n).map((p) => [p.id, 'like']));
+
+    // La carte qui fait apparaître le podium : celle à partir de laquelle la
+    // règle du panneau Classement le déclare prêt.
+    const seuil = DECK.findIndex((_, i) =>
+      podiumProvisoirePret(computeResults(reponduesJusqua(i), DECK, CANDIDATES))
+    );
+
+    const partie = (n: number) => (
+      <ThemeProvider>
+        <SwipeAvecOnglets
+          proposals={DECK}
+          currentIndex={n}
+          answers={reponduesJusqua(n)}
+          onAnswer={noop}
+          onUndo={noop}
+          onFinish={noop}
+          onSeeResult={noop}
+          onRestart={noop}
+          onExit={noop}
+          onOpenThemeFilter={noop}
+          selectedThemeIds={THEMES.map((t) => t.id)}
+          onOpenSettings={noop}
+          showTutorial={false}
+          onDismissTutorial={noop}
+          duel={null}
+        />
+      </ThemeProvider>
+    );
+
+    function monter(n: number): ReactTestRenderer {
+      let tree!: ReactTestRenderer;
+      renderer.act(() => {
+        tree = renderer.create(partie(n));
+      });
+      montes.push(tree);
+      return tree;
+    }
+
+    const annonce = 'Ton premier classement est prêt';
+
+    it('s’ouvre à la réponse qui fait apparaître le podium, et mène au classement', async () => {
+      expect(seuil).toBeGreaterThan(0);
+      const tree = monter(seuil - 1);
+      await renderer.act(async () => {});
+      expect(texts(tree)).not.toContain(annonce);
+
+      renderer.act(() => tree.update(partie(seuil)));
+      expect(texts(tree)).toContain(annonce);
+
+      const voir = touchables(tree).find(
+        (n: ReactTestInstance) => n.props.accessibilityLabel === 'Voir le classement'
+      );
+      renderer.act(() => voir!.props.onPress());
+      expect(texts(tree)).not.toContain(annonce);
+      expect(texts(tree)).toContain('Ton classement provisoire');
+    });
+
+    it('ne s’annonce qu’une fois par partie', async () => {
+      const tree = monter(seuil - 1);
+      await renderer.act(async () => {});
+      renderer.act(() => tree.update(partie(seuil)));
+      const continuer = touchables(tree).find(
+        (n: ReactTestInstance) => n.props.accessibilityLabel === 'Continuer à swiper'
+      );
+      renderer.act(() => continuer!.props.onPress());
+
+      // Retour en arrière sous le seuil, puis de nouveau au-dessus.
+      renderer.act(() => tree.update(partie(seuil - 1)));
+      renderer.act(() => tree.update(partie(seuil + 1)));
+      expect(texts(tree)).not.toContain(annonce);
+    });
+
+    it('ne se réannonce pas à la reprise d’une partie déjà classée', async () => {
+      const tree = monter(seuil + 5);
+      await renderer.act(async () => {});
+      expect(texts(tree)).not.toContain(annonce);
+    });
   });
 
   it('le swipe sort vers l’accueil par le bouton du haut', () => {
@@ -516,6 +677,37 @@ describe('montage des écrans', () => {
     expect(texts(tree).join(' ')).toMatch(/[A-ZÉÈ][a-zéèêë]+ [A-ZÉÈ]/);
   });
 
+  it('un résultat vu avant la fin le dit, et rend la partie', () => {
+    let retour = false;
+    const tree = mount(
+      <ResultsScreen
+        proposals={DECK}
+        answers={ANSWERS}
+        selectedThemeIds={THEMES.map((t) => t.id)}
+        onRestart={noop}
+        onBack={() => {
+          retour = true;
+        }}
+        backIsHome={false}
+        onGoHome={noop}
+        onOpenHowItWorks={noop}
+        onOpenSettings={noop}
+        duel={null}
+        onOpenDuel={noop}
+        alreadyRevealed
+        onReveal={noop}
+        cartesRestantes={12}
+      />
+    );
+    expect(texts(tree).join('')).toContain('Partie en cours : encore 12 cartes');
+    const continuer = touchables(tree).find(
+      (n: ReactTestInstance) => n.props.accessibilityLabel === 'Continuer à swiper'
+    );
+    expect(continuer).toBeDefined();
+    renderer.act(() => continuer!.props.onPress());
+    expect(retour).toBe(true);
+  });
+
   it('le résultat offre de sortir vers l’accueil à côté du partage', () => {
     const sorties: string[] = [];
     const tree = mount(
@@ -604,7 +796,7 @@ describe('montage des écrans', () => {
         onReveal={noop}
       />
     );
-    const mention = 'Sur le thème Santé uniquement';
+    const mention = 'Sur le thème Santé & solidarités uniquement';
     expect(texts(surSante).filter((t) => t === mention)).toHaveLength(2);
 
     // Sur tous les thèmes, c'est le classement général : rien à préciser.
@@ -669,7 +861,26 @@ describe('montage des écrans', () => {
       <ThemeSelectScreen initialSelection={['sante']} onConfirm={noop} onBack={noop} />
     );
     expectUsable(tree, 3);
-    expect(texts(tree)).toContain('Santé');
+    expect(texts(tree)).toContain('Santé & solidarités');
+  });
+
+  // L'écran annonçait toujours le paquet long : « Jouer : 165 cartes » pour
+  // une partie courte qui n'en tire que 55.
+  it('le choix des thèmes annonce le paquet du format choisi', () => {
+    const tous = THEMES.map((t) => t.id);
+    const court = mount(
+      <ThemeSelectScreen initialSelection={tous} quota={5} onConfirm={noop} onBack={noop} />
+    );
+    expect(texts(court)).toContain('Jouer : 55 cartes');
+    const long = mount(
+      <ThemeSelectScreen
+        initialSelection={tous}
+        quota={QUOTA_PAR_CANDIDAT}
+        onConfirm={noop}
+        onBack={noop}
+      />
+    );
+    expect(texts(long)).toContain('Jouer : 165 cartes');
   });
 
   it('les réglages se montent', () => {

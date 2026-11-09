@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Candidate } from '../types';
 import { CANDIDATE_PHOTOS } from '../data/candidatePhotos';
+import { MONO_SPACING, police } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
 type Props = {
@@ -18,7 +20,15 @@ export function Avatar({ candidate, size, emphasized, onPress }: Props) {
   const colors = useColors();
   const styles = useMemo(() => makeStyles(), []);
   const photo = CANDIDATE_PHOTOS[candidate.id];
-  const borderColor = emphasized ? colors.accent : colors.border;
+  // PLUS DE TRAIT AUTOUR DES VISAGES, SAUF POUR DIRE QUELQUE CHOSE.
+  //
+  // Chaque portrait portait un contour d'encre, épaissi pour le premier du
+  // podium. Les contours ont quitté l'app : une photo se détache très bien
+  // toute seule, et onze visages cerclés d'encre faisaient une planche de
+  // timbres. Il n'en reste qu'un, en accent, autour de celui qui arrive en
+  // tête — un trait qui n'est plus un cadre mais une médaille.
+  const borderColor = colors.accent;
+  const borderWidth = emphasized ? 3 : 0;
   const shape = {
     width: size,
     height: size,
@@ -37,7 +47,7 @@ export function Avatar({ candidate, size, emphasized, onPress }: Props) {
       accessible
       accessibilityRole="image"
       accessibilityLabel={candidate.name}
-      style={[shape, styles.photo, { borderColor, borderWidth: emphasized ? 2 : StyleSheet.hairlineWidth }]}
+      style={[shape, styles.photo, { borderColor, borderWidth }]}
     />
   ) : (
     <View
@@ -49,6 +59,7 @@ export function Avatar({ candidate, size, emphasized, onPress }: Props) {
         styles.fallback,
         {
           borderColor,
+          borderWidth,
           backgroundColor: emphasized ? colors.accent : colors.surfaceAlt,
         },
       ]}
@@ -56,7 +67,10 @@ export function Avatar({ candidate, size, emphasized, onPress }: Props) {
       <Text
         style={[
           styles.initials,
-          { fontSize: size * 0.32, color: emphasized ? colors.onAccent : colors.textSecondary },
+          {
+            fontSize: size * 0.32,
+            color: emphasized ? colors.onAccent : colors.textSecondary,
+          },
         ]}
       >
         {candidate.initials}
@@ -81,16 +95,18 @@ export function Avatar({ candidate, size, emphasized, onPress }: Props) {
 
 function makeStyles() {
   return StyleSheet.create({
-    photo: {
-      borderWidth: StyleSheet.hairlineWidth,
-    },
+    // L'épaisseur vient du composant : zéro, ou trois pour le premier du
+    // podium. Ce style ne garde que ce qui ne dépend pas de l'état.
+    photo: {},
     fallback: {
       alignItems: 'center',
       justifyContent: 'center',
-      borderWidth: StyleSheet.hairlineWidth,
     },
+    // Les initiales tiennent lieu de portrait : en mono, comme tout ce qui est
+    // une étiquette dans cette app.
     initials: {
-      fontWeight: '700',
+      fontFamily: police.mono[500],
+      letterSpacing: MONO_SPACING,
     },
     pressed: {
       opacity: 0.7,

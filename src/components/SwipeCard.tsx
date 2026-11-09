@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
+import { Texte as Text } from './Texte';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import * as Haptics from 'expo-haptics';
 import { haptics } from '../utils/haptics';
@@ -18,12 +19,12 @@ import { ThemeBadge } from './ThemeBadge';
 import { PROPOSAL_ARGUMENTS } from '../data/proposalArguments';
 import { PROPOSAL_EXPLANATIONS } from '../data/proposalExplanations';
 import { Proposal, ThemeTag } from '../types';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, ombre, radii, spacing } from '../theme';
 import { useColors, useThemeSettings } from '../theme/ThemeContext';
 import { RainbowGradient } from './RainbowGradient';
 import { cardFrameSweep, cardSweep } from '../theme/rainbowGradient';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import { precisionLabel, proposalProvenance } from '../data/source';
+import { precisionLabel } from '../data/source';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.28;
@@ -71,8 +72,16 @@ const PAN_ACTIVATION = 8;
 // vérifiable, et un chiffre dont personne ne sait s'il tient encore ne protège
 // personne. `scripts/check-data.js` compare désormais les deux à chaque
 // exécution et échoue si une proposition dépasse cette calibration.
+//
+// LA CALIBRATION A BAISSÉ AVEC LE CHANGEMENT DE TYPOGRAPHIE. Le budget compte
+// des caractères, pas des pixels : il suppose une largeur moyenne de glyphe.
+// Space Grotesk est sensiblement plus large que la police système sur laquelle
+// les 309 avaient été relevés, si bien que le même texte, à la même taille,
+// occupait une ligne de plus — et la carte débordait par le bas sur les
+// propositions longues. Ramené à 262, soit un sixième de moins, ce qui laisse
+// encore de la marge sur la plus longue proposition du vivier (234).
 const EXPLANATION_SIZE = fonts.small + 1;
-const TEXT_BUDGET = 309 * (fonts.cardText - 2) + 36 * fonts.small;
+const TEXT_BUDGET = 262 * (fonts.cardText - 2) + 36 * fonts.small;
 
 // LE BUDGET SUIT LA HAUTEUR DE LA CARTE.
 //
@@ -213,7 +222,9 @@ type Props = {
   // Ouvre le débat autour de la mesure. Absent sur les cartes du dessous,
   // qui ne sont pas interactives.
   onOpenDebate?: () => void;
-  onBecomeTop?: (trigger: (direction: SwipeDirection) => void) => void;
+  // Le déclencheur rend `false` quand la carte a déjà validé sa réponse : il
+  // n'a alors rien lancé, et l'appelant ne doit rien attendre (voir plus bas).
+  onBecomeTop?: (trigger: (direction: SwipeDirection) => boolean) => void;
 };
 
 export function SwipeCard({
@@ -311,8 +322,16 @@ export function SwipeCard({
     finishRef.current(direction);
   }, []);
 
+  // UNE CARTE DÉJÀ VALIDÉE NE REPART PAS. Entre la validation d'une carte et
+  // le moment où la suivante se déclare carte du dessus, le paquet tient
+  // encore le déclencheur de l'ancienne. Un appui tombé dans cet intervalle la
+  // relançait : l'animation repartait, la validation était refusée par le
+  // verrou ci-dessus, et l'écran attendait une sortie qui n'arriverait jamais
+  // — boutons éteints pour de bon. Révélé par un émulateur lent ; un double
+  // appui rapide suffisait sur un vrai téléphone.
   const triggerSwipe = useCallback(
-    (direction: SwipeDirection) => {
+    (direction: SwipeDirection): boolean => {
+      if (committed.current) return false;
       // Sortie déclenchée au bouton : un peu plus courte qu'avant (240 ms),
       // car ici aucun geste ne précède l'animation — l'attente était perçue
       // comme un temps mort entre l'appui et la carte suivante.
@@ -322,7 +341,7 @@ export function SwipeCard({
         exitOpacity.value = withTiming(0, { duration: reducedMotion.value ? 0 : 170 }, (finished) => {
           if (finished) runOnJS(commitSwipe)(direction);
         });
-        return;
+        return true;
       }
       if (direction === 'like' || direction === 'superlike') setExitKind(direction);
       const target = (direction === 'nope' ? -1 : 1) * SCREEN_WIDTH * 1.5;
@@ -330,6 +349,7 @@ export function SwipeCard({
         if (finished) runOnJS(commitSwipe)(direction);
       });
       translateY.value = withTiming(translateY.value - 30, { duration: d });
+      return true;
     },
     [commitSwipe, translateX, translateY, exitOpacity, reducedMotion]
   );
@@ -434,7 +454,6 @@ export function SwipeCard({
 
   const isTop = stackPosition === 0;
   const precision = precisionLabel(proposal);
-  const provenance = proposalProvenance(proposal);
   const explanation = PROPOSAL_EXPLANATIONS[proposal.id];
   const hasDebate = Boolean(PROPOSAL_ARGUMENTS[proposal.id]) && Boolean(onOpenDebate);
   const proposalSize = proposalFontSize(
@@ -448,7 +467,10 @@ export function SwipeCard({
   const dividerMargin = dividerMarginFor(cardHeight);
   const cardA11yLabel = `Thème : ${themeTag.label}. Proposition : ${proposal.text}.${
     explanation ? ` En clair : ${explanation}` : ''
-  }${precision ? ` ${precision}.` : ''} Source : ${provenance}`;
+  }${precision ? ` ${precision}.` : ''}`;
+  // Pas de source dans ce libellé : elle trahirait l'auteur au lecteur
+  // d'écran, comme elle le ferait à l'écran. Elle est donnée une fois
+  // l'auteur dévoilé, dans la fiche du candidat.
 
   const cardContent = (
     <Animated.View
@@ -612,6 +634,13 @@ function makeStyles(colors: ColorTokens) {
     cardOnGradient: {
       backgroundColor: 'transparent',
     },
+    // LE CADRE D'ENCRE, ET RIEN D'AUTRE POUR LA DÉTACHER.
+    //
+    // L'identité est plate : aucune ombre ne porte plus la carte au-dessus du
+    // fond. C'est ce trait de deux pixels qui le fait, comme le cadre de
+    // téléphone des captures du document. Deux pixels et pas un : à un, il
+    // disparaît sur les écrans les moins denses et la carte flotte sans
+    // contour ; à trois, il devient un objet en soi.
     card: {
       position: 'absolute',
       top: 0,
@@ -619,18 +648,18 @@ function makeStyles(colors: ColorTokens) {
       right: 0,
       bottom: 0,
       backgroundColor: colors.surface,
-      borderRadius: radii.lg,
+      borderRadius: radii.xl,
       paddingVertical: spacing.xl,
       paddingHorizontal: spacing.lg,
       alignItems: 'center',
       justifyContent: 'space-between',
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 14 },
-      shadowOpacity: 0.12,
-      shadowRadius: 24,
-      elevation: 6,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: colors.border,
+      // PLUS DE CADRE DU TOUT. La carte occupe presque tout l'écran, et le
+      // trait qui en faisait le tour se lisait avant la proposition qu'elle
+      // porte — d'abord deux pixels d'encre pleine, puis un d'encre pâle, puis
+      // plus rien. Ce qui la pose maintenant est une ombre, et sur le thème
+      // sombre, où une ombre ne se voit pas, l'écart entre son fond et celui
+      // de la page (voir theme/index.ts).
+      ...ombre,
     },
     textWrap: {
       flex: 1,
@@ -644,7 +673,7 @@ function makeStyles(colors: ColorTokens) {
       textAlign: 'center',
     },
     divider: {
-      height: StyleSheet.hairlineWidth,
+      height: 1,
       backgroundColor: colors.border,
       marginVertical: spacing.lg,
     },
@@ -717,22 +746,29 @@ function makeStyles(colors: ColorTokens) {
     stamp: {
       position: 'absolute',
       top: spacing.xl,
-      borderWidth: 3,
+      ...ombre,
       borderRadius: radii.sm,
       paddingVertical: spacing.xs,
       paddingHorizontal: spacing.md,
     },
+    // LES TAMPONS SONT PLEINS, ET NON PLUS CERNÉS.
+    //
+    // Ils portaient un contour de couleur vive et un texte assorti. Avec cette
+    // palette, un contour lime sur du blanc ne se voit pas (1.16:1, quand un
+    // élément graphique en demande 3). Le tampon devient donc un aplat de la
+    // couleur de la réponse, cerné d'encre, avec le mot en encre dessus — la
+    // même pastille que le bouton qu'on vient de toucher, en plus grand.
     likeStamp: {
       left: spacing.lg,
-      borderColor: colors.success,
+      backgroundColor: colors.success,
       transform: [{ rotate: '-14deg' }],
     },
     superlikeStamp: {
-      borderColor: colors.warning,
+      backgroundColor: colors.warning,
     },
     nopeStamp: {
       right: spacing.lg,
-      borderColor: colors.danger,
+      backgroundColor: colors.danger,
       transform: [{ rotate: '14deg' }],
     },
     stampText: {
@@ -740,11 +776,10 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '800',
       letterSpacing: 1,
     },
-    // Les bordures gardent la couleur vive ; le TEXTE passe par les variantes
-    // dédiées, qui tiennent le contraste sur `surface` en mode clair (le vert
-    // vif n'y atteignait que 3.02:1).
-    likeStampText: { color: colors.successText },
-    superlikeStampText: { color: colors.warningText },
-    nopeStampText: { color: colors.dangerText },
+    // Le mot posé sur l'aplat : de l'encre sur le lime et la pêche, du lime
+    // sur l'encre du super like.
+    likeStampText: { color: colors.onAccentSuccess },
+    superlikeStampText: { color: colors.onAccentWarning },
+    nopeStampText: { color: colors.onAccentDanger },
   });
 }

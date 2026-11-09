@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { LayoutChangeEvent, Pressable, StyleSheet, Text, View } from 'react-native';
+import { LayoutChangeEvent, Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
+import { Texte as Text } from './Texte';
 import { useGlissiere, usePression } from './mouvement';
 import { Ionicons } from '@expo/vector-icons';
-import { ColorTokens, fonts, radii, spacing } from '../theme';
+import { ColorTokens, fonts, ombre, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 
 // Plafond de grossissement des libellés. Au delà, une barre d'une seule ligne
@@ -18,7 +19,7 @@ const MAX_LABEL_SCALE = 1.2;
 // plancher — il rétrécit un peu au lieu d'être coupé au milieu d'un mot.
 const MIN_LABEL_SCALE = 0.8;
 
-// L'enfoncement sous le doigt et la pastille qui glisse sont partagés avec le
+// L'enfoncement sous le doigt et la pièce qui glisse sont partagés avec le
 // reste de l'app (voir mouvement.ts) ; seul ce grossissement, qui dit l'onglet
 // courant, appartient à cette barre.
 const ECHELLE_ACTIVE = 1.06;
@@ -60,11 +61,16 @@ type Extra = {
 // piquée sur l'icône : plus petit que le plus petit jeton de police de l'app,
 // pour dire un nombre qui tient dans le libellé.
 //
-// UNE SEULE PASTILLE, QUI SE DÉPLACE. Le fond de l'onglet choisi n'appartient
-// pas à l'onglet : c'est une pièce unique, posée derrière la rangée, qui
-// glisse d'une colonne à l'autre. Trois fonds qui s'allument et s'éteignent
-// diraient la même chose, mais sans montrer le trajet — or c'est le trajet qui
-// fait comprendre que ces trois vues sont côte à côte, et non empilées.
+// UNE SEULE MARQUE, QUI SE DÉPLACE. Le trait d'accent de l'onglet courant
+// n'appartient pas à l'onglet : c'est une pièce unique, posée sur la rangée,
+// qui glisse d'une colonne à l'autre. Trois traits qui s'allument et
+// s'éteignent diraient la même chose, mais sans montrer le trajet — or c'est
+// le trajet qui fait comprendre que ces trois vues sont côte à côte, et non
+// empilées.
+//
+// Elle reste ce que la charte demande : un petit repère d'accent, et non un
+// aplat de couleur sous tout l'onglet. La boîte qui glisse fait toute la
+// largeur de la colonne ; le trait, lui, garde ses 22 px, centré dedans.
 export function BottomTabBar<K extends string>({
   tabs,
   active,
@@ -84,11 +90,13 @@ export function BottomTabBar<K extends string>({
   return (
     <View style={styles.bar}>
       {/* LA RANGÉE NE PORTE AUCUNE MARGE INTÉRIEURE, et c'est ce qui rend la
-          pastille juste : les `x` que renvoie `onLayout` sont comptés depuis
-          ce cadre, et la pastille se place dans le même. Remettre une marge
-          ici décalerait l'un sans l'autre. Les marges sont sur la barre. */}
+          marque juste : les `x` que renvoie `onLayout` sont comptés depuis ce
+          cadre, et la marque se place dans le même. Remettre une marge ici
+          décalerait l'un sans l'autre. Les marges sont sur la barre. */}
       <View style={styles.rangee}>
-        <Animated.View style={[styles.pastille, glissiere.style]} pointerEvents="none" />
+        <Animated.View style={[styles.marqueGlissante, glissiere.style]} pointerEvents="none">
+          <View style={styles.marque} />
+        </Animated.View>
 
         {tabs.map((tab) => (
           <Onglet
@@ -142,7 +150,7 @@ function Onglet<K extends string>({
       accessibilityLabel={tab.label}
     >
       <Animated.View style={[styles.contenu, pression.style]}>
-        <Ionicons name={tab.icon} size={22} color={actif ? colors.accentText : colors.textMuted} />
+        <Ionicons name={tab.icon} size={22} color={actif ? colors.textPrimary : colors.textMuted} />
         <Text
           style={[styles.label, actif && styles.labelActive]}
           maxFontSizeMultiplier={MAX_LABEL_SCALE}
@@ -200,12 +208,12 @@ function makeStyles(colors: ColorTokens) {
     // Elle flotte : des marges la détachent des trois côtés, et le contenu de
     // l'écran passe DERRIÈRE elle (voir SwipeScreen, qui la sort du flux et
     // dégage la hauteur qu'il faut au bas de chaque vue). Le trait du haut
-    // disparaît avec le collage — il séparait deux surfaces jointives, et un
+    // disparaît avec le collage — il séparait deux surfaces jointives, et le
     // contour complet le remplace maintenant que la barre est un objet fermé.
     //
-    // L'ombre est celle des autres surfaces posées de l'app (même teinte,
-    // #1A1730), un cran plus portante : la barre est ce qui reste au-dessus
-    // quand tout le reste défile.
+    // SANS OMBRE : la charte n'en veut nulle part. Ce qui la détache du
+    // contenu est son trait d'encre, à la même épaisseur que les autres
+    // cadres, et le fond de l'écran qui passe tout autour.
     bar: {
       marginHorizontal: spacing.md,
       marginBottom: spacing.sm,
@@ -213,31 +221,50 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: spacing.xs,
       backgroundColor: colors.surface,
       borderRadius: radii.lg,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: colors.border,
-      shadowColor: '#1A1730',
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.1,
-      shadowRadius: 18,
-      elevation: 6,
+      // Sans contour : c'est l'ombre qui la pose au-dessus du contenu, comme
+      // la carte de swipe.
+      ...ombre,
     },
     rangee: {
       flexDirection: 'row',
     },
-    // La pièce qui glisse. Elle est SOUS les onglets dans l'ordre de rendu :
-    // son fond passe derrière l'icône et le libellé, jamais devant.
-    pastille: {
+    // LA BOÎTE QUI GLISSE fait la largeur de la colonne, pour que la mesure
+    // de l'onglet lui serve telle quelle ; la marque, elle, reste un repère de
+    // 24 px, centré dedans. Elle est posée en haut de la rangée, dans la
+    // hauteur que les onglets réservent au-dessus de leur icône.
+    marqueGlissante: {
       position: 'absolute',
       left: 0,
       top: 0,
-      bottom: 0,
-      borderRadius: radii.md,
-      backgroundColor: colors.accentSoft,
+      height: 6,
+      alignItems: 'center',
     },
+    // ELLE PREND LA COULEUR DE L'ACTION, ET C'EST CE QUI LA REND VISIBLE.
+    //
+    // C'est le seul signe qui dise quel onglet est ouvert. Posée en accent nu,
+    // elle valait 1.16:1 sur une barre claire, là où un élément qui porte une
+    // information en demande 3 ; le libellé courant, en encre face à l'encre
+    // pâle des autres, n'ajoutait que 2.37:1. Elle a d'abord été cernée d'un
+    // filet d'encre, puis les contours ont été retirés de toute l'app.
+    //
+    // `action` règle l'affaire sans contour et sans exception : c'est, par
+    // construction, la couleur qui se lit sur le fond courant — l'encre quand
+    // l'accent est clair, l'accent lui-même quand il est sombre ou que la nuit
+    // avale l'encre (voir actionColors dans theme/index.ts).
+    marque: {
+      width: 24,
+      height: 6,
+      borderRadius: radii.pill,
+      backgroundColor: colors.action,
+    },
+    // La place de la marque est retenue en haut, qu'un onglet la porte ou
+    // non : sans cela, la rangée sauterait de quatre pixels au premier
+    // changement d'onglet.
     tab: {
       flex: 1,
       alignItems: 'center',
-      paddingVertical: spacing.xs + 2,
+      paddingTop: 6 + spacing.xs,
+      paddingBottom: spacing.xs + 2,
     },
     // Ce qui grossit et se comprime est le CONTENU, pas la zone tactile : la
     // cible du doigt garde sa taille quoi qu'il arrive.
@@ -250,27 +277,28 @@ function makeStyles(colors: ColorTokens) {
       fontWeight: '600',
       color: colors.textMuted,
     },
-    // `accentText` et non `accent` : c'est la teinte d'accent calibrée pour
-    // être LUE sur une surface claire ou sombre (voir theme/index.ts). Sur le
-    // fond de la pastille, en mode sombre, `accent` tombait sous 4.5:1.
+    // L'ONGLET ACTIF S'ÉCRIT EN ENCRE, PAS EN ACCENT. Le lime ne se lit pas sur
+    // une barre claire (1.2:1) : ce qui distingue l'onglet courant est la
+    // densité du trait, pas une couleur. Sa marque, elle, prend l'accent.
     labelActive: {
-      color: colors.accentText,
+      color: colors.textPrimary,
       fontWeight: '700',
     },
 
     // Le trait qui dit « ce qui suit n'est pas un onglet ».
     divider: {
-      width: StyleSheet.hairlineWidth,
+      width: 1,
       alignSelf: 'stretch',
       marginVertical: spacing.xs,
       backgroundColor: colors.border,
     },
-    // Contour et non aplat : voir l'explication en tête de fichier. Le trait
-    // est celui qui sépare déjà les surfaces de l'app, à un pixel plein plutôt
-    // qu'au cheveu — sous 20 px de haut, un cheveu se perd.
+    // APLAT ET NON CONTOUR, depuis que les contours ont quitté l'app. Le
+    // raisonnement de l'en-tête de fichier tient toujours : cette action ne
+    // doit ressembler ni à un onglet sélectionné, ni à un onglet éteint. Un
+    // fond neutre — celui des panneaux secondaires, pas celui de l'accent — la
+    // distingue des trois onglets sans prétendre être l'écran courant.
     extraTab: {
-      borderWidth: 1,
-      borderColor: colors.border,
+      backgroundColor: colors.surfaceAlt,
       borderRadius: radii.md,
       marginHorizontal: spacing.xs,
       paddingHorizontal: 2,

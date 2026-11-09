@@ -202,7 +202,7 @@ function makeStyles(colors: ColorTokens) {
       // Un demi-point de recouvrement : à 50 % pile, l'arrondi du rendu
       // laissait par moments un cheveu de fond entre les deux pans.
       width: '50.5%',
-      backgroundColor: colors.accent,
+      backgroundColor: colors.action,
       overflow: 'hidden',
     },
     panGauche: {
@@ -217,7 +217,7 @@ function makeStyles(colors: ColorTokens) {
       right: 0,
       top: 0,
       height: `${CANTONNIERE_PART * 100}%`,
-      backgroundColor: colors.accentStrong,
+      backgroundColor: colors.actionPressed,
       overflow: 'hidden',
     },
     ombreCantonniere: {
