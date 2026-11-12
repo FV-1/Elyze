@@ -195,7 +195,7 @@ const base = {
     textPrimary: PALETTE.ink,
     textSecondary: PALETTE.ink2,
     textMuted: PALETTE.ink3,
-    neutralFill: PALETTE.ink3,
+    neutralFill: PALETTE.outline,
     neutralTrack: PALETTE.paper2,
   },
   dark: {
