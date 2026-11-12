@@ -40,24 +40,25 @@ import { contrastRatio, mixHex } from '../utils/color';
 // palette n'en garde que huit.
 //
 // PALETTE SOBRE : LES TUILES S'EFFACENT DEVANT L'ACCENT. L'app n'a plus
-// qu'un accent saturé, le bleu canard, réservé à ce qu'on touche. Les huit
-// tuiles sont donc ramenées à une même saturation, plus douce (0.12 en OKLCH,
-// là où elles allaient de 0.08 à 0.20), et leurs teintes réparties en laissant
-// libre la zone de l'accent : le logement, qui était bleu-vert, aurait passé
-// pour un bouton, et prend un bleu-violet assourdi. Le damier de la contrainte 3 est rétabli tel quel (4.7:1 et 5.9:1
-// face au blanc, en alternance), et deux tuiles qui se touchent ne partagent
-// jamais une famille de teinte. Distance minimale entre voisines : 70.
+// qu'un accent saturé, l'aubergine, réservé à ce qu'on touche. Les huit
+// tuiles sont donc ramenées à une même saturation, plus douce (au plus 0.12
+// en OKLCH, là où elles allaient de 0.08 à 0.20), et leurs teintes réparties
+// en laissant libre la zone de l'accent : l'école et la sécurité, qui étaient
+// prune et framboise, l'auraient imité. Le damier de la contrainte 3 est
+// rétabli tel quel (4.7:1 et 5.9:1 face au blanc, en alternance), et deux
+// tuiles qui se touchent ne partagent jamais une famille de teinte. Distance
+// minimale entre voisines : 72.
 export const THEME_COLORS: Record<string, string> = {
-  economie: '#167AB1',
+  economie: '#0D836D',
   travail: '#7F5F0B',
 
   sante: '#A24844',
-  education: '#955FA5',
+  education: '#5D6FBB',
 
   ecologie: '#3D8241',
-  logement: '#4F5FAA',
+  logement: '#126F78',
 
-  securite: '#9A4872',
+  securite: '#0E6A9B',
   institutions: '#AA6221',
 };
 

@@ -5,54 +5,56 @@ import { contrastRatio, mixHex } from '../utils/color';
 // Toute couleur affichée par l'app en sort, directement ou par un mélange
 // calculé plus bas. Le test theme/palette.test.ts y veille.
 //
-// UNE PALETTE SOBRE, AUTOUR D'UN BLEU CANARD.
+// UNE PALETTE SOBRE, AUTOUR D'UNE AUBERGINE.
 //
-// L'accent est un bleu canard, un bleu-vert profond. Il a été choisi pour ce
-// qu'est Élyze, pas tiré d'un modèle :
-//  - aucun grand parti ne l'a pour couleur, là où le bleu, le rouge, le rose,
-//    le vert et l'orange en désignent un — un comparateur de programmes ne
-//    peut pas avoir l'air d'en soutenir un ;
-//  - il ne se confond avec aucune des trois réponses (vert, rouge, jaune) ;
-//  - il n'est pas dans la zone violet-indigo, la couleur par défaut des
-//    interfaces générées (l'iris essayé avant lui en était à un degré près).
+// L'accent est une aubergine, un prune profond. Le choix s'est fait par
+// élimination, parce que presque tout le cercle des teintes est déjà pris :
+//  - le bleu, le rouge, le rose, le vert et l'orange désignent un parti, et
+//    un comparateur de programmes ne peut pas avoir l'air d'en soutenir un ;
+//  - le vert, le rouge et le jaune sont ceux des trois réponses ;
+//  - le violet-indigo est la couleur par défaut des interfaces générées
+//    (l'iris essayé d'abord en était à un degré près) ;
+//  - le bleu canard essayé ensuite donnait à l'app un air d'hôpital.
+// Reste ce prune : chaud, profond, et qui ne ressemble à rien de tout cela.
+// En thème sombre, il s'éclaircit en un mauve lilas, et non en rose.
 //
 // Les neutres ne sont pas une rampe de gris standard : ils sont teintés, de
-// très peu, vers ce même bleu canard, pour que le fond appartienne à l'app.
+// très peu, vers la même aubergine, pour que le fond appartienne à l'app.
 // Calculés en OKLCH, l'espace qui suit la perception de l'œil.
 export const PALETTE = {
-  ink: '#142225',
-  ink2: '#3C4B4E',
-  ink3: '#5B696D',
+  ink: '#251C23',
+  ink2: '#4F444C',
+  ink3: '#6D626A',
 
-  paper: '#EDF2F3',
-  paper2: '#E1E9EA',
+  paper: '#F3F0F2',
+  paper2: '#EAE5E9',
   white: '#FFFFFF',
-  line: '#D1DBDC',
+  line: '#DED7DC',
   // Le contour qui doit tenir seul (un champ de saisie, une carte cernée) :
   // un gris moyen qui tient les 3:1 que le WCAG demande à un contour
   // d'élément d'interface, et rien de plus.
-  outline: '#768385',
+  outline: '#867D83',
 
-  night: '#091113',
-  night2: '#141E20',
-  night3: '#1F2A2D',
-  lineNight: '#273335',
-  outlineNight: '#768385',
-  snow: '#ECF1F2',
-  snowDim: '#C8D3D5',
-  mutedOnNight: '#A6B4B6',
+  night: '#130D11',
+  night2: '#20191E',
+  night3: '#2D252B',
+  lineNight: '#362D34',
+  outlineNight: '#867D83',
+  snow: '#F2EFF1',
+  snowDim: '#D6CED4',
+  mutedOnNight: '#B8ADB5',
 
   // L'ACCENT, EN TONS. Un ton soutenu pour tout ce qui se remplit (bouton,
   // barre de progression, onglet actif, jauge, anneau d'avatar), un ton pour
   // le texte, et une teinte très pâle, calculée plus bas, pour les fonds
   // d'état sélectionné. Chaque couple est vérifié par theme/palette.test.ts.
-  canard: '#02717A',
-  canardPressed: '#005F67',
-  canardText: '#016770',
-  // Sur fond sombre, un bleu canard clair qui porte l'encre : un ton soutenu
-  // ne se détacherait pas de la piste d'une jauge.
-  canardNight: '#82CCD5',
-  canardNightPressed: '#6FB9C1',
+  prune: '#7C376F',
+  prunePressed: '#6B2B60',
+  pruneText: '#753368',
+  // Sur fond sombre, un mauve lilas qui porte l'encre : un ton soutenu ne se
+  // détacherait pas de la piste d'une jauge.
+  pruneNight: '#CEB2D7',
+  pruneNightPressed: '#BC9EC6',
 
   // Les marches du podium : or, argent et bronze, assourdis. L'encre s'écrit
   // dessus.
@@ -107,9 +109,9 @@ export const PALETTE = {
 export type AccentId = 'lime' | 'violet' | 'peach';
 
 export const ACCENTS: Record<AccentId, string> = {
-  lime: PALETTE.canard,
-  violet: PALETTE.canard,
-  peach: PALETTE.canard,
+  lime: PALETTE.prune,
+  violet: PALETTE.prune,
+  peach: PALETTE.prune,
 };
 
 export const DEFAULT_ACCENT: AccentId = 'lime';
@@ -226,20 +228,20 @@ function surAccent(hue: string): string {
 // l'un d'eux sorte de la palette.
 const TONS_ACCENT = {
   light: {
-    action: PALETTE.canard,
+    action: PALETTE.prune,
     onAction: PALETTE.white,
-    actionPressed: PALETTE.canardPressed,
-    accent: PALETTE.canard,
+    actionPressed: PALETTE.prunePressed,
+    accent: PALETTE.prune,
     onAccent: PALETTE.white,
-    accentText: PALETTE.canardText,
+    accentText: PALETTE.pruneText,
   },
   dark: {
-    action: PALETTE.canardNight,
+    action: PALETTE.pruneNight,
     onAction: PALETTE.ink,
-    actionPressed: PALETTE.canardNightPressed,
-    accent: PALETTE.canardNight,
+    actionPressed: PALETTE.pruneNightPressed,
+    accent: PALETTE.pruneNight,
     onAccent: PALETTE.ink,
-    accentText: PALETTE.canardNight,
+    accentText: PALETTE.pruneNight,
   },
 } as const;
 
@@ -252,7 +254,7 @@ export function buildColors(scheme: 'light' | 'dark', _accentId: string): ColorT
     ...b,
 
     ...tons,
-    accentSoft: mixHex(PALETTE.canard, b.surface, sombre ? 0.2 : 0.1),
+    accentSoft: mixHex(PALETTE.prune, b.surface, sombre ? 0.2 : 0.1),
 
     // LES TROIS RÉPONSES, chacune sur sa teinte (voir PALETTE).
     //
@@ -304,17 +306,18 @@ export const ombre = {
 
 // --- RAYONS -----------------------------------------------------------------
 //
-// MESURÉS, ET PLUS GÉNÉREUX PARTOUT. L'échelle allait de 16 à 44, et tous les
-// boutons étaient des pilules : un grand arrondi posé uniformément sur tout
-// est l'un des signes les plus reconnus d'une interface générée sans qu'on la
-// décide. Elle est divisée par deux, et la pilule est réservée à ce qui est
-// rond par nature : boutons d'icône, pastilles, interrupteurs, jauges. Un
-// bouton qui porte un libellé prend `md`.
+// MESURÉS, SANS ÊTRE SECS. L'échelle allait de 16 à 44, et tous les boutons
+// étaient des pilules : un grand arrondi posé uniformément sur tout est l'un
+// des signes les plus reconnus d'une interface générée sans qu'on la décide.
+// Divisée par deux (8 à 22), elle donnait une app trop anguleuse ; elle est
+// revenue à mi-chemin. La pilule reste réservée à ce qui est rond par nature :
+// boutons d'icône, pastilles, interrupteurs, jauges. Un bouton qui porte un
+// libellé prend `md`.
 export const radii = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 22,
+  sm: 12,
+  md: 16,
+  lg: 22,
+  xl: 28,
   pill: 999,
 } as const;
 
