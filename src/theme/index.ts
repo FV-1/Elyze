@@ -5,60 +5,54 @@ import { contrastRatio, mixHex } from '../utils/color';
 // Toute couleur affichée par l'app en sort, directement ou par un mélange
 // calculé plus bas. Le test theme/palette.test.ts y veille.
 //
-// UNE PALETTE SOBRE. La crème, la nuit violacée et les trois accents vifs
-// (lime, violet, pêche) cèdent la place à des gris légèrement froids et à un
-// seul accent, un bleu-gris pâle. Les gris suivent l'échelle « slate » de
-// Radix Colors, dont chaque cran a un rôle : fonds, bordures discrètes,
-// bordures d'éléments interactifs, texte. L'accent garde le rôle exact du
-// lime qu'il remplace — une teinte claire sur laquelle s'écrit l'encre —, si
-// bien que chaque écran garde sa construction ; seules les couleurs changent.
+// UNE PALETTE SOBRE, AUTOUR D'UN BLEU CANARD.
+//
+// L'accent est un bleu canard, un bleu-vert profond. Il a été choisi pour ce
+// qu'est Élyze, pas tiré d'un modèle :
+//  - aucun grand parti ne l'a pour couleur, là où le bleu, le rouge, le rose,
+//    le vert et l'orange en désignent un — un comparateur de programmes ne
+//    peut pas avoir l'air d'en soutenir un ;
+//  - il ne se confond avec aucune des trois réponses (vert, rouge, jaune) ;
+//  - il n'est pas dans la zone violet-indigo, la couleur par défaut des
+//    interfaces générées (l'iris essayé avant lui en était à un degré près).
+//
+// Les neutres ne sont pas une rampe de gris standard : ils sont teintés, de
+// très peu, vers ce même bleu canard, pour que le fond appartienne à l'app.
+// Calculés en OKLCH, l'espace qui suit la perception de l'œil.
 export const PALETTE = {
-  ink: '#1C2024',
-  ink2: '#40444C',
-  ink3: '#60646C',
+  ink: '#142225',
+  ink2: '#3C4B4E',
+  ink3: '#5B696D',
 
-  paper: '#F0F0F3',
-  paper2: '#E8E8EC',
+  paper: '#EDF2F3',
+  paper2: '#E1E9EA',
   white: '#FFFFFF',
-  line: '#D9D9E0',
-  // Le contour qui doit tenir seul (un champ de saisie, une carte cernée).
-  // C'était l'encre pâle, à 7:1 : un trait de feutre autour de chaque
-  // élément. Ce gris moyen tient les 3:1 que le WCAG demande à un contour
+  line: '#D1DBDC',
+  // Le contour qui doit tenir seul (un champ de saisie, une carte cernée) :
+  // un gris moyen qui tient les 3:1 que le WCAG demande à un contour
   // d'élément d'interface, et rien de plus.
-  outline: '#80838D',
+  outline: '#768385',
 
-  night: '#111113',
-  night2: '#212225',
-  night3: '#2E3135',
-  lineNight: '#363A3F',
-  outlineNight: '#7A7F88',
-  snow: '#EDEEF0',
-  snowDim: '#CDD0D5',
-  mutedOnNight: '#B0B4BA',
+  night: '#091113',
+  night2: '#141E20',
+  night3: '#1F2A2D',
+  lineNight: '#273335',
+  outlineNight: '#768385',
+  snow: '#ECF1F2',
+  snowDim: '#C8D3D5',
+  mutedOnNight: '#A6B4B6',
 
-  // L'ACCENT, UN IRIS. Un bleu-violet doux, tiré de l'échelle « iris » de
-  // Radix Colors, la sœur des gris « slate » ci-dessus. C'est la teinte la
-  // plus éloignée du vert, du rouge et du jaune des réponses : un bouton
-  // d'accent ne se lit jamais comme un « j'adhère » ou un « pas pour moi ».
-  //
-  // Il se décline en tons, comme dans Material 3 : un ton saturé pour tout
-  // ce qui se remplit (bouton, barre de progression, onglet actif, jauge,
-  // anneau d'avatar), un ton de texte, et une teinte très pâle, calculée plus
-  // bas, pour les fonds d'état sélectionné. Chaque couple est vérifié par
-  // theme/palette.test.ts.
-  //
-  // UN SEUL TON SATURÉ, ET NON DEUX. Un iris moyen pour les petits aplats a
-  // été essayé : trop pâle pour qu'une jauge ou un anneau s'en détache
-  // (2 à 2.5:1 là où il faut 3:1), et trop clair pour que le blanc s'y lise.
-  // C'est la règle 60-30-10 : des neutres, et un accent franc, rare.
-  iris: '#5B5BD6',
-  irisPressed: '#4B4BC4',
-  irisText: '#5753C6',
-  // Sur fond sombre, un iris clair qui porte l'encre, comme le lime le
-  // faisait sur la nuit : un iris saturé ne se détacherait pas de la piste
-  // d'une jauge, et le blanc ne s'y lirait pas assez.
-  irisNight: '#B1A9FF',
-  irisNightPressed: '#9F96F5',
+  // L'ACCENT, EN TONS. Un ton soutenu pour tout ce qui se remplit (bouton,
+  // barre de progression, onglet actif, jauge, anneau d'avatar), un ton pour
+  // le texte, et une teinte très pâle, calculée plus bas, pour les fonds
+  // d'état sélectionné. Chaque couple est vérifié par theme/palette.test.ts.
+  canard: '#02717A',
+  canardPressed: '#005F67',
+  canardText: '#016770',
+  // Sur fond sombre, un bleu canard clair qui porte l'encre : un ton soutenu
+  // ne se détacherait pas de la piste d'une jauge.
+  canardNight: '#82CCD5',
+  canardNightPressed: '#6FB9C1',
 
   // Les marches du podium : or, argent et bronze, assourdis. L'encre s'écrit
   // dessus.
@@ -113,9 +107,9 @@ export const PALETTE = {
 export type AccentId = 'lime' | 'violet' | 'peach';
 
 export const ACCENTS: Record<AccentId, string> = {
-  lime: PALETTE.iris,
-  violet: PALETTE.iris,
-  peach: PALETTE.iris,
+  lime: PALETTE.canard,
+  violet: PALETTE.canard,
+  peach: PALETTE.canard,
 };
 
 export const DEFAULT_ACCENT: AccentId = 'lime';
@@ -232,20 +226,20 @@ function surAccent(hue: string): string {
 // l'un d'eux sorte de la palette.
 const TONS_ACCENT = {
   light: {
-    action: PALETTE.iris,
+    action: PALETTE.canard,
     onAction: PALETTE.white,
-    actionPressed: PALETTE.irisPressed,
-    accent: PALETTE.iris,
+    actionPressed: PALETTE.canardPressed,
+    accent: PALETTE.canard,
     onAccent: PALETTE.white,
-    accentText: PALETTE.irisText,
+    accentText: PALETTE.canardText,
   },
   dark: {
-    action: PALETTE.irisNight,
+    action: PALETTE.canardNight,
     onAction: PALETTE.ink,
-    actionPressed: PALETTE.irisNightPressed,
-    accent: PALETTE.irisNight,
+    actionPressed: PALETTE.canardNightPressed,
+    accent: PALETTE.canardNight,
     onAccent: PALETTE.ink,
-    accentText: PALETTE.irisNight,
+    accentText: PALETTE.canardNight,
   },
 } as const;
 
@@ -258,7 +252,7 @@ export function buildColors(scheme: 'light' | 'dark', _accentId: string): ColorT
     ...b,
 
     ...tons,
-    accentSoft: mixHex(PALETTE.iris, b.surface, sombre ? 0.2 : 0.1),
+    accentSoft: mixHex(PALETTE.canard, b.surface, sombre ? 0.2 : 0.1),
 
     // LES TROIS RÉPONSES, chacune sur sa teinte (voir PALETTE).
     //
@@ -290,12 +284,6 @@ export function buildColors(scheme: 'light' | 'dark', _accentId: string): ColorT
 export const lightColors: ColorTokens = buildColors('light', DEFAULT_ACCENT);
 export const darkColors: ColorTokens = buildColors('dark', DEFAULT_ACCENT);
 
-// --- RAYONS -----------------------------------------------------------------
-//
-// Généreux : DESIGN.md va de 24 px pour une ligne de liste à 56 px pour un
-// cadre de téléphone, sur un canevas de 1080. Ramenés à la largeur d'un
-// téléphone, ces rapports donnent l'échelle ci-dessous — plus ronde que
-// l'ancienne, ce qui est tout le sujet.
 // CE QUI POSE UN OBJET SUR LA PAGE, MAINTENANT QUE LES CONTOURS SONT PARTIS.
 //
 // L'identité était plate et cernée : chaque carte, chaque bouton, chaque
@@ -314,11 +302,19 @@ export const ombre = {
   elevation: 3,
 } as const;
 
+// --- RAYONS -----------------------------------------------------------------
+//
+// MESURÉS, ET PLUS GÉNÉREUX PARTOUT. L'échelle allait de 16 à 44, et tous les
+// boutons étaient des pilules : un grand arrondi posé uniformément sur tout
+// est l'un des signes les plus reconnus d'une interface générée sans qu'on la
+// décide. Elle est divisée par deux, et la pilule est réservée à ce qui est
+// rond par nature : boutons d'icône, pastilles, interrupteurs, jauges. Un
+// bouton qui porte un libellé prend `md`.
 export const radii = {
-  sm: 16,
-  md: 24,
-  lg: 32,
-  xl: 44,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 22,
   pill: 999,
 } as const;
 
