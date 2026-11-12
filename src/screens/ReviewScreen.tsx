@@ -190,7 +190,7 @@ function ReviewRow({
         accessibilityRole="button"
         accessibilityLabel={`Lire en entier : ${proposal.text}`}
       >
-        <ThemeIcon icon={theme.icon} size={16} color={colors.textSecondary} />
+        <ThemeIcon icon={theme.icon} size={18} color={colors.textSecondary} weight="duotone" />
         <Text style={styles.rowText} numberOfLines={3}>
           {proposal.text}
         </Text>

@@ -13,8 +13,8 @@ const candidateB: Candidate = { id: 'b', name: 'Candidat B', initials: 'B', part
 const candidateC: Candidate = { id: 'c', name: 'Candidat C', initials: 'C', party: 'Parti C' };
 const CANDIDATES = [candidateA, candidateB, candidateC];
 
-const themeEco: ThemeTag = { id: 'eco', label: 'Économie', icon: 'cash-outline' };
-const themeSoc: ThemeTag = { id: 'soc', label: 'Social', icon: 'briefcase-outline' };
+const themeEco: ThemeTag = { id: 'eco', label: 'Économie', icon: 'CurrencyEur' };
+const themeSoc: ThemeTag = { id: 'soc', label: 'Social', icon: 'Briefcase' };
 const THEMES = [themeEco, themeSoc];
 
 function proposal(id: string, candidateId: string, themeId: string): Proposal {

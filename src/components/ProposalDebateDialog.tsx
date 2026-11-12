@@ -68,7 +68,7 @@ function Debat({ visible, proposal, theme, onClose }: ProposDebatProps) {
           <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
             {theme && (
               <View style={styles.themeRow}>
-                <ThemeIcon icon={theme.icon} size={15} color={colors.textSecondary} />
+                <ThemeIcon icon={theme.icon} size={16} color={colors.textSecondary} weight="bold" />
                 <Text style={styles.themeLabel}>{theme.label}</Text>
               </View>
             )}

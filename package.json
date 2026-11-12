@@ -16,12 +16,14 @@
     "expo-sharing": "~57.0.24",
     "expo-splash-screen": "~57.0.10",
     "expo-status-bar": "~57.0.1",
+    "phosphor-react-native": "^3.0.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
     "react-native-gesture-handler": "~2.32.0",
     "react-native-reanimated": "4.5.1",
     "react-native-safe-area-context": "~5.7.0",
+    "react-native-svg": "15.15.4",
     "react-native-view-shot": "5.1.0",
     "react-native-web": "^0.21.0",
     "react-native-worklets": "0.10.1"
@@ -58,6 +60,9 @@
     "setupFiles": [
       "<rootDir>/jest.setup.js"
     ],
-    "resolver": "react-native-worklets/jest/resolver"
+    "resolver": "react-native-worklets/jest/resolver",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|phosphor-react-native)"
+    ]
   }
 }

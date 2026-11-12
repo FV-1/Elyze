@@ -178,7 +178,7 @@ export function ThemeMosaic({
           >
             <Ionicons name="chevron-back" size={20} color={colors.textPrimary} />
             <View style={[styles.detailIconBadge, { backgroundColor: getThemeColor(selectedTheme.id) }]}>
-              <ThemeIcon icon={selectedTheme.icon} size={15} color="#FFFFFF" />
+              <ThemeIcon icon={selectedTheme.icon} size={16} color="#FFFFFF" weight="bold" />
             </View>
             <Text style={styles.detailTitle} numberOfLines={1}>
               {selectedTheme.label}
@@ -253,7 +253,7 @@ export function ThemeMosaic({
             accessibilityRole="button"
             accessibilityLabel={`${theme.label}, ${countByTheme[theme.id] ?? 0} propositions`}
           >
-            <ThemeIcon icon={theme.icon} size={28} color="#FFFFFF" />
+            <ThemeIcon icon={theme.icon} size={30} color="#FFFFFF" weight="duotone" />
             <View>
               <Text style={styles.tileLabel} numberOfLines={2}>
                 {theme.label}

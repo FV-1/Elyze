@@ -1,9 +1,9 @@
 import React from 'react';
 import { Pressable, StyleSheet, useColorScheme, View } from 'react-native';
 import { Texte as Text } from './Texte';
-import { Ionicons } from '@expo/vector-icons';
 import { ColorTokens, darkColors, lightColors, radii, spacing, fonts } from '../theme';
 import { clearSession } from '../utils/storage';
+import { ThemeIcon } from './ThemeIcon';
 
 type Props = { children: React.ReactNode };
 type State = { hasError: boolean };
@@ -54,7 +54,7 @@ function ErrorFallback({ onReset }: { onReset: () => void }) {
 
   return (
     <View style={styles.container}>
-      <Ionicons name="alert-circle-outline" size={44} color={colors.textMuted} style={styles.emoji} />
+      <ThemeIcon icon="WarningCircle" size={48} color={colors.textMuted} weight="duotone" style={styles.emoji} />
       <Text style={styles.title}>Un problème est survenu</Text>
       <Text style={styles.message}>
         L’application a rencontré une erreur inattendue. Tu peux réessayer, si le problème

@@ -50,7 +50,7 @@ export function ThemeBadge({ theme }: { theme: ThemeTag }) {
 
   return (
     <View style={[styles.badge, { backgroundColor: tint.background }]}>
-      <ThemeIcon icon={theme.icon} size={fonts.etiquette + 1} color={tint.text} />
+      <ThemeIcon icon={theme.icon} size={fonts.etiquette + 2} color={tint.text} weight="bold" />
       <Text style={[styles.label, { color: tint.text }]} numberOfLines={1}>
         {sujet}
       </Text>

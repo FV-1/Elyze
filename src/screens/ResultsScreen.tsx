@@ -39,6 +39,7 @@ import { Answers, Proposal } from '../types';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { ThemeIcon } from '../components/ThemeIcon';
 
 // Plafond de grossissement des deux libellés du pied de page. Ils cohabitent
 // dans une rangée de largeur fixe, où « Accueil » et « Partager » se disputent
@@ -264,7 +265,7 @@ export function ResultsScreen({
         </Pressable>
 
         <View style={styles.emptyWrap}>
-          <Ionicons name="help-circle-outline" size={44} color={colors.textMuted} style={styles.emptyEmoji} />
+          <ThemeIcon icon="Question" size={48} color={colors.textMuted} weight="duotone" style={styles.emptyEmoji} />
           <Text style={styles.emptyTitle}>Pas encore de résultat</Text>
           <Text style={styles.emptyText}>
             Aucune de tes réponses n’a pu être comptabilisée. Tu as sans doute répondu « pas

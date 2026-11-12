@@ -161,14 +161,14 @@ const LONGUEUR_IDEALE = 130;
 //
 // L'ordre de cette liste est celui de l'écran.
 const SUJETS = [
-  { id: 'economie', label: 'Économie & numérique', icon: 'cash-outline' },
-  { id: 'travail', label: 'Travail & retraites', icon: 'briefcase-outline' },
-  { id: 'sante', label: 'Santé & solidarités', icon: 'medkit-outline' },
-  { id: 'education', label: 'École & culture', icon: 'school-outline' },
-  { id: 'ecologie', label: 'Écologie & agriculture', icon: 'leaf-outline' },
-  { id: 'logement', label: 'Logement & transports', icon: 'home-outline' },
-  { id: 'securite', label: 'Sécurité & immigration', icon: 'shield-checkmark-outline' },
-  { id: 'institutions', label: 'Institutions & défense', icon: 'flag-outline' },
+  { id: 'economie', label: 'Économie & numérique', icon: 'CurrencyEur' },
+  { id: 'travail', label: 'Travail & retraites', icon: 'Briefcase' },
+  { id: 'sante', label: 'Santé & solidarités', icon: 'FirstAidKit' },
+  { id: 'education', label: 'École & culture', icon: 'GraduationCap' },
+  { id: 'ecologie', label: 'Écologie & agriculture', icon: 'Leaf' },
+  { id: 'logement', label: 'Logement & transports', icon: 'House' },
+  { id: 'securite', label: 'Sécurité & immigration', icon: 'ShieldCheck' },
+  { id: 'institutions', label: 'Institutions & défense', icon: 'Bank' },
 ];
 
 // --- Les quinze thèmes des sources, et le sujet de chacun ------------------

@@ -237,7 +237,7 @@ function ThemeChip({
 }) {
   return (
     <View style={[styles.themeChip, { backgroundColor: tint.background }]}>
-      <ThemeIcon icon={icon} size={fonts.etiquette + 1} color={tint.text} />
+      <ThemeIcon icon={icon} size={fonts.etiquette + 2} color={tint.text} weight="bold" />
       <Text style={[styles.themeChipLabel, { color: tint.text }]} numberOfLines={1}>
         {label}
       </Text>

@@ -60,7 +60,7 @@ export function ThemeAgreementList({
               }`}
             >
               <View style={[styles.dot, { backgroundColor: getThemeColor(entry.theme.id) }]}>
-                <ThemeIcon icon={entry.theme.icon} size={12} color="#FFFFFF" />
+                <ThemeIcon icon={entry.theme.icon} size={13} color="#FFFFFF" weight="bold" />
               </View>
               <Text style={styles.label} numberOfLines={1}>
                 {entry.theme.label}

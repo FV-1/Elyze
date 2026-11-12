@@ -130,7 +130,7 @@ export function ThemeSelectScreen({
               accessibilityState={{ checked: isSelected }}
               accessibilityLabel={`${theme.label}, ${count} proposition${count > 1 ? 's' : ''}`}
             >
-              <ThemeIcon icon={theme.icon} size={20} color={colors.textSecondary} />
+              <ThemeIcon icon={theme.icon} size={22} color={colors.textSecondary} weight="duotone" />
               <Text style={styles.rowLabel} numberOfLines={2}>
                 {theme.label}
               </Text>

@@ -1,10 +1,27 @@
-import type { Ionicons } from '@expo/vector-icons';
-
 // Un des huit sujets affichés. Les quinze thèmes des sources ne survivent que
 // dans l'identifiant des cartes (voir scripts/generate-data.js).
-// Le nom d'une icône Ionicons : une faute de frappe dans les données ne
-// passe pas la vérification de types (voir components/ThemeIcon).
-export type IconeDeTheme = keyof typeof Ionicons.glyphMap;
+// Le nom d'une icône Phosphor parmi celles que l'app embarque : une faute de
+// frappe dans les données ne passe pas la vérification de types (voir
+// components/ThemeIcon).
+export type IconeDeTheme =
+  | 'Bank'
+  | 'Books'
+  | 'Briefcase'
+  | 'Calculator'
+  | 'Cards'
+  | 'CurrencyEur'
+  | 'FirstAidKit'
+  | 'GraduationCap'
+  | 'House'
+  | 'Leaf'
+  | 'Lightbulb'
+  | 'Lock'
+  | 'MagnifyingGlass'
+  | 'Question'
+  | 'Scales'
+  | 'ShieldCheck'
+  | 'Star'
+  | 'WarningCircle';
 
 export type ThemeTag = {
   id: string;

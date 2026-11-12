@@ -217,7 +217,7 @@ function FicheCandidat({
                           key={theme.id}
                           style={[styles.chip, { backgroundColor: tint.background }]}
                         >
-                          <ThemeIcon icon={theme.icon} size={fonts.etiquette + 1} color={tint.text} />
+                          <ThemeIcon icon={theme.icon} size={fonts.etiquette + 2} color={tint.text} weight="bold" />
                           <Text style={[styles.chipLabel, { color: tint.text }]} numberOfLines={1}>
                             {theme.label}
                           </Text>
