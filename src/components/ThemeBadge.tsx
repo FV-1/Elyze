@@ -4,6 +4,7 @@ import { themeChipColors } from '../data/themeColors';
 import { ThemeTag } from '../types';
 import { fonts, MONO_SPACING, police, radii, spacing } from '../theme';
 import { useColors, useThemeColor, useThemeSettings } from '../theme/ThemeContext';
+import { ThemeIcon } from './ThemeIcon';
 
 // L'étiquette de thème posée en haut de chaque carte.
 //
@@ -49,7 +50,7 @@ export function ThemeBadge({ theme }: { theme: ThemeTag }) {
 
   return (
     <View style={[styles.badge, { backgroundColor: tint.background }]}>
-      <Text style={styles.icon}>{theme.icon}</Text>
+      <ThemeIcon icon={theme.icon} size={fonts.etiquette + 1} color={tint.text} />
       <Text style={[styles.label, { color: tint.text }]} numberOfLines={1}>
         {sujet}
       </Text>
@@ -75,9 +76,6 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs + 3,
     paddingHorizontal: spacing.md,
     gap: spacing.xs + 2,
-  },
-  icon: {
-    fontSize: fonts.etiquette,
   },
   label: {
     flexShrink: 1,

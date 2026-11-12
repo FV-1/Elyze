@@ -7,6 +7,7 @@ import { haptics } from '../utils/haptics';
 import { ThemeAgreement } from '../types';
 import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors, useThemeColor } from '../theme/ThemeContext';
+import { ThemeIcon } from './ThemeIcon';
 
 // Sujet par sujet : ce qu'on a retenu, et de qui. Chaque thème est replié au
 // départ — la liste sert d'abord de vue d'ensemble, on n'ouvre que ce qu'on
@@ -59,7 +60,7 @@ export function ThemeAgreementList({
               }`}
             >
               <View style={[styles.dot, { backgroundColor: getThemeColor(entry.theme.id) }]}>
-                <Text style={styles.dotIcon}>{entry.theme.icon}</Text>
+                <ThemeIcon icon={entry.theme.icon} size={12} color="#FFFFFF" />
               </View>
               <Text style={styles.label} numberOfLines={1}>
                 {entry.theme.label}
@@ -127,9 +128,6 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.pill,
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    dotIcon: {
-      fontSize: 12,
     },
     label: {
       flex: 1,

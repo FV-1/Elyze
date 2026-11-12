@@ -8,9 +8,10 @@ import { THEMES_BY_ID } from '../data/themes';
 import { Bascule } from './Bascule';
 import { themeChipColors } from '../data/themeColors';
 import { openUrl, proposalProvenance } from '../data/source';
-import { AnswerValue, Candidate, Proposal } from '../types';
+import { AnswerValue, Candidate, IconeDeTheme, Proposal } from '../types';
 import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors, useThemeColor, useThemeSettings } from '../theme/ThemeContext';
+import { ThemeIcon } from './ThemeIcon';
 
 // Les propositions d'un candidat, rangées par la réponse qu'on leur a donnée.
 // Une proposition pas encore vue n'apparaît dans aucun groupe.
@@ -230,13 +231,13 @@ function ThemeChip({
   styles,
 }: {
   label: string;
-  icon: string;
+  icon: IconeDeTheme;
   tint: { background: string; text: string };
   styles: ReturnType<typeof makeStyles>;
 }) {
   return (
     <View style={[styles.themeChip, { backgroundColor: tint.background }]}>
-      <Text style={styles.themeChipIcon}>{icon}</Text>
+      <ThemeIcon icon={icon} size={fonts.etiquette + 1} color={tint.text} />
       <Text style={[styles.themeChipLabel, { color: tint.text }]} numberOfLines={1}>
         {label}
       </Text>
@@ -354,9 +355,6 @@ function makeStyles(colors: ColorTokens) {
       paddingVertical: 4,
       paddingHorizontal: spacing.sm + 2,
       borderRadius: radii.pill,
-    },
-    themeChipIcon: {
-      fontSize: fonts.etiquette,
     },
     // La couleur du texte vient de `themeChipColors`, appariée au fond de la
     // pastille : elle est posée à l'usage, pas ici.

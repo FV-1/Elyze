@@ -4,13 +4,12 @@ import { Texte as Text } from './Texte';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from './Avatar';
 import { CandidateResult } from '../types';
-import { ColorTokens, fonts, spacing, police } from '../theme';
-import { useColors } from '../theme/ThemeContext';
+import { ColorTokens, fonts, PALETTE, spacing, police } from '../theme';
+import { useColors, useMedalColors } from '../theme/ThemeContext';
 
 const BAR_HEIGHT = 10;
 const BAR_RADIUS = 4;
 
-const MEDALS: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
 
 export function ResultRow({
   result,
@@ -25,11 +24,15 @@ export function ResultRow({
 }) {
   const colors = useColors();
   const styles = useMemo(() => makeStyles(colors), [colors]);
+  // LES TROIS PREMIERS PORTENT LA COULEUR DE LEUR MARCHE, PAS UN EMOJI. Une
+  // médaille 🥇 se dessinait différemment d'un téléphone à l'autre, et ne
+  // reprenait pas l'or, l'argent et le bronze du podium juste au-dessus.
+  const medals = useMedalColors();
   // `answered` (et non `total`, qui est pondéré par les super likes) : la
   // ligne doit afficher un nombre de propositions, pas un poids de calcul.
   const { candidate, pct, answered, tied } = result;
   const fillColor = emphasized ? colors.accent : colors.neutralFill;
-  const medal = MEDALS[rank];
+  const medal = rank >= 1 && rank <= 3 ? medals[rank - 1] : null;
   const rankWord = rank === 1 ? '1er' : `${rank}e`;
   // Le badge visuel (médaille/numéro) est décoratif et masqué aux lecteurs
   // d'écran ; l'information de rang est restituée via cette étiquette unique
@@ -46,7 +49,9 @@ export function ResultRow({
     >
       <View style={styles.rankBadge} accessibilityElementsHidden importantForAccessibility="no">
         {medal ? (
-          <Text style={styles.rankMedal}>{medal}</Text>
+          <View style={[styles.rankMedal, { backgroundColor: medal }]}>
+            <Text style={styles.rankMedalNumber}>{rank}</Text>
+          </View>
         ) : (
           <Text style={styles.rankNumber}>{rank}</Text>
         )}
@@ -99,7 +104,17 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
     },
     rankMedal: {
-      fontSize: 16,
+      width: 22,
+      height: 22,
+      borderRadius: 11,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    // Les trois métaux sont clairs : l'encre s'y écrit (voir PALETTE).
+    rankMedalNumber: {
+      fontSize: fonts.tiny,
+      fontWeight: '700',
+      color: PALETTE.ink,
     },
     rankNumber: {
       fontSize: fonts.tiny,

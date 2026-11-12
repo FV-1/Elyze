@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, StyleSheet, useColorScheme, View } from 'react-native';
 import { Texte as Text } from './Texte';
+import { Ionicons } from '@expo/vector-icons';
 import { ColorTokens, darkColors, lightColors, radii, spacing, fonts } from '../theme';
 import { clearSession } from '../utils/storage';
 
@@ -53,7 +54,7 @@ function ErrorFallback({ onReset }: { onReset: () => void }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.emoji}>😕</Text>
+      <Ionicons name="alert-circle-outline" size={44} color={colors.textMuted} style={styles.emoji} />
       <Text style={styles.title}>Un problème est survenu</Text>
       <Text style={styles.message}>
         L’application a rencontré une erreur inattendue. Tu peux réessayer, si le problème
@@ -82,7 +83,6 @@ function makeStyles(colors: ColorTokens) {
       gap: spacing.sm,
     },
     emoji: {
-      fontSize: 40,
       marginBottom: spacing.sm,
     },
     title: {
@@ -100,7 +100,7 @@ function makeStyles(colors: ColorTokens) {
     },
     button: {
       backgroundColor: colors.action,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.xl,
     },

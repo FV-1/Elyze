@@ -11,6 +11,7 @@ import { Answers, AnswerValue, Proposal, ThemeTag } from '../types';
 import { SwipeDirection } from '../components/SwipeCard';
 import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors } from '../theme/ThemeContext';
+import { ThemeIcon } from '../components/ThemeIcon';
 
 type Props = {
   proposals: Proposal[];
@@ -189,7 +190,7 @@ function ReviewRow({
         accessibilityRole="button"
         accessibilityLabel={`Lire en entier : ${proposal.text}`}
       >
-        <Text style={styles.rowIcon}>{theme.icon}</Text>
+        <ThemeIcon icon={theme.icon} size={16} color={colors.textSecondary} />
         <Text style={styles.rowText} numberOfLines={3}>
           {proposal.text}
         </Text>
@@ -340,9 +341,6 @@ function makeStyles(colors: ColorTokens) {
     rowMainPressed: {
       opacity: 0.6,
     },
-    rowIcon: {
-      fontSize: 16,
-    },
     rowText: {
       flex: 1,
       fontSize: fonts.tiny + 1,
@@ -397,7 +395,7 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
       gap: spacing.sm,
       backgroundColor: colors.action,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.md,
     },
     ctaPressed: {

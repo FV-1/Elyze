@@ -8,6 +8,7 @@ import { PROPOSAL_EXPLANATIONS } from '../data/proposalExplanations';
 import { Proposal, ThemeTag } from '../types';
 import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors, ZoneAccent } from '../theme/ThemeContext';
+import { ThemeIcon } from './ThemeIcon';
 
 // Le débat autour d'une mesure, ouvert depuis la carte.
 //
@@ -67,7 +68,7 @@ function Debat({ visible, proposal, theme, onClose }: ProposDebatProps) {
           <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
             {theme && (
               <View style={styles.themeRow}>
-                <Text style={styles.themeIcon}>{theme.icon}</Text>
+                <ThemeIcon icon={theme.icon} size={15} color={colors.textSecondary} />
                 <Text style={styles.themeLabel}>{theme.label}</Text>
               </View>
             )}
@@ -144,7 +145,7 @@ function makeStyles(colors: ColorTokens) {
     },
 
     themeRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-    themeIcon: { fontSize: 15 },
+   
     themeLabel: {
       fontSize: fonts.tiny,
       fontWeight: '800',

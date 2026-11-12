@@ -10,6 +10,7 @@ import { CANDIDATES } from '../data/candidates';
 import { candidatesQuota, QUOTA_PAR_CANDIDAT } from '../utils/deck';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors } from '../theme/ThemeContext';
+import { ThemeIcon } from '../components/ThemeIcon';
 
 const COUNT_BY_THEME: Record<string, number> = {};
 const CANDIDATES_BY_THEME: Record<string, Set<string>> = {};
@@ -129,7 +130,7 @@ export function ThemeSelectScreen({
               accessibilityState={{ checked: isSelected }}
               accessibilityLabel={`${theme.label}, ${count} proposition${count > 1 ? 's' : ''}`}
             >
-              <Text style={styles.rowIcon}>{theme.icon}</Text>
+              <ThemeIcon icon={theme.icon} size={20} color={colors.textSecondary} />
               <Text style={styles.rowLabel} numberOfLines={2}>
                 {theme.label}
               </Text>
@@ -235,9 +236,6 @@ function makeStyles(colors: ColorTokens) {
     rowPressed: {
       opacity: 0.8,
     },
-    rowIcon: {
-      fontSize: 20,
-    },
     rowLabel: {
       flex: 1,
       fontSize: fonts.body + 1,
@@ -282,7 +280,7 @@ function makeStyles(colors: ColorTokens) {
     },
     cta: {
       backgroundColor: colors.action,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.md + 2,
       alignItems: 'center',
     },

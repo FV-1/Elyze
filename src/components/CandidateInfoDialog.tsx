@@ -13,6 +13,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion';
 import { Answers, Candidate, Proposal } from '../types';
 import { ColorTokens, fonts, radii, spacing, police } from '../theme';
 import { useColors, useThemeColor, useThemeSettings, ZoneAccent } from '../theme/ThemeContext';
+import { ThemeIcon } from './ThemeIcon';
 
 // Fiche d'un candidat : une notice biographique, puis sa présence dans le
 // questionnaire.
@@ -216,7 +217,7 @@ function FicheCandidat({
                           key={theme.id}
                           style={[styles.chip, { backgroundColor: tint.background }]}
                         >
-                          <Text style={styles.chipIcon}>{theme.icon}</Text>
+                          <ThemeIcon icon={theme.icon} size={fonts.etiquette + 1} color={tint.text} />
                           <Text style={[styles.chipLabel, { color: tint.text }]} numberOfLines={1}>
                             {theme.label}
                           </Text>
@@ -485,9 +486,6 @@ function makeStyles(colors: ColorTokens) {
       paddingHorizontal: spacing.sm + 4,
       borderRadius: radii.pill,
     },
-    chipIcon: {
-      fontSize: fonts.etiquette,
-    },
     chipLabel: {
       fontSize: fonts.etiquette,
       fontWeight: '700',
@@ -510,7 +508,7 @@ function makeStyles(colors: ColorTokens) {
       gap: spacing.sm,
       marginTop: spacing.md,
       backgroundColor: colors.action,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.md + 2,
     },
     ctaPressed: {

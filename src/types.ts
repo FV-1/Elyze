@@ -1,9 +1,15 @@
+import type { Ionicons } from '@expo/vector-icons';
+
 // Un des huit sujets affichés. Les quinze thèmes des sources ne survivent que
 // dans l'identifiant des cartes (voir scripts/generate-data.js).
+// Le nom d'une icône Ionicons : une faute de frappe dans les données ne
+// passe pas la vérification de types (voir components/ThemeIcon).
+export type IconeDeTheme = keyof typeof Ionicons.glyphMap;
+
 export type ThemeTag = {
   id: string;
   label: string;
-  icon: string;
+  icon: IconeDeTheme;
 };
 
 export type Candidate = {

@@ -9,14 +9,14 @@
 import { ThemeTag } from '../types';
 
 export const THEMES: ThemeTag[] = [
-  { id: 'economie', label: 'Économie & numérique', icon: '💶' },
-  { id: 'travail', label: 'Travail & retraites', icon: '🤝' },
-  { id: 'sante', label: 'Santé & solidarités', icon: '🏥' },
-  { id: 'education', label: 'École & culture', icon: '🎓' },
-  { id: 'ecologie', label: 'Écologie & agriculture', icon: '🌱' },
-  { id: 'logement', label: 'Logement & transports', icon: '🏠' },
-  { id: 'securite', label: 'Sécurité & immigration', icon: '⚖️' },
-  { id: 'institutions', label: 'Institutions & défense', icon: '🏛️' },
+  { id: 'economie', label: 'Économie & numérique', icon: 'cash-outline' },
+  { id: 'travail', label: 'Travail & retraites', icon: 'briefcase-outline' },
+  { id: 'sante', label: 'Santé & solidarités', icon: 'medkit-outline' },
+  { id: 'education', label: 'École & culture', icon: 'school-outline' },
+  { id: 'ecologie', label: 'Écologie & agriculture', icon: 'leaf-outline' },
+  { id: 'logement', label: 'Logement & transports', icon: 'home-outline' },
+  { id: 'securite', label: 'Sécurité & immigration', icon: 'shield-checkmark-outline' },
+  { id: 'institutions', label: 'Institutions & défense', icon: 'flag-outline' },
 ];
 
 export const THEMES_BY_ID: Record<string, ThemeTag> = Object.fromEntries(

@@ -12,6 +12,7 @@ import { Answers, AnswerValue, Proposal, ThemeTag } from '../types';
 import { ColorTokens, fonts, radii, spacing } from '../theme';
 import { useColors, useThemeColor } from '../theme/ThemeContext';
 import { RESSORT, usePression } from './mouvement';
+import { ThemeIcon } from './ThemeIcon';
 
 // Mosaïque colorée des thèmes, portant sur TOUT LE CATALOGUE embarqué et non
 // sur le seul paquet de la session.
@@ -177,7 +178,7 @@ export function ThemeMosaic({
           >
             <Ionicons name="chevron-back" size={20} color={colors.textPrimary} />
             <View style={[styles.detailIconBadge, { backgroundColor: getThemeColor(selectedTheme.id) }]}>
-              <Text style={styles.detailIconText}>{selectedTheme.icon}</Text>
+              <ThemeIcon icon={selectedTheme.icon} size={15} color="#FFFFFF" />
             </View>
             <Text style={styles.detailTitle} numberOfLines={1}>
               {selectedTheme.label}
@@ -252,7 +253,7 @@ export function ThemeMosaic({
             accessibilityRole="button"
             accessibilityLabel={`${theme.label}, ${countByTheme[theme.id] ?? 0} propositions`}
           >
-            <Text style={styles.tileIcon}>{theme.icon}</Text>
+            <ThemeIcon icon={theme.icon} size={28} color="#FFFFFF" />
             <View>
               <Text style={styles.tileLabel} numberOfLines={2}>
                 {theme.label}
@@ -463,9 +464,6 @@ function makeStyles(colors: ColorTokens) {
     tilePressed: {
       opacity: 0.85,
     },
-    tileIcon: {
-      fontSize: 28,
-    },
     tileLabel: {
       fontSize: fonts.small,
       fontWeight: '800',
@@ -507,9 +505,6 @@ function makeStyles(colors: ColorTokens) {
       borderRadius: radii.pill,
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    detailIconText: {
-      fontSize: 15,
     },
     detailTitle: {
       flex: 1,
