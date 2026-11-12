@@ -511,7 +511,7 @@ function makeStyles(colors: ColorTokens) {
       gap: spacing.sm,
       marginTop: spacing.xs,
       backgroundColor: colors.action,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.md - 2,
     },
     finBoutonPresse: {

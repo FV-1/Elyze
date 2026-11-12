@@ -820,7 +820,7 @@ function makeStyles(colors: ColorTokens) {
     principal: {
       alignItems: 'center',
       backgroundColor: colors.action,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.md,
       marginTop: spacing.xs,
     },
@@ -847,7 +847,7 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
       gap: spacing.xs + 2,
       backgroundColor: colors.accentSoft,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.sm + 4,
     },
     secondaireTexte: {

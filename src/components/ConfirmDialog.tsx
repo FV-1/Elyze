@@ -100,16 +100,22 @@ function makeStyles(colors: ColorTokens) {
       color: colors.textSecondary,
       marginBottom: spacing.md,
     },
+    // LES BOUTONS S'EMPILENT, L'ACTION EN HAUT. Côte à côte, chacun n'avait
+    // que la moitié d'une carte de 340 points, sans marge intérieure :
+    // « Voir le classement » et « Continuer à swiper » touchaient leurs bords.
+    // Empilés, ils ont toute la largeur. L'ordre du code reste celui de la
+    // lecture (annuler, puis confirmer) ; `column-reverse` pose la
+    // confirmation au-dessus.
     actions: {
-      flexDirection: 'row',
+      flexDirection: 'column-reverse',
       gap: spacing.sm,
     },
     button: {
-      flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
       paddingVertical: spacing.md - 2,
-      borderRadius: radii.pill,
+      paddingHorizontal: spacing.md,
+      borderRadius: radii.md,
     },
     buttonPressed: {
       opacity: 0.8,

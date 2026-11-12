@@ -264,7 +264,7 @@ export function ResultsScreen({
         </Pressable>
 
         <View style={styles.emptyWrap}>
-          <Text style={styles.emptyEmoji}>🤔</Text>
+          <Ionicons name="help-circle-outline" size={44} color={colors.textMuted} style={styles.emptyEmoji} />
           <Text style={styles.emptyTitle}>Pas encore de résultat</Text>
           <Text style={styles.emptyText}>
             Aucune de tes réponses n’a pu être comptabilisée. Tu as sans doute répondu « pas
@@ -685,7 +685,6 @@ function makeStyles(colors: ColorTokens) {
       gap: spacing.sm,
     },
     emptyEmoji: {
-      fontSize: 40,
       marginBottom: spacing.sm,
     },
     emptyTitle: {
@@ -900,7 +899,7 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
       gap: spacing.sm,
       backgroundColor: colors.action,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.md,
     },
     restartPressed: {
@@ -921,7 +920,7 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
       gap: spacing.xs + 2,
       backgroundColor: colors.accentSoft,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.lg,
     },
@@ -940,7 +939,7 @@ function makeStyles(colors: ColorTokens) {
       justifyContent: 'center',
       gap: spacing.sm,
       backgroundColor: colors.action,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.md,
     },
     sharePressed: {

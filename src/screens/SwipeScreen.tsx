@@ -712,7 +712,7 @@ function makeStyles(colors: ColorTokens) {
       alignSelf: 'stretch',
       maxWidth: 320,
       backgroundColor: colors.action,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.md,
     },
     donePrimaryPressed: {
@@ -739,7 +739,7 @@ function makeStyles(colors: ColorTokens) {
       maxWidth: 320,
       marginTop: spacing.xs,
       backgroundColor: colors.accentSoft,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.lg,
     },

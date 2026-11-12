@@ -712,7 +712,7 @@ function makeStyles(colors: ColorTokens) {
       marginTop: spacing.xs,
       paddingVertical: 5,
       paddingHorizontal: spacing.sm + 2,
-      borderRadius: radii.pill,
+      borderRadius: radii.md,
       backgroundColor: colors.surfaceAlt,
     },
     debatePressed: {
